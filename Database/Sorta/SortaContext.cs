@@ -43,6 +43,11 @@ namespace Database.Sorta
                 .Where(p => p.Name == "Id" && !databaseGeneratedIds.Contains(p.DeclaringType))
                 .Configure(c => c.HasDatabaseGeneratedOption(DatabaseGeneratedOption.None));
 
+            // put all of the tables in the same table schema ("sorta.<table name>")
+            modelBuilder
+                .Types()
+                .Configure(c => c.ToTable("sorta." + c.ClrType.Name));
+
             base.OnModelCreating(modelBuilder);
         }
     }
