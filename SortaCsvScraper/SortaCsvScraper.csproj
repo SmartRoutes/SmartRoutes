@@ -39,6 +39,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AgencyCsvStreamParser.cs" />
+    <Compile Include="ServiceExceptionCsvStreamParser.cs" />
     <Compile Include="StopTimeCsvStreamParser.cs" />
     <Compile Include="ShapePointCsvStreamParser.cs" />
     <Compile Include="TripCsvStreamParser.cs" />

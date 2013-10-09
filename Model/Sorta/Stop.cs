@@ -2,6 +2,10 @@
 {
     public class Stop
     {
+        public virtual Stop Parent { get; set; }
+
+        #region CSV
+
         public int Id { get; set; }
         public string Code { get; set; }
         public string Name { get; set; }
@@ -13,5 +17,7 @@
         public int? ParentId { get; set; }
         public string Timezone { get; set; }
         public int? WheelchairBoarding { get; set; }
+
+        #endregion
     }
 }

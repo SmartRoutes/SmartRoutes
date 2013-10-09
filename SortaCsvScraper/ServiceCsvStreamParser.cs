@@ -13,13 +13,13 @@ namespace SortaCsvScraper
             return new Service
             {
                 Id = int.Parse(values["service_id"]),
-                Monday = bool.Parse(values["monday"]),
-                Tuesday = bool.Parse(values["tuesday"]),
-                Wednesday = bool.Parse(values["wednesday"]),
-                Thursday = bool.Parse(values["thursday"]),
-                Friday = bool.Parse(values["friday"]),
-                Saturday = bool.Parse(values["saturday"]),
-                Sunday = bool.Parse(values["sunday"]),
+                Monday = int.Parse(values["monday"]) != 0,
+                Tuesday = int.Parse(values["tuesday"]) != 0,
+                Wednesday = int.Parse(values["wednesday"]) != 0,
+                Thursday = int.Parse(values["thursday"]) != 0,
+                Friday = int.Parse(values["friday"]) != 0,
+                Saturday = int.Parse(values["saturday"]) != 0,
+                Sunday = int.Parse(values["sunday"]) != 0,
                 StartDate = ParseDate(values["start_date"]),
                 EndDate = ParseDate(values["end_date"])
             };

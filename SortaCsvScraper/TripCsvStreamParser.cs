@@ -18,8 +18,7 @@ namespace SortaCsvScraper
                 ShortName = values["trip_short_name"],
                 DirectionId = ParseNullableInt(values["direction_id"]),
                 BlockId = ParseNullableInt(values["block_id"]),
-                ShapeId = ParseNullableInt(values["shape_id"]),
-                WheelchairAccessible = ParseNullableInt(values["wheelchair_accessible"])
+                ShapeId = ParseNullableInt(values["shape_id"])
             };
         }
     }

@@ -18,6 +18,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SortaCsvScraper", "SortaCsv
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sandbox", "Sandbox\Sandbox.csproj", "{417D5E36-766A-48F1-AF87-AD11ADF695A7}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Database", "Database\Database.csproj", "{1E30E5FD-25B1-4F18-A2C2-5F8AC2B80683}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -44,6 +46,10 @@ Global
 		{417D5E36-766A-48F1-AF87-AD11ADF695A7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{417D5E36-766A-48F1-AF87-AD11ADF695A7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{417D5E36-766A-48F1-AF87-AD11ADF695A7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1E30E5FD-25B1-4F18-A2C2-5F8AC2B80683}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1E30E5FD-25B1-4F18-A2C2-5F8AC2B80683}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1E30E5FD-25B1-4F18-A2C2-5F8AC2B80683}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1E30E5FD-25B1-4F18-A2C2-5F8AC2B80683}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

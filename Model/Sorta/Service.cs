@@ -4,6 +4,8 @@ namespace Model.Sorta
 {
     public class Service
     {
+        #region CSV
+
         public int Id { get; set; }
         public bool Monday { get; set; }
         public bool Tuesday { get; set; }
@@ -14,5 +16,7 @@ namespace Model.Sorta
         public bool Sunday { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
+
+        #endregion
     }
 }

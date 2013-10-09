@@ -4,6 +4,12 @@ namespace Model.Sorta
 {
     public class StopTime
     {
+        public int Id { get; set; }
+        public virtual Trip Trip { get; set; }
+        public virtual Stop Stop { get; set; }
+
+        #region CSV
+
         public int TripId { get; set; }
         public DateTime ArrivalTime { get; set; }
         public DateTime DepartureTime { get; set; }
@@ -13,5 +19,7 @@ namespace Model.Sorta
         public int? PickupType { get; set; }
         public int? DropOffType { get; set; }
         public double? ShapeDistanceTraveled { get; set; }
+
+        #endregion
     }
 }
