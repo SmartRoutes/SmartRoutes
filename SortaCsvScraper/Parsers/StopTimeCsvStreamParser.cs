@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Model.Sorta;
 using Scraper;
 
-namespace SortaCsvScraper
+namespace SortaCsvScraper.Parsers
 {
     public class StopTimeCsvStreamParser : CsvStreamParser<StopTime>
     {

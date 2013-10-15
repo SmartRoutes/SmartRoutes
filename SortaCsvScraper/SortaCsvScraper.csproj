@@ -39,14 +39,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AgencyCsvStreamParser.cs" />
-    <Compile Include="ServiceExceptionCsvStreamParser.cs" />
-    <Compile Include="StopTimeCsvStreamParser.cs" />
-    <Compile Include="ShapePointCsvStreamParser.cs" />
-    <Compile Include="TripCsvStreamParser.cs" />
-    <Compile Include="ServiceCsvStreamParser.cs" />
-    <Compile Include="StopCsvStreamParser.cs" />
-    <Compile Include="RouteCsvStreamParser.cs" />
+    <Compile Include="Parsers\AgencyCsvStreamParser.cs" />
+    <Compile Include="Parsers\ServiceExceptionCsvStreamParser.cs" />
+    <Compile Include="Parsers\StopTimeCsvStreamParser.cs" />
+    <Compile Include="Parsers\ShapePointCsvStreamParser.cs" />
+    <Compile Include="Parsers\TripCsvStreamParser.cs" />
+    <Compile Include="Parsers\ServiceCsvStreamParser.cs" />
+    <Compile Include="Parsers\StopCsvStreamParser.cs" />
+    <Compile Include="Parsers\RouteCsvStreamParser.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -58,6 +58,9 @@
       <Project>{4401fe23-f94a-4eda-aa76-ccd53548e10e}</Project>
       <Name>Scraper</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Scrapers\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -4,7 +4,7 @@ using System.Globalization;
 using Model.Sorta;
 using Scraper;
 
-namespace SortaCsvScraper
+namespace SortaCsvScraper.Parsers
 {
     public class ServiceExceptionCsvStreamParser : CsvStreamParser<ServiceException>
     {

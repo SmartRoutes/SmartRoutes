@@ -2,7 +2,7 @@
 using Model.Sorta;
 using Scraper;
 
-namespace SortaCsvScraper
+namespace SortaCsvScraper.Parsers
 {
     public class AgencyCsvStreamParser : CsvStreamParser<Agency>
     {

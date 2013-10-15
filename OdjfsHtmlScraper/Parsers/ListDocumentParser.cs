@@ -1,17 +1,39 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Text.RegularExpressions;
 using CsQuery;
 using Model.Odjfs;
 using NLog;
 using Scraper;
 
-namespace OdjfsHtmlScraper
+namespace OdjfsHtmlScraper.Parsers
 {
-    public class SearchResultsRowParser : IParser<IDomElement, ChildCare>
+    public class ListDocumentParser : IParser<CQ, IEnumerable<ChildCare>>
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
-        public ChildCare Parse(IDomElement element)
+        public IEnumerable<ChildCare> Parse(CQ document)
+        {
+            // select the table
+            CQ table = document["table"];
+            if (table.Length != 1)
+            {
+                var exception = new ParserException("Exactly one table on the search results page is expected.");
+                Logger.ErrorException(string.Format("Expected: 1, Actual: {0}, HTML:\n{1}", table.Length, document.Document.OuterHTML), exception);
+                throw exception;
+            }
+
+            // select all of the relevant rows in the table
+            IEnumerable<IDomElement> rows = table["tr"]
+                .Elements
+                .Where((e, i) => i % 2 == 0) // every other row is empty...
+                .Skip(1); // the first two is for the header
+
+            // parse the rows using the child parser
+            return rows.Select(ParseRow);
+        }
+
+        private ChildCare ParseRow(IDomElement element)
         {
             // get all of the cells
             IDomElement[] cells = element.ChildElements.ToArray();
@@ -46,6 +68,9 @@ namespace OdjfsHtmlScraper
                     throw exception;
             }
 
+            // assign the type code
+            childCare.Type = typeCode;
+
             // get the link containing URL number
             var nameLink = (IHTMLAnchorElement) cells[2].FirstElementChild;
 
@@ -53,7 +78,13 @@ namespace OdjfsHtmlScraper
             Match match = Regex.Match(nameLink.Href, @"^results2\.asp\?provider_number=(?<UrlNumber>[A-Z]{18})$");
             childCare.UrlNumber = match.Groups["UrlNumber"].Value;
 
-            // TODO: parse the other columns
+            // parse out the name
+            childCare.Name = nameLink.InnerText.Trim();
+
+            // parse out the name
+            childCare.City = cells[10].InnerText.Trim();
+
+            // TODO: parse out the address and rating
 
             return childCare;
         }

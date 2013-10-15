@@ -1,15 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using CsQuery;
 using Model.Odjfs;
 using Scraper;
 
-namespace OdjfsHtmlScraper
+namespace OdjfsHtmlScraper.Scrapers
 {
-    public class SearchResultsPageScraper : IScraper<CQ, IEnumerable<ChildCare>>
+    public class ListDocumentScraper : IScraper<CQ, IEnumerable<ChildCare>>
     {
         public Task<IEnumerable<ChildCare>> Scrape(CQ input)
         {
