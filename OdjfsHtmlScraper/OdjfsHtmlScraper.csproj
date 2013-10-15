@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{711CC508-53A8-4EDB-BBCA-B911935DA4B0}</ProjectGuid>
+    <ProjectGuid>{393F1B81-3F51-45DC-976C-3BD31D2A71DE}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Model</RootNamespace>
-    <AssemblyName>Model</AssemblyName>
+    <RootNamespace>OdjfsHtmlScraper</RootNamespace>
+    <AssemblyName>OdjfsHtmlScraper</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -39,23 +39,25 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Odjfs\ChildCare.cs" />
-    <Compile Include="Odjfs\LicensedCenter.cs" />
-    <Compile Include="Odjfs\TypeAHome.cs" />
-    <Compile Include="Odjfs\DayCamp.cs" />
-    <Compile Include="Odjfs\DetailedChildCare.cs" />
-    <Compile Include="Odjfs\TypeBHome.cs" />
-    <Compile Include="Sorta\Agency.cs" />
-    <Compile Include="Sorta\Block.cs" />
-    <Compile Include="Sorta\ServiceException.cs" />
-    <Compile Include="Sorta\Shape.cs" />
-    <Compile Include="Sorta\StopTime.cs" />
-    <Compile Include="Sorta\ShapePoint.cs" />
-    <Compile Include="Sorta\Trip.cs" />
-    <Compile Include="Sorta\Service.cs" />
-    <Compile Include="Sorta\Stop.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Sorta\Route.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Model\Model.csproj">
+      <Project>{711cc508-53a8-4edb-bbca-b911935da4b0}</Project>
+      <Name>Model</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Scraper\Scraper.csproj">
+      <Project>{4401fe23-f94a-4eda-aa76-ccd53548e10e}</Project>
+      <Name>Scraper</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Submodules\CsQuery.FormFields\CsQuery.FormFields\CsQuery.FormFields.csproj">
+      <Project>{d563cc14-d211-44f3-8e9e-debe7c18b2d9}</Project>
+      <Name>CsQuery.FormFields</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Submodules\CsQuery.FormFields\CsQuery\source\CsQuery\CsQuery.csproj">
+      <Project>{c38dffe9-321b-4941-b031-29d718ab5c31}</Project>
+      <Name>CsQuery</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

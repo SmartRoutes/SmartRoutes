@@ -58,10 +58,6 @@
       <Project>{4401fe23-f94a-4eda-aa76-ccd53548e10e}</Project>
       <Name>Scraper</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Submodules\CsQuery\source\CsQuery\CsQuery.csproj">
-      <Project>{c38dffe9-321b-4941-b031-29d718ab5c31}</Project>
-      <Name>CsQuery</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
