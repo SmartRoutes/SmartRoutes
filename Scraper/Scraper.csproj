@@ -44,6 +44,7 @@
     <Compile Include="CsvStreamParser.cs" />
     <Compile Include="IParser.cs" />
     <Compile Include="IScraperOut.cs" />
+    <Compile Include="ParserException.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
