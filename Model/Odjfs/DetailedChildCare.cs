@@ -7,7 +7,7 @@ namespace Model.Odjfs
         #region HTML
 
         public bool ProviderAgreement { get; set; }
-        public string Administrator { get; set; }
+        public string Administrators { get; set; }
         public string CenterStatus { get; set; }
         public DateTime InitialApplicationDate { get; set; }
         public DateTime LicenseBeginDate { get; set; }
