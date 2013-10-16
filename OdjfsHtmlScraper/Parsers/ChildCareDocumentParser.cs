@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Text.RegularExpressions;
@@ -11,15 +12,16 @@ using Scraper;
 
 namespace OdjfsHtmlScraper.Parsers
 {
-    public class ItemDocumentParser : IParser<CQ, ChildCare>
+    public abstract class ChildCareParser<T> : IParser<CQ, T> where T : ChildCare
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
-        public ChildCare Parse(CQ document)
+        public T Parse(CQ document)
         {
             // parse the first and second tables
             string[][] detailArrays = GetFirstTableDetailArrays(document)
                 .Concat(GetSecondTableDetails(document))
+                .Select(t => new[] {t[0], t[1] != string.Empty ? t[1] : null}) // coalesce empty strings to null 
                 .ToArray();
 
             // make sure the keys are unique
@@ -28,19 +30,36 @@ namespace OdjfsHtmlScraper.Parsers
             if (keys.Length != uniqueKeys.Length)
             {
                 var exception = new ParserException("All keys in the first details table must be unique.");
-                Logger.ErrorException(string.Format("OriginalKeys: {0}", string.Join(", ", keys)), exception);
+                Logger.ErrorException(string.Format("Type: '{0}', OriginalKeys: {1}", typeof (T).Name, string.Join(", ", keys)), exception);
                 throw exception;
             }
 
             // create the dictionary
-            IDictionary<string, string> dictionary = detailArrays.ToDictionary(t => t[0], t => t[1]);
+            IDictionary<string, string> details = detailArrays.ToDictionary(t => t[0], t => t[1]);
 
-            foreach (var pair in dictionary)
-            {
-                Console.WriteLine("'{0}' = '{1}'", pair.Key, pair.Value);
-            }
+            // generate the concrete object using the child implementation
+            return GetChildCareInstance(details);
+        }
 
-            return null;
+        protected abstract T PopulateFields(T childCare, IDictionary<string, string> details);
+
+        private T GetChildCareInstance(IDictionary<string, string> details)
+        {
+            var childCare = Activator.CreateInstance<T>();
+
+            // fill in fields shared by all subclasses
+            childCare.Type = details["Type"];
+            childCare.ExternalId = details["Number"];
+            childCare.Name = details["Name"];
+            // Address is excluded because not all addresses are available on the ODJFS website
+            // childCare.Address = details["Address"]
+            childCare.City = details["City"];
+            childCare.State = details["State"];
+            childCare.ZipCode = int.Parse(details["Zip"]);
+            childCare.County = details["County"];
+            childCare.PhoneNumber = details["Phone"];
+
+            return PopulateFields(childCare, details);
         }
 
         private IEnumerable<string[]> GetFirstTableDetailArrays(CQ document)
@@ -50,7 +69,7 @@ namespace OdjfsHtmlScraper.Parsers
             if (table == null)
             {
                 var exception = new ParserException("No Program Details table was found.");
-                Logger.ErrorException(string.Empty, exception);
+                Logger.ErrorException(string.Format("Type: '{0}'", typeof (T).Name), exception);
                 throw exception;
             }
 
@@ -78,7 +97,7 @@ namespace OdjfsHtmlScraper.Parsers
                 if (detailArray.Length == 1)
                 {
                     var exception = new ParserException("A detail was not colon seperated.");
-                    Logger.ErrorException(string.Format("String: '{0}'", detailArray[0]), exception);
+                    Logger.ErrorException(string.Format("Type: '{0}', String: '{1}'", typeof (T).Name, detailArray[0]), exception);
                     throw exception;
                 }
             }
@@ -155,6 +174,11 @@ namespace OdjfsHtmlScraper.Parsers
                 image.ParentNode.InsertAfter(new DomText(text), image);
                 image.Remove();
             }
+        }
+
+        protected DateTime ParseDate(string date)
+        {
+            return DateTime.ParseExact(date, "MM/dd/yyyy", CultureInfo.InvariantCulture);
         }
     }
 }

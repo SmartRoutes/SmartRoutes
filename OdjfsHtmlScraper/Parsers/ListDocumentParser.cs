@@ -45,7 +45,6 @@ namespace OdjfsHtmlScraper.Parsers
             }
 
             // get the type
-            // TODO: parse the "Program Type Codes" key at the top of the page to make this more generic
             ChildCare childCare;
             string typeCode = cells[14].InnerText.Trim();
             switch (typeCode)
@@ -69,14 +68,15 @@ namespace OdjfsHtmlScraper.Parsers
             }
 
             // assign the type code
+            // TODO: parse the "Program Type Codes" key at the top of the page to make this more generic
             childCare.Type = typeCode;
 
             // get the link containing URL number
             var nameLink = (IHTMLAnchorElement) cells[2].FirstElementChild;
 
             // parse the URL number out of the URL
-            Match match = Regex.Match(nameLink.Href, @"^results2\.asp\?provider_number=(?<UrlNumber>[A-Z]{18})$");
-            childCare.UrlNumber = match.Groups["UrlNumber"].Value;
+            Match match = Regex.Match(nameLink.Href, @"^results2\.asp\?provider_number=(?<ExternalUrlId>[A-Z]{18})$");
+            childCare.ExternalUrlId = match.Groups["ExternalUrlId"].Value;
 
             // parse out the name
             childCare.Name = nameLink.InnerText.Trim();

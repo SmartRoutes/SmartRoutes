@@ -9,9 +9,10 @@ namespace Model.Odjfs
         #region HTML
 
         public string Type { get; set; }
-        public string UrlNumber { get; set; }
-        public string PageNumber { get; set; }
+        public string ExternalUrlId { get; set; }
+        public string ExternalId { get; set; }
         public string Name { get; set; }
+        public string Address { get; set; }
         public string City { get; set; }
         public string State { get; set; }
         public int ZipCode { get; set; }
