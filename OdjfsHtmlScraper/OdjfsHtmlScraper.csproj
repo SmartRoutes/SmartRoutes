@@ -44,9 +44,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Parsers\DayCampParser.cs" />
+    <Compile Include="Parsers\DayCampDocumentParser.cs" />
     <Compile Include="Parsers\ListDocumentParser.cs" />
-    <Compile Include="Parsers\ChildCareParser.cs" />
+    <Compile Include="Parsers\ChildCareDocumentParser.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Scrapers\ListDocumentScraper.cs" />
   </ItemGroup>

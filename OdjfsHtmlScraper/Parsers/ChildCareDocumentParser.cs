@@ -12,7 +12,7 @@ using Scraper;
 
 namespace OdjfsHtmlScraper.Parsers
 {
-    public abstract class ChildCareParser<T> : IParser<CQ, T> where T : ChildCare
+    public abstract class ChildCareDocumentParser<T> : IParser<CQ, T> where T : ChildCare
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
