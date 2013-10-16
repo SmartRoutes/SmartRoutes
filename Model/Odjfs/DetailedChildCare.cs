@@ -29,24 +29,31 @@ namespace Model.Odjfs
         public bool Coa { get; set; }
         public bool Acsi { get; set; }
 
+        public bool MondayReported { get; set; }
         public DateTime? MondayBegin { get; set; }
         public DateTime? MondayEnd { get; set; }
 
+        public bool TuesdayReported { get; set; }
         public DateTime? TuesdayBegin { get; set; }
         public DateTime? TuesdayEnd { get; set; }
 
+        public bool WednesdayReported { get; set; }
         public DateTime? WednesdayBegin { get; set; }
         public DateTime? WednesdayEnd { get; set; }
 
+        public bool ThursdayReported { get; set; }
         public DateTime? ThursdayBegin { get; set; }
         public DateTime? ThursdayEnd { get; set; }
 
+        public bool FridayReported { get; set; }
         public DateTime? FridayBegin { get; set; }
         public DateTime? FridayEnd { get; set; }
 
+        public bool SaturdayReported { get; set; }
         public DateTime? SaturdayBegin { get; set; }
         public DateTime? SaturdayEnd { get; set; }
 
+        public bool SundayReported { get; set; }
         public DateTime? SundayBegin { get; set; }
         public DateTime? SundayEnd { get; set; }
 

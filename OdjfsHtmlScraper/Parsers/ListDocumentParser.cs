@@ -19,7 +19,7 @@ namespace OdjfsHtmlScraper.Parsers
             if (table.Length != 1)
             {
                 var exception = new ParserException("Exactly one table on the search results page is expected.");
-                Logger.ErrorException(string.Format("Expected: 1, Actual: {0}, HTML:\n{1}", table.Length, document.Document.OuterHTML), exception);
+                Logger.ErrorException(string.Format("Expected: 1, Actual: {0}", table.Length), exception);
                 throw exception;
             }
 
