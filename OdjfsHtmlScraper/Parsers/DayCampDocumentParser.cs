@@ -8,11 +8,15 @@ namespace OdjfsHtmlScraper.Parsers
     {
         protected override DayCamp PopulateFields(DayCamp childCare, IDictionary<string, string> details)
         {
-            childCare.Address = details["Address"];
-            childCare.RegistrationStatus = details["Registration Status"];
-            childCare.Owner = details["Owner"];
-            childCare.RegistrationBeginDate = ParseDate(details["Registration Begin Date"]);
-            childCare.RegistrationEndDate = details["Registration End Date"] != "NA" ? ParseDate(details["Registration End Date"]) : (DateTime?) null;
+            // populate the base fields
+            base.PopulateFields(childCare, details);
+
+            childCare.Address = GetDetailString(details, "Address");
+            childCare.RegistrationStatus = GetDetailString(details, "Registration Status");
+            childCare.Owner = GetDetailString(details, "Owner");
+            childCare.RegistrationBeginDate = GetDetailString(details, "Registration Begin Date");
+            childCare.RegistrationEndDate = GetDetailString(details, "Registration End Date");
+            childCare.EffectiveDates = GetDetailString(details, "Effective Dates");
 
             return childCare;
         }

@@ -6,12 +6,12 @@ namespace Model.Odjfs
     {
         #region HTML
 
-        public bool ProviderAgreement { get; set; }
+        public string ProviderAgreement { get; set; }
         public string Administrators { get; set; }
         public string CenterStatus { get; set; }
-        public DateTime InitialApplicationDate { get; set; }
-        public DateTime LicenseBeginDate { get; set; }
-        public DateTime LicenseEndDate { get; set; }
+        public string InitialApplicationDate { get; set; }
+        public string LicenseBeginDate { get; set; }
+        public string LicenseEndDate { get; set; }
 
         public int? SutqRating { get; set; }
 

@@ -38,28 +38,41 @@ namespace OdjfsHtmlScraper.Parsers
             IDictionary<string, string> details = detailArrays.ToDictionary(t => t[0], t => t[1]);
 
             // generate the concrete object using the child implementation
-            return GetChildCareInstance(details);
+            return PopulateFields(Activator.CreateInstance<T>(), details);
         }
 
-        protected abstract T PopulateFields(T childCare, IDictionary<string, string> details);
-
-        private T GetChildCareInstance(IDictionary<string, string> details)
+        protected virtual T PopulateFields(T childCare, IDictionary<string, string> details)
         {
-            var childCare = Activator.CreateInstance<T>();
-
             // fill in fields shared by all subclasses
-            childCare.Type = details["Type"];
-            childCare.ExternalId = details["Number"];
-            childCare.Name = details["Name"];
+            childCare.Type = GetDetailString(details, "Type");
+            childCare.ExternalId = GetDetailString(details, "Number");
+            childCare.Name = GetDetailString(details, "Name");
             // Address is excluded because not all addresses are available on the ODJFS website
             // childCare.Address = details["Address"]
-            childCare.City = details["City"];
-            childCare.State = details["State"];
-            childCare.ZipCode = int.Parse(details["Zip"]);
-            childCare.County = details["County"];
-            childCare.PhoneNumber = details["Phone"];
+            childCare.City = GetDetailString(details, "City");
+            childCare.State = GetDetailString(details, "State");
+            childCare.ZipCode = int.Parse(GetDetailString(details, "Zip"));
+            childCare.County = GetDetailString(details, "County");
+            childCare.PhoneNumber = GetDetailString(details, "Phone");
 
-            return PopulateFields(childCare, details);
+            return childCare;
+        }
+
+        protected string GetDetailString(IDictionary<string, string> details, params string[] keys)
+        {
+            // try all of the provided keys to get the value
+            foreach (string key in keys)
+            {
+                string value;
+                if (details.TryGetValue(key, out value))
+                {
+                    return value;
+                }
+            }
+
+            var exception = new ParserException("An expected key was not found in the child care details.");
+            Logger.ErrorException(string.Format("AllKeys: '{0}', KeysTried: '{1}'", string.Join(", ", details.Keys), string.Join(", ", keys)), exception);
+            throw exception;
         }
 
         private IEnumerable<string[]> GetFirstTableDetailArrays(CQ document)
@@ -153,7 +166,7 @@ namespace OdjfsHtmlScraper.Parsers
                    {
                        new[] {tokens[1], tokens[0]},
                        new[] {tokens[3], tokens[2]},
-                       new[] {tokens[4], tokens[5]}
+                       new[] {tokens[4].TrimEnd(':'), tokens[5]}
                    };
         }
 

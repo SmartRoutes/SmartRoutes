@@ -44,6 +44,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Parsers\TypeAHomeDocumentParser.cs" />
+    <Compile Include="Parsers\LicenseCenterDocumentParser.cs" />
+    <Compile Include="Parsers\DetailedChildCareDocumentParser.cs" />
+    <Compile Include="Parsers\TypeBHomeDocumentParser.cs" />
     <Compile Include="Parsers\DayCampDocumentParser.cs" />
     <Compile Include="Parsers\ListDocumentParser.cs" />
     <Compile Include="Parsers\ChildCareDocumentParser.cs" />

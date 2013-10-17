@@ -6,8 +6,8 @@ namespace Model.Odjfs
     {
         #region HTML
 
-        public DateTime CertificationBeginDate { get; set; }
-        public DateTime CertificationEndDate { get; set; }
+        public string CertificationBeginDate { get; set; }
+        public string CertificationEndDate { get; set; }
 
         #endregion
     }

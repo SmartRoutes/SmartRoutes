@@ -8,8 +8,9 @@ namespace Model.Odjfs
 
         public string Owner { get; set; }
         public string RegistrationStatus { get; set; }
-        public DateTime RegistrationBeginDate { get; set; }
-        public DateTime? RegistrationEndDate { get; set; }
+        public string RegistrationBeginDate { get; set; }
+        public string RegistrationEndDate { get; set; }
+        public string EffectiveDates { get; set; }
 
         #endregion
     }
