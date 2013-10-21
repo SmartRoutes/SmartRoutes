@@ -1,8 +1,8 @@
 ﻿using System;
 using System.IO;
 using System.Net;
-using System.Net.Cache;
 using System.Net.Http;
+using System.Reflection;
 using System.Threading.Tasks;
 using CsQuery;
 using Model.Odjfs;
@@ -23,8 +23,17 @@ namespace OdjfsHtmlScraper.Support
                 AllowPipelining = true
             };
 
+            // get the version at runtime
+            string version = ((AssemblyInformationalVersionAttribute) Assembly
+                .GetAssembly(typeof (IClient))
+                .GetCustomAttributes(typeof (AssemblyInformationalVersionAttribute), false)[0])
+                .InformationalVersion;
+
+            // construct a helpful user-agent
+            string userAgent = string.Format("SmartRoutes/{0} (+http://goo.gl/Ol3VNR)", version);
+
             _httpClient = new HttpClient(handler);
-            _httpClient.DefaultRequestHeaders.Add("User-Agent", "SmartRoutes (+http://goo.gl/Ol3VNR)");
+            _httpClient.DefaultRequestHeaders.Add("User-Agent", userAgent);
         }
 
         public async Task<CQ> GetChildCareDocument(ChildCare childCare)
