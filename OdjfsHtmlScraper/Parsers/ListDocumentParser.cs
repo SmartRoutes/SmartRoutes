@@ -1,5 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using CsQuery;
@@ -9,12 +9,15 @@ using Scraper;
 
 namespace OdjfsHtmlScraper.Parsers
 {
-    public class ListDocumentParser : IParser<CQ, IEnumerable<ChildCare>>
+    public class ListDocumentParser : IListDocumentParser
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
-        public IEnumerable<ChildCare> Parse(CQ document)
+        public IEnumerable<ChildCare> Parse(byte[] bytes)
         {
+            // parse the HTML
+            CQ document = CQ.Create(new MemoryStream(bytes));
+
             // select the table
             CQ table = document["table"];
             if (table.Length != 1)

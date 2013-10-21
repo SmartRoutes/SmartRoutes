@@ -1,12 +1,10 @@
-﻿using System;
-using System.IO;
-using System.Security.Cryptography;
+﻿using System.IO;
 using System.Threading.Tasks;
 using Model.Odjfs;
 
 namespace OdjfsHtmlScraper.Support
 {
-    public class DownloadingClient : BaseClient
+    public class DownloadingClient : Client
     {
         private readonly string _directory;
 
@@ -27,13 +25,8 @@ namespace OdjfsHtmlScraper.Support
 
         private async Task WriteBytes(string fileNameFormat, byte[] bytes)
         {
-            // generate a hash of the contents
-            var sha = new SHA256Managed();
-            byte[] hashBytes = sha.ComputeHash(bytes);
-            string hash = BitConverter.ToString(hashBytes).Replace("-", "");
-
             // generate a path for the child care
-            string path = Path.Combine(_directory, string.Format(fileNameFormat, hash));
+            string path = Path.Combine(_directory, string.Format(fileNameFormat, bytes.GetSha256Hash()));
 
             using (var outputStream = new FileStream(path, FileMode.Create, FileAccess.Write))
             {

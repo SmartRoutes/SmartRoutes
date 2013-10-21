@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text.RegularExpressions;
@@ -8,16 +9,31 @@ using CsQuery;
 using CsQuery.Implementation;
 using Model.Odjfs;
 using NLog;
+using OdjfsHtmlScraper.Support;
 using Scraper;
 
 namespace OdjfsHtmlScraper.Parsers
 {
-    public abstract class ChildCareDocumentParser<T> : IParser<CQ, T> where T : ChildCare
+    public abstract class ChildCareDocumentParser<T> : IChildCareDocumentParser<T> where T : ChildCare
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
-        public T Parse(CQ document)
+        public void Parse(T childCare, byte[] bytes)
         {
+            // get the hash and no-op if the hash has not changed
+            string currentHash = bytes.GetSha256Hash();
+            if (currentHash == childCare.LastHash)
+            {
+                return;
+            }
+
+            // record this execution
+            childCare.LastHash = currentHash;
+            childCare.LastParsed = DateTime.Now; // TODO: UTC or local time
+
+            // parse the HTML
+            CQ document = CQ.Create(new MemoryStream(bytes));
+
             // parse the first and second tables
             string[][] detailArrays = GetFirstTableDetailArrays(document)
                 .Concat(GetSecondTableDetails(document))
@@ -38,7 +54,7 @@ namespace OdjfsHtmlScraper.Parsers
             IDictionary<string, string> details = detailArrays.ToDictionary(t => t[0], t => t[1]);
 
             // generate the concrete object using the child implementation
-            return PopulateFields(Activator.CreateInstance<T>(), details);
+            PopulateFields(childCare, details);
         }
 
         protected virtual T PopulateFields(T childCare, IDictionary<string, string> details)
@@ -88,10 +104,10 @@ namespace OdjfsHtmlScraper.Parsers
 
             // replace all of the images with text
             ReplaceImagesWithText(table, new Dictionary<string, string>
-                                         {
-                                             {"smallredstar2.gif", "*"},
-                                             {"http://jfs.ohio.gov/_assets/images/web_graphics/common/spacer.gif", string.Empty},
-                                         });
+            {
+                {"smallredstar2.gif", "*"},
+                {"http://jfs.ohio.gov/_assets/images/web_graphics/common/spacer.gif", string.Empty},
+            });
 
             // get all of the text fields in the first details table
             string[][] detailArrays = table
@@ -129,10 +145,10 @@ namespace OdjfsHtmlScraper.Parsers
 
             // replace all of the images with text
             ReplaceImagesWithText(table, new Dictionary<string, string>
-                                         {
-                                             {"Images/EmptyBox.jpg", "false"},
-                                             {"Images/GreenMark.jpg", "true"},
-                                         });
+            {
+                {"Images/EmptyBox.jpg", "false"},
+                {"Images/GreenMark.jpg", "true"},
+            });
 
             // get the useful rows in the table                     
             return table
@@ -163,11 +179,11 @@ namespace OdjfsHtmlScraper.Parsers
 
             // arrange the tokens as key value pairs
             return new[]
-                   {
-                       new[] {tokens[1], tokens[0]},
-                       new[] {tokens[3], tokens[2]},
-                       new[] {tokens[4].TrimEnd(':'), tokens[5]}
-                   };
+            {
+                new[] {tokens[1], tokens[0]},
+                new[] {tokens[3], tokens[2]},
+                new[] {tokens[4].TrimEnd(':'), tokens[5]}
+            };
         }
 
         private void ReplaceImagesWithText(IDomElement parent, IDictionary<string, string> replacements)

@@ -47,6 +47,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Parsers\IChildCareDocumentParser.cs" />
+    <Compile Include="Parsers\IListDocumentParser.cs" />
     <Compile Include="Parsers\TypeAHomeDocumentParser.cs" />
     <Compile Include="Parsers\LicenseCenterDocumentParser.cs" />
     <Compile Include="Parsers\DetailedChildCareDocumentParser.cs" />
@@ -56,9 +58,12 @@
     <Compile Include="Parsers\ChildCareDocumentParser.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Scrapers\ChildCareDocumentScraper.cs" />
+    <Compile Include="Scrapers\IChildCareDocumentScraper.cs" />
+    <Compile Include="Scrapers\IListDocumentScraper.cs" />
     <Compile Include="Scrapers\ListDocumentScraper.cs" />
     <Compile Include="Support\Client.cs" />
     <Compile Include="Support\DownloadingClient.cs" />
+    <Compile Include="Support\ExtensionMethods.cs" />
     <Compile Include="Support\IClient.cs" />
   </ItemGroup>
   <ItemGroup>

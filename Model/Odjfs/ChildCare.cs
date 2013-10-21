@@ -1,9 +1,13 @@
-﻿namespace Model.Odjfs
+﻿using System;
+
+namespace Model.Odjfs
 {
     public abstract class ChildCare
     {
         public int Id { get; set; }
         public string ChildCareType { get; set; }
+        public DateTime LastParsed { get; set; }
+        public string LastHash { get; set; }
 
         #region HTML
 

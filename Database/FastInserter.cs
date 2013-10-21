@@ -7,8 +7,8 @@ using System.Reflection;
 namespace Database
 {
     /// <summary>
-    /// This is a convenience class is the ideas introduced here:
-    /// http://stackoverflow.com/a/15662102/52749
+    ///     This is a convenience class is the ideas introduced here:
+    ///     http://stackoverflow.com/a/15662102/52749
     /// </summary>
     /// <typeparam name="T">The concrete <see cref="DbContext" /> child class.</typeparam>
     public class FastInserter<T> : IDisposable where T : DbContext

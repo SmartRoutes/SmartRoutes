@@ -42,10 +42,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="IScraperInOut.cs" />
     <Compile Include="CsvStreamParser.cs" />
-    <Compile Include="IParser.cs" />
-    <Compile Include="IScraperOut.cs" />
+    <Compile Include="ICsvStreamParser.cs" />
     <Compile Include="ParserException.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

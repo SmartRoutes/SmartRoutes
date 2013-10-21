@@ -35,11 +35,11 @@ namespace Database.Contexts
 
             // most entities do not need database generated IDs
             ISet<Type> databaseGeneratedIds = new HashSet<Type>
-                                              {
-                                                  typeof (ShapePoint),
-                                                  typeof (StopTime),
-                                                  typeof (ServiceException)
-                                              };
+            {
+                typeof (ShapePoint),
+                typeof (StopTime),
+                typeof (ServiceException)
+            };
             modelBuilder
                 .Properties()
                 .Where(p => p.Name == "Id" && !databaseGeneratedIds.Contains(p.DeclaringType))

@@ -1,18 +1,17 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using CsQuery;
 using Model.Odjfs;
+using OdjfsHtmlScraper.Parsers;
 using OdjfsHtmlScraper.Support;
-using Scraper;
 
 namespace OdjfsHtmlScraper.Scrapers
 {
-    public class ListDocumentScraper : IScraper<IEnumerable<ChildCare>>
+    public class ListDocumentScraper : IListDocumentScraper
     {
         private readonly IClient _client;
-        private readonly IParser<CQ, IEnumerable<ChildCare>> _parser;
+        private readonly IListDocumentParser _parser;
 
-        public ListDocumentScraper(IClient client, IParser<CQ, IEnumerable<ChildCare>> parser)
+        public ListDocumentScraper(IClient client, IListDocumentParser parser)
         {
             _client = client;
             _parser = parser;
@@ -20,11 +19,11 @@ namespace OdjfsHtmlScraper.Scrapers
 
         public async Task<IEnumerable<ChildCare>> Scrape()
         {
-            // fetch and parse the HTML
-            CQ document = await _client.GetListDocument();
+            // fetch the contents
+            byte[] bytes = await _client.GetListDocument();
 
             // extract the information from the HTML
-            return _parser.Parse(document);
+            return _parser.Parse(bytes);
         }
     }
 }

@@ -5,7 +5,7 @@ using Microsoft.VisualBasic.FileIO;
 
 namespace Scraper
 {
-    public abstract class CsvStreamParser<TOut> : IParser<Stream, IEnumerable<TOut>>
+    public abstract class CsvStreamParser<TOut> : ICsvStreamParser<TOut>
     {
         public IEnumerable<TOut> Parse(Stream csvStream)
         {
