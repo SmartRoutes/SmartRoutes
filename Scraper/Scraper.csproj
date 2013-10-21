@@ -81,7 +81,7 @@
       AssemblyProduct="Sandbox"
       AssemblyCopyright="Copyright © $(Year). All rights reserved."
       ComVisible="false"
-      CLSCompliant="true"
+      CLSCompliant="false"
       AssemblyInformationalVersion="$(Major).$(Minor).$(Build).$(Revision)"
       AssemblyVersion="$(Major).$(Minor).$(Build)"
       AssemblyFileVersion="$(Major).$(Minor).$(Build)" />
