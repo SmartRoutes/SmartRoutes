@@ -44,7 +44,7 @@ namespace OdjfsHtmlScraper.Parsers
         protected virtual T PopulateFields(T childCare, IDictionary<string, string> details)
         {
             // fill in fields shared by all subclasses
-            childCare.Type = GetDetailString(details, "Type");
+            // TODO: verify Type string is expected values
             childCare.ExternalId = GetDetailString(details, "Number");
             childCare.Name = GetDetailString(details, "Name");
             // Address is excluded because not all addresses are available on the ODJFS website

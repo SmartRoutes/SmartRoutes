@@ -4,6 +4,13 @@ namespace Model.Odjfs
 {
     public abstract class DetailedChildCare : ChildCare
     {
+        protected DetailedChildCare()
+        {
+            ChildCareType = "DetailedChildCare";
+        }
+
+        public string DetailedChildCareType { get; set; }
+
         #region HTML
 
         public string ProviderAgreement { get; set; }

@@ -5,10 +5,10 @@ namespace Model.Odjfs
     public abstract class ChildCare
     {
         public int Id { get; set; }
+        public string ChildCareType { get; set; }
 
         #region HTML
 
-        public string Type { get; set; }
         public string ExternalUrlId { get; set; }
         public string ExternalId { get; set; }
         public string Name { get; set; }

@@ -31,33 +31,43 @@ namespace OdjfsHtmlScraper.Scrapers
             };
         }
 
-        public async Task<ChildCare> Scrape(ChildCare childCare)
+        public async Task<ChildCare> Scrape(ChildCare childCareStub)
         {
             // make sure we have a parser before we fetch the HTML
-            Type childCareType = childCare.GetType();
+            Type childCareType = childCareStub.GetType();
             if (!_parsers.ContainsKey(childCareType))
             {
                 var exception = new ArgumentException("No parser was found for the provided child care type.");
-                Logger.ErrorException(string.Format("SupportedTypes: '{0}', ProvidedType: '{1}'", string.Join(", ", _parsers.Keys.Select(t => t.ToString())), childCare), exception);
+                Logger.ErrorException(string.Format(
+                    "SupportedTypes: '{0}', ProvidedType: '{1}', ExternalUrlId: '{2}'",
+                    string.Join(", ", _parsers.Keys.Select(t => t.ToString())),
+                    childCareType,
+                    childCareStub.ExternalUrlId), exception);
                 throw exception;
             }
             IParser<CQ, ChildCare> parser = _parsers[childCareType];
 
             // make sure we have a URL ID
-            if (string.IsNullOrWhiteSpace(childCare.ExternalUrlId))
+            if (string.IsNullOrWhiteSpace(childCareStub.ExternalUrlId))
             {
-                var exception = new ArgumentNullException("childCare", "The provided child care has a null external URL ID.");
-                Logger.ErrorException(string.Format("SupportedTypes: '{0}', ProvidedType: '{1}'", string.Join(", ", _parsers.Keys.Select(t => t.ToString())), childCare), exception);
+                var exception = new ArgumentNullException("childCareStub", "The provided child care has a null external URL ID.");
+                Logger.ErrorException(string.Format(
+                    "ProvidedType: '{0}', ExternalUrlId: '{1}'",
+                    childCareType,
+                    childCareStub.ExternalUrlId), exception);
                 throw exception;
             }
 
             // fetch and parse the HTML
-            CQ document = await _client.GetChildCareDocument(childCare);
+            CQ document = await _client.GetChildCareDocument(childCareStub);
 
             // TODO: verify child care argument matches the extracted child care
 
             // extract the child care information
-            return parser.Parse(document);
+            ChildCare childCare = parser.Parse(document);
+            childCare.ExternalUrlId = childCareStub.ExternalUrlId;
+
+            return childCare;
         }
     }
 }

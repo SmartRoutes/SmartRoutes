@@ -25,6 +25,8 @@ namespace Database.Sorta
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
+            base.OnModelCreating(modelBuilder);
+
             // give all Id columns "<Type Name>Id"
             modelBuilder
                 .Properties()
@@ -47,8 +49,6 @@ namespace Database.Sorta
             modelBuilder
                 .Types()
                 .Configure(c => c.ToTable("sorta." + c.ClrType.Name));
-
-            base.OnModelCreating(modelBuilder);
         }
     }
 }

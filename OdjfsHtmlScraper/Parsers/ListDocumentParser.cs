@@ -45,6 +45,7 @@ namespace OdjfsHtmlScraper.Parsers
                 throw exception;
             }
 
+            // TODO: parse the "Program Type Codes" key at the top of the page to make this more generic
             // get the type
             ChildCare childCare;
             string typeCode = cells[14].InnerText.Trim();
@@ -67,10 +68,6 @@ namespace OdjfsHtmlScraper.Parsers
                     Logger.ErrorException(string.Format("TypeCode: {0}, HTML:\n{1}", typeCode, element.OuterHTML), exception);
                     throw exception;
             }
-
-            // assign the type code
-            // TODO: parse the "Program Type Codes" key at the top of the page to make this more generic
-            childCare.Type = typeCode;
 
             // get the link containing URL number
             var nameLink = (IHTMLAnchorElement) cells[2].FirstElementChild;

@@ -1,9 +1,12 @@
-﻿using System;
-
-namespace Model.Odjfs
+﻿namespace Model.Odjfs
 {
     public class DayCamp : ChildCare
     {
+        public DayCamp()
+        {
+            ChildCareType = "DayCamp";
+        }
+
         #region HTML
 
         public string Owner { get; set; }

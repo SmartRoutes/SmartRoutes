@@ -1,8 +1,10 @@
-﻿using System;
-
-namespace Model.Odjfs
+﻿namespace Model.Odjfs
 {
     public class LicensedCenter : DetailedChildCare
     {
+        public LicensedCenter()
+        {
+            DetailedChildCareType = "LicensedCenter";
+        }
     }
 }

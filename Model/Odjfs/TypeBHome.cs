@@ -1,9 +1,12 @@
-﻿using System;
-
-namespace Model.Odjfs
+﻿namespace Model.Odjfs
 {
     public class TypeBHome : ChildCare
     {
+        public TypeBHome()
+        {
+            ChildCareType = "TypeBHome";
+        }
+
         #region HTML
 
         public string CertificationBeginDate { get; set; }

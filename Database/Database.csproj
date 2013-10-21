@@ -52,6 +52,7 @@
   <ItemGroup>
     <Compile Include="FastInserter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Odjfs\OdjfsContext.cs" />
     <Compile Include="Sorta\SortaContext.cs" />
   </ItemGroup>
   <ItemGroup>
