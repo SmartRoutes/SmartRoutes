@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Model.Odjfs
+﻿namespace Model.Odjfs
 {
     public abstract class ChildCare
     {

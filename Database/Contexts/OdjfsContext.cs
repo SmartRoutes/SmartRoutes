@@ -1,7 +1,7 @@
 ﻿using System.Data.Entity;
 using Model.Odjfs;
 
-namespace Database.Odjfs
+namespace Database.Contexts
 {
     public class OdjfsContext : DbContext
     {

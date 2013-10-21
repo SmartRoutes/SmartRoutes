@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity;
 using Model.Sorta;
 
-namespace Database.Sorta
+namespace Database.Contexts
 {
     public class SortaContext : DbContext
     {
