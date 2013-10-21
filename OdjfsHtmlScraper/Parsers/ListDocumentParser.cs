@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using CsQuery;
@@ -26,7 +27,7 @@ namespace OdjfsHtmlScraper.Parsers
             // select all of the relevant rows in the table
             IEnumerable<IDomElement> rows = table["tr"]
                 .Elements
-                .Where((e, i) => i % 2 == 0) // every other row is empty...
+                .Where((e, i) => i%2 == 0) // every other row is empty...
                 .Skip(1); // the first two is for the header
 
             // parse the rows using the child parser
@@ -76,6 +77,12 @@ namespace OdjfsHtmlScraper.Parsers
 
             // parse the URL number out of the URL
             Match match = Regex.Match(nameLink.Href, @"^results2\.asp\?provider_number=(?<ExternalUrlId>[A-Z]{18})$");
+            if (!match.Success)
+            {
+                var exception = new ParserException("The child care link URL was not in the expected format.");
+                Logger.ErrorException(string.Format("HREF: {0}, HTML:\n{1}", nameLink.Href, element.OuterHTML), exception);
+                throw exception;
+            }
             childCare.ExternalUrlId = match.Groups["ExternalUrlId"].Value;
 
             // parse out the name

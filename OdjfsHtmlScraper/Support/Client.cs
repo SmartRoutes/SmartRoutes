@@ -1,5 +1,7 @@
 ﻿using System;
 using System.IO;
+using System.Net;
+using System.Net.Cache;
 using System.Net.Http;
 using System.Threading.Tasks;
 using CsQuery;
@@ -13,7 +15,16 @@ namespace OdjfsHtmlScraper.Support
 
         protected BaseClient()
         {
-            _httpClient = new HttpClient();
+            var handler = new WebRequestHandler
+            {
+                AllowAutoRedirect = false,
+                AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate,
+                UseCookies = false,
+                AllowPipelining = true
+            };
+
+            _httpClient = new HttpClient(handler);
+            _httpClient.DefaultRequestHeaders.Add("User-Agent", "SmartRoutes (+http://goo.gl/Ol3VNR)");
         }
 
         public async Task<CQ> GetChildCareDocument(ChildCare childCare)
