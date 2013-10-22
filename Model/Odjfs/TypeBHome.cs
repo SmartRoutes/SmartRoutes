@@ -2,9 +2,11 @@
 {
     public class TypeBHome : ChildCare
     {
+        public const string Discriminator = "TypeBHome";
+
         public TypeBHome()
         {
-            ChildCareType = "TypeBHome";
+            ChildCareType = Discriminator;
         }
 
         #region HTML

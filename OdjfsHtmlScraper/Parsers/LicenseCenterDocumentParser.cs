@@ -2,7 +2,7 @@
 
 namespace OdjfsHtmlScraper.Parsers
 {
-    public class LicensedCenterDocumentParser : DetailedChildCareDocumentParser<LicensedCenter>
+    public class LicensedCenterParser : BaseDetailedChildCareParser<LicensedCenter>
     {
     }
 }

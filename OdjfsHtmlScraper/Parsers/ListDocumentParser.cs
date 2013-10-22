@@ -5,6 +5,7 @@ using System.Text.RegularExpressions;
 using CsQuery;
 using Model.Odjfs;
 using NLog;
+using OdjfsHtmlScraper.Support;
 using Scraper;
 
 namespace OdjfsHtmlScraper.Parsers
@@ -13,7 +14,7 @@ namespace OdjfsHtmlScraper.Parsers
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
-        public IEnumerable<ChildCare> Parse(byte[] bytes)
+        public IEnumerable<ChildCareStub> Parse(byte[] bytes)
         {
             // parse the HTML
             CQ document = CQ.Create(new MemoryStream(bytes));
@@ -37,7 +38,7 @@ namespace OdjfsHtmlScraper.Parsers
             return rows.Select(ParseRow);
         }
 
-        private ChildCare ParseRow(IDomElement element)
+        private ChildCareStub ParseRow(IDomElement element)
         {
             // get all of the cells
             IDomElement[] cells = element.ChildElements.ToArray();
@@ -48,27 +49,25 @@ namespace OdjfsHtmlScraper.Parsers
                 throw exception;
             }
 
-            // TODO: parse the "Program Type Codes" key at the top of the page to make this more generic
-            // get the type
-            ChildCare childCare;
             string typeCode = cells[14].InnerText.Trim();
+            ChildCareStub childCareStub;
             switch (typeCode)
             {
                 case "A":
-                    childCare = new TypeAHome();
+                    childCareStub = new TypeAHomeStub();
                     break;
                 case "B":
-                    childCare = new TypeBHome();
+                    childCareStub = new TypeBHomeStub();
                     break;
                 case "C":
-                    childCare = new LicensedCenter();
+                    childCareStub = new LicensedCenterStub();
                     break;
                 case "D":
-                    childCare = new DayCamp();
+                    childCareStub = new DayCampStub();
                     break;
                 default:
                     var exception = new ParserException("An unexpected child care type code was found.");
-                    Logger.ErrorException(string.Format("TypeCode: {0}, HTML:\n{1}", typeCode, element.OuterHTML), exception);
+                    Logger.ErrorException(string.Format("TypeCode: '{0}', HTML:\n{1}", typeCode, element.OuterHTML), exception);
                     throw exception;
             }
 
@@ -83,17 +82,24 @@ namespace OdjfsHtmlScraper.Parsers
                 Logger.ErrorException(string.Format("HREF: {0}, HTML:\n{1}", nameLink.Href, element.OuterHTML), exception);
                 throw exception;
             }
-            childCare.ExternalUrlId = match.Groups["ExternalUrlId"].Value;
+            childCareStub.ExternalUrlId = match.Groups["ExternalUrlId"].Value;
 
             // parse out the name
-            childCare.Name = nameLink.InnerText.Trim();
+            childCareStub.Name = nameLink.GetCollapsedInnerText();
 
             // parse out the name
-            childCare.City = cells[10].InnerText.Trim();
+            childCareStub.City = cells[10].GetCollapsedInnerText();
+
+            // type B child cares do not have public addresses
+            if (!(childCareStub is TypeBHomeStub))
+            {
+                // parse out the address
+                childCareStub.Address = cells[6].GetCollapsedInnerText();
+            }
 
             // TODO: parse out the address and rating
 
-            return childCare;
+            return childCareStub;
         }
     }
 }

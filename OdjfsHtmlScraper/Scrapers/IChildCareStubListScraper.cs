@@ -4,8 +4,8 @@ using Model.Odjfs;
 
 namespace OdjfsHtmlScraper.Scrapers
 {
-    public interface IListDocumentScraper
+    public interface IChildCareStubListScraper
     {
-        Task<IEnumerable<ChildCare>> Scrape();
+        Task<IEnumerable<ChildCareStub>> Scrape();
     }
 }

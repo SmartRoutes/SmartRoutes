@@ -5,6 +5,6 @@ namespace OdjfsHtmlScraper.Parsers
 {
     public interface IListDocumentParser
     {
-        IEnumerable<ChildCare> Parse(byte[] bytes);
+        IEnumerable<ChildCareStub> Parse(byte[] bytes);
     }
 }

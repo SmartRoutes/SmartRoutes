@@ -4,9 +4,11 @@ namespace Model.Odjfs
 {
     public abstract class DetailedChildCare : ChildCare
     {
+        public const string Discriminator = "DetailedChildCare";
+
         protected DetailedChildCare()
         {
-            ChildCareType = "DetailedChildCare";
+            ChildCareType = Discriminator;
         }
 
         public string DetailedChildCareType { get; set; }

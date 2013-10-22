@@ -3,9 +3,9 @@ using Model.Odjfs;
 
 namespace OdjfsHtmlScraper.Parsers
 {
-    public class DayCampDocumentParser : ChildCareDocumentParser<DayCamp>
+    public class DayCampParser : BaseChildCareParser<DayCamp>
     {
-        protected override DayCamp PopulateFields(DayCamp childCare, IDictionary<string, string> details)
+        protected override void PopulateFields(DayCamp childCare, IDictionary<string, string> details)
         {
             // populate the base fields
             base.PopulateFields(childCare, details);
@@ -16,8 +16,6 @@ namespace OdjfsHtmlScraper.Parsers
             childCare.RegistrationBeginDate = GetDetailString(details, "Registration Begin Date");
             childCare.RegistrationEndDate = GetDetailString(details, "Registration End Date");
             childCare.EffectiveDates = GetDetailString(details, "Effective Dates");
-
-            return childCare;
         }
     }
 }

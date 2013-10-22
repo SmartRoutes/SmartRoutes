@@ -47,20 +47,21 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Parsers\IChildCareDocumentParser.cs" />
+    <Compile Include="Parsers\AbstractChildCareParser.cs" />
+    <Compile Include="Parsers\IChildCareParser.cs" />
     <Compile Include="Parsers\IListDocumentParser.cs" />
-    <Compile Include="Parsers\TypeAHomeDocumentParser.cs" />
+    <Compile Include="Parsers\TypeAHomeParser.cs" />
     <Compile Include="Parsers\LicenseCenterDocumentParser.cs" />
-    <Compile Include="Parsers\DetailedChildCareDocumentParser.cs" />
-    <Compile Include="Parsers\TypeBHomeDocumentParser.cs" />
-    <Compile Include="Parsers\DayCampDocumentParser.cs" />
+    <Compile Include="Parsers\BaseDetailedChildCareParser.cs" />
+    <Compile Include="Parsers\TypeBHomeParser.cs" />
+    <Compile Include="Parsers\DayCampParser.cs" />
     <Compile Include="Parsers\ListDocumentParser.cs" />
-    <Compile Include="Parsers\ChildCareDocumentParser.cs" />
+    <Compile Include="Parsers\BaseChildCareParser.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Scrapers\ChildCareDocumentScraper.cs" />
-    <Compile Include="Scrapers\IChildCareDocumentScraper.cs" />
-    <Compile Include="Scrapers\IListDocumentScraper.cs" />
-    <Compile Include="Scrapers\ListDocumentScraper.cs" />
+    <Compile Include="Scrapers\ChildCareScraper.cs" />
+    <Compile Include="Scrapers\IChildCareScraper.cs" />
+    <Compile Include="Scrapers\IChildCareStubListScraper.cs" />
+    <Compile Include="Scrapers\ChildCareStubListScraper.cs" />
     <Compile Include="Support\Client.cs" />
     <Compile Include="Support\DownloadingClient.cs" />
     <Compile Include="Support\ExtensionMethods.cs" />

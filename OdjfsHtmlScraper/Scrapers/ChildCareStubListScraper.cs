@@ -6,18 +6,18 @@ using OdjfsHtmlScraper.Support;
 
 namespace OdjfsHtmlScraper.Scrapers
 {
-    public class ListDocumentScraper : IListDocumentScraper
+    public class ChildCareStubListScraper : IChildCareStubListScraper
     {
         private readonly IClient _client;
         private readonly IListDocumentParser _parser;
 
-        public ListDocumentScraper(IClient client, IListDocumentParser parser)
+        public ChildCareStubListScraper(IClient client, IListDocumentParser parser)
         {
             _client = client;
             _parser = parser;
         }
 
-        public async Task<IEnumerable<ChildCare>> Scrape()
+        public async Task<IEnumerable<ChildCareStub>> Scrape()
         {
             // fetch the contents
             byte[] bytes = await _client.GetListDocument();

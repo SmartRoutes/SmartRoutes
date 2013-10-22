@@ -7,14 +7,14 @@ using OdjfsHtmlScraper.Support;
 
 namespace OdjfsHtmlScraper.Scrapers
 {
-    public class ChildCareDocumentScraper<T> : IChildCareDocumentScraper<T> where T : ChildCare
+    public class ChildCareScraper<T> : IChildCareScraper<T> where T : ChildCare
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
         private readonly IClient _client;
-        private readonly IChildCareDocumentParser<T> _parser;
+        private readonly IChildCareParser<T> _parser;
 
-        public ChildCareDocumentScraper(IClient client, IChildCareDocumentParser<T> parser)
+        public ChildCareScraper(IClient client, IChildCareParser<T> parser)
         {
             _client = client;
             _parser = parser;

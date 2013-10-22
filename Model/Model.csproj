@@ -41,6 +41,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Odjfs\TypeBHomeStub.cs" />
+    <Compile Include="Odjfs\TypeAHomeStub.cs" />
+    <Compile Include="Odjfs\LicensedCenterStub.cs" />
+    <Compile Include="Odjfs\DayCampStub.cs" />
+    <Compile Include="Odjfs\ChildCareStub.cs" />
     <Compile Include="Odjfs\ChildCare.cs" />
     <Compile Include="Odjfs\LicensedCenter.cs" />
     <Compile Include="Odjfs\TypeAHome.cs" />
