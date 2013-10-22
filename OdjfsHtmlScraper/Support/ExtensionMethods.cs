@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Security.Cryptography;
 using System.Text.RegularExpressions;
@@ -30,6 +31,21 @@ namespace OdjfsHtmlScraper.Support
 
             // collapse the whitespace
             return Regex.Replace(text, @"\s+", " ").Trim();
+        }
+
+        public static IEnumerable<IDomElement> GetDescendentElements(this IDomObject e)
+        {
+            if (e.HasChildren)
+            {
+                foreach (IDomElement child in e.ChildElements)
+                {
+                    yield return child;
+                    foreach (IDomElement descendent in child.GetDescendentElements())
+                    {
+                        yield return descendent;
+                    }
+                }
+            }
         }
     }
 }

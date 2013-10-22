@@ -32,6 +32,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="CsQuery">
+      <HintPath>..\packages\CsQuery.1.3.5-beta5\lib\net40\CsQuery.dll</HintPath>
+    </Reference>
     <Reference Include="NLog">
       <HintPath>..\packages\NLog.2.1.0\lib\net45\NLog.dll</HintPath>
     </Reference>
@@ -75,14 +78,6 @@
     <ProjectReference Include="..\Scraper\Scraper.csproj">
       <Project>{4401fe23-f94a-4eda-aa76-ccd53548e10e}</Project>
       <Name>Scraper</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Submodules\CsQuery.FormFields\CsQuery.FormFields\CsQuery.FormFields.csproj">
-      <Project>{d563cc14-d211-44f3-8e9e-debe7c18b2d9}</Project>
-      <Name>CsQuery.FormFields</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Submodules\CsQuery.FormFields\CsQuery\source\CsQuery\CsQuery.csproj">
-      <Project>{c38dffe9-321b-4941-b031-29d718ab5c31}</Project>
-      <Name>CsQuery</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
