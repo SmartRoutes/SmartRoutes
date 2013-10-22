@@ -1,4 +1,5 @@
-﻿using System.Data.Entity;
+﻿using System;
+using System.Data.Entity;
 using Model.Odjfs;
 
 namespace Database.Contexts
@@ -24,32 +25,36 @@ namespace Database.Contexts
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
-            // TODO: singular table names
-
             base.OnModelCreating(modelBuilder);
 
             // put all of the tables in the same table schema ("odjfs.<table name>")
             modelBuilder.Types()
-                .Where(t => !typeof (ChildCareStub).IsAssignableFrom(t) || t == typeof (ChildCareStub)) // exclude ChildCare subclasses, which do not get their own tables
+                .Where(t => !typeof (ChildCareStub).IsAssignableFrom(t) || t == typeof (ChildCareStub))
+                .Where(t => !typeof (DetailedChildCare).IsAssignableFrom(t) || t == typeof (DetailedChildCare))
                 .Configure(c => c.ToTable("odjfs." + c.ClrType.Name));
 
             // inheritance: table-per-hierarchy
             modelBuilder.Entity<ChildCareStub>()
+                .Ignore(e => e.ChildCareType)
                 .Map<TypeAHomeStub>(x => x.Requires("ChildCareType").HasValue(TypeAHomeStub.Discriminator))
                 .Map<TypeBHomeStub>(x => x.Requires("ChildCareType").HasValue(TypeBHomeStub.Discriminator))
                 .Map<LicensedCenterStub>(x => x.Requires("ChildCareType").HasValue(LicensedCenterStub.Discriminator))
                 .Map<DayCampStub>(x => x.Requires("ChildCareType").HasValue(DayCampStub.Discriminator));
 
-            // inheritance: table-per-type
-            modelBuilder.Entity<ChildCare>()
-                .Map<TypeBHome>(x => x.Requires("ChildCareType").HasValue(TypeBHome.Discriminator))
-                .Map<DayCamp>(x => x.Requires("ChildCareType").HasValue(DayCamp.Discriminator))
-                .Map<DetailedChildCare>(x => x.Requires("ChildCareType").HasValue(DetailedChildCare.Discriminator));
+            // inheritance: table-per-hierarchy
             modelBuilder.Entity<DetailedChildCare>()
+                .Ignore(e => e.DetailedChildCareType)
                 .Map<TypeAHome>(x => x.Requires("DetailedChildCareType").HasValue(TypeAHome.DetailedDiscriminator))
                 .Map<LicensedCenter>(x => x.Requires("DetailedChildCareType").HasValue(LicensedCenter.DetailedDiscriminator));
 
-            // name the ID columns something more useful...
+            // inheritance: table-per-type
+            modelBuilder.Entity<ChildCare>()
+                .Ignore(e => e.ChildCareType)
+                .Map<TypeBHome>(x => x.Requires("ChildCareType").HasValue(TypeBHome.Discriminator))
+                .Map<DayCamp>(x => x.Requires("ChildCareType").HasValue(DayCamp.Discriminator))
+                .Map<DetailedChildCare>(x => x.Requires("ChildCareType").HasValue(DetailedChildCare.Discriminator));
+
+            // name the ID name columns unique per hierarchy
             modelBuilder
                 .Properties()
                 .Where(p => p.Name == "Id")

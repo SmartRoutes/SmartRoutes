@@ -25,8 +25,6 @@ namespace Database.Contexts
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
-            // TODO: singular table names
-
             base.OnModelCreating(modelBuilder);
 
             // give all Id columns "<Type Name>Id"
