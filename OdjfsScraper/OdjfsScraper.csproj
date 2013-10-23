@@ -7,8 +7,8 @@
     <ProjectGuid>{393F1B81-3F51-45DC-976C-3BD31D2A71DE}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>OdjfsHtmlScraper</RootNamespace>
-    <AssemblyName>OdjfsHtmlScraper</AssemblyName>
+    <RootNamespace>OdjfsScraper</RootNamespace>
+    <AssemblyName>OdjfsScraper</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
@@ -97,6 +97,6 @@
     <Time>
       <Output TaskParameter="Year" PropertyName="Year" />
     </Time>
-    <AssemblyInfo CodeLanguage="CS" OutputFile="Properties\AssemblyInfo.cs" AssemblyTitle="Sandbox" AssemblyDescription="" AssemblyCompany="" AssemblyProduct="Sandbox" AssemblyCopyright="Copyright © $(Year). All rights reserved." ComVisible="false" CLSCompliant="false" AssemblyInformationalVersion="$(Major).$(Minor).$(Build).$(Revision)" AssemblyVersion="$(Major).$(Minor).$(Build)" AssemblyFileVersion="$(Major).$(Minor).$(Build)" />
+    <AssemblyInfo CodeLanguage="CS" OutputFile="Properties\AssemblyInfo.cs" AssemblyTitle="OdjfsScraper" AssemblyDescription="" AssemblyCompany="" AssemblyProduct="OdjfsScraper" AssemblyCopyright="Copyright © $(Year). All rights reserved." ComVisible="false" CLSCompliant="false" AssemblyInformationalVersion="$(Major).$(Minor).$(Build).$(Revision)" AssemblyVersion="$(Major).$(Minor).$(Build)" AssemblyFileVersion="$(Major).$(Minor).$(Build)" />
   </Target>
 </Project>

@@ -1,4 +1,4 @@
-﻿namespace OdjfsHtmlScraper.Parsers
+﻿namespace OdjfsScraper.Parsers
 {
     public interface IChildCareParser<in T>
     {

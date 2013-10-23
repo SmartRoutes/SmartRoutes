@@ -9,10 +9,10 @@ using CsQuery;
 using CsQuery.Implementation;
 using Model.Odjfs;
 using NLog;
-using OdjfsHtmlScraper.Support;
+using OdjfsScraper.Support;
 using Scraper;
 
-namespace OdjfsHtmlScraper.Parsers
+namespace OdjfsScraper.Parsers
 {
     public abstract class AbstractChildCareParser<T> : IChildCareParser<T> where T : ChildCare
     {

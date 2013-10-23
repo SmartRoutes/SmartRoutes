@@ -3,10 +3,10 @@ using System.Linq;
 using CsQuery;
 using Model.Odjfs;
 using NLog;
-using OdjfsHtmlScraper.Support;
+using OdjfsScraper.Support;
 using Scraper;
 
-namespace OdjfsHtmlScraper.Parsers
+namespace OdjfsScraper.Parsers
 {
     public class BaseChildCareParser<T> : AbstractChildCareParser<T> where T : ChildCare
     {

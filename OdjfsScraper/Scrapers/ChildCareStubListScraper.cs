@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Model.Odjfs;
-using OdjfsHtmlScraper.Parsers;
-using OdjfsHtmlScraper.Support;
+using OdjfsScraper.Parsers;
+using OdjfsScraper.Support;
 
-namespace OdjfsHtmlScraper.Scrapers
+namespace OdjfsScraper.Scrapers
 {
     public class ChildCareStubListScraper : IChildCareStubListScraper
     {

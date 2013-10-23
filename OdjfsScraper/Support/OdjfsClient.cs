@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Model.Odjfs;
 using Scraper;
 
-namespace OdjfsHtmlScraper.Support
+namespace OdjfsScraper.Support
 {
     public class OdjfsClient : IOdjfsClient
     {

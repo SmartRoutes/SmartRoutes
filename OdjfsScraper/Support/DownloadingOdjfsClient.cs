@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using Model.Odjfs;
 
-namespace OdjfsHtmlScraper.Support
+namespace OdjfsScraper.Support
 {
     public class DownloadingOdjfsClient : OdjfsClient
     {

@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using Model.Odjfs;
 
-namespace OdjfsHtmlScraper.Scrapers
+namespace OdjfsScraper.Scrapers
 {
     public interface IChildCareStubListScraper
     {

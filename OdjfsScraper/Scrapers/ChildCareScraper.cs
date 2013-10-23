@@ -2,10 +2,10 @@
 using System.Threading.Tasks;
 using Model.Odjfs;
 using NLog;
-using OdjfsHtmlScraper.Parsers;
-using OdjfsHtmlScraper.Support;
+using OdjfsScraper.Parsers;
+using OdjfsScraper.Support;
 
-namespace OdjfsHtmlScraper.Scrapers
+namespace OdjfsScraper.Scrapers
 {
     public class ChildCareScraper<T> : IChildCareScraper<T> where T : ChildCare
     {

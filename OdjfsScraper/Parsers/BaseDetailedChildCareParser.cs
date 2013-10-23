@@ -5,10 +5,10 @@ using System.Text.RegularExpressions;
 using CsQuery;
 using Model.Odjfs;
 using NLog;
-using OdjfsHtmlScraper.Support;
+using OdjfsScraper.Support;
 using Scraper;
 
-namespace OdjfsHtmlScraper.Parsers
+namespace OdjfsScraper.Parsers
 {
     public class BaseDetailedChildCareParser<T> : BaseChildCareParser<T> where T : DetailedChildCare
     {

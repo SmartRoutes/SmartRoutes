@@ -20,7 +20,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sandbox", "Sandbox\Sandbox.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Database", "Database\Database.csproj", "{1E30E5FD-25B1-4F18-A2C2-5F8AC2B80683}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OdjfsHtmlScraper", "OdjfsHtmlScraper\OdjfsHtmlScraper.csproj", "{393F1B81-3F51-45DC-976C-3BD31D2A71DE}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OdjfsScraper", "OdjfsScraper\OdjfsScraper.csproj", "{393F1B81-3F51-45DC-976C-3BD31D2A71DE}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".build", ".build", "{3A86964F-7AEE-44BF-B2A5-DDD1C971FF4D}"
 	ProjectSection(SolutionItems) = preProject

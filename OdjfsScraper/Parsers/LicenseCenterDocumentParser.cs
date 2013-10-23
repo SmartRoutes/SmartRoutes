@@ -1,6 +1,6 @@
 ﻿using Model.Odjfs;
 
-namespace OdjfsHtmlScraper.Parsers
+namespace OdjfsScraper.Parsers
 {
     public class LicensedCenterParser : BaseDetailedChildCareParser<LicensedCenter>
     {
