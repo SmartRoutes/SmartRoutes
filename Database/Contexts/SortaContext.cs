@@ -6,9 +6,9 @@ using Model.Sorta;
 
 namespace Database.Contexts
 {
-    public class SortaContext : DbContext
+    public class SortaContext : BaseContext
     {
-        public SortaContext() : base("StreetSmartz")
+        public SortaContext() : base("sorta")
         {
         }
 
@@ -37,6 +37,7 @@ namespace Database.Contexts
             // most entities do not need database generated IDs
             ISet<Type> databaseGeneratedIds = new HashSet<Type>
             {
+                typeof (Archive),
                 typeof (ShapePoint),
                 typeof (StopTime),
                 typeof (ServiceException)
@@ -49,7 +50,7 @@ namespace Database.Contexts
             // put all of the tables in the same table schema ("sorta.<table name>")
             modelBuilder
                 .Types()
-                .Configure(c => c.ToTable("sorta." + c.ClrType.Name));
+                .Configure(c => c.ToTable(GetTableName(c.ClrType)));
         }
     }
 }

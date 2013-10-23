@@ -1,12 +1,11 @@
-﻿using System;
-using System.Data.Entity;
+﻿using System.Data.Entity;
 using Model.Odjfs;
 
 namespace Database.Contexts
 {
-    public class OdjfsContext : DbContext
+    public class OdjfsContext : BaseContext
     {
-        public OdjfsContext() : base("StreetSmartz")
+        public OdjfsContext() : base("odjfs")
         {
         }
 
@@ -31,7 +30,7 @@ namespace Database.Contexts
             modelBuilder.Types()
                 .Where(t => !typeof (ChildCareStub).IsAssignableFrom(t) || t == typeof (ChildCareStub))
                 .Where(t => !typeof (DetailedChildCare).IsAssignableFrom(t) || t == typeof (DetailedChildCare))
-                .Configure(c => c.ToTable("odjfs." + c.ClrType.Name));
+                .Configure(c => c.ToTable(GetTableName(c.ClrType)));
 
             // inheritance: table-per-hierarchy
             modelBuilder.Entity<ChildCareStub>()

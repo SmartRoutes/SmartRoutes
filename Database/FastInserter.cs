@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
-using System.Reflection;
 
 namespace Database
 {
@@ -13,19 +12,17 @@ namespace Database
     /// <typeparam name="T">The concrete <see cref="DbContext" /> child class.</typeparam>
     public class FastInserter<T> : IDisposable where T : DbContext
     {
-        private readonly int _refreshFrequency;
+        private readonly bool _refresh;
         private readonly int _saveFrequency;
         private T _dbContext;
         private IDictionary<Type, object> _dbSets = new Dictionary<Type, object>();
-        private int _untilRefresh;
         private int _untilSave;
 
-        public FastInserter(int saveFrequency, int refreshFrequency)
+        public FastInserter(int saveFrequency, bool refresh)
         {
             _saveFrequency = saveFrequency;
+            _refresh = refresh;
             _untilSave = _saveFrequency;
-            _refreshFrequency = refreshFrequency;
-            _untilRefresh = _refreshFrequency;
         }
 
         public void Dispose()
@@ -50,9 +47,7 @@ namespace Database
             _dbContext.Configuration.ValidateOnSaveEnabled = false;
 
             _dbSets = _dbContext
-                .GetType()
-                .GetProperties(BindingFlags.Instance | BindingFlags.Public | BindingFlags.GetProperty | BindingFlags.DeclaredOnly)
-                .Where(p => p.PropertyType.GetGenericTypeDefinition() == typeof (DbSet<>))
+                .GetEntitySetProperties()
                 .ToDictionary(p => p.PropertyType.GetGenericArguments().First(), p => p.GetGetMethod().Invoke(_dbContext, null));
         }
 
@@ -76,21 +71,16 @@ namespace Database
 
             // increment the counter
             _untilSave -= 1;
-            _untilRefresh -= 1;
 
             // save if necessary
             if (_untilSave <= 0)
             {
                 _dbContext.SaveChanges();
-                Console.WriteLine("Saved.");
+                if (_refresh)
+                {
+                    RefreshDbContext();
+                }
                 _untilSave = _saveFrequency;
-            }
-
-            // refresh if necessary
-            if (_untilRefresh <= 0)
-            {
-                RefreshDbContext();
-                _untilRefresh = _refreshFrequency;
             }
         }
 
