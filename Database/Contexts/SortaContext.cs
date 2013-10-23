@@ -12,6 +12,7 @@ namespace Database.Contexts
         {
         }
 
+        public DbSet<Archive> Archives { get; set; }
         public DbSet<Agency> Agencies { get; set; }
         public DbSet<Service> Services { get; set; }
         public DbSet<ServiceException> ServiceException { get; set; }

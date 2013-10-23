@@ -4,34 +4,17 @@ using System.Net.Http;
 using System.Reflection;
 using System.Threading.Tasks;
 using Model.Odjfs;
+using Scraper;
 
 namespace OdjfsHtmlScraper.Support
 {
-    public class Client : IClient
+    public class OdjfsClient : IOdjfsClient
     {
-        private readonly HttpClient _httpClient;
+        private readonly ScraperClient _scraperClient;
 
-        protected Client()
+        protected OdjfsClient()
         {
-            var handler = new WebRequestHandler
-            {
-                AllowAutoRedirect = false,
-                AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate,
-                UseCookies = false,
-                AllowPipelining = true
-            };
-
-            // get the version at runtime
-            string version = ((AssemblyInformationalVersionAttribute) Assembly
-                .GetAssembly(typeof (IClient))
-                .GetCustomAttributes(typeof (AssemblyInformationalVersionAttribute), false)[0])
-                .InformationalVersion;
-
-            // construct a helpful user-agent
-            string userAgent = string.Format("SmartRoutes/{0} (+http://goo.gl/Ol3VNR)", version);
-
-            _httpClient = new HttpClient(handler);
-            _httpClient.DefaultRequestHeaders.Add("User-Agent", userAgent);
+            _scraperClient = new ScraperClient();
         }
 
         public async Task<byte[]> GetChildCareDocument(ChildCare childCare)
@@ -65,7 +48,7 @@ namespace OdjfsHtmlScraper.Support
         private async Task<byte[]> GetBytes(Uri requestUri)
         {
             // get the response bytes
-            return await _httpClient.GetByteArrayAsync(requestUri);
+            return await _scraperClient.GetByteArrayAsync(requestUri);
         }
 
         protected virtual Task HandleChildCareDocumentBytes(ChildCare childCare, byte[] bytes)

@@ -4,11 +4,11 @@ using Model.Odjfs;
 
 namespace OdjfsHtmlScraper.Support
 {
-    public class DownloadingClient : Client
+    public class DownloadingOdjfsClient : OdjfsClient
     {
         private readonly string _directory;
 
-        public DownloadingClient(string directory)
+        public DownloadingOdjfsClient(string directory)
         {
             _directory = directory;
         }

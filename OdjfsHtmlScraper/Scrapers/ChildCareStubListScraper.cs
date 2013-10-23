@@ -8,19 +8,19 @@ namespace OdjfsHtmlScraper.Scrapers
 {
     public class ChildCareStubListScraper : IChildCareStubListScraper
     {
-        private readonly IClient _client;
+        private readonly IOdjfsClient _odjfsClient;
         private readonly IListDocumentParser _parser;
 
-        public ChildCareStubListScraper(IClient client, IListDocumentParser parser)
+        public ChildCareStubListScraper(IOdjfsClient odjfsClient, IListDocumentParser parser)
         {
-            _client = client;
+            _odjfsClient = odjfsClient;
             _parser = parser;
         }
 
         public async Task<IEnumerable<ChildCareStub>> Scrape()
         {
             // fetch the contents
-            byte[] bytes = await _client.GetListDocument();
+            byte[] bytes = await _odjfsClient.GetListDocument();
 
             // extract the information from the HTML
             return _parser.Parse(bytes);

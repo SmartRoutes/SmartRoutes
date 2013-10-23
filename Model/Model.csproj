@@ -49,6 +49,7 @@
     <Compile Include="Odjfs\DetailedChildCare.cs" />
     <Compile Include="Odjfs\TypeBHome.cs" />
     <Compile Include="Sorta\Agency.cs" />
+    <Compile Include="Sorta\Archive.cs" />
     <Compile Include="Sorta\Block.cs" />
     <Compile Include="Sorta\ServiceException.cs" />
     <Compile Include="Sorta\Shape.cs" />

@@ -11,12 +11,12 @@ namespace OdjfsHtmlScraper.Scrapers
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
-        private readonly IClient _client;
+        private readonly IOdjfsClient _odjfsClient;
         private readonly IChildCareParser<T> _parser;
 
-        public ChildCareScraper(IClient client, IChildCareParser<T> parser)
+        public ChildCareScraper(IOdjfsClient odjfsClient, IChildCareParser<T> parser)
         {
-            _client = client;
+            _odjfsClient = odjfsClient;
             _parser = parser;
         }
 
@@ -34,7 +34,7 @@ namespace OdjfsHtmlScraper.Scrapers
             }
 
             // fetch the contents
-            byte[] bytes = await _client.GetChildCareDocument(childCare);
+            byte[] bytes = await _odjfsClient.GetChildCareDocument(childCare);
 
             // extract the child care information
             _parser.Parse(childCare, bytes);

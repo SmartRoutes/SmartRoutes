@@ -60,10 +60,10 @@
     <Compile Include="Scrapers\IChildCareScraper.cs" />
     <Compile Include="Scrapers\IChildCareStubListScraper.cs" />
     <Compile Include="Scrapers\ChildCareStubListScraper.cs" />
-    <Compile Include="Support\Client.cs" />
-    <Compile Include="Support\DownloadingClient.cs" />
+    <Compile Include="Support\OdjfsClient.cs" />
+    <Compile Include="Support\DownloadingOdjfsClient.cs" />
     <Compile Include="Support\ExtensionMethods.cs" />
-    <Compile Include="Support\IClient.cs" />
+    <Compile Include="Support\IOdjfsClient.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Model\Model.csproj">
