@@ -48,19 +48,19 @@ namespace SortaScraper.Parsers
                     switch (entry.FileName)
                     {
                         case "agency.txt":
-                            collection.Agencies = _agencyParser.Parse(entry.InputStream).ToArray();
+                            collection.Agencies = _agencyParser.Parse(entry.OpenReader()).ToArray();
                             break;
                         case "calendar.txt":
-                            collection.Services = _serviceParser.Parse(entry.InputStream).ToArray();
+                            collection.Services = _serviceParser.Parse(entry.OpenReader()).ToArray();
                             break;
                         case "calendar_dates.txt":
-                            collection.ServiceException = _serviceExceptionParser.Parse(entry.InputStream).ToArray();
+                            collection.ServiceException = _serviceExceptionParser.Parse(entry.OpenReader()).ToArray();
                             break;
                         case "routes.txt":
-                            collection.Routes = _routeParser.Parse(entry.InputStream).ToArray();
+                            collection.Routes = _routeParser.Parse(entry.OpenReader()).ToArray();
                             break;
                         case "shapes.txt":
-                            collection.ShapePoints = _shapePointParser.Parse(entry.InputStream).ToArray();
+                            collection.ShapePoints = _shapePointParser.Parse(entry.OpenReader()).ToArray();
                             collection.Shapes = collection
                                 .ShapePoints
                                 .Select(s => s.ShapeId)
@@ -68,13 +68,13 @@ namespace SortaScraper.Parsers
                                 .Select(i => new Shape {Id = i});
                             break;
                         case "stop_times.txt":
-                            collection.StopTimes = _stopTimeParser.Parse(entry.InputStream).ToArray();
+                            collection.StopTimes = _stopTimeParser.Parse(entry.OpenReader()).ToArray();
                             break;
                         case "stops.txt":
-                            collection.Stops = _stopParser.Parse(entry.InputStream).ToArray();
+                            collection.Stops = _stopParser.Parse(entry.OpenReader()).ToArray();
                             break;
                         case "trips.txt":
-                            collection.Trips = _tripParser.Parse(entry.InputStream).ToArray();
+                            collection.Trips = _tripParser.Parse(entry.OpenReader()).ToArray();
                             collection.Blocks = collection
                                 .Trips
                                 .Where(t => t.BlockId.HasValue)

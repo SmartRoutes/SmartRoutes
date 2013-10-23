@@ -93,5 +93,13 @@ namespace Database
                 _untilRefresh = _refreshFrequency;
             }
         }
+
+        public void AddRange<TEntity>(IEnumerable<TEntity> entities) where TEntity : class
+        {
+            foreach (TEntity entity in entities)
+            {
+                Add(entity);
+            }
+        }
     }
 }
