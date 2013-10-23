@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using Model.Sorta;
 
-namespace SortaCsvScraper.Support
+namespace SortaScraper.Support
 {
     public class EntityCollection
     {

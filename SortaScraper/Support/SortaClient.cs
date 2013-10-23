@@ -4,7 +4,7 @@ using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using Scraper;
 
-namespace SortaCsvScraper.Support
+namespace SortaScraper.Support
 {
     public class SortaClient : ISortaClient
     {

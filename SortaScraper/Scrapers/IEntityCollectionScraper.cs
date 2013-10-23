@@ -1,7 +1,7 @@
 using System.Threading.Tasks;
-using SortaCsvScraper.Support;
+using SortaScraper.Support;
 
-namespace SortaCsvScraper.Scrapers
+namespace SortaScraper.Scrapers
 {
     public interface IEntityCollectionScraper
     {

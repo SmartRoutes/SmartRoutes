@@ -7,8 +7,8 @@
     <ProjectGuid>{00D91962-12C1-4729-A893-8BEEB1599C5E}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SortaCsvScraper</RootNamespace>
-    <AssemblyName>SortaCsvScraper</AssemblyName>
+    <RootNamespace>SortaScraper</RootNamespace>
+    <AssemblyName>SortaScraper</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
@@ -97,6 +97,6 @@
     <Time>
       <Output TaskParameter="Year" PropertyName="Year" />
     </Time>
-    <AssemblyInfo CodeLanguage="CS" OutputFile="Properties\AssemblyInfo.cs" AssemblyTitle="Sandbox" AssemblyDescription="" AssemblyCompany="" AssemblyProduct="Sandbox" AssemblyCopyright="Copyright © $(Year). All rights reserved." ComVisible="false" CLSCompliant="false" AssemblyInformationalVersion="$(Major).$(Minor).$(Build).$(Revision)" AssemblyVersion="$(Major).$(Minor).$(Build)" AssemblyFileVersion="$(Major).$(Minor).$(Build)" />
+    <AssemblyInfo CodeLanguage="CS" OutputFile="Properties\AssemblyInfo.cs" AssemblyTitle="SortaScraper" AssemblyDescription="" AssemblyCompany="" AssemblyProduct="SortaScraper" AssemblyCopyright="Copyright © $(Year). All rights reserved." ComVisible="false" CLSCompliant="false" AssemblyInformationalVersion="$(Major).$(Minor).$(Build).$(Revision)" AssemblyVersion="$(Major).$(Minor).$(Build)" AssemblyFileVersion="$(Major).$(Minor).$(Build)" />
   </Target>
 </Project>

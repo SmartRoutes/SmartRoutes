@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Model.Sorta;
 
-namespace SortaCsvScraper.Scrapers
+namespace SortaScraper.Scrapers
 {
     public interface IArchiveScraper
     {

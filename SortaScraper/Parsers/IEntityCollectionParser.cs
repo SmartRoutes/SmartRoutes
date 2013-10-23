@@ -1,6 +1,6 @@
-﻿using SortaCsvScraper.Support;
+﻿using SortaScraper.Support;
 
-namespace SortaCsvScraper.Parsers
+namespace SortaScraper.Parsers
 {
     public interface IEntityCollectionParser
     {

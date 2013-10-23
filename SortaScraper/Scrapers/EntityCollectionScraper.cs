@@ -1,8 +1,8 @@
 ﻿using System.Threading.Tasks;
-using SortaCsvScraper.Parsers;
-using SortaCsvScraper.Support;
+using SortaScraper.Parsers;
+using SortaScraper.Support;
 
-namespace SortaCsvScraper.Scrapers
+namespace SortaScraper.Scrapers
 {
     public class EntityCollectionScraper : IEntityCollectionScraper
     {

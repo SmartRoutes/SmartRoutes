@@ -3,9 +3,9 @@ using System.Linq;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using Model.Sorta;
-using SortaCsvScraper.Support;
+using SortaScraper.Support;
 
-namespace SortaCsvScraper.Scrapers
+namespace SortaScraper.Scrapers
 {
     public class ArchiveScraper : IArchiveScraper
     {

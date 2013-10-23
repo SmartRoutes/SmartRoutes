@@ -14,7 +14,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Model", "Model\Model.csproj
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Scraper", "Scraper\Scraper.csproj", "{4401FE23-F94A-4EDA-AA76-CCD53548E10E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SortaCsvScraper", "SortaCsvScraper\SortaCsvScraper.csproj", "{00D91962-12C1-4729-A893-8BEEB1599C5E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SortaScraper", "SortaScraper\SortaScraper.csproj", "{00D91962-12C1-4729-A893-8BEEB1599C5E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sandbox", "Sandbox\Sandbox.csproj", "{417D5E36-766A-48F1-AF87-AD11ADF695A7}"
 EndProject

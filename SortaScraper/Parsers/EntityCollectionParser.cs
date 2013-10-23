@@ -3,9 +3,9 @@ using System.Linq;
 using Ionic.Zip;
 using Model.Sorta;
 using Scraper;
-using SortaCsvScraper.Support;
+using SortaScraper.Support;
 
-namespace SortaCsvScraper.Parsers
+namespace SortaScraper.Parsers
 {
     public class EntityCollectionParser : IEntityCollectionParser
     {

@@ -1,7 +1,7 @@
 ﻿using System.Net.Http.Headers;
 using System.Threading.Tasks;
 
-namespace SortaCsvScraper.Support
+namespace SortaScraper.Support
 {
     public interface ISortaClient
     {
