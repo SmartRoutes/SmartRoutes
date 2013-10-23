@@ -30,9 +30,9 @@ namespace SortaScraper.Support
             return response.Headers;
         }
 
-        public async Task<byte[]> GetArchiveBytes()
+        public async Task<HttpResponseMessage> GetArchiveContent()
         {
-            return await _scraperClient.GetByteArrayAsync(ArchiveUri);
+            return await _scraperClient.GetAsync(ArchiveUri, HttpCompletionOption.ResponseContentRead);
         }
     }
 }

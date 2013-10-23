@@ -9,13 +9,6 @@ namespace OdjfsScraper.Support
 {
     public static class ExtensionMethods
     {
-        public static string GetSha256Hash(this byte[] bytes)
-        {
-            var sha = new SHA256Managed();
-            byte[] hashBytes = sha.ComputeHash(bytes);
-            return BitConverter.ToString(hashBytes).Replace("-", "");
-        }
-
         public static string ToNullIfEmpty(this string input)
         {
             return input == string.Empty ? null : input;

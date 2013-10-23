@@ -1,32 +1,22 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http.Headers;
+using System.Text;
 using System.Threading.Tasks;
 using Model.Sorta;
-using SortaScraper.Support;
 
-namespace SortaScraper.Scrapers
+namespace SortaScraper.Parsers
 {
-    public class ArchiveScraper : IArchiveScraper
+    public class ArchiveParser : IArchiveParser
     {
-        private readonly ISortaClient _sortaClient;
-
-        public ArchiveScraper(ISortaClient sortaClient)
-        {
-            _sortaClient = sortaClient;
-        }
-
-        public async Task<Archive> Scrape()
+        public Archive Parse(HttpResponseHeaders headers)
         {
             // the output instance
             // TODO: UTC or local time?
             var archive = new Archive {DownloadedOn = DateTime.Now};
 
-            // get the headers 
-            HttpResponseHeaders headers = await _sortaClient.GetArchiveHeaders();
-
             // parse the headers
-            // TODO: handle weak ETags?
             archive.ETag = headers.ETag.Tag;
             archive.LastModified = headers.GetValues("Last-Modified").FirstOrDefault();
 

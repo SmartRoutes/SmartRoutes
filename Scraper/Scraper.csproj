@@ -41,6 +41,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CsvStreamParser.cs" />
+    <Compile Include="ExtensionMethods.cs" />
     <Compile Include="ScraperClient.cs" />
     <Compile Include="ICsvStreamParser.cs" />
     <Compile Include="ParserException.cs" />

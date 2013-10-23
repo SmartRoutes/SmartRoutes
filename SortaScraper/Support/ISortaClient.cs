@@ -1,4 +1,5 @@
-﻿using System.Net.Http.Headers;
+﻿using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Threading.Tasks;
 
 namespace SortaScraper.Support
@@ -6,6 +7,6 @@ namespace SortaScraper.Support
     public interface ISortaClient
     {
         Task<HttpResponseHeaders> GetArchiveHeaders();
-        Task<byte[]> GetArchiveBytes();
+        Task<HttpResponseMessage> GetArchiveContent();
     }
 }
