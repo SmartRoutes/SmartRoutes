@@ -14,15 +14,28 @@ namespace Database
     {
         private readonly bool _refresh;
         private readonly int _saveFrequency;
+        private readonly bool _userProvidedDbContext;
         private T _dbContext;
         private IDictionary<Type, object> _dbSets = new Dictionary<Type, object>();
         private int _untilSave;
+
+        public FastInserter(T dbContext, int saveFrequency)
+        {
+            _saveFrequency = saveFrequency;
+            _refresh = false;
+            _untilSave = _saveFrequency;
+            _userProvidedDbContext = true;
+
+            _dbContext = dbContext;
+            SetDbSets();
+        }
 
         public FastInserter(int saveFrequency, bool refresh)
         {
             _saveFrequency = saveFrequency;
             _refresh = refresh;
             _untilSave = _saveFrequency;
+            _userProvidedDbContext = false;
         }
 
         public void Dispose()
@@ -34,7 +47,11 @@ namespace Database
                     _dbContext.SaveChanges();
                     Console.WriteLine("Saved before dispose.");
                 }
-                _dbContext.Dispose();
+
+                if (!_userProvidedDbContext)
+                {
+                    _dbContext.Dispose();
+                }
             }
         }
 
@@ -46,6 +63,11 @@ namespace Database
             _dbContext.Configuration.AutoDetectChangesEnabled = false;
             _dbContext.Configuration.ValidateOnSaveEnabled = false;
 
+            SetDbSets();
+        }
+
+        private void SetDbSets()
+        {
             _dbSets = _dbContext
                 .GetEntitySetProperties()
                 .ToDictionary(p => p.PropertyType.GetGenericArguments().First(), p => p.GetGetMethod().Invoke(_dbContext, null));
