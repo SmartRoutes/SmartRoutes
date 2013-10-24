@@ -23,15 +23,18 @@ namespace SortaScraper.Scrapers
 
         public async Task<EntityCollection> Scrape(Archive currentArchive)
         {
-            // do the headers indicate a change?
-            HttpResponseHeaders headers = await _sortaClient.GetArchiveHeaders();
-            Archive newestArchive = _archiveParser.Parse(headers);
+            Archive newestArchive;
 
-            if (currentArchive != null &&
-                newestArchive.ETag == currentArchive.ETag &&
-                newestArchive.LastModified == currentArchive.LastModified)
+            if (currentArchive != null)
             {
-                return null;
+                // do the headers indicate a change?
+                HttpResponseHeaders headers = await _sortaClient.GetArchiveHeaders();
+                newestArchive = _archiveParser.Parse(headers);
+
+                if (newestArchive.ETag == currentArchive.ETag)
+                {
+                    return null;
+                }
             }
 
             // does the content indicate a change?
@@ -45,13 +48,16 @@ namespace SortaScraper.Scrapers
             {
                 return new EntityCollection
                 {
-                    Archives = new[] {newestArchive}
+                    Archive = newestArchive,
+                    ContainsEntities = false
                 };
             }
 
             // parse the entities
             EntityCollection entities = _entityCollectionParser.Parse(bytes);
-            entities.Archives = new[] {newestArchive};
+            entities.Archive = newestArchive;
+            entities.ContainsEntities = true;
+
             return entities;
         }
     }

@@ -18,7 +18,6 @@ namespace SortaScraper.Parsers
 
             // parse the headers
             archive.ETag = headers.ETag.Tag;
-            archive.LastModified = headers.GetValues("Last-Modified").FirstOrDefault();
 
             return archive;
         }

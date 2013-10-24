@@ -5,7 +5,8 @@ namespace SortaScraper.Support
 {
     public class EntityCollection
     {
-        public IEnumerable<Archive> Archives { get; set; }
+        public Archive Archive { get; set; }
+        public bool ContainsEntities { get; set; }
         public IEnumerable<Agency> Agencies { get; set; }
         public IEnumerable<Route> Routes { get; set; }
         public IEnumerable<Service> Services { get; set; }
