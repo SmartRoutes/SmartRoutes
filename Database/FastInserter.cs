@@ -45,7 +45,7 @@ namespace Database
             {
                 if (_untilSave < _saveFrequency)
                 {
-                    _dbContext.SaveChanges();
+                    SaveChangesAsync().Wait();
                 }
 
                 if (!_userProvidedDbContext)
@@ -97,7 +97,7 @@ namespace Database
             // save if necessary
             if (_untilSave <= 0)
             {
-                await _dbContext.SaveChangesAsync();
+                await SaveChangesAsync();
                 if (_refresh)
                 {
                     RefreshDbContext();
