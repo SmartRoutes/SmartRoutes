@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -13,6 +14,9 @@ namespace Database.Contexts
         protected BaseContext(string schema) : base("StreetSmartz")
         {
             _schema = schema;
+
+            // increase the timeout for each command
+            ((IObjectContextAdapter)this).ObjectContext.CommandTimeout = 180;
         }
 
         protected string GetTableName(Type type)

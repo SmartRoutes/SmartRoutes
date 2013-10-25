@@ -50,8 +50,8 @@
     <Compile Include="ExtensionMethods.cs" />
     <Compile Include="FastInserter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Contexts\OdjfsContext.cs" />
-    <Compile Include="Contexts\SortaContext.cs" />
+    <Compile Include="Contexts\OdjfsEntities.cs" />
+    <Compile Include="Contexts\SortaEntities.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

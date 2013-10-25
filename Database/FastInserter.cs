@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Database
 {
@@ -45,7 +46,6 @@ namespace Database
                 if (_untilSave < _saveFrequency)
                 {
                     _dbContext.SaveChanges();
-                    Console.WriteLine("Saved before dispose.");
                 }
 
                 if (!_userProvidedDbContext)
@@ -73,7 +73,7 @@ namespace Database
                 .ToDictionary(p => p.PropertyType.GetGenericArguments().First(), p => p.GetGetMethod().Invoke(_dbContext, null));
         }
 
-        public void Add<TEntity>(TEntity entity) where TEntity : class
+        public async Task AddAsync<TEntity>(TEntity entity) where TEntity : class
         {
             // make sure the context is initialized
             if (_dbContext == null)
@@ -97,7 +97,7 @@ namespace Database
             // save if necessary
             if (_untilSave <= 0)
             {
-                _dbContext.SaveChanges();
+                await _dbContext.SaveChangesAsync();
                 if (_refresh)
                 {
                     RefreshDbContext();
@@ -106,11 +106,19 @@ namespace Database
             }
         }
 
-        public void AddRange<TEntity>(IEnumerable<TEntity> entities) where TEntity : class
+        public async Task AddRangeAsync<TEntity>(IEnumerable<TEntity> entities) where TEntity : class
         {
             foreach (TEntity entity in entities)
             {
-                Add(entity);
+                await AddAsync(entity);
+            }
+        }
+
+        public async Task SaveChangesAsync()
+        {
+            if (_dbContext != null)
+            {
+                await _dbContext.SaveChangesAsync();
             }
         }
     }

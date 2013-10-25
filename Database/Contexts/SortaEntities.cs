@@ -6,9 +6,9 @@ using Model.Sorta;
 
 namespace Database.Contexts
 {
-    public class SortaContext : BaseContext
+    public class SortaEntities : BaseContext
     {
-        public SortaContext() : base("sorta")
+        public SortaEntities() : base("sorta")
         {
         }
 

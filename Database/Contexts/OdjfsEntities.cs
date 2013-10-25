@@ -3,9 +3,9 @@ using Model.Odjfs;
 
 namespace Database.Contexts
 {
-    public class OdjfsContext : BaseContext
+    public class OdjfsEntities : BaseContext
     {
-        public OdjfsContext() : base("odjfs")
+        public OdjfsEntities() : base("odjfs")
         {
         }
 
