@@ -14,6 +14,8 @@ namespace SortaDataChecker
         {
             try
             {
+                Logger.Trace("SortaDataChecker is now starting.");
+
                 IKernel kernel = new StandardKernel();
                 kernel.Bind(c => c
                     .FromAssemblyContaining(typeof (IEntityCollectionScraper))
@@ -22,6 +24,8 @@ namespace SortaDataChecker
 
                 var dataChecker = new DataChecker(kernel.Get<IEntityCollectionScraper>());
                 dataChecker.UpdateDatabase().Wait();
+
+                Logger.Trace("SortaDataChecker has completed.");
             }
             catch (Exception e)
             {

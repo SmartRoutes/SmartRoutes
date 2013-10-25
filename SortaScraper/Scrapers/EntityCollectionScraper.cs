@@ -58,12 +58,12 @@ namespace SortaScraper.Scrapers
             Logger.Trace("The newest archive has {0} bytes ({1} megabytes).", bytes.LongLength, Math.Round(bytes.LongLength/(1024.0*1024.0), 2));
 
             newestArchive.Hash = bytes.GetSha256Hash();
-            Logger.Trace("The newest archice has the follow SHA-2 (SHA-256) hash: {0}", newestArchive.Hash);
+            Logger.Trace("The newest archive has the follow SHA-2 (SHA-256) hash: {0}", newestArchive.Hash);
 
             if (currentArchive != null &&
                 currentArchive.Hash == newestArchive.Hash)
             {
-                Logger.Trace("The newest archive has the same has, but a different ETag from the previous.");
+                Logger.Trace("The newest archive has the same hash, but a different ETag from the previous.");
                 return new EntityCollection
                 {
                     Archive = newestArchive,

@@ -59,6 +59,7 @@ namespace SortaDataChecker
                 {
                     Logger.Trace("No entities were returned except for a new Archive instance.");
                     ctx.Archives.Add(entityCollection.Archive);
+                    Logger.Trace("Saving the new Archive record.");
                     await ctx.SaveChangesAsync();
                     return;
                 }
