@@ -31,6 +31,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".build", ".build", "{3A8696
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SortaDataChecker", "SortaDataChecker\SortaDataChecker.csproj", "{2DF9E208-BEF4-4BC3-AE8D-6CE3FCF729EC}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OdjfsDataChecker", "OdjfsDataChecker\OdjfsDataChecker.csproj", "{F7F33810-6765-442B-82F8-A442875013CB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -81,6 +83,12 @@ Global
 		{2DF9E208-BEF4-4BC3-AE8D-6CE3FCF729EC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2DF9E208-BEF4-4BC3-AE8D-6CE3FCF729EC}.Release|Any CPU.Build.0 = Release|Any CPU
 		{2DF9E208-BEF4-4BC3-AE8D-6CE3FCF729EC}.Release|x64.ActiveCfg = Release|Any CPU
+		{F7F33810-6765-442B-82F8-A442875013CB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F7F33810-6765-442B-82F8-A442875013CB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F7F33810-6765-442B-82F8-A442875013CB}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{F7F33810-6765-442B-82F8-A442875013CB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F7F33810-6765-442B-82F8-A442875013CB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F7F33810-6765-442B-82F8-A442875013CB}.Release|x64.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
