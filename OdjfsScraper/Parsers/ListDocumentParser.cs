@@ -3,7 +3,7 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using CsQuery;
-using Model.Odjfs.ChildCares;
+using Model.Odjfs;
 using Model.Odjfs.ChildCareStubs;
 using NLog;
 using OdjfsScraper.Support;
@@ -16,6 +16,11 @@ namespace OdjfsScraper.Parsers
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
         public IEnumerable<ChildCareStub> Parse(byte[] bytes)
+        {
+            return Parse(bytes, null);
+        }
+
+        public IEnumerable<ChildCareStub> Parse(byte[] bytes, County county)
         {
             // parse the HTML
             CQ document = CQ.Create(new MemoryStream(bytes));
@@ -36,10 +41,10 @@ namespace OdjfsScraper.Parsers
                 .Skip(1); // the first two is for the header
 
             // parse the rows using the child parser
-            return rows.Select(ParseRow);
+            return rows.Select(r => ParseRow(r, county));
         }
 
-        private ChildCareStub ParseRow(IDomElement element)
+        private ChildCareStub ParseRow(IDomElement element, County county)
         {
             // get all of the cells
             IDomElement[] cells = element.ChildElements.ToArray();
@@ -97,6 +102,9 @@ namespace OdjfsScraper.Parsers
                 // parse out the address
                 childCareStub.Address = cells[6].GetCollapsedInnerText();
             }
+
+            // set the county that was passed down
+            childCareStub.County = county;
 
             // TODO: parse out the address and rating
 

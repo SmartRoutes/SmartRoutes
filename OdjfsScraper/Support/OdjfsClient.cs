@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Net;
-using System.Net.Http;
-using System.Reflection;
 using System.Threading.Tasks;
+using Model.Odjfs;
 using Model.Odjfs.ChildCares;
 using Scraper;
 
@@ -12,7 +10,7 @@ namespace OdjfsScraper.Support
     {
         private readonly ScraperClient _scraperClient;
 
-        protected OdjfsClient()
+        public OdjfsClient()
         {
             _scraperClient = new ScraperClient();
         }
@@ -33,14 +31,22 @@ namespace OdjfsScraper.Support
 
         public async Task<byte[]> GetListDocument()
         {
+            return await GetListDocument(null);
+        }
+
+        public async Task<byte[]> GetListDocument(County county)
+        {
+            // create the query parameter
+            string countyQueryParameter = county == null ? string.Empty : string.Format("County={0}&", county.Name);
+
             // create the URL
-            var requestUri = new Uri("http://www.odjfs.state.oh.us/cdc/results1.asp?Zip=45224&Printable=Y&ShowAllPages=Y");
+            var requestUri = new Uri(string.Format("http://www.odjfs.state.oh.us/cdc/results1.asp?{0}Printable=Y&ShowAllPages=Y", countyQueryParameter));
 
             // fetch the bytes
             byte[] bytes = await GetBytes(requestUri);
 
             // execute the implementation-specific code
-            await HandleListDocumentBytes(bytes);
+            await HandleListDocumentBytes(county, bytes);
 
             return bytes;
         }
@@ -56,7 +62,7 @@ namespace OdjfsScraper.Support
             return Task.FromResult(0);
         }
 
-        protected virtual Task HandleListDocumentBytes(byte[] bytes)
+        protected virtual Task HandleListDocumentBytes(County county, byte[] bytes)
         {
             return Task.FromResult(0);
         }

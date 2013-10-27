@@ -6,7 +6,7 @@ namespace Model.Odjfs.ChildCares
     {
         public int Id { get; set; }
         public string ChildCareType { get; set; }
-        public DateTime LastParsed { get; set; }
+        public DateTime LastScrapedOn { get; set; }
         public string LastHash { get; set; }
 
         #region HTML to Entities

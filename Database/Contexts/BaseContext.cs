@@ -16,7 +16,7 @@ namespace Database.Contexts
             _schema = schema;
 
             // increase the timeout for each command
-            ((IObjectContextAdapter)this).ObjectContext.CommandTimeout = 180;
+            ((IObjectContextAdapter) this).ObjectContext.CommandTimeout = 180;
         }
 
         protected string GetTableName(Type type)
@@ -40,6 +40,11 @@ namespace Database.Contexts
             }
         }
 
+        protected virtual bool ShouldTruncate(string tableName)
+        {
+            return true;
+        }
+
         private IEnumerable<string> GetTruncateQueries()
         {
             if (!Database.Exists())
@@ -59,7 +64,7 @@ namespace Database.Contexts
 
             foreach (string query in queries)
             {
-                foreach (string tableName in tableNames)
+                foreach (string tableName in tableNames.Where(ShouldTruncate))
                 {
                     yield return string.Format(query, tableName);
                 }

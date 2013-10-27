@@ -4,6 +4,8 @@
     {
         public int Id { get; set; }
         public abstract string ChildCareType { get; }
+        public virtual int? CountyId { get; set; }
+        public virtual County County { get; set; }
 
         #region HTML
 

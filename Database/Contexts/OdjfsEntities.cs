@@ -1,4 +1,6 @@
-﻿using System.Data.Entity;
+﻿using System;
+using System.Data.Entity;
+using System.Linq;
 using Model.Odjfs;
 using Model.Odjfs.ChildCares;
 using Model.Odjfs.ChildCareStubs;
@@ -16,32 +18,11 @@ namespace Database.Contexts
         {
         }
 
-        #region Dependent Entites
-
-        public IDbSet<County> Counties { get; set; }
-
-        #endregion
-
-        #region ChildCareStubs
-
-        public IDbSet<ChildCareStub> ChildCareStubs { get; set; }
-        public IDbSet<TypeAHomeStub> TypeAHomeStubs { get; set; }
-        public IDbSet<TypeBHomeStub> TypeBHomeStubs { get; set; }
-        public IDbSet<LicensedCenterStub> LicensedCenterStubs { get; set; }
-        public IDbSet<DayCampStub> DayCampStubs { get; set; }
-
-        #endregion
-
-        #region ChildCares
-
-        public IDbSet<ChildCare> ChildCares { get; set; }
-        public IDbSet<DetailedChildCare> DetailedChildCares { get; set; }
-        public IDbSet<TypeAHome> TypeAHomes { get; set; }
-        public IDbSet<TypeBHome> TypeBHomes { get; set; }
-        public IDbSet<LicensedCenter> LicensedCenters { get; set; }
-        public IDbSet<DayCamp> DayCamps { get; set; }
-
-        #endregion
+        protected override bool ShouldTruncate(string tableName)
+        {
+            // the County table should should never be truncated
+            return tableName != GetTableName(typeof (County));
+        }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
@@ -52,6 +33,16 @@ namespace Database.Contexts
                 .Where(t => !typeof (ChildCareStub).IsAssignableFrom(t) || t == typeof (ChildCareStub))
                 .Where(t => !typeof (DetailedChildCare).IsAssignableFrom(t) || t == typeof (DetailedChildCare))
                 .Configure(c => c.ToTable(GetTableName(c.ClrType)));
+
+            // set up some columns to have unique constraints
+            modelBuilder.Entity<ChildCare>()
+                .Property(c => c.ExternalUrlId).IsRequired().HasMaxLength(18);
+
+            modelBuilder.Entity<ChildCareStub>()
+                .Property(c => c.ExternalUrlId).IsRequired().HasMaxLength(18);
+
+            modelBuilder.Entity<County>()
+                .Property(c => c.Name).IsRequired().HasMaxLength(10);
 
             // inheritance: table-per-hierarchy
             modelBuilder.Entity<ChildCareStub>()
@@ -88,17 +79,70 @@ namespace Database.Contexts
                 .Configure(c => c.HasColumnName("ChildCareId"));
         }
 
+        #region Dependent Entites
+
+        public IDbSet<County> Counties { get; set; }
+
+        #endregion
+
+        #region ChildCareStubs
+
+        public IDbSet<ChildCareStub> ChildCareStubs { get; set; }
+        public IDbSet<TypeAHomeStub> TypeAHomeStubs { get; set; }
+        public IDbSet<TypeBHomeStub> TypeBHomeStubs { get; set; }
+        public IDbSet<LicensedCenterStub> LicensedCenterStubs { get; set; }
+        public IDbSet<DayCampStub> DayCampStubs { get; set; }
+
+        #endregion
+
+        #region ChildCares
+
+        public IDbSet<ChildCare> ChildCares { get; set; }
+        public IDbSet<DetailedChildCare> DetailedChildCares { get; set; }
+        public IDbSet<TypeAHome> TypeAHomes { get; set; }
+        public IDbSet<TypeBHome> TypeBHomes { get; set; }
+        public IDbSet<LicensedCenter> LicensedCenters { get; set; }
+        public IDbSet<DayCamp> DayCamps { get; set; }
+
+        #endregion
 
         private class Initializer : IDatabaseInitializer<OdjfsEntities>
         {
+            private static readonly string[] CountyNames =
+            {
+                "ADAMS", "ALLEN", "ASHLAND", "ASHTABULA", "ATHENS", "AUGLAIZE", "BELMONT", "BROWN",
+                "BUTLER", "CARROLL", "CHAMPAIGN", "CLARK", "CLERMONT", "CLINTON", "COLUMBIANA", "COSHOCTON",
+                "CRAWFORD", "CUYAHOGA", "DARKE", "DEFIANCE", "DELAWARE", "ERIE", "FAIRFIELD", "FAYETTE",
+                "FRANKLIN", "FULTON", "GALLIA", "GEAUGA", "GREENE", "GUERNSEY", "HAMILTON", "HANCOCK",
+                "HARDIN", "HARRISON", "HENRY", "HIGHLAND", "HOCKING", "HOLMES", "HURON", "JACKSON",
+                "JEFFERSON", "KNOX", "LAKE", "LAWRENCE", "LICKING", "LOGAN", "LORAIN", "LUCAS",
+                "MADISON", "MAHONING", "MARION", "MEDINA", "MEIGS", "MERCER", "MIAMI", "MONROE",
+                "MONTGOMERY", "MORGAN", "MORROW", "MUSKINGUM", "NOBLE", "OTTAWA", "PAULDING", "PERRY",
+                "PICKAWAY", "PIKE", "PORTAGE", "PREBLE", "PUTNAM", "RICHLAND", "ROSS", "SANDUSKY",
+                "SCIOTO", "SENECA", "SHELBY", "STARK", "SUMMIT", "TRUMBULL", "TUSCARAWAS", "UNION",
+                "VAN WERT", "VINTON", "WARREN", "WASHINGTON", "WAYNE", "WILLIAMS", "WOOD", "WYANDOT"
+            };
+
             public void InitializeDatabase(OdjfsEntities context)
             {
                 if (!context.Database.Exists())
                 {
                     context.Database.Create();
 
-                    context.Database.ExecuteSqlCommand(string.Format("ALTER TABLE {0} ADD CONSTRAINT [UK_{0}_Name] UNIQUE (Name)", context.GetTableName(typeof (County))));
+                    AddUniqueConstraint(context, typeof (ChildCareStub), "ExternalUrlId");
+                    AddUniqueConstraint(context, typeof (ChildCare), "ExternalUrlId");
+                    AddUniqueConstraint(context, typeof (County), "Name");
+
+                    context.Database.ExecuteSqlCommand(string.Format(
+                        "INSERT INTO {0} (Name) VALUES {1}",
+                        context.GetTableName(typeof (County)),
+                        string.Join(", ", CountyNames.Select(c => string.Format("('{0}')", c)))));
                 }
+            }
+
+            private void AddUniqueConstraint(OdjfsEntities context, Type entityType, string propertyName)
+            {
+                context.Database.ExecuteSqlCommand(string.Format("ALTER TABLE {0} ADD CONSTRAINT [UK_{0}_{1}] UNIQUE ({1})", context.GetTableName(entityType), propertyName));
             }
         }
     }

@@ -49,8 +49,8 @@ namespace OdjfsScraper.Parsers
             childCare.City = GetDetailString(details, "City");
             childCare.State = GetDetailString(details, "State");
             childCare.ZipCode = int.Parse(GetDetailString(details, "Zip"));
-            childCare.County = new County {Name = GetDetailString(details, "County")};
             childCare.PhoneNumber = GetDetailString(details, "Phone");
+            childCare.County = new County {Name = GetDetailString(details, "County")};
         }
 
         #region Helpers

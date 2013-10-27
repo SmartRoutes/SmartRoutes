@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using Model.Odjfs;
 using Model.Odjfs.ChildCares;
 
 namespace OdjfsScraper.Support
@@ -7,5 +8,6 @@ namespace OdjfsScraper.Support
     {
         Task<byte[]> GetChildCareDocument(ChildCare childCare);
         Task<byte[]> GetListDocument();
+        Task<byte[]> GetListDocument(County county);
     }
 }

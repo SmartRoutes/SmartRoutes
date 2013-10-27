@@ -1,15 +1,41 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Ninject;
+using Ninject.Extensions.Conventions;
+using Ninject.Parameters;
+using NLog;
+using OdjfsScraper.Scrapers;
+using OdjfsScraper.Support;
 
 namespace OdjfsDataChecker
 {
-    class Program
+    internal class Program
     {
-        static void Main(string[] args)
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+
+        private static void Main(string[] args)
         {
+            try
+            {
+                Logger.Trace("OdjfsDataChecker is now starting.");
+
+                IKernel kernel = new StandardKernel();
+                kernel.Bind(c => c
+                    .FromAssemblyContaining(typeof (IChildCareStubListScraper))
+                    .SelectAllClasses()
+                    .BindAllInterfaces());
+
+                var parameter = new ConstructorArgument("odjfsClient", new DownloadingOdjfsClient("HTML"));
+                var scraper = kernel.Get<IChildCareStubListScraper>(parameter);
+
+                var dataChecker = new DataChecker(scraper);
+                dataChecker.UpdateList().Wait();
+
+                Logger.Trace("SortaDataChecker has completed.");
+            }
+            catch (Exception e)
+            {
+                Logger.ErrorException("An exception has forced the SortaDataChecker to terminate.", e);
+            }
         }
     }
 }

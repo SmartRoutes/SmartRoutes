@@ -29,7 +29,7 @@ namespace OdjfsScraper.Parsers
 
             // record this execution
             childCare.LastHash = currentHash;
-            childCare.LastParsed = DateTime.Now; // TODO: UTC or local time
+            childCare.LastScrapedOn = DateTime.Now; // TODO: UTC or local time
 
             // parse the HTML
             CQ document = CQ.Create(new MemoryStream(bytes));
