@@ -23,13 +23,9 @@ namespace SortaDataChecker
 
         public async Task UpdateDatabase()
         {
-            Logger.Trace("Initializing SortaEntities context in DataChecker.");
+            Logger.Trace("Initializing SortaEntities.");
             using (var ctx = new SortaEntities())
             {
-                // improve performance on adding
-                ctx.Configuration.AutoDetectChangesEnabled = false;
-                ctx.Configuration.ValidateOnSaveEnabled = false;
-
                 // get the current archive from the database (if any)
                 Logger.Trace("Getting the current Archive instance (if any).");
                 Archive currentArchive = await ctx.Archives
