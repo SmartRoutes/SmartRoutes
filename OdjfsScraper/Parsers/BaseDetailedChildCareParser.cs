@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using CsQuery;
-using Model.Odjfs;
+using Model.Odjfs.ChildCares;
 using NLog;
 using OdjfsScraper.Support;
 using Scraper;

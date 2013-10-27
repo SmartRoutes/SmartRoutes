@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using Model.Odjfs;
+using Model.Odjfs.ChildCares;
 
 namespace OdjfsScraper.Parsers
 {

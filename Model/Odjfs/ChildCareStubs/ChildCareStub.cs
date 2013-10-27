@@ -1,4 +1,4 @@
-﻿namespace Model.Odjfs
+﻿namespace Model.Odjfs.ChildCareStubs
 {
     public abstract class ChildCareStub
     {

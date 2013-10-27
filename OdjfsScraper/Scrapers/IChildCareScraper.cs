@@ -1,5 +1,5 @@
 ﻿using System.Threading.Tasks;
-using Model.Odjfs;
+using Model.Odjfs.ChildCares;
 
 namespace OdjfsScraper.Scrapers
 {

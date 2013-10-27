@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Model.Odjfs
+namespace Model.Odjfs.ChildCares
 {
     public abstract class ChildCare
     {
@@ -8,6 +8,13 @@ namespace Model.Odjfs
         public string ChildCareType { get; set; }
         public DateTime LastParsed { get; set; }
         public string LastHash { get; set; }
+
+        #region HTML to Entities
+
+        public int CountyId { get; set; }
+        public virtual County County { get; set; }
+
+        #endregion
 
         #region HTML
 
@@ -18,7 +25,6 @@ namespace Model.Odjfs
         public string City { get; set; }
         public string State { get; set; }
         public int ZipCode { get; set; }
-        public string County { get; set; }
         public string PhoneNumber { get; set; }
 
         #endregion

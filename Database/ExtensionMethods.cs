@@ -17,7 +17,7 @@ namespace Database
             return dbContext
                 .GetType()
                 .GetProperties(BindingFlags.Instance | BindingFlags.Public | BindingFlags.GetProperty | BindingFlags.DeclaredOnly)
-                .Where(p => p.PropertyType.GetGenericTypeDefinition() == typeof (DbSet<>));
+                .Where(p => typeof (IDbSet<>).IsAssignableFrom(p.PropertyType.GetGenericTypeDefinition()));
         }
 
         public static IEnumerable<Type> GetEntityTypes(this DbContext dbContext)

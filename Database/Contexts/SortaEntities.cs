@@ -12,17 +12,17 @@ namespace Database.Contexts
         {
         }
 
-        public DbSet<Archive> Archives { get; set; }
-        public DbSet<Agency> Agencies { get; set; }
-        public DbSet<Service> Services { get; set; }
-        public DbSet<ServiceException> ServiceException { get; set; }
-        public DbSet<Route> Routes { get; set; }
-        public DbSet<Shape> Shapes { get; set; }
-        public DbSet<ShapePoint> ShapePoints { get; set; }
-        public DbSet<Block> Blocks { get; set; }
-        public DbSet<Trip> Trips { get; set; }
-        public DbSet<Stop> Stops { get; set; }
-        public DbSet<StopTime> StopTimes { get; set; }
+        public IDbSet<Archive> Archives { get; set; }
+        public IDbSet<Agency> Agencies { get; set; }
+        public IDbSet<Service> Services { get; set; }
+        public IDbSet<ServiceException> ServiceException { get; set; }
+        public IDbSet<Route> Routes { get; set; }
+        public IDbSet<Shape> Shapes { get; set; }
+        public IDbSet<ShapePoint> ShapePoints { get; set; }
+        public IDbSet<Block> Blocks { get; set; }
+        public IDbSet<Trip> Trips { get; set; }
+        public IDbSet<Stop> Stops { get; set; }
+        public IDbSet<StopTime> StopTimes { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {

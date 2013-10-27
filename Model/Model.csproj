@@ -37,17 +37,18 @@
     <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Odjfs\TypeBHomeStub.cs" />
-    <Compile Include="Odjfs\TypeAHomeStub.cs" />
-    <Compile Include="Odjfs\LicensedCenterStub.cs" />
-    <Compile Include="Odjfs\DayCampStub.cs" />
-    <Compile Include="Odjfs\ChildCareStub.cs" />
-    <Compile Include="Odjfs\ChildCare.cs" />
-    <Compile Include="Odjfs\LicensedCenter.cs" />
-    <Compile Include="Odjfs\TypeAHome.cs" />
-    <Compile Include="Odjfs\DayCamp.cs" />
-    <Compile Include="Odjfs\DetailedChildCare.cs" />
-    <Compile Include="Odjfs\TypeBHome.cs" />
+    <Compile Include="Odjfs\ChildCareStubs\TypeBHomeStub.cs" />
+    <Compile Include="Odjfs\ChildCareStubs\TypeAHomeStub.cs" />
+    <Compile Include="Odjfs\ChildCareStubs\LicensedCenterStub.cs" />
+    <Compile Include="Odjfs\ChildCareStubs\DayCampStub.cs" />
+    <Compile Include="Odjfs\ChildCareStubs\ChildCareStub.cs" />
+    <Compile Include="Odjfs\ChildCares\ChildCare.cs" />
+    <Compile Include="Odjfs\ChildCares\LicensedCenter.cs" />
+    <Compile Include="Odjfs\ChildCares\TypeAHome.cs" />
+    <Compile Include="Odjfs\ChildCares\DayCamp.cs" />
+    <Compile Include="Odjfs\ChildCares\DetailedChildCare.cs" />
+    <Compile Include="Odjfs\ChildCares\TypeBHome.cs" />
+    <Compile Include="Odjfs\County.cs" />
     <Compile Include="Sorta\Agency.cs" />
     <Compile Include="Sorta\Archive.cs" />
     <Compile Include="Sorta\Block.cs" />

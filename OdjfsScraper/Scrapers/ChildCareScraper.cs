@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Model.Odjfs;
+using Model.Odjfs.ChildCares;
 using NLog;
 using OdjfsScraper.Parsers;
 using OdjfsScraper.Support;

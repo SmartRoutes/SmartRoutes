@@ -1,26 +1,47 @@
 ﻿using System.Data.Entity;
 using Model.Odjfs;
+using Model.Odjfs.ChildCares;
+using Model.Odjfs.ChildCareStubs;
 
 namespace Database.Contexts
 {
     public class OdjfsEntities : BaseContext
     {
+        static OdjfsEntities()
+        {
+            System.Data.Entity.Database.SetInitializer(new Initializer());
+        }
+
         public OdjfsEntities() : base("odjfs")
         {
         }
 
-        public DbSet<ChildCareStub> ChildCareStubs { get; set; }
-        public DbSet<TypeAHomeStub> TypeAHomeStubs { get; set; }
-        public DbSet<TypeBHomeStub> TypeBHomeStubs { get; set; }
-        public DbSet<LicensedCenterStub> LicensedCenterStubs { get; set; }
-        public DbSet<DayCampStub> DayCampStubs { get; set; }
+        #region Dependent Entites
 
-        public DbSet<ChildCare> ChildCares { get; set; }
-        public DbSet<DetailedChildCare> DetailedChildCares { get; set; }
-        public DbSet<TypeAHome> TypeAHomes { get; set; }
-        public DbSet<TypeBHome> TypeBHomes { get; set; }
-        public DbSet<LicensedCenter> LicensedCenters { get; set; }
-        public DbSet<DayCamp> DayCamps { get; set; }
+        public IDbSet<County> Counties { get; set; }
+
+        #endregion
+
+        #region ChildCareStubs
+
+        public IDbSet<ChildCareStub> ChildCareStubs { get; set; }
+        public IDbSet<TypeAHomeStub> TypeAHomeStubs { get; set; }
+        public IDbSet<TypeBHomeStub> TypeBHomeStubs { get; set; }
+        public IDbSet<LicensedCenterStub> LicensedCenterStubs { get; set; }
+        public IDbSet<DayCampStub> DayCampStubs { get; set; }
+
+        #endregion
+
+        #region ChildCares
+
+        public IDbSet<ChildCare> ChildCares { get; set; }
+        public IDbSet<DetailedChildCare> DetailedChildCares { get; set; }
+        public IDbSet<TypeAHome> TypeAHomes { get; set; }
+        public IDbSet<TypeBHome> TypeBHomes { get; set; }
+        public IDbSet<LicensedCenter> LicensedCenters { get; set; }
+        public IDbSet<DayCamp> DayCamps { get; set; }
+
+        #endregion
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
@@ -65,6 +86,20 @@ namespace Database.Contexts
                 .Where(p => p.Name == "Id")
                 .Where(p => typeof (ChildCare).IsAssignableFrom(p.DeclaringType))
                 .Configure(c => c.HasColumnName("ChildCareId"));
+        }
+
+
+        private class Initializer : IDatabaseInitializer<OdjfsEntities>
+        {
+            public void InitializeDatabase(OdjfsEntities context)
+            {
+                if (!context.Database.Exists())
+                {
+                    context.Database.Create();
+
+                    context.Database.ExecuteSqlCommand(string.Format("ALTER TABLE {0} ADD CONSTRAINT [UK_{0}_Name] UNIQUE (Name)", context.GetTableName(typeof (County))));
+                }
+            }
         }
     }
 }

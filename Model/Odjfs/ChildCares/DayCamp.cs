@@ -1,4 +1,4 @@
-﻿namespace Model.Odjfs
+﻿namespace Model.Odjfs.ChildCares
 {
     public class DayCamp : ChildCare
     {

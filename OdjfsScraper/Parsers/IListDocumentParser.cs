@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
-using Model.Odjfs;
+using Model.Odjfs.ChildCares;
+using Model.Odjfs.ChildCareStubs;
 
 namespace OdjfsScraper.Parsers
 {

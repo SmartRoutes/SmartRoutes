@@ -1,4 +1,6 @@
-﻿namespace Model.Odjfs
+﻿using Model.Odjfs.ChildCares;
+
+namespace Model.Odjfs.ChildCareStubs
 {
     public class TypeAHomeStub : ChildCareStub
     {

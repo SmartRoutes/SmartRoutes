@@ -3,7 +3,7 @@ using System.Net;
 using System.Net.Http;
 using System.Reflection;
 using System.Threading.Tasks;
-using Model.Odjfs;
+using Model.Odjfs.ChildCares;
 using Scraper;
 
 namespace OdjfsScraper.Support

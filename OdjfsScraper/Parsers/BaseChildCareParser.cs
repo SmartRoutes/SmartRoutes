@@ -2,6 +2,7 @@
 using System.Linq;
 using CsQuery;
 using Model.Odjfs;
+using Model.Odjfs.ChildCares;
 using NLog;
 using OdjfsScraper.Support;
 using Scraper;
@@ -48,7 +49,7 @@ namespace OdjfsScraper.Parsers
             childCare.City = GetDetailString(details, "City");
             childCare.State = GetDetailString(details, "State");
             childCare.ZipCode = int.Parse(GetDetailString(details, "Zip"));
-            childCare.County = GetDetailString(details, "County");
+            childCare.County = new County {Name = GetDetailString(details, "County")};
             childCare.PhoneNumber = GetDetailString(details, "Phone");
         }
 

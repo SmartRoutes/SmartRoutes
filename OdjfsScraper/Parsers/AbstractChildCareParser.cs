@@ -7,7 +7,7 @@ using System.Net;
 using System.Text.RegularExpressions;
 using CsQuery;
 using CsQuery.Implementation;
-using Model.Odjfs;
+using Model.Odjfs.ChildCares;
 using NLog;
 using OdjfsScraper.Support;
 using Scraper;

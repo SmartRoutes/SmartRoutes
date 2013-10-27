@@ -86,7 +86,7 @@ namespace Database
             {
                 throw new ArgumentException("No DbSet of the provided type could be found.");
             }
-            var dbSet = (DbSet<TEntity>) _dbSets[typeof (TEntity)];
+            var dbSet = (IDbSet<TEntity>) _dbSets[typeof (TEntity)];
 
             // add the entity
             dbSet.Add(entity);

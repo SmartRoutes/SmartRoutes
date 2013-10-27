@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Database.Contexts
 {
-    public class BaseContext : DbContext
+    public abstract class BaseContext : DbContext
     {
         private readonly string _schema;
 

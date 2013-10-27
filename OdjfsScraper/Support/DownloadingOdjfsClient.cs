@@ -1,6 +1,6 @@
 ﻿using System.IO;
 using System.Threading.Tasks;
-using Model.Odjfs;
+using Model.Odjfs.ChildCares;
 using Scraper;
 
 namespace OdjfsScraper.Support
