@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Net;
 using System.Net.Http;
+using System.Text;
 using System.Threading.Tasks;
 using Model.Odjfs;
 using Model.Odjfs.ChildCares;
@@ -100,7 +101,15 @@ namespace OdjfsScraper.Support
             var requestUri = new Uri(string.Format("http://www.odjfs.state.oh.us/cdc/results2.asp?provider_number={0}", externalUrlId));
 
             // fetch the bytes
-            return await GetResponse(requestUri);
+            ClientResponse response = await GetResponse(requestUri);
+
+            // 404 errors are masked as 500 errors...
+            if (response.StatusCode == HttpStatusCode.InternalServerError && Encoding.UTF8.GetString(response.Content).Contains("error '800a0bcd'"))
+            {
+                response.StatusCode = HttpStatusCode.NotFound;
+            }
+
+            return response;
         }
 
         private async Task<ClientResponse> GetResponse(Uri requestUri)
