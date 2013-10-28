@@ -18,13 +18,6 @@ namespace OdjfsScraper.Parsers
 
         public T Parse(T childCare, byte[] bytes)
         {
-            // get the hash and no-op if the hash has not changed
-            string currentHash = bytes.GetSha256Hash();
-            if (currentHash == childCare.LastHash)
-            {
-                return childCare;
-            }
-
             // parse the HTML
             CQ document = CQ.Create(new MemoryStream(bytes));
 
@@ -50,8 +43,8 @@ namespace OdjfsScraper.Parsers
             PopulateFields(childCare, details);
 
             // record this execution
-            childCare.LastHash = currentHash;
-            childCare.LastScrapedOn = DateTime.Now; // TODO: UTC or local time
+            // TODO: UTC?
+            childCare.LastScrapedOn = DateTime.Now;
 
             return childCare;
         }
