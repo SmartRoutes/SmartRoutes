@@ -46,7 +46,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Parsers\AbstractChildCareParser.cs" />
+    <Compile Include="Parsers\ChildCareParser.cs" />
     <Compile Include="Parsers\IChildCareParser.cs" />
+    <Compile Include="Parsers\IChildCareParserT.cs" />
     <Compile Include="Parsers\IListDocumentParser.cs" />
     <Compile Include="Parsers\TypeAHomeParser.cs" />
     <Compile Include="Parsers\LicenseCenterDocumentParser.cs" />

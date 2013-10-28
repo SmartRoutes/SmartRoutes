@@ -1,7 +1,11 @@
-﻿namespace OdjfsScraper.Parsers
+﻿using Model.Odjfs.ChildCares;
+using Model.Odjfs.ChildCareStubs;
+
+namespace OdjfsScraper.Parsers
 {
-    public interface IChildCareParser<in T>
+    public interface IChildCareParser
     {
-        void Parse(T childCare, byte[] bytes);
+        ChildCare Parse(ChildCareStub childCareStub, byte[] bytes);
+        void Parse(ChildCare childCare, byte[] bytes);
     }
 }

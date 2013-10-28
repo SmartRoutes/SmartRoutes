@@ -1,10 +1,12 @@
 ﻿using System.Threading.Tasks;
 using Model.Odjfs.ChildCares;
+using Model.Odjfs.ChildCareStubs;
 
 namespace OdjfsScraper.Scrapers
 {
-    public interface IChildCareScraper<in T> where T : ChildCare
+    public interface IChildCareScraper
     {
-        Task Scrape(T childCare);
+        Task<ChildCare> Scrape(ChildCareStub childCareStub);
+        Task Scrape(ChildCare childCare);
     }
 }

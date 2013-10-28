@@ -26,12 +26,13 @@ namespace OdjfsDataChecker
                     .BindAllInterfaces());
 
                 var parameter = new ConstructorArgument("odjfsClient", new DownloadingOdjfsClient("HTML"));
-                var scraper = kernel.Get<IChildCareStubListScraper>(parameter);
+                var dataChecker = new Odjfs(kernel.Get<IChildCareStubListScraper>(parameter), kernel.Get<IChildCareScraper>(parameter));
 
-                var dataChecker = new Odjfs(scraper);
                 using (var ctx = new OdjfsEntities())
                 {
-                    dataChecker.UpdateNextCounty(ctx).Wait();
+                    // dataChecker.UpdateNextCounty(ctx).Wait();
+                    dataChecker.UpdateNextChildCare(ctx).Wait();
+                    ctx.SaveChanges();
                 }
                 
                 Logger.Trace("SortaDataChecker has completed.");

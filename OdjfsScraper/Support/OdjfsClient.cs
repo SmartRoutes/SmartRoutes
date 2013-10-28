@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Model.Odjfs;
 using Model.Odjfs.ChildCares;
+using Model.Odjfs.ChildCareStubs;
 using Scraper;
 
 namespace OdjfsScraper.Support
@@ -15,17 +16,17 @@ namespace OdjfsScraper.Support
             _scraperClient = new ScraperClient();
         }
 
+        public async Task<byte[]> GetChildCareDocument(ChildCareStub childCareStub)
+        {
+            byte[] bytes = await GetChildCareDocument(childCareStub.ExternalUrlId);
+            await HandleChildCareDocumentBytes(childCareStub, bytes);
+            return bytes;
+        }
+
         public async Task<byte[]> GetChildCareDocument(ChildCare childCare)
         {
-            // create the URL
-            var requestUri = new Uri(string.Format("http://www.odjfs.state.oh.us/cdc/results2.asp?provider_number={0}", childCare.ExternalUrlId));
-
-            // fetch the bytes
-            byte[] bytes = await GetBytes(requestUri);
-
-            // execute the implementation-specific code
+            byte[] bytes = await GetChildCareDocument(childCare.ExternalUrlId);
             await HandleChildCareDocumentBytes(childCare, bytes);
-
             return bytes;
         }
 
@@ -51,6 +52,17 @@ namespace OdjfsScraper.Support
             return bytes;
         }
 
+        private async Task<byte[]> GetChildCareDocument(string externalUrlId)
+        {
+            // create the URL
+            var requestUri = new Uri(string.Format("http://www.odjfs.state.oh.us/cdc/results2.asp?provider_number={0}", externalUrlId));
+
+            // fetch the bytes
+            byte[] bytes = await GetBytes(requestUri);
+
+            return bytes;
+        }
+
         private async Task<byte[]> GetBytes(Uri requestUri)
         {
             // get the response bytes
@@ -58,6 +70,11 @@ namespace OdjfsScraper.Support
         }
 
         protected virtual Task HandleChildCareDocumentBytes(ChildCare childCare, byte[] bytes)
+        {
+            return Task.FromResult(0);
+        }
+
+        protected virtual Task HandleChildCareDocumentBytes(ChildCareStub childCareStub, byte[] bytes)
         {
             return Task.FromResult(0);
         }

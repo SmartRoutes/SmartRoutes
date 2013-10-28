@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Model.Odjfs;
 using Model.Odjfs.ChildCares;
+using Model.Odjfs.ChildCareStubs;
 using Scraper;
 
 namespace OdjfsScraper.Support
@@ -28,6 +29,12 @@ namespace OdjfsScraper.Support
             CheckDirectory();
             string countyName = county == null ? "all" : county.Name;
             await WriteBytes("list_" + countyName + "_{0}.html", bytes);
+        }
+
+        protected override async Task HandleChildCareDocumentBytes(ChildCareStub childCareStub, byte[] bytes)
+        {
+            CheckDirectory();
+            await WriteBytes("child_care_" + childCareStub.ExternalUrlId + "_{0}.html", bytes);
         }
 
         private void CheckDirectory()
