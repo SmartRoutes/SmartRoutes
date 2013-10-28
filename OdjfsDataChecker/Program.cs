@@ -1,4 +1,5 @@
 ﻿using System;
+using Database.Contexts;
 using Ninject;
 using Ninject.Extensions.Conventions;
 using Ninject.Parameters;
@@ -27,9 +28,12 @@ namespace OdjfsDataChecker
                 var parameter = new ConstructorArgument("odjfsClient", new DownloadingOdjfsClient("HTML"));
                 var scraper = kernel.Get<IChildCareStubListScraper>(parameter);
 
-                var dataChecker = new DataChecker(scraper);
-                dataChecker.UpdateList().Wait();
-
+                var dataChecker = new Odjfs(scraper);
+                using (var ctx = new OdjfsEntities())
+                {
+                    dataChecker.UpdateNextCounty(ctx).Wait();
+                }
+                
                 Logger.Trace("SortaDataChecker has completed.");
             }
             catch (Exception e)
