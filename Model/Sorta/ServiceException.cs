@@ -5,7 +5,12 @@ namespace Model.Sorta
     public class ServiceException
     {
         public int Id { get; set; }
+
+        #region Navigation Properties
+
         public virtual Service Service { get; set; }
+
+        #endregion
 
         #region CSV
 

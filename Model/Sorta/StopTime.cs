@@ -5,8 +5,13 @@ namespace Model.Sorta
     public class StopTime
     {
         public int Id { get; set; }
+
+        #region Navigation Properties
+
         public virtual Trip Trip { get; set; }
         public virtual Stop Stop { get; set; }
+
+        #endregion
 
         #region CSV
 

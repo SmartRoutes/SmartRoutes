@@ -10,7 +10,7 @@ namespace SortaScraper.Support
         public IEnumerable<Agency> Agencies { get; set; }
         public IEnumerable<Route> Routes { get; set; }
         public IEnumerable<Service> Services { get; set; }
-        public IEnumerable<ServiceException> ServiceException { get; set; }
+        public IEnumerable<ServiceException> ServiceExceptions { get; set; }
         public IEnumerable<Shape> Shapes { get; set; }
         public IEnumerable<ShapePoint> ShapePoints { get; set; }
         public IEnumerable<Stop> Stops { get; set; }

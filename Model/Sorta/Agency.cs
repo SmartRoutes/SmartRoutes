@@ -1,7 +1,27 @@
-﻿namespace Model.Sorta
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
+
+namespace Model.Sorta
 {
     public class Agency
     {
+        private ICollection<Route> _routes;
+
+        public Agency()
+        {
+            _routes = new Collection<Route>();
+        }
+
+        #region Navigation Properties
+
+        public virtual ICollection<Route> Routes
+        {
+            get { return _routes; }
+            set { _routes = value; }
+        }
+
+        #endregion
+
         #region CSV
 
         public string Id { get; set; }

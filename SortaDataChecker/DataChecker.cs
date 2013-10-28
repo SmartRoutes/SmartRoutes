@@ -73,8 +73,8 @@ namespace SortaDataChecker
                     Logger.Trace("Adding {0} new Service records.", entityCollection.Services.Count());
                     await inserter.AddRangeAsync(entityCollection.Services);
 
-                    Logger.Trace("Adding {0} new ServiceException records.", entityCollection.ServiceException.Count());
-                    await inserter.AddRangeAsync(entityCollection.ServiceException);
+                    Logger.Trace("Adding {0} new ServiceException records.", entityCollection.ServiceExceptions.Count());
+                    await inserter.AddRangeAsync(entityCollection.ServiceExceptions);
 
                     Logger.Trace("Adding {0} new Route records.", entityCollection.Routes.Count());
                     await inserter.AddRangeAsync(entityCollection.Routes);

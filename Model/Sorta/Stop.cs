@@ -1,8 +1,36 @@
-﻿namespace Model.Sorta
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
+
+namespace Model.Sorta
 {
     public class Stop
     {
-        public virtual Stop Parent { get; set; }
+        private ICollection<Stop> _childStops;
+        private ICollection<StopTime> _stopTimes;
+
+        public Stop()
+        {
+            _childStops = new Collection<Stop>();
+            _stopTimes = new Collection<StopTime>();
+        }
+
+        #region Navigation Properties
+
+        public virtual Stop ParentStop { get; set; }
+
+        public virtual ICollection<Stop> ChildStops
+        {
+            get { return _childStops; }
+            set { _childStops = value; }
+        }
+
+        public virtual ICollection<StopTime> StopTimes
+        {
+            get { return _stopTimes; }
+            set { _stopTimes = value; }
+        }
+
+        #endregion
 
         #region CSV
 

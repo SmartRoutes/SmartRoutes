@@ -3,7 +3,12 @@
     public class ShapePoint
     {
         public int Id { get; set; }
+
+        #region Navigation Properties
+
         public virtual Shape Shape { get; set; }
+
+        #endregion
 
         #region CSV
 

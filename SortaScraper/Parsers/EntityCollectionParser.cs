@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using Ionic.Zip;
 using Model.Sorta;
@@ -54,7 +55,7 @@ namespace SortaScraper.Parsers
                             collection.Services = _serviceParser.Parse(entry.OpenReader()).ToArray();
                             break;
                         case "calendar_dates.txt":
-                            collection.ServiceException = _serviceExceptionParser.Parse(entry.OpenReader()).ToArray();
+                            collection.ServiceExceptions = _serviceExceptionParser.Parse(entry.OpenReader()).ToArray();
                             break;
                         case "routes.txt":
                             collection.Routes = _routeParser.Parse(entry.OpenReader()).ToArray();
@@ -65,7 +66,8 @@ namespace SortaScraper.Parsers
                                 .ShapePoints
                                 .Select(s => s.ShapeId)
                                 .Distinct()
-                                .Select(i => new Shape {Id = i});
+                                .Select(i => new Shape {Id = i})
+                                .ToArray();
                             break;
                         case "stop_times.txt":
                             collection.StopTimes = _stopTimeParser.Parse(entry.OpenReader()).ToArray();
@@ -80,13 +82,90 @@ namespace SortaScraper.Parsers
                                 .Where(t => t.BlockId.HasValue)
                                 .Select(t => t.BlockId.Value)
                                 .Distinct()
-                                .Select(i => new Block {Id = i});
+                                .Select(i => new Block {Id = i})
+                                .ToArray();
                             break;
                     }
                 }
             }
 
+            // associate entities
+            Associate(collection);
+
             return collection;
+        }
+
+        private void Associate(EntityCollection collection)
+        {
+            // Route.Agency
+            IDictionary<string, Agency> agencies = collection.Agencies.ToDictionary(a => a.Id);
+            foreach (Route route in collection.Routes)
+            {
+                route.Agency = agencies[route.AgencyId];
+                route.Agency.Routes.Add(route);
+            }
+
+            // ServiceException.Service
+            IDictionary<int, Service> services = collection.Services.ToDictionary(s => s.Id);
+            foreach (ServiceException serviceException in collection.ServiceExceptions)
+            {
+                serviceException.Service = services[serviceException.ServiceId];
+                serviceException.Service.ServiceExceptions.Add(serviceException);
+            }
+
+            // ShapePoint.Shape
+            IDictionary<int, Shape> shapes = collection.Shapes.ToDictionary(s => s.Id);
+            foreach (ShapePoint shapePoint in collection.ShapePoints)
+            {
+                shapePoint.Shape = shapes[shapePoint.ShapeId];
+                shapePoint.Shape.ShapePoints.Add(shapePoint);
+            }
+
+            // Stop.ParentStop
+            IDictionary<int, Stop> stops = collection.Stops.ToDictionary(s => s.Id);
+            foreach (Stop stop in collection.Stops)
+            {
+                if (stop.ParentId.HasValue)
+                {
+                    stop.ParentStop = stops[stop.ParentId.Value];
+                    stop.ParentStop.ChildStops.Add(stop);
+                }
+            }
+
+            // StopTime.Trip, StopTime.Stop
+            IDictionary<int, Trip> trips = collection.Trips.ToDictionary(t => t.Id);
+            foreach (StopTime stopTime in collection.StopTimes)
+            {
+                stopTime.Trip = trips[stopTime.TripId];
+                stopTime.Trip.StopTimes.Add(stopTime);
+
+                stopTime.Stop = stops[stopTime.StopId];
+                stopTime.Stop.StopTimes.Add(stopTime);
+            }
+
+            // Trip.Route, Trip.Service, Trip.Block, Trip.Shape
+            IDictionary<int, Route> routes = collection.Routes.ToDictionary(r => r.Id);
+            IDictionary<int, Block> blocks = collection.Blocks.ToDictionary(b => b.Id);
+            foreach (Trip trip in collection.Trips)
+            {
+                trip.Route = routes[trip.RouteId];
+                trip.Route.Trips.Add(trip);
+
+                trip.Service = services[trip.ServiceId];
+                trip.Service.Trips.Add(trip);
+
+                if (trip.BlockId.HasValue)
+                {
+                    trip.Block = blocks[trip.BlockId.Value];
+                    trip.Block.Trips.Add(trip);
+                }
+
+                if (trip.ShapeId.HasValue)
+                {
+                    trip.Shape = shapes[trip.ShapeId.Value];
+                    trip.Shape.Trips.Add(trip);
+                }
+            }
         }
     }
 }

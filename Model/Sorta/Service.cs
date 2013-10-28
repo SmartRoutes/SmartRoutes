@@ -1,9 +1,37 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 namespace Model.Sorta
 {
     public class Service
     {
+        private ICollection<ServiceException> _serviceExceptions;
+
+        private ICollection<Trip> _trips;
+
+        public Service()
+        {
+            _serviceExceptions = new Collection<ServiceException>();
+            _trips = new Collection<Trip>();
+        }
+
+        #region Navigation Properties
+
+        public virtual ICollection<Trip> Trips
+        {
+            get { return _trips; }
+            set { _trips = value; }
+        }
+
+        public virtual ICollection<ServiceException> ServiceExceptions
+        {
+            get { return _serviceExceptions; }
+            set { _serviceExceptions = value; }
+        }
+
+        #endregion
+
         #region CSV
 
         public int Id { get; set; }
