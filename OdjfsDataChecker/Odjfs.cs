@@ -11,6 +11,7 @@ using Model.Odjfs.ChildCares;
 using Model.Odjfs.ChildCareStubs;
 using NLog;
 using OdjfsScraper.Scrapers;
+using Scraper;
 
 namespace OdjfsDataChecker
 {
@@ -32,14 +33,45 @@ namespace OdjfsDataChecker
             Logger.Trace("Stub with ID '{0}' will be scraped.", stub.ExternalUrlId);
             ChildCare childCare = await _childCareScraper.Scrape(stub);
             ctx.ChildCareStubs.Remove(stub);
-            ctx.ChildCares.Add(childCare);
+            if (childCare != null)
+            {
+                ctx.ChildCares.AddOrUpdate(childCare);
+            }
+            else
+            {
+                ChildCare existingChildCare = await ctx
+                    .ChildCares
+                    .Where(c => c.ExternalUrlId == stub.ExternalUrlId)
+                    .FirstOrDefaultAsync();
+                if (existingChildCare != null)
+                {
+                    ctx.ChildCares.Remove(existingChildCare);
+                }
+                Logger.Trace("The full detail page for the stub could not be found so the child care was deleted.");
+            }
         }
 
         public async Task UpdateChildCare(OdjfsEntities ctx, ChildCare childCare)
         {
             Logger.Trace("Child care with ID '{0}' will be scraped.", childCare.ExternalUrlId);
-            await _childCareScraper.Scrape(childCare);
-            ctx.ChildCares.AddOrUpdate(childCare);
+            ChildCare newChildCare = await _childCareScraper.Scrape(childCare);
+            if (newChildCare != null)
+            {
+                ctx.ChildCares.AddOrUpdate(newChildCare);
+            }
+            else
+            {
+                ctx.ChildCares.Remove(childCare);
+                ChildCareStub stub = await ctx
+                    .ChildCareStubs
+                    .Where(c => c.ExternalUrlId == childCare.ExternalUrlId)
+                    .FirstOrDefaultAsync();
+                if (stub != null)
+                {
+                    ctx.ChildCareStubs.Remove(stub);
+                }
+                Logger.Trace("The full detail page for the child care could not be found so the child care was deleted.");
+            }
         }
 
         public async Task UpdateNextChildCare(OdjfsEntities ctx)
@@ -103,7 +135,7 @@ namespace OdjfsDataChecker
                     .Where(g => g.Length > 0)
                     .Select(g => g[0]);
 
-                var exception = new Exception("One more more duplicate child cares were found in the list.");
+                var exception = new ScraperException("One more more duplicate child cares were found in the list.");
                 Logger.ErrorException(string.Format(
                     "County: '{0}', HasDuplicates: '{1}', TotalCount: {2}, UniqueCount: {3}",
                     county.Name,
@@ -132,7 +164,7 @@ namespace OdjfsDataChecker
             {
                 dbStubIds.IntersectWith(dbIds);
 
-                var exception = new Exception("There are child cares that exist in both the ChildCare and ChildCareStub tables.");
+                var exception = new ScraperException("There are child cares that exist in both the ChildCare and ChildCareStub tables.");
                 Logger.ErrorException(string.Format("County: '{0}', Overlapping: '{1}'", county.Name, string.Join(", ", dbStubIds)), exception);
                 throw exception;
             }

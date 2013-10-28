@@ -7,6 +7,6 @@ namespace OdjfsScraper.Scrapers
     public interface IChildCareScraper
     {
         Task<ChildCare> Scrape(ChildCareStub childCareStub);
-        Task Scrape(ChildCare childCare);
+        Task<ChildCare> Scrape(ChildCare childCare);
     }
 }

@@ -1,7 +1,7 @@
 ﻿namespace OdjfsScraper.Parsers
 {
-    public interface IChildCareParser<in T>
+    public interface IChildCareParser<T>
     {
-        void Parse(T childCare, byte[] bytes);
+        T Parse(T childCare, byte[] bytes);
     }
 }

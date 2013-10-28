@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net;
 using System.Threading.Tasks;
 using Model.Odjfs.ChildCares;
 using Model.Odjfs.ChildCareStubs;
@@ -35,13 +36,17 @@ namespace OdjfsScraper.Scrapers
             }
 
             // fetch the contents
-            byte[] bytes = await _odjfsClient.GetChildCareDocument(childCareStub);
+            ClientResponse response = await _odjfsClient.GetChildCareDocument(childCareStub);
+            if (response.StatusCode == HttpStatusCode.NotFound)
+            {
+                return null;
+            }
 
             // extract the child care information
-            return _parser.Parse(childCareStub, bytes);
+            return _parser.Parse(childCareStub, response.Content);
         }
 
-        public async Task Scrape(ChildCare childCare)
+        public async Task<ChildCare> Scrape(ChildCare childCare)
         {
             // make sure we have a URL ID
             if (string.IsNullOrWhiteSpace(childCare.ExternalUrlId))
@@ -55,10 +60,14 @@ namespace OdjfsScraper.Scrapers
             }
 
             // fetch the contents
-            byte[] bytes = await _odjfsClient.GetChildCareDocument(childCare);
+            ClientResponse response = await _odjfsClient.GetChildCareDocument(childCare);
+            if (response.StatusCode == HttpStatusCode.NotFound)
+            {
+                return null;
+            }
 
             // extract the child care information
-            _parser.Parse(childCare, bytes);
+            return _parser.Parse(childCare, response.Content);
         }
     }
 }

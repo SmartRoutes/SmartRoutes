@@ -6,6 +6,6 @@ namespace OdjfsScraper.Parsers
     public interface IChildCareParser
     {
         ChildCare Parse(ChildCareStub childCareStub, byte[] bytes);
-        void Parse(ChildCare childCare, byte[] bytes);
+        ChildCare Parse(ChildCare childCare, byte[] bytes);
     }
 }

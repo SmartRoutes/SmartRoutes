@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Net;
-using System.Text.RegularExpressions;
 using CsQuery;
 using CsQuery.Implementation;
 using Model.Odjfs.ChildCares;
@@ -18,13 +16,13 @@ namespace OdjfsScraper.Parsers
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
-        public void Parse(T childCare, byte[] bytes)
+        public T Parse(T childCare, byte[] bytes)
         {
             // get the hash and no-op if the hash has not changed
             string currentHash = bytes.GetSha256Hash();
             if (currentHash == childCare.LastHash)
             {
-                return;
+                return childCare;
             }
 
             // record this execution
@@ -54,6 +52,8 @@ namespace OdjfsScraper.Parsers
 
             // generate the concrete object using the child implementation
             PopulateFields(childCare, details);
+
+            return childCare;
         }
 
         protected abstract IEnumerable<KeyValuePair<string, string>> GetDetailKeyValuePairs(CQ document);

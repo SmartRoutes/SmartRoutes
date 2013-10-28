@@ -48,34 +48,31 @@ namespace OdjfsScraper.Parsers
                 throw exception;
             }
 
-            Parse(childCare, bytes);
-            return childCare;
+            return Parse(childCare, bytes);
         }
 
-        public void Parse(ChildCare childCare, byte[] bytes)
+        public ChildCare Parse(ChildCare childCare, byte[] bytes)
         {
             if (childCare is TypeAHome)
             {
-                _aParser.Parse((TypeAHome) childCare, bytes);
+                return _aParser.Parse((TypeAHome) childCare, bytes);
             }
-            else if (childCare is TypeBHome)
+            if (childCare is TypeBHome)
             {
-                _bParser.Parse((TypeBHome) childCare, bytes);
+                return _bParser.Parse((TypeBHome) childCare, bytes);
             }
-            else if (childCare is LicensedCenter)
+            if (childCare is LicensedCenter)
             {
-                _cParser.Parse((LicensedCenter) childCare, bytes);
+                return _cParser.Parse((LicensedCenter) childCare, bytes);
             }
-            else if (childCare is DayCamp)
+            if (childCare is DayCamp)
             {
-                _dParser.Parse((DayCamp) childCare, bytes);
+                return _dParser.Parse((DayCamp) childCare, bytes);
             }
-            else
-            {
-                var exception = new ArgumentException("Unknown ChildCare type provided.", "childCare");
-                Logger.ErrorException(string.Format("Type: '{0}'", childCare.GetType()), exception);
-                throw exception;
-            }
+
+            var exception = new ArgumentException("Unknown ChildCare type provided.", "childCare");
+            Logger.ErrorException(string.Format("Type: '{0}'", childCare.GetType()), exception);
+            throw exception;
         }
     }
 }

@@ -7,9 +7,9 @@ namespace OdjfsScraper.Support
 {
     public interface IOdjfsClient
     {
-        Task<byte[]> GetChildCareDocument(ChildCareStub childCareStub);
-        Task<byte[]> GetChildCareDocument(ChildCare childCare);
-        Task<byte[]> GetListDocument();
-        Task<byte[]> GetListDocument(County county);
+        Task<ClientResponse> GetChildCareDocument(ChildCareStub childCareStub);
+        Task<ClientResponse> GetChildCareDocument(ChildCare childCare);
+        Task<ClientResponse> GetListDocument();
+        Task<ClientResponse> GetListDocument(County county);
     }
 }

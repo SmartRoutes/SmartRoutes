@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Model.Odjfs;
-using Model.Odjfs.ChildCares;
 using Model.Odjfs.ChildCareStubs;
 using OdjfsScraper.Parsers;
 using OdjfsScraper.Support;
@@ -22,19 +21,19 @@ namespace OdjfsScraper.Scrapers
         public async Task<IEnumerable<ChildCareStub>> Scrape()
         {
             // fetch the contents
-            byte[] bytes = await _odjfsClient.GetListDocument();
+            ClientResponse response = await _odjfsClient.GetListDocument();
 
             // extract the information from the HTML
-            return _parser.Parse(bytes);
+            return _parser.Parse(response.Content);
         }
 
         public async Task<IEnumerable<ChildCareStub>> Scrape(County county)
         {
             // fetch the contents
-            byte[] bytes = await _odjfsClient.GetListDocument(county);
+            ClientResponse response = await _odjfsClient.GetListDocument(county);
 
             // extract the information from the HTML
-            return _parser.Parse(bytes, county);
+            return _parser.Parse(response.Content, county);
         }
     }
 }

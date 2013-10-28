@@ -18,23 +18,23 @@ namespace OdjfsScraper.Support
             _hasDirectoryBeenChecked = false;
         }
 
-        protected override async Task HandleChildCareDocumentBytes(ChildCare childCare, byte[] bytes)
+        protected override async Task HandleChildCareDocumentResponse(ChildCare childCare, ClientResponse response)
         {
             CheckDirectory();
-            await WriteBytes("child_care_" + childCare.ExternalUrlId + "_{0}.html", bytes);
+            await WriteBytes("child_care_" + childCare.ExternalUrlId + "_{0}_{1}.html", response);
         }
 
-        protected override async Task HandleListDocumentBytes(County county, byte[] bytes)
+        protected override async Task HandleListDocumentResponse(County county, ClientResponse response)
         {
             CheckDirectory();
             string countyName = county == null ? "all" : county.Name;
-            await WriteBytes("list_" + countyName + "_{0}.html", bytes);
+            await WriteBytes("list_" + countyName + "_{0}_{1}.html", response);
         }
 
-        protected override async Task HandleChildCareDocumentBytes(ChildCareStub childCareStub, byte[] bytes)
+        protected override async Task HandleChildCareDocumentResponse(ChildCareStub childCareStub, ClientResponse response)
         {
             CheckDirectory();
-            await WriteBytes("child_care_" + childCareStub.ExternalUrlId + "_{0}.html", bytes);
+            await WriteBytes("child_care_" + childCareStub.ExternalUrlId + "_{0}_{1}.html", response);
         }
 
         private void CheckDirectory()
@@ -49,17 +49,20 @@ namespace OdjfsScraper.Support
             }
         }
 
-        private async Task WriteBytes(string fileNameFormat, byte[] bytes)
+        private async Task WriteBytes(string fileNameFormat, ClientResponse response)
         {
             // generate a path for the child care
-            string path = Path.Combine(_directory, string.Format(fileNameFormat, bytes.GetSha256Hash()));
+            string path = Path.Combine(_directory, string.Format(
+                fileNameFormat,
+                response.StatusCode,
+                response.Content.GetSha256Hash()));
 
             if (!File.Exists(path))
             {
                 using (var outputStream = new FileStream(path, FileMode.Create, FileAccess.Write))
                 {
                     // write to the file
-                    await outputStream.WriteAsync(bytes, 0, bytes.Length);
+                    await outputStream.WriteAsync(response.Content, 0, response.Content.Length);
                 }
             }
         }
