@@ -25,10 +25,6 @@ namespace OdjfsScraper.Parsers
                 return childCare;
             }
 
-            // record this execution
-            childCare.LastHash = currentHash;
-            childCare.LastScrapedOn = DateTime.Now; // TODO: UTC or local time
-
             // parse the HTML
             CQ document = CQ.Create(new MemoryStream(bytes));
 
@@ -52,6 +48,10 @@ namespace OdjfsScraper.Parsers
 
             // generate the concrete object using the child implementation
             PopulateFields(childCare, details);
+
+            // record this execution
+            childCare.LastHash = currentHash;
+            childCare.LastScrapedOn = DateTime.Now; // TODO: UTC or local time
 
             return childCare;
         }

@@ -1,4 +1,6 @@
-﻿namespace Model.Odjfs.ChildCareStubs
+﻿using System;
+
+namespace Model.Odjfs.ChildCareStubs
 {
     public abstract class ChildCareStub
     {
@@ -6,6 +8,7 @@
         public abstract string ChildCareType { get; }
         public virtual int? CountyId { get; set; }
         public virtual County County { get; set; }
+        public DateTime? LastScrapedOn { get; set; }
 
         #region HTML
 

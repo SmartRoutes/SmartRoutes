@@ -199,10 +199,6 @@ namespace OdjfsDataChecker
                 ctx.ChildCareStubs.Add(stub);
             }
 
-            // update the scrape date on this county
-            // TODO: UTC?
-            county.LastScrapedOn = DateTime.Now;
-
             Logger.Trace("Saving changes.");
             await ctx.SaveChangesAsync();
         }

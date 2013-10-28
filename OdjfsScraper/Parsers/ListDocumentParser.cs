@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -41,7 +42,15 @@ namespace OdjfsScraper.Parsers
                 .Skip(1); // the first two is for the header
 
             // parse the rows using the child parser
-            return rows.Select(r => ParseRow(r, county));
+            IEnumerable<ChildCareStub> stubs = rows.Select(r => ParseRow(r, county));
+
+            // TODO: UTC?
+            if (county != null)
+            {
+                county.LastScrapedOn = DateTime.Now;
+            }
+
+            return stubs;
         }
 
         private ChildCareStub ParseRow(IDomElement element, County county)

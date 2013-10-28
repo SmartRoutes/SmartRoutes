@@ -48,7 +48,12 @@ namespace OdjfsScraper.Parsers
                 throw exception;
             }
 
-            return Parse(childCare, bytes);
+            childCare = Parse(childCare, bytes);
+
+            // TODO: UTC?
+            childCareStub.LastScrapedOn = DateTime.Now;
+
+            return childCare;
         }
 
         public ChildCare Parse(ChildCare childCare, byte[] bytes)
