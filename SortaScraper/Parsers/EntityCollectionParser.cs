@@ -36,7 +36,8 @@ namespace SortaScraper.Parsers
             var collection = new EntityCollection();
 
             // extract files from the zip
-            using (ZipFile zipFile = ZipFile.Read(new MemoryStream(bytes)))
+            // ZipFile.Read(new MemoryStream(bytes))
+            using (ZipFile zipFile = ZipFile.Read("C:\\Users\\alcaz0r\\Documents\\School\\CS Senior Design\\streetsmartz\\Sandbox\\sorta\\google_transit_info.zip"))
             {
                 foreach (ZipEntry entry in zipFile.Entries)
                 {

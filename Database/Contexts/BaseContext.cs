@@ -11,7 +11,7 @@ namespace Database.Contexts
     {
         private readonly string _schema;
 
-        protected BaseContext(string schema) : base("SmartRoutes")
+        protected BaseContext(string schema) : base("123ssdffsdgsdfsd123")
         {
             _schema = schema;
 
