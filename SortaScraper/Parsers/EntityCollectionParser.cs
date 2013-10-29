@@ -102,7 +102,7 @@ namespace SortaScraper.Parsers
             foreach (Route route in collection.Routes)
             {
                 route.Agency = agencies[route.AgencyId];
-                route.Agency.Routes.Add(route);
+                // route.Agency.Routes.Add(route);
             }
 
             // ServiceException.Service
@@ -110,7 +110,7 @@ namespace SortaScraper.Parsers
             foreach (ServiceException serviceException in collection.ServiceExceptions)
             {
                 serviceException.Service = services[serviceException.ServiceId];
-                serviceException.Service.ServiceExceptions.Add(serviceException);
+                // serviceException.Service.ServiceExceptions.Add(serviceException);
             }
 
             // ShapePoint.Shape
@@ -118,7 +118,7 @@ namespace SortaScraper.Parsers
             foreach (ShapePoint shapePoint in collection.ShapePoints)
             {
                 shapePoint.Shape = shapes[shapePoint.ShapeId];
-                shapePoint.Shape.ShapePoints.Add(shapePoint);
+                // shapePoint.Shape.ShapePoints.Add(shapePoint);
             }
 
             // Stop.ParentStop
@@ -128,7 +128,7 @@ namespace SortaScraper.Parsers
                 if (stop.ParentId.HasValue)
                 {
                     stop.ParentStop = stops[stop.ParentId.Value];
-                    stop.ParentStop.ChildStops.Add(stop);
+                    // stop.ParentStop.ChildStops.Add(stop);
                 }
             }
 
@@ -137,10 +137,10 @@ namespace SortaScraper.Parsers
             foreach (StopTime stopTime in collection.StopTimes)
             {
                 stopTime.Trip = trips[stopTime.TripId];
-                stopTime.Trip.StopTimes.Add(stopTime);
+                // stopTime.Trip.StopTimes.Add(stopTime);
 
                 stopTime.Stop = stops[stopTime.StopId];
-                stopTime.Stop.StopTimes.Add(stopTime);
+                // stopTime.Stop.StopTimes.Add(stopTime);
             }
 
             // Trip.Route, Trip.Service, Trip.Block, Trip.Shape
@@ -149,21 +149,21 @@ namespace SortaScraper.Parsers
             foreach (Trip trip in collection.Trips)
             {
                 trip.Route = routes[trip.RouteId];
-                trip.Route.Trips.Add(trip);
+                // trip.Route.Trips.Add(trip);
 
                 trip.Service = services[trip.ServiceId];
-                trip.Service.Trips.Add(trip);
+                // trip.Service.Trips.Add(trip);
 
                 if (trip.BlockId.HasValue)
                 {
                     trip.Block = blocks[trip.BlockId.Value];
-                    trip.Block.Trips.Add(trip);
+                    // trip.Block.Trips.Add(trip);
                 }
 
                 if (trip.ShapeId.HasValue)
                 {
                     trip.Shape = shapes[trip.ShapeId.Value];
-                    trip.Shape.Trips.Add(trip);
+                    // trip.Shape.Trips.Add(trip);
                 }
             }
         }
