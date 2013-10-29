@@ -64,6 +64,9 @@ namespace SortaDataChecker
                 Logger.Trace("Truncating all of the old entities.");
                 ctx.Truncate();
 
+                ctx.Configuration.AutoDetectChangesEnabled = false;
+                ctx.Configuration.ValidateOnSaveEnabled = false;
+
                 using (var inserter = new FastInserter<SortaEntities>(ctx, 1000))
                 {
                     //  persist all of the new entities
@@ -99,8 +102,6 @@ namespace SortaDataChecker
 
                     Logger.Trace("Adding the new Archive record.");
                     await inserter.AddAsync(entityCollection.Archive);
-
-                    await inserter.SaveChangesAsync();
                 }
             }
         }
