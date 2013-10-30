@@ -77,6 +77,9 @@ namespace Database.Contexts
                 .Where(p => p.Name == "Id")
                 .Where(p => typeof (ChildCare).IsAssignableFrom(p.DeclaringType))
                 .Configure(c => c.HasColumnName("ChildCareId"));
+
+            modelBuilder.Entity<County>()
+                .Property(c => c.Id).HasColumnName("CountyId");
         }
 
         #region Dependent Entites
