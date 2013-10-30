@@ -30,6 +30,10 @@ namespace OdjfsDataChecker
 
         public async Task UpdateChildCareStub(OdjfsEntities ctx, ChildCareStub stub)
         {
+            // record this scrape
+            stub.LastScrapedOn = DateTime.Now;
+            await ctx.SaveChangesAsync();
+
             Logger.Trace("Stub with ID '{0}' will be scraped.", stub.ExternalUrlId);
             ChildCare childCare = await _childCareScraper.Scrape(stub);
             ctx.ChildCareStubs.Remove(stub);
@@ -49,10 +53,16 @@ namespace OdjfsDataChecker
                 }
                 Logger.Trace("The full detail page for the stub could not be found so the child care was deleted.");
             }
+
+            await ctx.SaveChangesAsync();
         }
 
         public async Task UpdateChildCare(OdjfsEntities ctx, ChildCare childCare)
         {
+            // record this scrape
+            childCare.LastScrapedOn = DateTime.Now;
+            await ctx.SaveChangesAsync();
+
             Logger.Trace("Child care with ID '{0}' will be scraped.", childCare.ExternalUrlId);
             ChildCare newChildCare = await _childCareScraper.Scrape(childCare);
             if (newChildCare != null)
@@ -72,6 +82,8 @@ namespace OdjfsDataChecker
                 }
                 Logger.Trace("The full detail page for the child care could not be found so the child care was deleted.");
             }
+
+            await ctx.SaveChangesAsync();
         }
 
         public async Task UpdateNextChildCare(OdjfsEntities ctx)
@@ -118,6 +130,10 @@ namespace OdjfsDataChecker
 
         public async Task UpdateCounty(OdjfsEntities ctx, County county)
         {
+            // record this scrape
+            county.LastScrapedOn = DateTime.Now;
+            await ctx.SaveChangesAsync();
+
             // get the stubs from the web
             Logger.Trace("Scraping stubs for county '{0}'.", county.Name);
             ChildCareStub[] webStubs = (await _listScraper.Scrape(county)).ToArray();
