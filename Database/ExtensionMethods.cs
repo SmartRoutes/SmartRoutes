@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.Data.Entity.Core.Metadata.Edm;
 using System.Data.Entity.Core.Objects;
 using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Reflection;
-using System.Text.RegularExpressions;
-using Model.Sorta;
 
 namespace Database
 {
@@ -29,20 +28,17 @@ namespace Database
 
         public static IEnumerable<string> GetTableNames(this DbContext dbContext)
         {
-            ObjectContext objectContext = ((IObjectContextAdapter) dbContext).ObjectContext;
-            MethodInfo createObjectSet = objectContext
-                .GetType()
-                .GetMethods(BindingFlags.Instance | BindingFlags.Public)
-                .First(m => m.Name == "CreateObjectSet" && m.GetParameters().Length == 0);
+            ObjectContext ctx = ((IObjectContextAdapter) dbContext).ObjectContext;
+            MetadataWorkspace mw = ctx.MetadataWorkspace;
 
-            return dbContext
-                .GetEntityTypes()
-                .Select(localType => createObjectSet.MakeGenericMethod(localType).Invoke(objectContext, null))
-                .Select(objectSet => ((dynamic) objectSet).ToTraceString())
-                .ToArray()
-                .Select(traceString => Regex.Match((string) traceString, @"FROM\s+(?<TableName>.+?)\s+AS"))
-                .Select(match => match.Groups["TableName"].Value)
-                .Distinct();
+            return mw
+                .GetItemCollection(DataSpace.SSpace)
+                .GetItems<EntityContainer>()
+                .SelectMany(e => e.BaseEntitySets)
+                .OfType<EntitySet>()
+                .Select(s => string.Format("{0}.{1}", s.Schema, s.Table))
+                .Distinct()
+                .ToArray();
         }
     }
 }
