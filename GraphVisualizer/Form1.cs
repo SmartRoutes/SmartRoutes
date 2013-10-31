@@ -19,7 +19,7 @@ using Graph;
 using Graph.Node;
 using System.IO;
 
-namespace WindowsFormsApplication1
+namespace GraphVisualizer
 {
     public partial class Form1 : Form 
     {
