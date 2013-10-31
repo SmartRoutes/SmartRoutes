@@ -31,7 +31,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SortaDataChecker", "SortaDa
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OdjfsDataChecker", "OdjfsDataChecker\OdjfsDataChecker.csproj", "{F7F33810-6765-442B-82F8-A442875013CB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GraphBuildingTester", "GraphBuildingTester\GraphBuildingTester.csproj", "{EFD2FC16-9536-4C25-9402-F728BA2F35DA}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Graph", "Graph\Graph.csproj", "{EFD2FC16-9536-4C25-9402-F728BA2F35DA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GraphVisualizer", "GraphVisualizer\GraphVisualizer.csproj", "{5481CFED-654C-4694-955A-DB8CA4FEC9FE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -153,6 +155,18 @@ Global
 		{EFD2FC16-9536-4C25-9402-F728BA2F35DA}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{EFD2FC16-9536-4C25-9402-F728BA2F35DA}.Release|Win32.ActiveCfg = Release|Any CPU
 		{EFD2FC16-9536-4C25-9402-F728BA2F35DA}.Release|x64.ActiveCfg = Release|Any CPU
+		{5481CFED-654C-4694-955A-DB8CA4FEC9FE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5481CFED-654C-4694-955A-DB8CA4FEC9FE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5481CFED-654C-4694-955A-DB8CA4FEC9FE}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{5481CFED-654C-4694-955A-DB8CA4FEC9FE}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{5481CFED-654C-4694-955A-DB8CA4FEC9FE}.Debug|Win32.ActiveCfg = Debug|Any CPU
+		{5481CFED-654C-4694-955A-DB8CA4FEC9FE}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{5481CFED-654C-4694-955A-DB8CA4FEC9FE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5481CFED-654C-4694-955A-DB8CA4FEC9FE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5481CFED-654C-4694-955A-DB8CA4FEC9FE}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{5481CFED-654C-4694-955A-DB8CA4FEC9FE}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{5481CFED-654C-4694-955A-DB8CA4FEC9FE}.Release|Win32.ActiveCfg = Release|Any CPU
+		{5481CFED-654C-4694-955A-DB8CA4FEC9FE}.Release|x64.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
