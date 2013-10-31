@@ -3,7 +3,6 @@ using System.Net;
 
 namespace OdjfsScraper
 {
-    [Serializable]
     public class ClientResponse
     {
         public string RequestUri { get; set; }

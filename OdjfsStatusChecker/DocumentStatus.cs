@@ -1,5 +1,5 @@
 ﻿using System;
-using OdjfsScraper;
+using System.Net;
 
 namespace OdjfsStatusChecker
 {
@@ -8,17 +8,13 @@ namespace OdjfsStatusChecker
     {
         public DateTime DateTime { get; set; }
         public string Hash { get; set; }
-        public ClientResponse ClientResponse { get; set; }
+        public Document Document { get; set; }
+        public byte[] Content { get; set; }
+        public HttpStatusCode StatusCode { get; set; }
 
         public bool Equals(DocumentStatus other)
         {
-            return other != null &&
-                   Hash == other.Hash &&
-                   ((ClientResponse == null &&
-                     other.ClientResponse == null) ||
-                    (ClientResponse != null &&
-                     other.ClientResponse != null &&
-                     ClientResponse.StatusCode == other.ClientResponse.StatusCode));
+            return other != null && Hash == other.Hash && StatusCode == other.StatusCode;
         }
     }
 }
