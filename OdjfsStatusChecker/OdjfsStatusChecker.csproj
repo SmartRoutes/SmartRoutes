@@ -60,14 +60,6 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Model\Model.csproj">
-      <Project>{711cc508-53a8-4edb-bbca-b911935da4b0}</Project>
-      <Name>Model</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\OdjfsScraper\OdjfsScraper.csproj">
-      <Project>{393f1b81-3f51-45dc-976c-3bd31d2a71de}</Project>
-      <Name>OdjfsScraper</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Scraper\Scraper.csproj">
       <Project>{4401fe23-f94a-4eda-aa76-ccd53548e10e}</Project>
       <Name>Scraper</Name>
