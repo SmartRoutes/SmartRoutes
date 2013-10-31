@@ -67,7 +67,7 @@ namespace OdjfsStatusChecker
                     CheckIfDocumentStatusHasChanged(DocumentStatusesDirectory, client, currentDocument);
 
                     // wait for 5 seconds
-                    Thread.Sleep(2000);
+                    Thread.Sleep(5000);
                 }
             }
             catch (Exception e)
