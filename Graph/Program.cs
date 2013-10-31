@@ -21,16 +21,24 @@ namespace Graph
     {
         private static Byte[] zipFileBytes = File.ReadAllBytes("C:\\Users\\alcaz0r\\Documents\\School\\CS Senior Design\\streetsmartz\\Sandbox\\sorta\\google_transit_info.zip");
 
+        private class myModule : NinjectModule
+        {
+            public override void Load()
+            {
+                Bind<IMetroNode>().To<MetroNode>();
+                Bind<IGraphBuilder>().To<GraphBuilder>();
+            }
+        }
+
         static void Main(string[] args)
         {
             try
             {
-                
                 Console.WriteLine("GraphBuildingTester is now starting.");
 
                 Console.WriteLine("Attempting to parse SORTA zip file.");
 
-                IKernel kernel = new StandardKernel();
+                IKernel kernel = new StandardKernel(new myModule());
 
                 kernel.Bind(c => c
                     .FromAssemblyContaining(typeof(IEntityCollectionParser))
@@ -62,12 +70,14 @@ namespace Graph
                 }
 
                 Console.WriteLine("Creating Nodes.");
+                DateTime tic = DateTime.Now;
 
-                var builder = new GraphBuilder();
+                var builder = kernel.Get<IGraphBuilder>();
                 INode[] MetroNodes = builder.BuildGraph(collection);
 
-//                Console.WriteLine(String.Format("{0}", MetroNodes.Count()));
-//                Console.WriteLine(String.Format("{0}", collection.StopTimes.Count()));
+                DateTime toc = DateTime.Now;
+
+                Console.WriteLine("Nodes created in {0} milliseconds.", (toc - tic).TotalMilliseconds);
                 Console.ReadLine();
             }
             catch (Exception e)

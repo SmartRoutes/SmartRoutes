@@ -14,23 +14,23 @@ using Graph.Node;
 
 namespace Graph
 {
-    class NodeModule : NinjectModule
-    {
-        public override void Load()
-        {
-            Bind<IMetroNode>().To<MetroNode>();
-        }
-    }
-
     public class GraphBuilder : IGraphBuilder
     {
-        private StandardKernel kernel = new StandardKernel(new NodeModule());
-
+        private readonly IMetroNode _metroNodeMaker;
         private Logger Logger = LogManager.GetCurrentClassLogger();
 
-        public GraphBuilder() 
+        public GraphBuilder(IMetroNode metroNodeMaker) 
         {
-            Logger.Trace("GraphBuilder object created.");
+            try
+            {
+                _metroNodeMaker = metroNodeMaker;
+                Logger.Trace("GraphBuilder object created.");
+            }
+            catch (Exception e)
+            {
+                Logger.ErrorException("Exception encountered during GraphBuilder object creation.", e);
+                throw e;
+            }
         }
 
         public INode[] BuildGraph(EntityCollection collection)
@@ -61,13 +61,8 @@ namespace Graph
 
             try
             {
-                // grab instance of IMetroNode implementation to handle creation of nodes
-                var nodeMaker = kernel.Get<IMetroNode>();
-
-                // turn StopTime entities into IEnumerable of IMetroNodes, ordered first by
-                // tripID, and second by Sequence
                 var MetroNodes = (from stopTime in collection.StopTimes
-                                  select nodeMaker.CreateNode(stopTime))
+                                  select _metroNodeMaker.CreateNode(stopTime))
                                  .ToArray();
 
                 Logger.Trace("Metro Nodes created successfully.");
@@ -135,12 +130,12 @@ namespace Graph
             }
         }
 
-        private IEnumerable<INode> CreateChildcareNodes(IEnumerable<ChildCare> ChildcareCollection)
+        private IChildcareNode[] CreateChildcareNodes(IEnumerable<ChildCare> ChildcareCollection)
         {
             return null;
         }
 
-        private IEnumerable<INode> CombineNodes(IEnumerable<INode> MetroNodes, IEnumerable<INode> ChildcareNodes)
+        private INode[] CombineNodes(IMetroNode[] MetroNodes, IChildcareNode[] ChildcareNodes)
         {
             return MetroNodes;
         }
