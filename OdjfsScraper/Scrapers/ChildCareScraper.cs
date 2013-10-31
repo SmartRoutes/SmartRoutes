@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Net;
+using System.Text;
 using System.Threading.Tasks;
 using Model.Odjfs.ChildCares;
 using Model.Odjfs.ChildCareStubs;
 using NLog;
 using OdjfsScraper.Parsers;
 using OdjfsScraper.Support;
+using Scraper;
 
 namespace OdjfsScraper.Scrapers
 {
@@ -37,6 +39,7 @@ namespace OdjfsScraper.Scrapers
 
             // fetch the contents
             ClientResponse response = await _odjfsClient.GetChildCareDocument(childCareStub);
+            ValidateClientResponse(response);
             if (response.StatusCode == HttpStatusCode.NotFound)
             {
                 return null;
@@ -61,6 +64,7 @@ namespace OdjfsScraper.Scrapers
 
             // fetch the contents
             ClientResponse response = await _odjfsClient.GetChildCareDocument(childCare);
+            ValidateClientResponse(response);
             if (response.StatusCode == HttpStatusCode.NotFound)
             {
                 return null;
@@ -68,6 +72,19 @@ namespace OdjfsScraper.Scrapers
 
             // extract the child care information
             return _parser.Parse(childCare, response.Content);
+        }
+
+        private void ValidateClientResponse(ClientResponse response)
+        {
+            if (response.StatusCode != HttpStatusCode.OK && response.StatusCode != HttpStatusCode.NotFound)
+            {
+                var exception = new ScraperException("A status code that is not 200 or 404 was returned when getting a child care document.");
+                Logger.ErrorException(string.Format(
+                    "RequestUri: '{0}', StatusCode: '{1}'",
+                    response.RequestUri,
+                    response.StatusCode), exception);
+                throw exception;
+            }
         }
     }
 }

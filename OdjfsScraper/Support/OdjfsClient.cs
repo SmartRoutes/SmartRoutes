@@ -6,15 +6,12 @@ using System.Threading.Tasks;
 using Model.Odjfs;
 using Model.Odjfs.ChildCares;
 using Model.Odjfs.ChildCareStubs;
-using NLog;
 using Scraper;
 
 namespace OdjfsScraper.Support
 {
     public class OdjfsClient : IOdjfsClient
     {
-        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
-
         private readonly ScraperClient _scraperClient;
 
         public OdjfsClient()
@@ -30,17 +27,6 @@ namespace OdjfsScraper.Support
             // execute implementation-specific code
             await HandleChildCareDocumentResponse(childCareStub, response);
 
-            if (response.StatusCode != HttpStatusCode.OK && response.StatusCode != HttpStatusCode.NotFound)
-            {
-                var exception = new ScraperException("A status code that is not 200 or 404 was returned when getting a child care document from a stub.");
-                Logger.ErrorException(string.Format(
-                    "Type: '{0}', ExternalUrlId: '{1}', StatusCode: '{2}'",
-                    childCareStub.GetType(),
-                    childCareStub.ExternalUrlId,
-                    response.StatusCode), exception);
-                throw exception;
-            }
-
             return response;
         }
 
@@ -52,45 +38,38 @@ namespace OdjfsScraper.Support
             // execute implementation-specific code
             await HandleChildCareDocumentResponse(childCare, response);
 
-            if (response.StatusCode != HttpStatusCode.OK && response.StatusCode != HttpStatusCode.NotFound)
-            {
-                var exception = new ScraperException("A status code that is not 200 or 404 was returned when getting a child care document.");
-                Logger.ErrorException(string.Format(
-                    "Type: '{0}', ExternalUrlId: '{1}', StatusCode: '{2}'",
-                    childCare.GetType(),
-                    childCare.ExternalUrlId,
-                    response.StatusCode), exception);
-                throw exception;
-            }
-
             return response;
         }
 
         public async Task<ClientResponse> GetListDocument()
         {
-            return await GetListDocument(null);
+            return await GetListDocument(null, 0);
+        }
+
+        public async Task<ClientResponse> GetListDocument(int zipCode)
+        {
+            return await GetListDocument(null, zipCode);
         }
 
         public async Task<ClientResponse> GetListDocument(County county)
         {
+            return await GetListDocument(county, 0);
+        }
+
+        public async Task<ClientResponse> GetListDocument(County county, int zipCode)
+        {
             // create the query parameter
             string countyQueryParameter = county == null ? string.Empty : string.Format("County={0}&", county.Name);
+            string zipCodeQueryParameter = zipCode == 0 ? string.Empty : string.Format("Zip={0}&", zipCode);
 
             // create the URL
-            var requestUri = new Uri(string.Format("http://www.odjfs.state.oh.us/cdc/results1.asp?{0}Printable=Y&ShowAllPages=Y", countyQueryParameter));
+            var requestUri = new Uri(string.Format("http://www.odjfs.state.oh.us/cdc/results1.asp?{0}{1}Printable=Y&ShowAllPages=Y", countyQueryParameter, zipCodeQueryParameter));
 
             // fetch the bytes
             ClientResponse response = await GetResponse(requestUri);
 
             // execute the implementation-specific code
             await HandleListDocumentResponse(county, response);
-
-            if (response.StatusCode != HttpStatusCode.OK)
-            {
-                var exception = new ScraperException("A status code that is not 200 was returned when getting the list document.");
-                Logger.ErrorException(string.Format("RequestUri: '{0}', StatusCode: '{1}'", requestUri, response.StatusCode), exception);
-                throw exception;
-            }
 
             return response;
         }
@@ -122,6 +101,7 @@ namespace OdjfsScraper.Support
 
             return new ClientResponse
             {
+                RequestUri = requestUri.ToString(),
                 StatusCode = response.StatusCode,
                 Content = bytes
             };
