@@ -17,13 +17,15 @@ namespace Graph
     public class GraphBuilder : IGraphBuilder
     {
         private readonly IMetroNode _metroNodeMaker;
+        private readonly IChildcareNode _childCareNodeMaker;
         private Logger Logger = LogManager.GetCurrentClassLogger();
 
-        public GraphBuilder(IMetroNode metroNodeMaker) 
+        public GraphBuilder(IChildcareNode childCareNodeMaker, IMetroNode metroNodeMaker) 
         {
             try
             {
                 _metroNodeMaker = metroNodeMaker;
+                _childCareNodeMaker = childCareNodeMaker;
                 Logger.Trace("GraphBuilder object created.");
             }
             catch (Exception e)

@@ -37,6 +37,12 @@
     <Reference Include="Common.Logging">
       <HintPath>..\packages\Common.Logging.2.0.0\lib\2.0\Common.Logging.dll</HintPath>
     </Reference>
+    <Reference Include="EntityFramework">
+      <HintPath>..\packages\EntityFramework.6.0.1\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer">
+      <HintPath>..\packages\EntityFramework.6.0.1\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
     <Reference Include="Ionic.Zip, Version=1.9.1.8, Culture=neutral, PublicKeyToken=edbe51ad942a3f5c, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\DotNetZip.1.9.1.8\lib\net20\Ionic.Zip.dll</HintPath>
@@ -52,6 +58,7 @@
       <HintPath>..\packages\NLog.2.1.0\lib\net45\NLog.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data.SQLite">
@@ -70,8 +77,12 @@
   <ItemGroup>
     <Compile Include="Comparers\ComparerForTransferSorting.cs" />
     <Compile Include="Comparers\ComparerForTripSorting.cs" />
+    <Compile Include="Graph.cs" />
     <Compile Include="GraphBuilder\GraphBuilder.cs" />
     <Compile Include="GraphBuilder\IGraphBuilder.cs" />
+    <Compile Include="GraphModule.cs" />
+    <Compile Include="IGraph.cs" />
+    <Compile Include="Node\ChildCareNode.cs" />
     <Compile Include="Node\IChildcareNode.cs" />
     <Compile Include="Node\IMetroNode.cs" />
     <Compile Include="Node\INode.cs" />
@@ -84,6 +95,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Database\Database.csproj">
+      <Project>{1e30e5fd-25b1-4f18-a2c2-5f8ac2b80683}</Project>
+      <Name>Database</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Model\Model.csproj">
       <Project>{711cc508-53a8-4edb-bbca-b911935da4b0}</Project>
       <Name>Model</Name>
@@ -91,6 +106,10 @@
     <ProjectReference Include="..\Scraper\Scraper.csproj">
       <Project>{4401fe23-f94a-4eda-aa76-ccd53548e10e}</Project>
       <Name>Scraper</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SortaDataChecker\SortaDataChecker.csproj">
+      <Project>{2df9e208-bef4-4bc3-ae8d-6ce3fcf729ec}</Project>
+      <Name>SortaDataChecker</Name>
     </ProjectReference>
     <ProjectReference Include="..\SortaScraper\SortaScraper.csproj">
       <Project>{00d91962-12c1-4729-a893-8beeb1599c5e}</Project>

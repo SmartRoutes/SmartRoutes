@@ -18,6 +18,7 @@ using Model.Sorta;
 using Graph;
 using Graph.Node;
 using System.IO;
+using Model.Odjfs;
 
 namespace GraphVisualizer
 {
@@ -32,7 +33,7 @@ namespace GraphVisualizer
 
         private void ilPanel1_Load(object sender, EventArgs e)
         {
-            IKernel kernel = new StandardKernel();
+            IKernel kernel = new StandardKernel(new GraphModule());
 
             kernel.Bind(c => c
                 .FromAssemblyContaining(typeof(IEntityCollectionParser))
@@ -58,8 +59,8 @@ namespace GraphVisualizer
                 entry.Shape = collection.Shapes.
                     Single<Shape>(s => s.Id == entry.ShapeId);
             }
-
-            var builder = new GraphBuilder();
+            
+            var builder = kernel.Get<IGraphBuilder>();
             INode[] MetroNodes = builder.BuildGraph(collection);
 
             var scene = new ILScene();

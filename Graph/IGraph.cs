@@ -3,13 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using SortaScraper.Support;
-using Graph.Node;
 
 namespace Graph
 {
-    public interface IGraphBuilder
+    public interface IGraph
     {
-        INode[] BuildGraph(EntityCollection collection);
+        Task updateSortaEntities();
     }
 }
