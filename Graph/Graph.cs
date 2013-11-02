@@ -17,41 +17,17 @@ namespace Graph
     public class Graph : IGraph
     {
         private readonly IGraphBuilder _builder;
-        private readonly IEntityCollectionScraper _scraper;
         private EntityCollection _collection;
-        private DataChecker _dataChecker;
         private INode[] GraphNodes;
 
-        public Graph(IGraphBuilder builder, IEntityCollectionScraper scraper)
+        public Graph(IGraphBuilder builder)
         {
             Console.WriteLine("Graph Constructor starting.");
             _builder = builder;
-            _scraper = scraper;
-            _dataChecker = new DataChecker(scraper);
             Console.WriteLine("Calling Data Checker.");
-            //_dataChecker.UpdateDatabase().Wait();
             updateSortaEntities();
 
-            // temporary untill entities are properly stitched
-            //foreach (StopTime entry in _collection.StopTimes)
-            //{
-            //    entry.Stop = _collection.Stops.
-            //        Single<Stop>(s => s.Id == entry.StopId);
-            //}
-
-            //foreach (StopTime entry in _collection.StopTimes)
-            //{
-            //    entry.Trip = _collection.Trips.
-            //        Single<Trip>(s => s.Id == entry.TripId);
-            //}
-
-            //foreach (Trip entry in _collection.Trips)
-            //{
-            //    entry.Shape = _collection.Shapes.
-            //        Single<Shape>(s => s.Id == entry.ShapeId);
-            //}
-
-            _builder.BuildGraph(_collection);
+            GraphNodes = _builder.BuildGraph(_collection);
         }
 
         public void updateSortaEntities()
