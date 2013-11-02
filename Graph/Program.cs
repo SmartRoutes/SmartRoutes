@@ -14,6 +14,7 @@ using Ninject.Modules;
 using Graph.Node;
 using System.IO;
 using Ionic.Zip;
+using SortaScraper.Scrapers;
 
 namespace Graph
 {
@@ -32,35 +33,11 @@ namespace Graph
                 IKernel kernel = new StandardKernel(new GraphModule());
 
                 kernel.Bind(c => c
-                    .FromAssemblyContaining(typeof(IEntityCollectionParser))
+                    .FromAssemblyContaining(typeof(IEntityCollectionParser), typeof(IEntityCollectionScraper))
                     .SelectAllClasses()
                     .BindAllInterfaces());
 
-                var collection = kernel.Get<IEntityCollectionParser>().Parse(zipFileBytes);
-
-                Console.WriteLine("SORTA zip file successfully parsed.");
-
-                Console.WriteLine("Stitching collection entities together.");
-
-                foreach (StopTime entry in collection.StopTimes)
-                {
-                    entry.Stop = collection.Stops.
-                        Single<Stop>(s => s.Id == entry.StopId);
-                }
-
-                foreach (StopTime entry in collection.StopTimes)
-                {
-                    entry.Trip = collection.Trips.
-                        Single<Trip>(s => s.Id == entry.TripId);
-                }
-
-                foreach (Trip entry in collection.Trips)
-                {
-                    entry.Shape = collection.Shapes.
-                        Single<Shape>(s => s.Id == entry.ShapeId);
-                }
-
-                Console.WriteLine("Creating Nodes.");
+                Console.WriteLine("Creating Graph.");
                 DateTime tic = DateTime.Now;
 
                 var graph = kernel.Get<IGraph>();
