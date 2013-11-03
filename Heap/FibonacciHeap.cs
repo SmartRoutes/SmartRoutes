@@ -6,15 +6,15 @@ using System.Threading.Tasks;
 
 namespace Heap
 {
-    public class FibonacciHeap<T> : IFibonacciHeap<T>
+    public class FibonacciHeap<T, K> : IFibonacciHeap<T, K> where K : IComparable
     {
-        private List<FibHeapNode<T>> Roots;
-        private FibHeapNode<T> Min;
+        private List<FibHeapNode<T, K>> Roots;
+        private FibHeapNode<T, K> Min;
 
         public FibonacciHeap()
         {
-            Roots = new List<FibHeapNode<T>>();
-            Min = default(FibHeapNode<T>);
+            Roots = new List<FibHeapNode<T, K>>();
+            Min = default(FibHeapNode<T, K>);
         }
 
         // check for emptiness
@@ -24,15 +24,15 @@ namespace Heap
         }
 
         // insert an element
-        public FibHeapHandle<T> Insert(T Element, double Key)
+        public FibHeapHandle<T, K> Insert(T Element, K Key)
         {
             // create new tree
-            var newTree = new FibHeapNode<T>(Element, Key);
+            var newTree = new FibHeapNode<T, K>(Element, Key);
 
             AddToRoot(newTree);
             ConsolidateTrees();
 
-            var handle = new FibHeapHandle<T>(newTree, this);
+            var handle = new FibHeapHandle<T, K>(newTree, this);
             newTree.HandleTo = handle;
             return handle;
         }
@@ -52,11 +52,11 @@ namespace Heap
             return minElement;
         }
 
-        public void UpdateKey(FibHeapHandle<T> handle, double newKey)
+        public void UpdateKey(FibHeapHandle<T, K> handle, K newKey)
         {
             if (handle.ValidHandle && handle.ParentHeap == this)
             {
-                if (newKey < handle.Element.Key) DecreaseKey(handle.Element, newKey);
+                if (newKey.CompareTo(handle.Element.Key) < 0) DecreaseKey(handle.Element, newKey);
                 else IncreaseKey(handle.Element, newKey);
             }
         }
@@ -69,15 +69,15 @@ namespace Heap
                 Min = Roots.First();
                 foreach (var root in Roots)
                 {
-                    if (root.Key < Min.Key) Min = root;
+                    if (root.Key.CompareTo(Min.Key) < 0) Min = root;
                 }
             }
         }
 
         // merge two trees
-        private void Link(FibHeapNode<T> tree1, FibHeapNode<T> tree2)
+        private void Link(FibHeapNode<T, K> tree1, FibHeapNode<T, K> tree2)
         {
-            if (tree1.Key > tree2.Key)
+            if (tree1.Key.CompareTo(tree2.Key) > 0)
             {
                 Link(tree2, tree1);
             }
@@ -101,7 +101,7 @@ namespace Heap
             bool linkNeeded = false;
 
             var enumerator1 = Roots.GetEnumerator();
-            FibHeapNode<T> tree1 = null, tree2 = null;
+            FibHeapNode<T, K> tree1 = null, tree2 = null;
 
             while (enumerator1.MoveNext() && !linkNeeded)
             {
@@ -111,7 +111,7 @@ namespace Heap
                     if (enumerator1.Current.Rank == enumerator2.Current.Rank)
                     {
                         linkNeeded = true;
-                        if (enumerator1.Current.Key < enumerator2.Current.Key)
+                        if (enumerator1.Current.Key.CompareTo(enumerator2.Current.Key) < 0)
                         {
                             tree1 = enumerator1.Current;
                             tree2 = enumerator2.Current;
@@ -135,7 +135,7 @@ namespace Heap
         }
 
         // prune the tree
-        private void CutOrMark(FibHeapNode<T> Tree)
+        private void CutOrMark(FibHeapNode<T, K> Tree)
         {
             if (Tree.Marked == true)
             {
@@ -143,7 +143,7 @@ namespace Heap
                 Tree.Parent.Children.Remove(Tree);
                 Tree.Parent.Rank -= Tree.Rank;
                 Roots.Add(Tree);
-                if (Tree.Key < Min.Key) UpdateMin();
+                if (Tree.Key.CompareTo(Min.Key) < 0) UpdateMin();
                 ConsolidateTrees();
                 CutOrMark(Tree.Parent);
             }
@@ -154,16 +154,16 @@ namespace Heap
         }
 
         // decrease key value and updates heap
-        private void DecreaseKey(FibHeapNode<T> Tree, double newKey)
+        private void DecreaseKey(FibHeapNode<T, K> Tree, K newKey)
         {
             if (Tree.HandleTo.ValidHandle)
             {
                 if (Tree.Parent == null)
                 { // element is a root
                     Tree.Key = newKey;
-                    if (newKey < Min.Key) UpdateMin();
+                    if (newKey.CompareTo(Min.Key) < 0) UpdateMin();
                 }
-                else if (Tree.Parent.Key < newKey)
+                else if (Tree.Parent.Key.CompareTo(newKey) < 0)
                 { // heap order not violated
                     Tree.Key = newKey;
                 }
@@ -177,14 +177,14 @@ namespace Heap
         }
 
         // increases key value and updates heap
-        private void IncreaseKey(FibHeapNode<T> Tree, double newKey)
+        private void IncreaseKey(FibHeapNode<T, K> Tree, K newKey)
         {
             if (Tree.HandleTo.ValidHandle)
             {
                 Tree.Key = newKey;
 
                 var HeapViolators = from child in Tree.Children
-                                    where child.Key < newKey
+                                    where child.Key.CompareTo(newKey) < 0
                                     select child;
 
                 foreach (var child in HeapViolators)
@@ -199,12 +199,12 @@ namespace Heap
             }
         }
 
-        private void AddToRoot(FibHeapNode<T> Tree)
+        private void AddToRoot(FibHeapNode<T, K> Tree)
         {
             Tree.Marked = false;
             if (Roots.Count() > 0)
             {
-                if (Tree.Key < Min.Key) Min = Tree;
+                if (Tree.Key.CompareTo(Min.Key) < 0) Min = Tree;
             }
             else
             {

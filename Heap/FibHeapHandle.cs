@@ -7,13 +7,13 @@ using System.Threading.Tasks;
 namespace Heap
 {
     // provide handles to inserted objects
-    public class FibHeapHandle<T>
+    public class FibHeapHandle<T, K> where K : IComparable
     {
-        internal readonly FibHeapNode<T> Element;
-        internal readonly IFibonacciHeap<T> ParentHeap;
+        internal readonly FibHeapNode<T, K> Element;
+        internal readonly IFibonacciHeap<T, K> ParentHeap;
         internal bool ValidHandle;
 
-        internal FibHeapHandle(FibHeapNode<T> Element, FibonacciHeap<T> ParentHeap)
+        internal FibHeapHandle(FibHeapNode<T, K> Element, FibonacciHeap<T, K> ParentHeap)
         {
             this.Element = Element;
             this.ParentHeap = ParentHeap;
