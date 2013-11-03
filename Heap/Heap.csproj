@@ -39,6 +39,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FibHeapHandle.cs" />
+    <Compile Include="FibHeapNode.cs" />
     <Compile Include="FibonacciHeap.cs" />
     <Compile Include="IFibonacciHeap.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

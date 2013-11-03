@@ -9,7 +9,8 @@ namespace Heap
     public interface IFibonacciHeap<T>
     {
         bool Empty();
-        FibonacciHeap<T>.FibHeapHandle Insert(T Element, double Key);
+        FibHeapHandle<T> Insert(T Element, double Key);
         T DeleteMin();
+        void UpdateKey(FibHeapHandle<T> handle, double newKey);
     }
 }

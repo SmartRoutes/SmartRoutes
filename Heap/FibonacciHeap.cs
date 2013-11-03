@@ -8,49 +8,13 @@ namespace Heap
 {
     public class FibonacciHeap<T> : IFibonacciHeap<T>
     {
-        // trees formed from Node objects
-        public class Node
-        {
-            public T Element;
-            public double Key;
-            public ISet<Node> Children;
-            public Node Parent;
-            public long Rank;
-            public bool Marked; // marked for pruning if previously lost child
-            public FibHeapHandle HandleTo;
-
-            public Node(T Element, double Key)
-            {
-                this.Element = Element;
-                this.Key = Key;
-                Children = new HashSet<Node>();
-                Rank = 0;
-                Marked = false;
-            }
-        }
-
-        // provide handles to inserted objects
-        public class FibHeapHandle
-        {
-            public Node Element;
-            public IFibonacciHeap<T> ParentHeap;
-            public bool ValidHandle;
-
-            public FibHeapHandle(Node Element, FibonacciHeap<T> ParentHeap)
-            {
-                this.Element = Element;
-                this.ParentHeap = ParentHeap;
-                ValidHandle = true;
-            }
-        }
-
-        private ISet<Node> Roots;
-        private Node Min;
+        private ISet<FibHeapNode<T>> Roots;
+        private FibHeapNode<T> Min;
 
         public FibonacciHeap()
         {
-            Roots = new HashSet<Node>();
-            Min = default(Node);
+            Roots = new HashSet<FibHeapNode<T>>();
+            Min = default(FibHeapNode<T>);
         }
 
         // check for emptiness
@@ -60,14 +24,14 @@ namespace Heap
         }
 
         // insert an element
-        public FibHeapHandle Insert(T Element, double Key)
+        public FibHeapHandle<T> Insert(T Element, double Key)
         {
             // create new tree
-            var newTree = new Node(Element, Key);
+            var newTree = new FibHeapNode<T>(Element, Key);
 
             AddToRoot(newTree);
 
-            var handle = new FibHeapHandle(newTree, this);
+            var handle = new FibHeapHandle<T>(newTree, this);
             newTree.HandleTo = handle;
             return handle;
         }
@@ -87,7 +51,7 @@ namespace Heap
             return minElement;
         }
 
-        public void UpdateKey(FibHeapHandle handle, double newKey)
+        public void UpdateKey(FibHeapHandle<T> handle, double newKey)
         {
             if (handle.ValidHandle && handle.ParentHeap == this)
             {
@@ -110,7 +74,7 @@ namespace Heap
         }
 
         // merge two trees
-        private void Link(Node tree1, Node tree2)
+        private void Link(FibHeapNode<T> tree1, FibHeapNode<T> tree2)
         {
             if (tree1.Key > tree2.Key)
             {
@@ -127,7 +91,7 @@ namespace Heap
         // link any root trees of same rank
         private void ConsolidateTrees()
         {
-            Node[] rootsArray = Roots.ToArray();
+            FibHeapNode<T>[] rootsArray = Roots.ToArray();
 
             bool linkNeeded = false;
 
@@ -143,7 +107,7 @@ namespace Heap
                     {
                         linkNeeded = true;
                         Link(root1, root2);
-                        Node RootToRemove = (root1.Key > root2.Key) ? root1 : root2;
+                        FibHeapNode<T> RootToRemove = (root1.Key > root2.Key) ? root1 : root2;
                         Roots.Remove(RootToRemove);
                         ConsolidateTrees();
                     }
@@ -152,7 +116,7 @@ namespace Heap
         }
 
         // prune the tree
-        private void CutOrMark(Node Tree)
+        private void CutOrMark(FibHeapNode<T> Tree)
         {
             if (Tree.Marked == true)
             {
@@ -170,7 +134,7 @@ namespace Heap
         }
 
         // decrease key value and updates heap
-        private void DecreaseKey(Node Tree, double newKey)
+        private void DecreaseKey(FibHeapNode<T> Tree, double newKey)
         {
             if (Tree.HandleTo.ValidHandle)
             {
@@ -193,7 +157,7 @@ namespace Heap
         }
 
         // increases key value and updates heap
-        private void IncreaseKey(Node Tree, double newKey)
+        private void IncreaseKey(FibHeapNode<T> Tree, double newKey)
         {
             if (Tree.HandleTo.ValidHandle)
             {
@@ -214,7 +178,7 @@ namespace Heap
             }
         }
 
-        private void AddToRoot(Node Tree)
+        private void AddToRoot(FibHeapNode<T> Tree)
         {
             Tree.Marked = false;
             if (Roots.Count() > 0)
