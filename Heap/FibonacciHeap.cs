@@ -122,6 +122,7 @@ namespace Heap
             {
                 Tree.Marked = false;
                 Tree.Parent.Children.Remove(Tree);
+                Tree.Parent.Rank -= Tree.Rank;
                 Roots.Add(Tree);
                 if (Tree.Key < Min.Key) UpdateMin();
                 ConsolidateTrees();
@@ -170,6 +171,7 @@ namespace Heap
                 foreach (var child in HeapViolators)
                 {
                     Tree.Children.Remove(child);
+                    Tree.Rank -= child.Rank;
                     AddToRoot(child);
                 }
 
