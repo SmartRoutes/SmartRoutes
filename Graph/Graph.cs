@@ -45,7 +45,7 @@ namespace Graph
                 _collection.Agencies = (from e in ctx.Agencies select e).ToList();
                 _collection.Archive = ctx.Archives.OrderBy(e => e.DownloadedOn).FirstOrDefault();
                 _collection.Trips = (from e in ctx.Trips select e).ToList();
-                _collection.ServiceException = (from e in ctx.ServiceException select e).ToList();
+                _collection.ServiceExceptions = (from e in ctx.ServiceException select e).ToList();
                 _collection.Services = (from e in ctx.Services select e).ToList();
                 _collection.ContainsEntities = true;
             }
