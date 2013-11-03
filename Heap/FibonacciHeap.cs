@@ -17,6 +17,7 @@ namespace Heap
             public Node Parent;
             public long Rank;
             public bool Marked; // marked for pruning if previously lost child
+            public FibHeapHandle HandleTo;
 
             public Node(T Element, double Key)
             {
@@ -33,11 +34,13 @@ namespace Heap
         {
             private Node Element;
             private FibonacciHeap<T> ParentHeap;
+            public bool ValidHandle;
 
             public FibHeapHandle(Node Element, FibonacciHeap<T> ParentHeap)
             {
                 this.Element = Element;
                 this.ParentHeap = ParentHeap;
+                ValidHandle = true;
             }
 
             public void UpdateKey(double newKey)
@@ -70,7 +73,9 @@ namespace Heap
 
             AddToRoot(newTree);
 
-            return new FibHeapHandle(newTree, this);
+            var handle = new FibHeapHandle(newTree, this);
+            newTree.HandleTo = handle;
+            return handle;
         }
 
         // get min element and update heap
@@ -84,6 +89,7 @@ namespace Heap
             Roots.Remove(Min);
             UpdateMin();
             ConsolidateTrees();
+            Min.HandleTo.ValidHandle = false;
             return minElement;
         }
 
@@ -163,40 +169,46 @@ namespace Heap
         // decrease key value and updates heap
         private void DecreaseKey(Node Tree, double newKey)
         {
-            if (Tree.Parent == null)
-            { // element is a root
-                Tree.Key = newKey;
-                if (newKey < Min.Key) UpdateMin();
-            }
-            else if (Tree.Parent.Key < newKey)
-            { // heap order not violated
-                Tree.Key = newKey;
-            }
-            else
-            { // MAYDAY MAYDAY, HEAP ORDER HAS BEEN VIOLATED, I REPEAT, HEAP ORDER HAS BEEN VIOLATED
-                Tree.Key = newKey;
-                Tree.Marked = true;
-                CutOrMark(Tree);
+            if (Tree.HandleTo.ValidHandle)
+            {
+                if (Tree.Parent == null)
+                { // element is a root
+                    Tree.Key = newKey;
+                    if (newKey < Min.Key) UpdateMin();
+                }
+                else if (Tree.Parent.Key < newKey)
+                { // heap order not violated
+                    Tree.Key = newKey;
+                }
+                else
+                { // MAYDAY MAYDAY, HEAP ORDER HAS BEEN VIOLATED, I REPEAT, HEAP ORDER HAS BEEN VIOLATED
+                    Tree.Key = newKey;
+                    Tree.Marked = true;
+                    CutOrMark(Tree);
+                }
             }
         }
 
         // increases key value and updates heap
         private void IncreaseKey(Node Tree, double newKey)
         {
-            Tree.Key = newKey;
-
-            var HeapViolators = from child in Tree.Children
-                                where child.Key < newKey
-                                select child;
-
-            foreach (var child in HeapViolators)
+            if (Tree.HandleTo.ValidHandle)
             {
-                Tree.Children.Remove(child);
-                AddToRoot(child);
-            }
+                Tree.Key = newKey;
 
-            UpdateMin();
-            ConsolidateTrees();
+                var HeapViolators = from child in Tree.Children
+                                    where child.Key < newKey
+                                    select child;
+
+                foreach (var child in HeapViolators)
+                {
+                    Tree.Children.Remove(child);
+                    AddToRoot(child);
+                }
+
+                UpdateMin();
+                ConsolidateTrees();
+            }
         }
 
         private void AddToRoot(Node Tree)

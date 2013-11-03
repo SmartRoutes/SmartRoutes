@@ -8,8 +8,8 @@ namespace Heap
 {
     public interface IFibonacciHeap<T>
     {
-        public bool Empty();
-        public FibonacciHeap<T>.FibHeapHandle Insert(T Element, double Key);
-        public T DeleteMin();
+        bool Empty();
+        FibonacciHeap<T>.FibHeapHandle Insert(T Element, double Key);
+        T DeleteMin();
     }
 }
