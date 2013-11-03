@@ -8,12 +8,12 @@ namespace Heap
 {
     public class FibonacciHeap<T> : IFibonacciHeap<T>
     {
-        private ISet<FibHeapNode<T>> Roots;
+        private List<FibHeapNode<T>> Roots;
         private FibHeapNode<T> Min;
 
         public FibonacciHeap()
         {
-            Roots = new HashSet<FibHeapNode<T>>();
+            Roots = new List<FibHeapNode<T>>();
             Min = default(FibHeapNode<T>);
         }
 
@@ -30,6 +30,7 @@ namespace Heap
             var newTree = new FibHeapNode<T>(Element, Key);
 
             AddToRoot(newTree);
+            ConsolidateTrees();
 
             var handle = new FibHeapHandle<T>(newTree, this);
             newTree.HandleTo = handle;
@@ -47,7 +48,7 @@ namespace Heap
             Roots.Remove(Min);
             UpdateMin();
             ConsolidateTrees();
-            Min.HandleTo.ValidHandle = false;
+            if (Min.HandleTo != null) Min.HandleTo.ValidHandle = false;
             return minElement;
         }
 
@@ -91,28 +92,46 @@ namespace Heap
         // link any root trees of same rank
         private void ConsolidateTrees()
         {
-            FibHeapNode<T>[] rootsArray = Roots.ToArray();
+            while (InnerConsolidateTrees()) ;
+        }
 
+        // having inner function prevents stack from overflowing with too many recursions
+        private bool InnerConsolidateTrees()
+        {
             bool linkNeeded = false;
 
-            // where ranks are equal, convert root list to array, link trees of equal rank,
-            // remove tree (with larger root element) from Roots, recurse
-            for (int i = 0; i < rootsArray.Count() - 1 && !linkNeeded; i++)
+            var enumerator1 = Roots.GetEnumerator();
+            FibHeapNode<T> tree1 = null, tree2 = null;
+
+            while (enumerator1.MoveNext() && !linkNeeded)
             {
-                for (int j = i + 1; j < rootsArray.Count() && !linkNeeded; j++)
+                var enumerator2 = enumerator1;
+                while (enumerator2.MoveNext() && !linkNeeded)
                 {
-                    var root1 = rootsArray[i];
-                    var root2 = rootsArray[j];
-                    if (root1.Rank == root2.Rank)
+                    if (enumerator1.Current.Rank == enumerator2.Current.Rank)
                     {
                         linkNeeded = true;
-                        Link(root1, root2);
-                        FibHeapNode<T> RootToRemove = (root1.Key > root2.Key) ? root1 : root2;
-                        Roots.Remove(RootToRemove);
-                        ConsolidateTrees();
+                        if (enumerator1.Current.Key < enumerator2.Current.Key)
+                        {
+                            tree1 = enumerator1.Current;
+                            tree2 = enumerator2.Current;
+                        }
+                        else
+                        {
+                            tree1 = enumerator2.Current;
+                            tree2 = enumerator1.Current;
+                        }
                     }
                 }
             }
+
+            if (linkNeeded)
+            {
+                Roots.Remove(tree2);
+                Link(tree1, tree2);
+            }
+
+            return linkNeeded;
         }
 
         // prune the tree
