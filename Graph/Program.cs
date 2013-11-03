@@ -26,16 +26,16 @@ namespace Graph
         {
             try
             {
-                Console.WriteLine("GraphBuildingTester is now starting.");
-
-                Console.WriteLine("Attempting to parse SORTA zip file.");
-
                 IKernel kernel = new StandardKernel(new GraphModule());
 
                 kernel.Bind(c => c
                     .FromAssemblyContaining(typeof(IEntityCollectionParser), typeof(IEntityCollectionScraper))
                     .SelectAllClasses()
                     .BindAllInterfaces());
+
+                // initialize database to small zip file
+                //DatabaseLoader dbloader = new DatabaseLoader(kernel.Get<IEntityCollectionParser>());
+                //dbloader.loadDatabaseFromFile(zipFileBytes).Wait();
 
                 Console.WriteLine("Creating Graph.");
                 DateTime tic = DateTime.Now;

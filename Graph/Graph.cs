@@ -26,16 +26,17 @@ namespace Graph
             _builder = builder;
             Console.WriteLine("Calling Data Checker.");
             updateSortaEntities();
-
             GraphNodes = _builder.BuildGraph(_collection);
         }
 
         public void updateSortaEntities()
         {
             Console.WriteLine("updateSortaEntities called.");
+
+            _collection = new EntityCollection();
+
             using (var ctx = new SortaEntities())
             {
-                _collection = new EntityCollection();
                 _collection.StopTimes = (from e in ctx.StopTimes select e).ToList();
                 _collection.Stops = (from e in ctx.Stops select e).ToList();
                 _collection.Routes = (from e in ctx.Routes select e).ToList();
