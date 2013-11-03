@@ -32,8 +32,8 @@ namespace Heap
         // provide handles to inserted objects
         public class FibHeapHandle
         {
-            private Node Element;
-            private FibonacciHeap<T> ParentHeap;
+            public Node Element;
+            public IFibonacciHeap<T> ParentHeap;
             public bool ValidHandle;
 
             public FibHeapHandle(Node Element, FibonacciHeap<T> ParentHeap)
@@ -41,12 +41,6 @@ namespace Heap
                 this.Element = Element;
                 this.ParentHeap = ParentHeap;
                 ValidHandle = true;
-            }
-
-            public void UpdateKey(double newKey)
-            {
-                if (newKey < Element.Key) ParentHeap.DecreaseKey(Element, newKey); 
-                else ParentHeap.IncreaseKey(Element, newKey);
             }
         }
 
@@ -91,6 +85,15 @@ namespace Heap
             ConsolidateTrees();
             Min.HandleTo.ValidHandle = false;
             return minElement;
+        }
+
+        public void UpdateKey(FibHeapHandle handle, double newKey)
+        {
+            if (handle.ValidHandle && handle.ParentHeap == this)
+            {
+                if (newKey < handle.Element.Key) DecreaseKey(handle.Element, newKey);
+                else IncreaseKey(handle.Element, newKey);
+            }
         }
 
         // scan roots for min element
