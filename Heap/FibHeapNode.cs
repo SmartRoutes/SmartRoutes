@@ -6,17 +6,17 @@ using System.Threading.Tasks;
 
 namespace Heap
 {
-    public class FibHeapNode<T>
+    internal class FibHeapNode<T>
     {
-        public readonly T Element;
-        public ISet<FibHeapNode<T>> Children;
-        public FibHeapNode<T> Parent;
-        public bool Marked; // marked for pruning if previously lost child
-        public FibHeapHandle<T> HandleTo;
+        internal readonly T Element;
+        internal ISet<FibHeapNode<T>> Children;
+        internal FibHeapNode<T> Parent;
+        internal bool Marked; // marked for pruning if previously lost child
+        internal FibHeapHandle<T> HandleTo;
         internal double Key;
         internal double Rank;
 
-        public FibHeapNode(T Element, double Key)
+        internal FibHeapNode(T Element, double Key)
         {
             this.Element = Element;
             this.Key = Key;

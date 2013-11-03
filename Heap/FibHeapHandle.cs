@@ -9,11 +9,11 @@ namespace Heap
     // provide handles to inserted objects
     public class FibHeapHandle<T>
     {
-        public readonly FibHeapNode<T> Element;
-        public readonly IFibonacciHeap<T> ParentHeap;
+        internal readonly FibHeapNode<T> Element;
+        internal readonly IFibonacciHeap<T> ParentHeap;
         internal bool ValidHandle;
 
-        public FibHeapHandle(FibHeapNode<T> Element, FibonacciHeap<T> ParentHeap)
+        internal FibHeapHandle(FibHeapNode<T> Element, FibonacciHeap<T> ParentHeap)
         {
             this.Element = Element;
             this.ParentHeap = ParentHeap;
