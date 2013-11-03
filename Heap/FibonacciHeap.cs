@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Heap
 {
-    public class FibonacciHeap<T>
+    public class FibonacciHeap<T> : IFibonacciHeap<T>
     {
         // trees formed from Node objects
         public class Node
