@@ -19,6 +19,9 @@ namespace Graph
         private readonly IGraphBuilder _builder;
         private EntityCollection _collection;
         private INode[] GraphNodes;
+        private ISet<INode> Start;
+        private Func<INode, bool> GoalCheck;
+        private Queue<INode> Open;
 
         public Graph(IGraphBuilder builder)
         {

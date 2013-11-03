@@ -15,6 +15,7 @@ using Graph.Node;
 using System.IO;
 using Ionic.Zip;
 using SortaScraper.Scrapers;
+using Heap;
 
 namespace Graph
 {
