@@ -8,6 +8,6 @@ namespace Graph
 {
     public interface IGraph
     {
-        Task updateSortaEntities();
+        void updateSortaEntities();
     }
 }
