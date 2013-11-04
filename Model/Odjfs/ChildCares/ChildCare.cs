@@ -7,6 +7,8 @@ namespace Model.Odjfs.ChildCares
         public int Id { get; set; }
         public string ChildCareType { get; set; }
         public DateTime LastScrapedOn { get; set; }
+        public double? Latitude { get; set; }
+        public double? Longitude { get; set; }
 
         #region HTML to Entities
 
