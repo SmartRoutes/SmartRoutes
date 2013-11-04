@@ -77,7 +77,7 @@ namespace OdjfsScraper.Support
         private async Task<ClientResponse> GetChildCareDocument(string externalUrlId)
         {
             // create the URL
-            var requestUri = new Uri(string.Format("http://www.odjfs.state.oh.us/cdc/results2.asp?provider_number={0}", externalUrlId));
+            var requestUri = new Uri(string.Format("http://www.odjfs.state.oh.us/cdc/results2.asp?provider_number={0}&Printable=Y", externalUrlId));
 
             // fetch the bytes
             ClientResponse response = await GetResponse(requestUri);
