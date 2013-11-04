@@ -14,15 +14,15 @@ namespace Heap
         internal bool Marked; // marked for pruning if previously lost child
         internal FibHeapHandle<T, K> HandleTo;
         internal K Key;
-        internal long Rank;
+        internal long Rank; // number of children
 
         internal FibHeapNode(T Element, K Key)
         {
             this.Element = Element;
             this.Key = Key;
             Children = new HashSet<FibHeapNode<T, K>>();
-            Parent = null;
             Marked = false;
+            Rank = 0;
         }
     }
 }

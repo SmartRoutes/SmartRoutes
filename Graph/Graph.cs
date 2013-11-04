@@ -11,48 +11,140 @@ using SortaScraper.Support;
 using SortaScraper.Scrapers;
 using SortaDataChecker;
 using Model.Sorta;
+using Heap;
 
 namespace Graph
 {
+    internal enum State
+    {
+        Open, Closed
+    }
+
+    public enum Direction 
+    { 
+        Upwind, Downwind 
+    }
+
+    public class NodeInfo
+    {
+        internal FibHeapHandle<INode, TimeSpan> handle;
+        internal TimeSpan travelTime;
+        internal State state;
+        public INode node;
+        public INode parent;
+    }
+
     public class Graph : IGraph
     {
-        private readonly IGraphBuilder _builder;
-        private EntityCollection _collection;
-        private INode[] GraphNodes;
-        private ISet<INode> Start;
-        private Func<INode, bool> GoalCheck;
-        private Queue<INode> Open;
+        
+        private readonly IGraphBuilder Builder;
+        private EntityCollection Collection;
+        private Dictionary<INode, NodeInfo> SearchInfo;
+        public readonly INode[] GraphNodes;
+        public IFibonacciHeap<INode, TimeSpan> Queue { get; set; }
 
-        public Graph(IGraphBuilder builder)
+        public Graph(IGraphBuilder Builder, IFibonacciHeap<INode, TimeSpan> Queue)
         {
-            Console.WriteLine("Graph Constructor starting.");
-            _builder = builder;
-            Console.WriteLine("Calling Data Checker.");
+            this.Queue = Queue;
+            this.Builder = Builder;
             updateSortaEntities();
-            GraphNodes = _builder.BuildGraph(_collection);
+            GraphNodes = Builder.BuildGraph(Collection);
         }
 
         public void updateSortaEntities()
         {
-            Console.WriteLine("updateSortaEntities called.");
-
-            _collection = new EntityCollection();
+            Collection = new EntityCollection();
 
             using (var ctx = new SortaEntities())
             {
-                _collection.StopTimes = (from e in ctx.StopTimes select e).ToList();
-                _collection.Stops = (from e in ctx.Stops select e).ToList();
-                _collection.Routes = (from e in ctx.Routes select e).ToList();
-                _collection.Shapes = (from e in ctx.Shapes select e).ToList();
-                _collection.ShapePoints = (from e in ctx.ShapePoints select e).ToList();
-                _collection.Blocks = (from e in ctx.Blocks select e).ToList();
-                _collection.Agencies = (from e in ctx.Agencies select e).ToList();
-                _collection.Archive = ctx.Archives.OrderBy(e => e.DownloadedOn).FirstOrDefault();
-                _collection.Trips = (from e in ctx.Trips select e).ToList();
-                _collection.ServiceExceptions = (from e in ctx.ServiceException select e).ToList();
-                _collection.Services = (from e in ctx.Services select e).ToList();
-                _collection.ContainsEntities = true;
+                Collection.StopTimes = (from e in ctx.StopTimes select e).ToList();
+                Collection.Stops = (from e in ctx.Stops select e).ToList();
+                Collection.Routes = (from e in ctx.Routes select e).ToList();
+                Collection.Shapes = (from e in ctx.Shapes select e).ToList();
+                Collection.ShapePoints = (from e in ctx.ShapePoints select e).ToList();
+                Collection.Blocks = (from e in ctx.Blocks select e).ToList();
+                Collection.Agencies = (from e in ctx.Agencies select e).ToList();
+                Collection.Archive = ctx.Archives.OrderBy(e => e.DownloadedOn).FirstOrDefault();
+                Collection.Trips = (from e in ctx.Trips select e).ToList();
+                Collection.ServiceExceptions = (from e in ctx.ServiceException select e).ToList();
+                Collection.Services = (from e in ctx.Services select e).ToList();
+                Collection.ContainsEntities = true;
             }
+        }
+
+        public NodeInfo Dijkstras(ISet<INode> StartNodes, Func<INode, bool> GoalCheck, Direction direction)
+        {
+            // assign search info to StartNodes and place them in queue
+            foreach (var node in StartNodes)
+            {
+                var nodeInfo = new NodeInfo();
+                nodeInfo.state = State.Closed;
+                nodeInfo.travelTime = new TimeSpan(0);
+                nodeInfo.handle = Queue.Insert(node, nodeInfo.travelTime);
+                SearchInfo.Add(node, nodeInfo);
+            }
+
+            while (!Queue.Empty())
+            {
+                INode current = Queue.DeleteMin();
+
+                // get search info
+                NodeInfo currentInfo = null;
+                if (!SearchInfo.TryGetValue(current, out currentInfo))
+                { 
+                    throw new KeyNotFoundException("Node removed from heap did not have associated search info: ");
+                }
+
+                // check for completion
+                if (GoalCheck(current))
+                {
+                    return currentInfo;
+                }
+
+                // loop through neighbors and handle business
+                var Neighbors = (direction == Direction.Upwind) ?
+                    current.UpwindNeighbors : current.DownwindNeighbors;
+
+                foreach (var neighbor in Neighbors)
+                {
+                    NodeInfo neighborInfo = null;
+                    if (!SearchInfo.TryGetValue(neighbor, out neighborInfo))
+                    { 
+                        // node is new, give it search info and place in queue
+                        neighborInfo = new NodeInfo();
+                        neighborInfo.node = neighbor;
+                        neighborInfo.parent = current;
+                        neighborInfo.state = State.Open;
+                        neighborInfo.travelTime = (direction == Direction.Upwind)
+                            ? currentInfo.travelTime + (neighbor.Time() - current.Time())
+                            : currentInfo.travelTime + (current.Time() - neighbor.Time());
+                        neighborInfo.handle = Queue.Insert(neighbor, neighborInfo.travelTime);
+                    }
+                    else
+                    { 
+                        // neighbor is in queue, check state
+                        if (neighborInfo.state == State.Open)
+                        {
+                            // update neighborInfo if this route is better
+                            TimeSpan newTravelTime = (direction == Direction.Upwind)
+                                ? currentInfo.travelTime + (neighbor.Time() - current.Time())
+                                : currentInfo.travelTime + (current.Time() - neighbor.Time());
+                            if (newTravelTime < neighborInfo.travelTime)
+                            {
+                                // update search info and update queue for new key
+                                neighborInfo.travelTime = newTravelTime;
+                                neighborInfo.parent = current;
+                                Queue.UpdateKey(neighborInfo.handle, newTravelTime);
+                            }
+                        }
+                    }
+                }
+
+                // and we're done with current
+                currentInfo.state = State.Closed;
+            }
+
+            throw new Exception("Dijkstras did not reach a goal node.");
         }
     }
 }

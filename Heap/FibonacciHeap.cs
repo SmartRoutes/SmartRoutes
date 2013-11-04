@@ -14,7 +14,6 @@ namespace Heap
         public FibonacciHeap()
         {
             Roots = new List<FibHeapNode<T, K>>();
-            Min = default(FibHeapNode<T, K>);
         }
 
         // check for emptiness
@@ -47,6 +46,7 @@ namespace Heap
             foreach (var child in Min.Children) AddToRoot(child);
             ConsolidateTrees();
 
+            // update min
             if (Roots.Count > 0)
             {
                 Min = Roots.First();
@@ -104,11 +104,6 @@ namespace Heap
 
                 while (enumerator2.MoveNext() && !linkNeeded)
                 {
-                    if (enumerator1.Current == enumerator2.Current)
-                    {
-                        throw new Exception("duplicate item in list");
-                    }
-
                     if (enumerator1.Current.Rank == enumerator2.Current.Rank)
                     {
                         linkNeeded = true;
@@ -125,13 +120,6 @@ namespace Heap
                     }
                 }
             }
-
-            if (tree1 == tree2 && tree1 != null && tree2 != null)
-            {
-                throw new Exception("duplicate in consolidate.");
-            }
-            if (tree1 != null) if (tree1.Parent != null) throw new Exception("wtf");
-            if (tree2 != null) if (tree2.Parent != null) throw new Exception("wtf");
 
             if (linkNeeded)
             {
@@ -152,7 +140,7 @@ namespace Heap
             }
         }
 
-        // returns next node to cut or null
+        // cuts tree and returns returns next node to cut, or returns null
         private FibHeapNode<T, K> InnerCutOrMark(FibHeapNode<T, K> Tree)
         {
             FibHeapNode<T, K> ReturnNode = null;
@@ -163,10 +151,6 @@ namespace Heap
                 ReturnNode = Tree.Parent;
 
                 Tree.Parent.Marked = true; // parent has now lost a child
-                if (!Tree.Parent.Children.Contains(Tree))
-                {
-                    throw new Exception("Impossibru.");
-                }
                 Tree.Parent.Children.Remove(Tree); // cut tree is no longer child of parent
                 Tree.Parent.Rank -= Tree.Rank + 1; // parent has lost Tree.Rank + 1 children 
                 Tree.Parent = null; // cut tree will no longer have parent
@@ -205,6 +189,7 @@ namespace Heap
         private void IncreaseKey(FibHeapNode<T, K> Tree, K newKey)
         {
             Tree.Key = newKey;
+            Tree.HandleTo.key = newKey;
 
             FibHeapNode<T, K>[] HeapViolators = (from child in Tree.Children
                                 where child.Key.CompareTo(newKey) < 0
@@ -229,7 +214,6 @@ namespace Heap
             
             if (Roots.Count() > 0)
             {
-                if (Roots.Contains(Tree)) throw new Exception("Attempt to add duplicate root.");
                 if (Tree.Key.CompareTo(Min.Key) < 0) Min = Tree;
             }
             else
