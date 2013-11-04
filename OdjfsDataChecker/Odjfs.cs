@@ -35,11 +35,12 @@ namespace OdjfsDataChecker
             await ctx.SaveChangesAsync();
 
             Logger.Trace("Stub with ID '{0}' will be scraped.", stub.ExternalUrlId);
-            ChildCare childCare = await _childCareScraper.Scrape(stub);
+            ChildCare newChildCare = await _childCareScraper.Scrape(stub);
             ctx.ChildCareStubs.Remove(stub);
-            if (childCare != null)
+            if (newChildCare != null)
             {
-                ctx.ChildCares.AddOrUpdate(childCare);
+                SetAttachedCounty(ctx, newChildCare);
+                ctx.ChildCares.AddOrUpdate(newChildCare);
             }
             else
             {
@@ -54,27 +55,29 @@ namespace OdjfsDataChecker
                 Logger.Trace("The full detail page for the stub could not be found so the child care was deleted.");
             }
 
+            Logger.Trace("Saving changes.");
             await ctx.SaveChangesAsync();
         }
 
-        public async Task UpdateChildCare(OdjfsEntities ctx, ChildCare childCare)
+        public async Task UpdateChildCare(OdjfsEntities ctx, ChildCare oldChildCare)
         {
             // record this scrape
-            childCare.LastScrapedOn = DateTime.Now;
+            oldChildCare.LastScrapedOn = DateTime.Now;
             await ctx.SaveChangesAsync();
 
-            Logger.Trace("Child care with ID '{0}' will be scraped.", childCare.ExternalUrlId);
-            ChildCare newChildCare = await _childCareScraper.Scrape(childCare);
+            Logger.Trace("Child care with ID '{0}' will be scraped.", oldChildCare.ExternalUrlId);
+            ChildCare newChildCare = await _childCareScraper.Scrape(oldChildCare);
             if (newChildCare != null)
             {
+                SetAttachedCounty(ctx, newChildCare);
                 ctx.ChildCares.AddOrUpdate(newChildCare);
             }
             else
             {
-                ctx.ChildCares.Remove(childCare);
+                ctx.ChildCares.Remove(oldChildCare);
                 ChildCareStub stub = await ctx
                     .ChildCareStubs
-                    .Where(c => c.ExternalUrlId == childCare.ExternalUrlId)
+                    .Where(c => c.ExternalUrlId == oldChildCare.ExternalUrlId)
                     .FirstOrDefaultAsync();
                 if (stub != null)
                 {
@@ -83,6 +86,7 @@ namespace OdjfsDataChecker
                 Logger.Trace("The full detail page for the child care could not be found so the child care was deleted.");
             }
 
+            Logger.Trace("Saving changes.");
             await ctx.SaveChangesAsync();
         }
 
@@ -108,7 +112,8 @@ namespace OdjfsDataChecker
 
                 if (childCare == null)
                 {
-                    Logger.Trace("There are not child care or child care stub records to scrape.");
+                    Logger.Trace("There are no child care or child care stub records to scrape.");
+                    return;
                 }
 
                 await UpdateChildCare(ctx, childCare);
@@ -217,6 +222,15 @@ namespace OdjfsDataChecker
 
             Logger.Trace("Saving changes.");
             await ctx.SaveChangesAsync();
+        }
+
+        private void SetAttachedCounty(OdjfsEntities ctx, ChildCare childCare)
+        {
+            if (childCare.County != null && childCare.County.Id == 0)
+            {
+                childCare.County = ctx.GetAttachedCounty(childCare.County.Name);
+                childCare.CountyId = childCare.County.Id;
+            }
         }
     }
 }

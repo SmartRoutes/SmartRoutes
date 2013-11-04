@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Database.Contexts;
 using Ninject;
 using Ninject.Extensions.Conventions;
@@ -30,11 +31,16 @@ namespace OdjfsDataChecker
 
                 using (var ctx = new OdjfsEntities())
                 {
-                    // dataChecker.UpdateNextCounty(ctx).Wait();
-                    dataChecker.UpdateNextChildCare(ctx).Wait();
-                    ctx.SaveChanges();
+                    if (args.Contains("county"))
+                    {
+                        dataChecker.UpdateNextCounty(ctx).Wait();
+                    }
+                    else
+                    {
+                        dataChecker.UpdateNextChildCare(ctx).Wait();
+                    }
                 }
-                
+
                 Logger.Trace("SortaDataChecker has completed.");
             }
             catch (Exception e)

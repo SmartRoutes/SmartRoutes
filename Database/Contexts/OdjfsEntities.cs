@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using Model.Odjfs;
@@ -9,6 +10,8 @@ namespace Database.Contexts
 {
     public class OdjfsEntities : BaseContext
     {
+        private IDictionary<string, County> _attachedCounties;
+
         static OdjfsEntities()
         {
             System.Data.Entity.Database.SetInitializer(new Initializer());
@@ -80,6 +83,17 @@ namespace Database.Contexts
 
             modelBuilder.Entity<County>()
                 .Property(c => c.Id).HasColumnName("CountyId");
+        }
+
+        public County GetAttachedCounty(string name)
+        {
+            if (_attachedCounties == null)
+            {
+                // create a dictionary of counties, keyed on their name
+                _attachedCounties = Counties.ToDictionary(c => c.Name);
+            }
+
+            return _attachedCounties[name];
         }
 
         #region Dependent Entites
