@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
+using System.Threading;
 using Database.Contexts;
 using Ninject;
 using Ninject.Extensions.Conventions;
@@ -16,6 +19,43 @@ namespace OdjfsDataChecker
 
         private static void Main(string[] args)
         {
+            const int maximumDuration = 5*60*1000; // five minutes, in milliseconds
+            const int sleepDuration = 3*1000; // three seconds, in milliseconds
+
+            // start timing
+            var stopwatch = new Stopwatch();
+            stopwatch.Start();
+
+            // update a list and sleep (if possible)
+            Update(true);
+            if (stopwatch.ElapsedMilliseconds + sleepDuration >= maximumDuration)
+            {
+                return;
+            }
+            Thread.Sleep(sleepDuration);
+
+            // update individual child cares for the rest of the time
+            IList<long> times = new List<long>();
+            long expectedEnd = stopwatch.ElapsedMilliseconds;
+            while (expectedEnd < maximumDuration)
+            {
+                long before = stopwatch.ElapsedMilliseconds;
+
+                // update a child care and sleep (if possible)
+                Update(false);
+                if (stopwatch.ElapsedMilliseconds + sleepDuration >= maximumDuration)
+                {
+                    return;
+                }
+                Thread.Sleep(sleepDuration);
+
+                times.Add(stopwatch.ElapsedMilliseconds - before);
+                expectedEnd = (long) times.Average() + stopwatch.ElapsedMilliseconds;
+            }
+        }
+
+        private static void Update(bool updateCounty)
+        {
             try
             {
                 Logger.Trace("OdjfsDataChecker is now starting.");
@@ -31,7 +71,7 @@ namespace OdjfsDataChecker
 
                 using (var ctx = new OdjfsEntities())
                 {
-                    if (args.Contains("county"))
+                    if (updateCounty)
                     {
                         dataChecker.UpdateNextCounty(ctx).Wait();
                     }
