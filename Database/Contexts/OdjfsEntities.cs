@@ -49,7 +49,6 @@ namespace Database.Contexts
 
             // inheritance: table-per-hierarchy
             modelBuilder.Entity<ChildCareStub>()
-                .Ignore(e => e.ChildCareType)
                 .Map<TypeAHomeStub>(x => x.Requires("ChildCareType").HasValue(TypeAHomeStub.Discriminator))
                 .Map<TypeBHomeStub>(x => x.Requires("ChildCareType").HasValue(TypeBHomeStub.Discriminator))
                 .Map<LicensedCenterStub>(x => x.Requires("ChildCareType").HasValue(LicensedCenterStub.Discriminator))
@@ -63,7 +62,6 @@ namespace Database.Contexts
 
             // inheritance: table-per-type
             modelBuilder.Entity<ChildCare>()
-                .Ignore(e => e.ChildCareType)
                 .Map<TypeBHome>(x => x.Requires("ChildCareType").HasValue(TypeBHome.Discriminator))
                 .Map<DayCamp>(x => x.Requires("ChildCareType").HasValue(DayCamp.Discriminator))
                 .Map<DetailedChildCare>(x => x.Requires("ChildCareType").HasValue(DetailedChildCare.Discriminator));
