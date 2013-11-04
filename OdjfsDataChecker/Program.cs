@@ -26,7 +26,7 @@ namespace OdjfsDataChecker
                     .SelectAllClasses()
                     .BindAllInterfaces());
 
-                var parameter = new ConstructorArgument("odjfsClient", new DownloadingOdjfsClient("HTML"));
+                var parameter = new ConstructorArgument("odjfsClient", new DownloadingOdjfsClient(@"Logs\HTML"));
                 var dataChecker = new Odjfs(kernel.Get<IChildCareStubListScraper>(parameter), kernel.Get<IChildCareScraper>(parameter));
 
                 using (var ctx = new OdjfsEntities())
