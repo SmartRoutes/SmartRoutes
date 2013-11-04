@@ -96,7 +96,8 @@ namespace OdjfsDataChecker
             Logger.Trace("Checking for a stub that need to be scraped.");
             ChildCareStub stub = await ctx
                 .ChildCareStubs
-                .OrderBy(c => c.Id)
+                .OrderBy(c => c.LastScrapedOn.HasValue)
+                .ThenByDescending(c => c.LastScrapedOn)
                 .FirstOrDefaultAsync();
             if (stub != null)
             {
