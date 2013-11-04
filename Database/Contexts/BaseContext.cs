@@ -9,19 +9,15 @@ namespace Database.Contexts
 {
     public abstract class BaseContext : DbContext
     {
-        private readonly string _schema;
-
-        protected BaseContext(string schema) : base("SmartRoutes")
+        protected BaseContext(string databaseName) : base(databaseName)
         {
-            _schema = schema;
-
             // increase the timeout for each command
             ((IObjectContextAdapter) this).ObjectContext.CommandTimeout = 180;
         }
 
         protected string GetTableName(Type type)
         {
-            return string.Format("{0}.{1}", _schema, type.Name);
+            return string.Format("dbo.{0}", type.Name);
         }
 
         public async Task TruncateAsync()

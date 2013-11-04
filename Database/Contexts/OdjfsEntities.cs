@@ -17,7 +17,7 @@ namespace Database.Contexts
             System.Data.Entity.Database.SetInitializer(new Initializer());
         }
 
-        public OdjfsEntities() : base("odjfs")
+        public OdjfsEntities() : base("Odjfs")
         {
         }
 
