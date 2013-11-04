@@ -40,30 +40,13 @@ namespace Heap
         // get min element and update heap
         public T DeleteMin()
         {
-            T minElement = Min.Element;
+            var ReturnMin = Min;
 
-            // merge children of min into roots list
-            foreach (var child in Min.Children) AddToRoot(child);
-
+            // remove min from roots and merge children of min into roots
             Roots.Remove(Min);
-            UpdateMin();
+            foreach (var child in Min.Children) AddToRoot(child);
             ConsolidateTrees();
-            if (Min.HandleTo != null) Min.HandleTo.ValidHandle = false;
-            return minElement;
-        }
 
-        public void UpdateKey(FibHeapHandle<T, K> handle, K newKey)
-        {
-            if (handle.ValidHandle && handle.ParentHeap == this)
-            {
-                if (newKey.CompareTo(handle.Element.Key) < 0) DecreaseKey(handle.Element, newKey);
-                else IncreaseKey(handle.Element, newKey);
-            }
-        }
-
-        // scan roots for min element
-        private void UpdateMin()
-        {
             if (Roots.Count > 0)
             {
                 Min = Roots.First();
@@ -71,6 +54,18 @@ namespace Heap
                 {
                     if (root.Key.CompareTo(Min.Key) < 0) Min = root;
                 }
+            }
+
+            if (ReturnMin.HandleTo != null) ReturnMin.HandleTo.ValidHandle = false;
+            return ReturnMin.Element;
+        }
+
+        public void UpdateKey(FibHeapHandle<T, K> handle, K newKey)
+        {
+            if (handle.ValidHandle && handle.ParentHeap == this)
+            {
+                if (newKey.CompareTo(handle.Node.Key) < 0) DecreaseKey(handle.Node, newKey);
+                else IncreaseKey(handle.Node, newKey);
             }
         }
 
@@ -106,24 +101,37 @@ namespace Heap
             while (enumerator1.MoveNext() && !linkNeeded)
             {
                 var enumerator2 = enumerator1;
+
                 while (enumerator2.MoveNext() && !linkNeeded)
                 {
+                    if (enumerator1.Current == enumerator2.Current)
+                    {
+                        throw new Exception("duplicate item in list");
+                    }
+
                     if (enumerator1.Current.Rank == enumerator2.Current.Rank)
                     {
                         linkNeeded = true;
-                        if (enumerator1.Current.Key.CompareTo(enumerator2.Current.Key) < 0)
-                        {
-                            tree1 = enumerator1.Current;
-                            tree2 = enumerator2.Current;
-                        }
-                        else
+                        if (enumerator1.Current.Key.CompareTo(enumerator2.Current.Key) > 0)
                         {
                             tree1 = enumerator2.Current;
                             tree2 = enumerator1.Current;
                         }
+                        else
+                        {
+                            tree1 = enumerator1.Current;
+                            tree2 = enumerator2.Current;
+                        }
                     }
                 }
             }
+
+            if (tree1 == tree2 && tree1 != null && tree2 != null)
+            {
+                throw new Exception("duplicate in consolidate.");
+            }
+            if (tree1 != null) if (tree1.Parent != null) throw new Exception("wtf");
+            if (tree2 != null) if (tree2.Parent != null) throw new Exception("wtf");
 
             if (linkNeeded)
             {
@@ -137,73 +145,91 @@ namespace Heap
         // prune the tree
         private void CutOrMark(FibHeapNode<T, K> Tree)
         {
-            if (Tree.Marked == true)
+             // cut tree and it's ancestors
+            while (Tree != null)
             {
-                Tree.Marked = false;
-                Tree.Parent.Children.Remove(Tree);
-                Tree.Parent.Rank -= Tree.Rank;
-                Roots.Add(Tree);
-                if (Tree.Key.CompareTo(Min.Key) < 0) UpdateMin();
-                ConsolidateTrees();
-                CutOrMark(Tree.Parent);
+                Tree = InnerCutOrMark(Tree);
             }
-            else
+        }
+
+        // returns next node to cut or null
+        private FibHeapNode<T, K> InnerCutOrMark(FibHeapNode<T, K> Tree)
+        {
+            FibHeapNode<T, K> ReturnNode = null;
+
+            // don't try to cut root
+            if (Tree.Marked == true && Tree.Parent != null)
             {
-                Tree.Marked = true;
+                ReturnNode = Tree.Parent;
+
+                Tree.Parent.Marked = true; // parent has now lost a child
+                if (!Tree.Parent.Children.Contains(Tree))
+                {
+                    throw new Exception("Impossibru.");
+                }
+                Tree.Parent.Children.Remove(Tree); // cut tree is no longer child of parent
+                Tree.Parent.Rank -= Tree.Rank + 1; // parent has lost Tree.Rank + 1 children 
+                Tree.Parent = null; // cut tree will no longer have parent
+
+                AddToRoot(Tree);
             }
+
+            Tree.Marked = false;
+            return ReturnNode;
         }
 
         // decrease key value and updates heap
         private void DecreaseKey(FibHeapNode<T, K> Tree, K newKey)
         {
-            if (Tree.HandleTo.ValidHandle)
-            {
-                if (Tree.Parent == null)
-                { // element is a root
-                    Tree.Key = newKey;
-                    if (newKey.CompareTo(Min.Key) < 0) UpdateMin();
-                }
-                else if (Tree.Parent.Key.CompareTo(newKey) < 0)
-                { // heap order not violated
-                    Tree.Key = newKey;
-                }
-                else
-                { // MAYDAY MAYDAY, HEAP ORDER HAS BEEN VIOLATED, I REPEAT, HEAP ORDER HAS BEEN VIOLATED
-                    Tree.Key = newKey;
-                    Tree.Marked = true;
-                    CutOrMark(Tree);
-                }
+            Tree.Key = newKey;
+            Tree.HandleTo.key = newKey;
+
+            if (Tree.Parent == null)
+            { 
+                // element is a root
+                if (newKey.CompareTo(Min.Key) < 0) Min = Tree;
+            }
+            else if (Tree.Parent.Key.CompareTo(newKey) < 0)
+            { 
+                // heap order not violated
+            }
+            else
+            { 
+                // heap order violated
+                Tree.Marked = true;
+                CutOrMark(Tree);
             }
         }
 
         // increases key value and updates heap
         private void IncreaseKey(FibHeapNode<T, K> Tree, K newKey)
         {
-            if (Tree.HandleTo.ValidHandle)
+            Tree.Key = newKey;
+
+            FibHeapNode<T, K>[] HeapViolators = (from child in Tree.Children
+                                where child.Key.CompareTo(newKey) < 0
+                                select child).ToArray();
+
+            foreach (var child in HeapViolators)
             {
-                Tree.Key = newKey;
-
-                var HeapViolators = from child in Tree.Children
-                                    where child.Key.CompareTo(newKey) < 0
-                                    select child;
-
-                foreach (var child in HeapViolators)
-                {
-                    Tree.Children.Remove(child);
-                    Tree.Rank -= child.Rank;
-                    AddToRoot(child);
-                }
-
-                UpdateMin();
-                ConsolidateTrees();
+                Tree.Children.Remove(child);
+                Tree.Rank -= child.Rank - 1;
+                if (child.Key.CompareTo(Min.Key) < 0) Min = child;
+                AddToRoot(child);
+                CutOrMark(Tree);
             }
+
+            ConsolidateTrees();
         }
 
         private void AddToRoot(FibHeapNode<T, K> Tree)
         {
             Tree.Marked = false;
+            Tree.Parent = null;
+            
             if (Roots.Count() > 0)
             {
+                if (Roots.Contains(Tree)) throw new Exception("Attempt to add duplicate root.");
                 if (Tree.Key.CompareTo(Min.Key) < 0) Min = Tree;
             }
             else

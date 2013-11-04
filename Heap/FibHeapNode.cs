@@ -21,6 +21,7 @@ namespace Heap
             this.Element = Element;
             this.Key = Key;
             Children = new HashSet<FibHeapNode<T, K>>();
+            Parent = null;
             Marked = false;
         }
     }
