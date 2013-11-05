@@ -40,7 +40,7 @@ namespace OdjfsScraper.Scrapers
             // fetch the contents
             ClientResponse response = await _odjfsClient.GetChildCareDocument(childCareStub);
             ValidateClientResponse(response);
-            if (response.StatusCode == HttpStatusCode.NotFound)
+            if (response.StatusCode == HttpStatusCode.NotFound || response.StatusCode == HttpStatusCode.InternalServerError)
             {
                 return null;
             }
@@ -65,7 +65,7 @@ namespace OdjfsScraper.Scrapers
             // fetch the contents
             ClientResponse response = await _odjfsClient.GetChildCareDocument(childCare);
             ValidateClientResponse(response);
-            if (response.StatusCode == HttpStatusCode.NotFound)
+            if (response.StatusCode == HttpStatusCode.NotFound || response.StatusCode == HttpStatusCode.InternalServerError)
             {
                 return null;
             }
@@ -76,7 +76,9 @@ namespace OdjfsScraper.Scrapers
 
         private void ValidateClientResponse(ClientResponse response)
         {
-            if (response.StatusCode != HttpStatusCode.OK && response.StatusCode != HttpStatusCode.NotFound)
+            if (response.StatusCode != HttpStatusCode.OK && // the record will be updated (with new parse)
+                response.StatusCode != HttpStatusCode.NotFound && // the record will be deleted
+                response.StatusCode != HttpStatusCode.InternalServerError) // the record will be deleted
             {
                 var exception = new ScraperException("A status code that is not 200 or 404 was returned when getting a child care document.");
                 Logger.ErrorException(string.Format(

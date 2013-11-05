@@ -82,10 +82,19 @@ namespace OdjfsScraper.Support
             // fetch the bytes
             ClientResponse response = await GetResponse(requestUri);
 
-            // 404 errors are masked as 500 errors...
-            if (response.StatusCode == HttpStatusCode.InternalServerError && Encoding.UTF8.GetString(response.Content).Contains("error '800a0bcd'"))
+            if (response.StatusCode == HttpStatusCode.ServiceUnavailable)
             {
-                response.StatusCode = HttpStatusCode.NotFound;
+                string responseString = Encoding.UTF8.GetString(response.Content);
+                if (responseString.Contains("error '800a0bcd'"))
+                {
+                    // missing/deleted record
+                    response.StatusCode = HttpStatusCode.NotFound;
+                }
+                else if (responseString.Contains("error '80040e14'"))
+                {
+                    // an actual error from ODJFS code
+                    response.StatusCode = HttpStatusCode.InternalServerError;
+                }
             }
 
             return response;
@@ -99,12 +108,20 @@ namespace OdjfsScraper.Support
 
             byte[] bytes = await response.Content.ReadAsByteArrayAsync();
 
-            return new ClientResponse
+            var clientResponse = new ClientResponse
             {
                 RequestUri = requestUri.ToString(),
                 StatusCode = response.StatusCode,
                 Content = bytes
             };
+
+            // 500 returned are usually 503, e.g. the Oracle database is shutting down or is shut down
+            if (clientResponse.StatusCode == HttpStatusCode.InternalServerError)
+            {
+                clientResponse.StatusCode = HttpStatusCode.ServiceUnavailable;
+            }
+
+            return clientResponse;
         }
 
         protected virtual Task HandleChildCareDocumentResponse(ChildCare childCare, ClientResponse response)

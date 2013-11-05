@@ -44,15 +44,16 @@ namespace OdjfsDataChecker
             }
             else
             {
+                Logger.Trace("There was an permanent error getting the full detail page for the child care.");
                 ChildCare existingChildCare = await ctx
                     .ChildCares
                     .Where(c => c.ExternalUrlId == stub.ExternalUrlId)
                     .FirstOrDefaultAsync();
                 if (existingChildCare != null)
                 {
+                    Logger.Trace("The associated child care will be deleted.");
                     ctx.ChildCares.Remove(existingChildCare);
                 }
-                Logger.Trace("The full detail page for the stub could not be found so the child care was deleted.");
             }
 
             Logger.Trace("Saving changes.");
@@ -74,6 +75,7 @@ namespace OdjfsDataChecker
             }
             else
             {
+                Logger.Trace("There was an permanent error getting the full detail page for the child care.");
                 ctx.ChildCares.Remove(oldChildCare);
                 ChildCareStub stub = await ctx
                     .ChildCareStubs
@@ -81,9 +83,9 @@ namespace OdjfsDataChecker
                     .FirstOrDefaultAsync();
                 if (stub != null)
                 {
+                    Logger.Trace("The associated stub was deleted.");
                     ctx.ChildCareStubs.Remove(stub);
                 }
-                Logger.Trace("The full detail page for the child care could not be found so the child care was deleted.");
             }
 
             Logger.Trace("Saving changes.");
