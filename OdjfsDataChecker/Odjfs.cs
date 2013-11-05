@@ -95,14 +95,17 @@ namespace OdjfsDataChecker
             Logger.Trace("Getting the child care to scrape.");
             Logger.Trace("Checking for a stub matching the selector.");
             ChildCareStub stub = await childCareStubSelector(ctx.ChildCareStubs);
-            if (stub != null)
+
+            Logger.Trace("Checking for a child care matching the selector.");
+            ChildCare childCare = await childCareSelector(ctx.ChildCares);
+
+            if (stub != null && (!stub.LastScrapedOn.HasValue || childCare == null || stub.LastScrapedOn.Value <= childCare.LastScrapedOn))
             {
+                Logger.Trace("Updating stub with ExternalUrlId '{0}'.", stub.ExternalUrlId);
                 await UpdateChildCareStub(ctx, stub);
                 return;
             }
-
-            Logger.Trace("No stub was found, so checking for a child care matching the selector.");
-            ChildCare childCare = await childCareSelector(ctx.ChildCares);
+            
             if (childCare == null)
             {
                 Logger.Trace("There are no child care or child care stub records matching the selector to scrape.");
@@ -119,10 +122,10 @@ namespace OdjfsDataChecker
                 ctx,
                 childCareStubs => childCareStubs
                     .OrderBy(c => c.LastScrapedOn.HasValue)
-                    .ThenByDescending(c => c.LastScrapedOn)
+                    .ThenBy(c => c.LastScrapedOn)
                     .FirstOrDefaultAsync(),
                 childCares => childCares
-                    .OrderByDescending(c => c.LastScrapedOn)
+                    .OrderBy(c => c.LastScrapedOn)
                     .FirstOrDefaultAsync());
         }
 
@@ -144,7 +147,7 @@ namespace OdjfsDataChecker
                 ctx,
                 counties => counties
                     .OrderBy(c => c.LastScrapedOn.HasValue)
-                    .ThenByDescending(c => c.LastScrapedOn)
+                    .ThenBy(c => c.LastScrapedOn)
                     .FirstOrDefaultAsync());
         }
 
