@@ -25,10 +25,7 @@ namespace Scraper
         private static string GetUserAgent()
         {
             // get the version at runtime
-            string version = ((AssemblyInformationalVersionAttribute) Assembly
-                .GetExecutingAssembly()
-                .GetCustomAttributes(typeof (AssemblyInformationalVersionAttribute), false)[0])
-                .InformationalVersion;
+            string version = Assembly.GetExecutingAssembly().GetInformationalVersion();
 
             // construct a helpful user-agent
             return string.Format("SmartRoutes/{0} (+http://goo.gl/Ol3VNR)", version);

@@ -28,7 +28,7 @@ namespace OdjfsDataChecker
             _childCareScraper = childCareScraper;
         }
 
-        public async Task UpdateChildCareStub(OdjfsEntities ctx, ChildCareStub stub)
+        private async Task UpdateChildCareStub(OdjfsEntities ctx, ChildCareStub stub)
         {
             // record this scrape
             stub.LastScrapedOn = DateTime.Now;
@@ -59,7 +59,7 @@ namespace OdjfsDataChecker
             await ctx.SaveChangesAsync();
         }
 
-        public async Task UpdateChildCare(OdjfsEntities ctx, ChildCare oldChildCare)
+        private async Task UpdateChildCare(OdjfsEntities ctx, ChildCare oldChildCare)
         {
             // record this scrape
             oldChildCare.LastScrapedOn = DateTime.Now;
@@ -90,51 +90,88 @@ namespace OdjfsDataChecker
             await ctx.SaveChangesAsync();
         }
 
-        public async Task UpdateNextChildCare(OdjfsEntities ctx)
+        private async Task UpdateChildCareOrStub(OdjfsEntities ctx, Func<IDbSet<ChildCareStub>, Task<ChildCareStub>> childCareStubSelector, Func<IDbSet<ChildCare>, Task<ChildCare>> childCareSelector)
         {
-            Logger.Trace("Getting the next child care to scrape.");
-            Logger.Trace("Checking for a stub that need to be scraped.");
-            ChildCareStub stub = await ctx
-                .ChildCareStubs
-                .OrderBy(c => c.LastScrapedOn.HasValue)
-                .ThenByDescending(c => c.LastScrapedOn)
-                .FirstOrDefaultAsync();
+            Logger.Trace("Getting the child care to scrape.");
+            Logger.Trace("Checking for a stub matching the selector.");
+            ChildCareStub stub = await childCareStubSelector(ctx.ChildCareStubs);
             if (stub != null)
             {
                 await UpdateChildCareStub(ctx, stub);
+                return;
             }
-            else
+
+            Logger.Trace("No stub was found, so checking for a child care matching the selector.");
+            ChildCare childCare = await childCareSelector(ctx.ChildCares);
+            if (childCare == null)
             {
-                Logger.Trace("No stub was found, so a child care will be checked for updates.");
-                ChildCare childCare = await ctx
-                    .ChildCares
-                    .OrderBy(c => c.LastScrapedOn)
-                    .FirstOrDefaultAsync();
-
-                if (childCare == null)
-                {
-                    Logger.Trace("There are no child care or child care stub records to scrape.");
-                    return;
-                }
-
-                await UpdateChildCare(ctx, childCare);
+                Logger.Trace("There are no child care or child care stub records matching the selector to scrape.");
+                return;
             }
+
+            await UpdateChildCare(ctx, childCare);
+        }
+
+        public async Task UpdateNextChildCare(OdjfsEntities ctx)
+        {
+            Logger.Trace("Fetching the next stub or child care to scrape.");
+            await UpdateChildCareOrStub(
+                ctx,
+                childCareStubs => childCareStubs
+                    .OrderBy(c => c.LastScrapedOn.HasValue)
+                    .ThenByDescending(c => c.LastScrapedOn)
+                    .FirstOrDefaultAsync(),
+                childCares => childCares
+                    .OrderByDescending(c => c.LastScrapedOn)
+                    .FirstOrDefaultAsync());
+        }
+
+        public async Task UpdateChildCare(OdjfsEntities ctx, string externalUrlId)
+        {
+            Logger.Trace("Fetching the stub or child care with ExternalUrlId '{0}' to scrape.", externalUrlId);
+            await UpdateChildCareOrStub(
+                ctx,
+                childCareStubs => childCareStubs
+                    .FirstOrDefaultAsync(c => c.ExternalUrlId == externalUrlId),
+                childCares => childCares
+                    .FirstOrDefaultAsync(c => c.ExternalUrlId == externalUrlId));
         }
 
         public async Task UpdateNextCounty(OdjfsEntities ctx)
         {
-            Logger.Trace("Getting the next County to scrape.");
-            County county = ctx
-                .Counties
-                .OrderBy(c => c.LastScrapedOn.HasValue)
-                .ThenByDescending(c => c.LastScrapedOn)
-                .First();
-            Logger.Trace("The next county to scrape is '{0}'.", county.Name);
+            Logger.Trace("Fetching the next county to scrape.");
+            await UpdateCounty(
+                ctx,
+                counties => counties
+                    .OrderBy(c => c.LastScrapedOn.HasValue)
+                    .ThenByDescending(c => c.LastScrapedOn)
+                    .FirstOrDefaultAsync());
+        }
 
+        public async Task UpdateCounty(OdjfsEntities ctx, string name)
+        {
+            Logger.Trace("Fetching the county with Name '{0}' to scrape.", name);
+            await UpdateCounty(
+                ctx,
+                counties => counties
+                    .FirstOrDefaultAsync(c => c.Name.ToUpper() == name.ToUpper()));
+        }
+
+        private async Task UpdateCounty(OdjfsEntities ctx, Func<IDbSet<County>, Task<County>> countySelector)
+        {
+            Logger.Trace("Getting the next County to scrape.");
+            County county = await countySelector(ctx.Counties);
+            if (county == null)
+            {
+                Logger.Trace("No county matching the provided selector was found.");
+                return;
+            }
+
+            Logger.Trace("The next county to scrape is '{0}'.", county.Name);
             await UpdateCounty(ctx, county);
         }
 
-        public async Task UpdateCounty(OdjfsEntities ctx, County county)
+        private async Task UpdateCounty(OdjfsEntities ctx, County county)
         {
             // record this scrape
             county.LastScrapedOn = DateTime.Now;

@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+using System.Reflection;
 using System.Security.Cryptography;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Scraper
 {
@@ -14,6 +11,13 @@ namespace Scraper
             var sha = new SHA256Managed();
             byte[] hashBytes = sha.ComputeHash(bytes);
             return BitConverter.ToString(hashBytes).Replace("-", "");
+        }
+
+        public static string GetInformationalVersion(this Assembly assembly)
+        {
+            return ((AssemblyInformationalVersionAttribute) assembly
+                .GetCustomAttributes(typeof (AssemblyInformationalVersionAttribute), false)[0])
+                .InformationalVersion;
         }
     }
 }

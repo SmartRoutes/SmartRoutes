@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
+using CommandLine;
 using Database.Contexts;
 using Ninject;
 using Ninject.Extensions.Conventions;
@@ -17,17 +19,49 @@ namespace OdjfsDataChecker
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
-        private static void Main(string[] args)
+        private static int Main(string[] args)
         {
-            const int maximumDuration = 5*60*1000; // five minutes, in milliseconds
-            const int sleepDuration = 3*1000; // three seconds, in milliseconds
+            // parse the options
+            string verb = null;
+            object verbOptions = null;
+            if (!Parser.Default.ParseArgumentsStrict(args, new Options(), (innerVerb, innerVerbOptions) =>
+            {
+                verb = innerVerb;
+                verbOptions = innerVerbOptions;
+            }))
+            {
+                Console.Error.WriteLine("There was an error when parsing the command line arguments.");
+                return Parser.DefaultExitCodeFail;
+            }
 
+            // execute the options
+            switch (verb)
+            {
+                case "crawl":
+                    var crawlOptions = (CrawlOptions) verbOptions;
+                    Crawl(crawlOptions.SleepDuration, crawlOptions.MaximumDuration);
+                    break;
+                case "childcare":
+                    var childCareOptions = (ChildCareOptions) verbOptions;
+                    Update((ctx, odjfs) => odjfs.UpdateChildCare(ctx, childCareOptions.ExternalUrlId));
+                    break;
+                case "county":
+                    var countyOptions = (CountyOptions) verbOptions;
+                    Update((ctx, odjfs) => odjfs.UpdateCounty(ctx, countyOptions.Name));
+                    break;
+            }
+
+            return 0;
+        }
+
+        private static void Crawl(int sleepDuration, int maximumDuration)
+        {
             // start timing
             var stopwatch = new Stopwatch();
             stopwatch.Start();
 
             // update a list and sleep (if possible)
-            Update(true);
+            Update((ctx, odjfs) => odjfs.UpdateNextCounty(ctx));
             if (stopwatch.ElapsedMilliseconds + sleepDuration >= maximumDuration)
             {
                 return;
@@ -42,7 +76,7 @@ namespace OdjfsDataChecker
                 long before = stopwatch.ElapsedMilliseconds;
 
                 // update a child care and sleep (if possible)
-                Update(false);
+                Update((ctx, odjfs) => odjfs.UpdateNextChildCare(ctx));
                 if (stopwatch.ElapsedMilliseconds + sleepDuration >= maximumDuration)
                 {
                     return;
@@ -54,7 +88,7 @@ namespace OdjfsDataChecker
             }
         }
 
-        private static void Update(bool updateCounty)
+        private static void Update(Func<OdjfsEntities, Odjfs, Task> odfjsTaskGenerator)
         {
             try
             {
@@ -67,18 +101,11 @@ namespace OdjfsDataChecker
                     .BindAllInterfaces());
 
                 var parameter = new ConstructorArgument("odjfsClient", new DownloadingOdjfsClient(@"Logs\HTML"));
-                var dataChecker = new Odjfs(kernel.Get<IChildCareStubListScraper>(parameter), kernel.Get<IChildCareScraper>(parameter));
+                var odjfs = new Odjfs(kernel.Get<IChildCareStubListScraper>(parameter), kernel.Get<IChildCareScraper>(parameter));
 
                 using (var ctx = new OdjfsEntities())
                 {
-                    if (updateCounty)
-                    {
-                        dataChecker.UpdateNextCounty(ctx).Wait();
-                    }
-                    else
-                    {
-                        dataChecker.UpdateNextChildCare(ctx).Wait();
-                    }
+                    odfjsTaskGenerator(ctx, odjfs).Wait();
                 }
 
                 Logger.Trace("SortaDataChecker has completed.");
