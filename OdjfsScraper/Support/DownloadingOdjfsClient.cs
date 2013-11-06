@@ -20,25 +20,28 @@ namespace OdjfsScraper.Support
 
         protected override async Task HandleChildCareDocumentResponse(ChildCare childCare, ClientResponse response)
         {
-            CheckDirectory();
-            await WriteBytes("child_care_" + childCare.ExternalUrlId + "_{0}_{1}.html", response);
+            await WriteChildCareBytes(childCare.ExternalUrlId, response);
         }
 
         protected override async Task HandleListDocumentResponse(County county, ClientResponse response)
         {
-            CheckDirectory();
             string countyName = county == null ? "all" : county.Name;
-            await WriteBytes("list_" + countyName + "_{0}_{1}.html", response);
+            await WriteBytes("County_" + countyName + "_Current_{0}_{1}.html", response);
         }
 
         protected override async Task HandleChildCareDocumentResponse(ChildCareStub childCareStub, ClientResponse response)
         {
-            CheckDirectory();
-            await WriteBytes("child_care_" + childCareStub.ExternalUrlId + "_{0}_{1}.html", response);
+            await WriteChildCareBytes(childCareStub.ExternalUrlId, response);
         }
 
-        private void CheckDirectory()
+        private async Task WriteChildCareBytes(string externalUrlId, ClientResponse response)
         {
+            await WriteBytes("ChildCare_" + externalUrlId + "_Current_{0}_{1}.html", response);
+        }
+
+        private async Task WriteBytes(string fileNameFormat, ClientResponse response)
+        {
+            // make sure the directory exists before writing to it...
             if (!_hasDirectoryBeenChecked)
             {
                 if (!Directory.Exists(_directory))
@@ -47,10 +50,7 @@ namespace OdjfsScraper.Support
                 }
                 _hasDirectoryBeenChecked = true;
             }
-        }
 
-        private async Task WriteBytes(string fileNameFormat, ClientResponse response)
-        {
             // generate a path for the child care
             string path = Path.Combine(_directory, string.Format(
                 fileNameFormat,
