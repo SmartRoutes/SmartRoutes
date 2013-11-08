@@ -108,11 +108,11 @@ namespace OdjfsDataChecker
                     odfjsTaskGenerator(ctx, odjfs).Wait();
                 }
 
-                Logger.Trace("SortaDataChecker has completed.");
+                Logger.Trace("OdjfsDataChecker has completed.");
             }
             catch (Exception e)
             {
-                Logger.ErrorException("An exception has forced the SortaDataChecker to terminate.", e);
+                Logger.ErrorException("An exception has forced the OdjfsDataChecker to terminate.", e);
             }
         }
     }
