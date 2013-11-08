@@ -39,6 +39,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Graph", "Graph\Graph.csproj
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GraphVisualizer", "GraphVisualizer\GraphVisualizer.csproj", "{5481CFED-654C-4694-955A-DB8CA4FEC9FE}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SortaScraper.Test", "SortaScraper.Test\SortaScraper.Test.csproj", "{995019AF-0B89-4104-8A91-6A35D6177C33}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{A7C97D81-BA09-405B-ABD7-23872311D68C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -183,8 +187,23 @@ Global
 		{5481CFED-654C-4694-955A-DB8CA4FEC9FE}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{5481CFED-654C-4694-955A-DB8CA4FEC9FE}.Release|Win32.ActiveCfg = Release|Any CPU
 		{5481CFED-654C-4694-955A-DB8CA4FEC9FE}.Release|x64.ActiveCfg = Release|Any CPU
+		{995019AF-0B89-4104-8A91-6A35D6177C33}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{995019AF-0B89-4104-8A91-6A35D6177C33}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{995019AF-0B89-4104-8A91-6A35D6177C33}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{995019AF-0B89-4104-8A91-6A35D6177C33}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{995019AF-0B89-4104-8A91-6A35D6177C33}.Debug|Win32.ActiveCfg = Debug|Any CPU
+		{995019AF-0B89-4104-8A91-6A35D6177C33}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{995019AF-0B89-4104-8A91-6A35D6177C33}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{995019AF-0B89-4104-8A91-6A35D6177C33}.Release|Any CPU.Build.0 = Release|Any CPU
+		{995019AF-0B89-4104-8A91-6A35D6177C33}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{995019AF-0B89-4104-8A91-6A35D6177C33}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{995019AF-0B89-4104-8A91-6A35D6177C33}.Release|Win32.ActiveCfg = Release|Any CPU
+		{995019AF-0B89-4104-8A91-6A35D6177C33}.Release|x64.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{995019AF-0B89-4104-8A91-6A35D6177C33} = {A7C97D81-BA09-405B-ABD7-23872311D68C}
 	EndGlobalSection
 EndGlobal
