@@ -113,7 +113,11 @@ namespace OdjfsScraper.Parsers
             }
 
             // set the county that was passed down
-            childCareStub.County = county;
+            if (county != null)
+            {
+                childCareStub.County = county;
+                childCareStub.CountyId = county.Id;
+            }
 
             // TODO: parse out the address and rating
 

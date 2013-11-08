@@ -5,6 +5,7 @@ using System.Data.Entity.Migrations;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
+using Database;
 using Database.Contexts;
 using Model.Odjfs;
 using Model.Odjfs.ChildCares;
@@ -209,19 +210,22 @@ namespace OdjfsDataChecker
                 throw exception;
             }
 
-            // get all of the external IDs that could belong to this county
-            ISet<string> dbStubIds = new HashSet<string>(await ctx
+            // get all of the stub that belong to this county or do not have a county
+            // TODO: this code assumes a child care or stub never changed county
+            ChildCareStub[] dbStubs = await ctx
                 .ChildCareStubs
                 .Where(c => c.CountyId == null || c.CountyId == county.Id)
-                .Select(c => c.ExternalUrlId)
-                .ToArrayAsync());
+                .ToArrayAsync();
+            ISet<string> dbStubIds = new HashSet<string>(dbStubs.Select(s => s.ExternalUrlId));
+            IDictionary<string, ChildCareStub> idToDbStub = dbStubs.ToDictionary(s => s.ExternalUrlId);
             Logger.Trace("{0} stubs were found in the database.", dbStubIds.Count);
 
-            ISet<string> dbIds = new HashSet<string>(await ctx
+            ChildCare[] dbChildCares = await ctx
                 .ChildCares
                 .Where(c => c.CountyId == county.Id)
-                .Select(c => c.ExternalUrlId)
-                .ToArrayAsync());
+                .ToArrayAsync();
+            ISet<string> dbIds = new HashSet<string>(dbChildCares.Select(c => c.ExternalUrlId));
+            IDictionary<string, ChildCare> idToDbChildCare = dbChildCares.ToDictionary(c => c.ExternalUrlId);
             Logger.Trace("{0} child cares were found in the database.", dbIds.Count);
 
             if (dbStubIds.Overlaps(dbIds))
@@ -243,13 +247,19 @@ namespace OdjfsDataChecker
             // delete
             if (deleted.Count > 0)
             {
-                // TODO: keep an eye on https://github.com/loresoft/EntityFramework.Extended/issues/62#issuecomment-25361505
-                IEnumerable<SqlParameter> parameters = deleted.Select((id, i) => new SqlParameter("@p" + i, id));
-                string query = "DELETE FROM {0} WHERE ExternalUrlId IN (" + string.Join(", ", parameters.Select(p => p.ParameterName)) + ")";
-
-                // intentionally enumerate the parameters twice, to get new SqlParameter instances per query
-                await ctx.Database.ExecuteSqlCommandAsync(string.Format(query, "odjfs.ChildCareStub"), parameters.ToArray());
-                await ctx.Database.ExecuteSqlCommandAsync(string.Format(query, "odjfs.ChildCare"), parameters.ToArray());
+                foreach (var id in deleted)
+                {
+                    ChildCareStub stub;
+                    if (idToDbStub.TryGetValue(id, out stub))
+                    {
+                        ctx.ChildCareStubs.Remove(stub);
+                    }
+                    ChildCare childCare;
+                    if (idToDbChildCare.TryGetValue(id, out childCare))
+                    {
+                        ctx.ChildCares.Remove(childCare);
+                    }
+                }
             }
 
             // find the newly added child cares
@@ -262,6 +272,19 @@ namespace OdjfsDataChecker
             {
                 ctx.ChildCareStubs.Add(stub);
             }
+            
+            // find stubs that we already have records of
+            ISet<string> updated = new HashSet<string>(dbStubIds);
+            updated.IntersectWith(webIds);
+
+            // update
+            foreach (ChildCareStub webStub in webStubs.Where(c => updated.Contains(c.ExternalUrlId)))
+            {
+                ChildCareStub dbStub = idToDbStub[webStub.ExternalUrlId];
+                webStub.Id = dbStub.Id;
+                ctx.ChildCareStubs.AddOrUpdate(webStub);
+            }
+            Logger.Trace("{0} stubs will be updated.", updated.Count);
 
             Logger.Trace("Saving changes.");
             await ctx.SaveChangesAsync();
