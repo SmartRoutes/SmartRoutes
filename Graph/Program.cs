@@ -45,7 +45,7 @@ namespace Graph
 
                 DateTime toc = DateTime.Now;
 
-                Console.WriteLine("Nodes created in {0} milliseconds.", (toc - tic).TotalMilliseconds);
+                Console.WriteLine("Graph created in {0} milliseconds.", (toc - tic).TotalMilliseconds);
                 Console.ReadLine();
             }
             catch (Exception e)

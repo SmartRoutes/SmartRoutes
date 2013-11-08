@@ -13,5 +13,6 @@ namespace Graph
         IFibonacciHeap<INode, TimeSpan> Queue { get; set; }
         void updateSortaEntities();
         NodeInfo Dijkstras(ISet<INode> StartNodes, Func<INode, bool> GoalCheck, Direction direction);
+        INode[] GraphNodes { get; }
     }
 }

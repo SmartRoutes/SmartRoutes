@@ -75,6 +75,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Comparers\ComparerForDisplay.cs" />
     <Compile Include="Comparers\ComparerForTransferSorting.cs" />
     <Compile Include="Comparers\ComparerForTripSorting.cs" />
     <Compile Include="DatabaseLoader.cs" />

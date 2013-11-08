@@ -90,7 +90,7 @@ namespace Graph
                     IMetroNode node = MetroNodes[i];
                     IMetroNode previousNode = MetroNodes[i-1];
 
-                    if (node.TripID() == previousNode.TripID())
+                    if (node.TripID == previousNode.TripID)
                     {
                         node.DownwindNeighbors.Add(previousNode);
                         previousNode.UpwindNeighbors.Add(node);
@@ -117,8 +117,7 @@ namespace Graph
                     IMetroNode node = MetroNodes[i];
                     IMetroNode previousNode = MetroNodes[i-1];
 
-                    if (node.ShapeID() == previousNode.ShapeID() 
-                        && node.Sequence() == previousNode.Sequence())
+                    if (node.StopID == previousNode.StopID)
                     {
                         node.DownwindNeighbors.Add(previousNode);
                         previousNode.UpwindNeighbors.Add(node);

@@ -15,7 +15,7 @@ using Heap;
 
 namespace Graph
 {
-    internal enum State
+    internal enum NodeState
     {
         Open, Closed
     }
@@ -29,18 +29,17 @@ namespace Graph
     {
         internal FibHeapHandle<INode, TimeSpan> handle;
         internal TimeSpan travelTime;
-        internal State state;
+        internal NodeState state;
         public INode node;
-        public INode parent;
+        public NodeInfo parent;
     }
 
     public class Graph : IGraph
     {
-        
         private readonly IGraphBuilder Builder;
         private EntityCollection Collection;
         private Dictionary<INode, NodeInfo> SearchInfo;
-        public readonly INode[] GraphNodes;
+        public INode[] GraphNodes { get; private set; }
         public IFibonacciHeap<INode, TimeSpan> Queue { get; set; }
 
         public Graph(IGraphBuilder Builder, IFibonacciHeap<INode, TimeSpan> Queue)
@@ -78,7 +77,7 @@ namespace Graph
             foreach (var node in StartNodes)
             {
                 var nodeInfo = new NodeInfo();
-                nodeInfo.state = State.Closed;
+                nodeInfo.state = NodeState.Closed;
                 nodeInfo.travelTime = new TimeSpan(0);
                 nodeInfo.handle = Queue.Insert(node, nodeInfo.travelTime);
                 SearchInfo.Add(node, nodeInfo);
@@ -113,27 +112,27 @@ namespace Graph
                         // node is new, give it search info and place in queue
                         neighborInfo = new NodeInfo();
                         neighborInfo.node = neighbor;
-                        neighborInfo.parent = current;
-                        neighborInfo.state = State.Open;
+                        neighborInfo.parent = currentInfo;
+                        neighborInfo.state = NodeState.Open;
                         neighborInfo.travelTime = (direction == Direction.Upwind)
-                            ? currentInfo.travelTime + (neighbor.Time() - current.Time())
-                            : currentInfo.travelTime + (current.Time() - neighbor.Time());
+                            ? currentInfo.travelTime + (neighbor.Time - current.Time)
+                            : currentInfo.travelTime + (current.Time - neighbor.Time);
                         neighborInfo.handle = Queue.Insert(neighbor, neighborInfo.travelTime);
                     }
                     else
                     { 
                         // neighbor is in queue, check state
-                        if (neighborInfo.state == State.Open)
+                        if (neighborInfo.state == NodeState.Open)
                         {
                             // update neighborInfo if this route is better
                             TimeSpan newTravelTime = (direction == Direction.Upwind)
-                                ? currentInfo.travelTime + (neighbor.Time() - current.Time())
-                                : currentInfo.travelTime + (current.Time() - neighbor.Time());
+                                ? currentInfo.travelTime + (neighbor.Time - current.Time)
+                                : currentInfo.travelTime + (current.Time - neighbor.Time);
                             if (newTravelTime < neighborInfo.travelTime)
                             {
                                 // update search info and update queue for new key
                                 neighborInfo.travelTime = newTravelTime;
-                                neighborInfo.parent = current;
+                                neighborInfo.parent = currentInfo;
                                 Queue.UpdateKey(neighborInfo.handle, newTravelTime);
                             }
                         }
@@ -141,7 +140,7 @@ namespace Graph
                 }
 
                 // and we're done with current
-                currentInfo.state = State.Closed;
+                currentInfo.state = NodeState.Closed;
             }
 
             throw new Exception("Dijkstras did not reach a goal node.");

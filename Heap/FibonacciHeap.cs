@@ -198,7 +198,7 @@ namespace Heap
             foreach (var child in HeapViolators)
             {
                 Tree.Children.Remove(child);
-                Tree.Rank -= child.Rank - 1;
+                Tree.Rank -= child.Rank + 1;
                 if (child.Key.CompareTo(Min.Key) < 0) Min = child;
                 AddToRoot(child);
                 CutOrMark(Tree);
