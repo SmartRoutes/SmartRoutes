@@ -29,6 +29,8 @@ namespace Heap
             var newTree = new FibHeapNode<T, K>(Element, Key);
 
             AddToRoot(newTree);
+
+            // comment out ConsolidateTrees(); for "lazy" tree consolidation
             ConsolidateTrees();
 
             var handle = new FibHeapHandle<T, K>(newTree, this);
@@ -78,7 +80,6 @@ namespace Heap
             }
             else
             {
-                tree1.Rank += tree2.Rank + 1;
                 tree1.Children.Add(tree2);
                 tree2.Parent = tree1;
             }
@@ -152,7 +153,6 @@ namespace Heap
 
                 Tree.Parent.Marked = true; // parent has now lost a child
                 Tree.Parent.Children.Remove(Tree); // cut tree is no longer child of parent
-                Tree.Parent.Rank -= Tree.Rank + 1; // parent has lost Tree.Rank + 1 children 
                 Tree.Parent = null; // cut tree will no longer have parent
 
                 AddToRoot(Tree);
@@ -198,7 +198,6 @@ namespace Heap
             foreach (var child in HeapViolators)
             {
                 Tree.Children.Remove(child);
-                Tree.Rank -= child.Rank + 1;
                 if (child.Key.CompareTo(Min.Key) < 0) Min = child;
                 AddToRoot(child);
                 CutOrMark(Tree);

@@ -38,14 +38,34 @@ namespace Graph
                 //DatabaseLoader dbloader = new DatabaseLoader(kernel.Get<IEntityCollectionParser>());
                 //dbloader.loadDatabaseFromFile(zipFileBytes).Wait();
 
-                Console.WriteLine("Creating Graph.");
-                DateTime tic = DateTime.Now;
+                //Console.WriteLine("Creating Graph.");
+                //DateTime tic = DateTime.Now;
 
-                var graph = kernel.Get<IGraph>();
+                //var graph = kernel.Get<IGraph>();
 
-                DateTime toc = DateTime.Now;
+                //DateTime toc = DateTime.Now;
 
-                Console.WriteLine("Graph created in {0} milliseconds.", (toc - tic).TotalMilliseconds);
+                //Console.WriteLine("Graph created in {0} milliseconds.", (toc - tic).TotalMilliseconds);
+
+                var heap = new FibonacciHeap<double, double>();
+
+                int count = 1000000;
+                var rand = new Random();
+                var handles = new FibHeapHandle<double, double>[count];
+
+                for (int i = 0; i < count; i++)
+                {
+                    var num1 = rand.NextDouble();
+                    var num2 = rand.NextDouble();
+                    handles[i] = heap.Insert(num1, num1);
+                }
+
+                while (!heap.Empty())
+                {
+                    heap.DeleteMin();
+                    //Console.WriteLine(heap.DeleteMin());
+                }
+
                 Console.ReadLine();
             }
             catch (Exception e)

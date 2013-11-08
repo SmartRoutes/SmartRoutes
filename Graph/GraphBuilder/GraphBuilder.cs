@@ -46,6 +46,7 @@ namespace Graph
 
                 var MetroNodes = CreateMetroNodes(collection);
                 ConnectTrips(MetroNodes);
+                //ConnectTransfers(MetroNodes);
                 ExperimentalConnectTransfers(MetroNodes, collection);
                 //var ChildcareNodes = CreateChildcareNodes(ChildcareCollection);
                 //var Graph = CombineNodes(MetroNodes, ChildcareNodes);

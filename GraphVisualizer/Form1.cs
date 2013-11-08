@@ -54,7 +54,7 @@ namespace GraphVisualizer
             plotCube.Axes.YAxis.Label.Text = "Longitude";
             plotCube.Axes.ZAxis.Label.Text = "Time";
             
-            for (int i = 0; i < 1500; i++)
+            for (int i = 0; i < 500; i++)
             {
                 INode node = Nodes[i];
                 foreach (INode neighbor in node.DownwindNeighbors)

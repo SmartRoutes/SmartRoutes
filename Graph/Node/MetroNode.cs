@@ -29,6 +29,7 @@ namespace Graph.Node
             Time = stopTime.ArrivalTime;
             Latitude = stopTime.Stop.Latitude;
             Longitude = stopTime.Stop.Longitude;
+            Name = stopTime.Stop.Name;
             StopID = stopTime.StopId;
             TripID = stopTime.TripId;
             Sequence = stopTime.Sequence;
