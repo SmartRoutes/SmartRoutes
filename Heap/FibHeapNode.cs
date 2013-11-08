@@ -9,7 +9,7 @@ namespace Heap
     internal class FibHeapNode<T, K> where K : IComparable
     {
         internal readonly T Element;
-        internal ISet<FibHeapNode<T, K>> Children;
+        internal List<FibHeapNode<T, K>> Children;
         internal FibHeapNode<T, K> Parent;
         internal bool Marked; // marked for pruning if previously lost child
         internal FibHeapHandle<T, K> HandleTo;
@@ -19,7 +19,7 @@ namespace Heap
         {
             this.Element = Element;
             this.Key = Key;
-            Children = new HashSet<FibHeapNode<T, K>>();
+            Children = new List<FibHeapNode<T, K>>();
             Marked = false;
         }
 

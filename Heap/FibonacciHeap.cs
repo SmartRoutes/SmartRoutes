@@ -44,7 +44,7 @@ namespace Heap
             var ReturnMin = Min;
 
             // remove min from roots and merge children of min into roots
-            Roots.Remove(Min);
+            Roots.RemoveAll(x => x == Min);
             foreach (var child in Min.Children) AddToRoot(child);
             ConsolidateTrees();
 
@@ -124,7 +124,7 @@ namespace Heap
 
             if (linkNeeded)
             {
-                Roots.Remove(tree2);
+                Roots.RemoveAll(x => x == tree2);
                 Link(tree1, tree2);
             }
 
@@ -152,13 +152,17 @@ namespace Heap
                 ReturnNode = Tree.Parent;
 
                 Tree.Parent.Marked = true; // parent has now lost a child
-                Tree.Parent.Children.Remove(Tree); // cut tree is no longer child of parent
+                Tree.Parent.Children.RemoveAll(x => x == Tree); // cut tree is no longer child of parent
                 Tree.Parent = null; // cut tree will no longer have parent
+                Tree.Marked = false; // cut Tree no longer marked
 
                 AddToRoot(Tree);
             }
+            else
+            {
+                Tree.Marked = true;
+            }
 
-            Tree.Marked = false;
             return ReturnNode;
         }
 
@@ -197,7 +201,7 @@ namespace Heap
 
             foreach (var child in HeapViolators)
             {
-                Tree.Children.Remove(child);
+                Tree.Children.RemoveAll(x => x == child);
                 if (child.Key.CompareTo(Min.Key) < 0) Min = child;
                 AddToRoot(child);
                 CutOrMark(Tree);

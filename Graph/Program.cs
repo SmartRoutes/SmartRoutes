@@ -62,8 +62,8 @@ namespace Graph
 
                 while (!heap.Empty())
                 {
-                    heap.DeleteMin();
-                    //Console.WriteLine(heap.DeleteMin());
+                    //heap.DeleteMin();
+                    Console.WriteLine(heap.DeleteMin());
                 }
 
                 Console.ReadLine();
