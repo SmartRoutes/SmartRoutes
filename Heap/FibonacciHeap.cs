@@ -10,10 +10,14 @@ namespace Heap
     {
         private List<FibHeapNode<T, K>> Roots;
         private FibHeapNode<T, K> Min;
+        private FibHeapNode<T, K>[] RootsOfRank; // index i contains root of rank i
 
         public FibonacciHeap()
         {
             Roots = new List<FibHeapNode<T, K>>();
+            RootsOfRank = new FibHeapNode<T,K>[1000]; // you would need a LOT of nodes to get tree of rank 1000
+
+            for (int i = 0; i < 1000; i++) RootsOfRank[i] = null;
         }
 
         // check for emptiness
@@ -30,7 +34,6 @@ namespace Heap
 
             AddToRoot(newTree);
 
-            // comment out ConsolidateTrees(); for "lazy" tree consolidation
             ConsolidateTrees();
 
             var handle = new FibHeapHandle<T, K>(newTree, this);
@@ -42,6 +45,9 @@ namespace Heap
         public T DeleteMin()
         {
             var ReturnMin = Min;
+
+            // remove min from RootsOfRank array, if it is there
+            if (RootsOfRank[Min.Rank] == Min) RootsOfRank[Min.Rank] = null;
 
             // remove min from roots and merge children of min into roots
             Roots.RemoveAll(x => x == Min);
@@ -80,6 +86,12 @@ namespace Heap
             }
             else
             {
+                // tree1's rank will increase, remove reference to it from RootsOfRank array
+                if (RootsOfRank[tree1.Rank] == tree1) RootsOfRank[tree1.Rank] = null;
+
+                // tree2 is no longer a root, remove reference to it as well
+                if (RootsOfRank[tree2.Rank] == tree2) RootsOfRank[tree2.Rank] = null;
+
                 tree1.Children.Add(tree2);
                 tree2.Parent = tree1;
             }
@@ -95,37 +107,39 @@ namespace Heap
         private bool InnerConsolidateTrees()
         {
             bool linkNeeded = false;
+            FibHeapNode<T, K> tree1 = null, tree2 = null; // store roots to link while enumerating
 
-            var enumerator1 = Roots.GetEnumerator();
-            FibHeapNode<T, K> tree1 = null, tree2 = null;
+            var RootsEnum = Roots.GetEnumerator();
 
-            while (enumerator1.MoveNext() && !linkNeeded)
+            while (RootsEnum.MoveNext() && !linkNeeded)
             {
-                var enumerator2 = enumerator1;
+                var root = RootsEnum.Current;
 
-                while (enumerator2.MoveNext() && !linkNeeded)
+                if (RootsOfRank[root.Rank] == null)
                 {
-                    if (enumerator1.Current.Rank == enumerator2.Current.Rank)
+                    RootsOfRank[root.Rank] = root;
+                }
+                else if (root != RootsOfRank[root.Rank]) // two roots have same rank
+                {
+                    linkNeeded = true;
+
+                    if (root.Key.CompareTo(RootsOfRank[root.Rank].Key) <= 0)
                     {
-                        linkNeeded = true;
-                        if (enumerator1.Current.Key.CompareTo(enumerator2.Current.Key) > 0)
-                        {
-                            tree1 = enumerator2.Current;
-                            tree2 = enumerator1.Current;
-                        }
-                        else
-                        {
-                            tree1 = enumerator1.Current;
-                            tree2 = enumerator2.Current;
-                        }
+                        tree1 = root;
+                        tree2 = RootsOfRank[root.Rank];
+                    }
+                    else
+                    {
+                        tree1 = RootsOfRank[root.Rank];
+                        tree2 = root;
                     }
                 }
             }
 
             if (linkNeeded)
             {
-                Roots.RemoveAll(x => x == tree2);
                 Link(tree1, tree2);
+                Roots.RemoveAll(x => x == tree2);
             }
 
             return linkNeeded;
@@ -152,6 +166,13 @@ namespace Heap
                 ReturnNode = Tree.Parent;
 
                 Tree.Parent.Marked = true; // parent has now lost a child
+
+                // Tree.Parent rank will chang, remove it from RootsOfRank array
+                if (RootsOfRank[Tree.Parent.Rank] == Tree.Parent)
+                {
+                    RootsOfRank[Tree.Parent.Rank] = null;
+                }
+
                 Tree.Parent.Children.RemoveAll(x => x == Tree); // cut tree is no longer child of parent
                 Tree.Parent = null; // cut tree will no longer have parent
                 Tree.Marked = false; // cut Tree no longer marked
@@ -199,6 +220,12 @@ namespace Heap
                                 where child.Key.CompareTo(newKey) < 0
                                 select child).ToArray();
 
+            // if rank of Tree will change, remove it from RootsOfRank array
+            if (HeapViolators.Count() > 0 && RootsOfRank[Tree.Rank] == Tree)
+            {
+                RootsOfRank[Tree.Rank] = null;
+            }
+
             foreach (var child in HeapViolators)
             {
                 Tree.Children.RemoveAll(x => x == child);
@@ -214,7 +241,9 @@ namespace Heap
         {
             Tree.Marked = false;
             Tree.Parent = null;
-            
+
+            if (RootsOfRank[Tree.Rank] == null) RootsOfRank[Tree.Rank] = Tree;
+
             if (Roots.Count() > 0)
             {
                 if (Tree.Key.CompareTo(Min.Key) < 0) Min = Tree;
