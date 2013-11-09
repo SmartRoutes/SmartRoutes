@@ -49,7 +49,7 @@ namespace OdjfsStatusChecker
         {
             try
             {
-                Logger.Trace("OdjfsUptimeChecker is now starting.");
+                Logger.Trace("OdjfsStatusChecker is now starting.");
 
                 var client = new ScraperClient();
 
@@ -72,7 +72,7 @@ namespace OdjfsStatusChecker
             }
             catch (Exception e)
             {
-                Logger.ErrorException("An exception has forced the OdjfsUptimeChecker to terminate.", e);
+                Logger.ErrorException("An exception has forced the OdjfsStatusChecker to terminate.", e);
             }
         }
 
