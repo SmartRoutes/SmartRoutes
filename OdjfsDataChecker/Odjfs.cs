@@ -323,7 +323,6 @@ namespace OdjfsDataChecker
             ChildCare childCare = await ctx
                 .ChildCares
                 .Where(c => c.Address != null && (!c.Latitude.HasValue || !c.Longitude.HasValue || !c.LastGeocodedOn.HasValue))
-                .OrderByDescending(c => c.LastGeocodedOn)
                 .FirstOrDefaultAsync();
             if (childCare == null)
             {
