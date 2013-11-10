@@ -322,7 +322,7 @@ namespace OdjfsDataChecker
         {
             ChildCare childCare = await ctx
                 .ChildCares
-                .Where(c => c.Address != null && (!c.Latitude.HasValue || !c.Longitude.HasValue || !c.LastGeocodedOn.HasValue))
+                .Where(c => c.Address != null && (!c.Latitude.HasValue || !c.Longitude.HasValue) && !c.LastGeocodedOn.HasValue)
                 .FirstOrDefaultAsync();
             if (childCare == null)
             {
@@ -367,6 +367,7 @@ namespace OdjfsDataChecker
                     childCare.ExternalUrlId,
                     geocoderResponse.Locations.Length,
                     string.Join(", ", geocoderResponse.Locations.Select(l => l.Name)));
+                return;
             }
             Location geocoderLocation = geocoderResponse.Locations[0];
 

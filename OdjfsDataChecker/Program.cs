@@ -10,6 +10,7 @@ using Ninject;
 using Ninject.Extensions.Conventions;
 using Ninject.Parameters;
 using NLog;
+using NLog.Config;
 using OdjfsScraper.Scrapers;
 using OdjfsScraper.Support;
 
@@ -72,7 +73,10 @@ namespace OdjfsDataChecker
                     }
                     else
                     {
-                        Update((ctx, odjfs) => odjfs.GeocodeNextChildCare(ctx));
+                        for (int i = 0; i < geocodeOptions.Count; i++)
+                        {
+                            Update((ctx, odjfs) => odjfs.GeocodeNextChildCare(ctx));
+                        }
                     }
                     break;
             }
