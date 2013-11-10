@@ -2,16 +2,17 @@
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Data.Entity.Migrations;
-using System.Data.SqlClient;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
-using Database;
 using Database.Contexts;
 using Model.Odjfs;
 using Model.Odjfs.ChildCares;
 using Model.Odjfs.ChildCareStubs;
 using NLog;
 using OdjfsScraper.Scrapers;
+using PolyGeocoder.Geocoders;
+using PolyGeocoder.Support;
 using Scraper;
 
 namespace OdjfsDataChecker
@@ -108,7 +109,7 @@ namespace OdjfsDataChecker
                 await UpdateChildCareStub(ctx, stub);
                 return;
             }
-            
+
             if (childCare == null)
             {
                 Logger.Trace("There are no child care or child care stub records matching the selector to scrape.");
@@ -247,7 +248,7 @@ namespace OdjfsDataChecker
             // delete
             if (deleted.Count > 0)
             {
-                foreach (var id in deleted)
+                foreach (string id in deleted)
                 {
                     ChildCareStub stub;
                     if (idToDbStub.TryGetValue(id, out stub))
@@ -272,7 +273,7 @@ namespace OdjfsDataChecker
             {
                 ctx.ChildCareStubs.Add(stub);
             }
-            
+
             // find stubs that we already have records of
             ISet<string> updated = new HashSet<string>(dbStubIds);
             updated.IntersectWith(webIds);
@@ -297,6 +298,88 @@ namespace OdjfsDataChecker
                 childCare.County = ctx.GetAttachedCounty(childCare.County.Name);
                 childCare.CountyId = childCare.County.Id;
             }
+        }
+
+        public async Task GeocodeChildCare(OdjfsEntities ctx, string externalUrlId)
+        {
+            // get the child care in question
+            Logger.Trace("Fecthing child care with ExternalUrlId '{0}' to geocode.", externalUrlId);
+            externalUrlId = (externalUrlId ?? string.Empty).Trim();
+            ChildCare childCare = await ctx
+                .ChildCares
+                .Where(c => c.ExternalUrlId == externalUrlId)
+                .FirstOrDefaultAsync();
+            if (childCare == null)
+            {
+                Logger.Trace("No child care with ExternalUrlId '{0}' was found.", externalUrlId);
+                return;
+            }
+
+            await GeocodeChildCare(ctx, childCare);
+        }
+
+        public async Task GeocodeNextChildCare(OdjfsEntities ctx)
+        {
+            ChildCare childCare = await ctx
+                .ChildCares
+                .Where(c => c.Address != null && (!c.Latitude.HasValue || !c.Longitude.HasValue))
+                .OrderBy(c => c.LastScrapedOn)
+                .FirstOrDefaultAsync();
+            if (childCare == null)
+            {
+                Logger.Trace("There are no child cares to geocode.");
+                return;
+            }
+
+            await GeocodeChildCare(ctx, childCare);
+        }
+
+        private async Task GeocodeChildCare(OdjfsEntities ctx, ChildCare childCare)
+        {
+            Logger.Trace("Geocoding child care '{0}'.", childCare.ExternalUrlId);
+
+            if (childCare.Address == null)
+            {
+                Logger.Trace("The provided child care does not have an address.");
+                return;
+            }
+
+            childCare.LastScrapedOn = DateTime.Now;
+            ctx.ChildCares.AddOrUpdate(childCare);
+            ctx.SaveChanges();
+
+            // generate the address string
+            string address = string.Join(", ", new[]
+            {
+                childCare.Address,
+                childCare.ZipCode.ToString(CultureInfo.InvariantCulture)
+            });
+            Logger.Trace("Geocoding address '{0}'.", address);
+
+            // create the geocoder
+            IClient geocoderClient = new Client(ScraperClient.GetUserAgent());
+            ISimpleGeocoder geocoder = new OpenStreetMapGeocoder(geocoderClient);
+
+            // geocode
+            Response geocoderResponse = await geocoder.GeocodeAsync(address);
+            if (geocoderResponse.Locations.Length != 1)
+            {
+                Logger.Trace("Child care '{0}' could not be reliably geocoded. GeocodedLocationCount: {1}, GeocodedLocationNames: '{2}'.",
+                    childCare.ExternalUrlId,
+                    geocoderResponse.Locations.Length,
+                    string.Join(", ", geocoderResponse.Locations.Select(l => l.Name)));
+            }
+            Location geocoderLocation = geocoderResponse.Locations[0];
+
+            // copy over the latitude and longitude from the response
+            Logger.Trace("Child care '{0}' is at {1}, {2}.", childCare.ExternalUrlId, geocoderLocation.Latitude, geocoderLocation.Longitude);
+            childCare.Latitude = geocoderLocation.Latitude;
+            childCare.Longitude = geocoderLocation.Longitude;
+
+            // save the changes
+            ctx.ChildCares.AddOrUpdate(childCare);
+            Logger.Trace("Saving changes.");
+            await ctx.SaveChangesAsync();
         }
     }
 }

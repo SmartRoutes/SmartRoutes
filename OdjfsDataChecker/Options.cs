@@ -17,6 +17,10 @@ namespace OdjfsDataChecker
             HelpText = "Scrape a specific county.")]
         public CountyOptions CountyOptions { get; set; }
 
+        [VerbOption("geocode",
+            HelpText = "Geocode a child care.")]
+        public GeocodeOptions GeocodeOptions { get; set; }
+
         [HelpVerbOption]
         public string GetUsage(string verb)
         {

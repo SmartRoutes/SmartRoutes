@@ -22,7 +22,7 @@ namespace Scraper
             };
         }
 
-        private static string GetUserAgent()
+        public static string GetUserAgent()
         {
             // get the version at runtime
             string version = Assembly.GetExecutingAssembly().GetInformationalVersion();

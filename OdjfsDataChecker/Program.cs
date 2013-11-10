@@ -49,6 +49,17 @@ namespace OdjfsDataChecker
                     var countyOptions = (CountyOptions) verbOptions;
                     Update((ctx, odjfs) => odjfs.UpdateCounty(ctx, countyOptions.Name));
                     break;
+                case "geocode":
+                    var geocodeOptions = (GeocodeOptions)verbOptions;
+                    if (geocodeOptions.ExternalUrlId != null)
+                    {
+                        Update((ctx, odjfs) => odjfs.GeocodeChildCare(ctx, geocodeOptions.ExternalUrlId));
+                    }
+                    else
+                    {
+                        Update((ctx, odjfs) => odjfs.GeocodeNextChildCare(ctx));
+                    }
+                    break;
             }
 
             return 0;
