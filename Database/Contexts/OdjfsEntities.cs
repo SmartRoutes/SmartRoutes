@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.Entity;
-using System.Linq;
+﻿using System.Data.Entity;
 using Model.Odjfs;
 using Model.Odjfs.ChildCares;
 using Model.Odjfs.ChildCareStubs;
@@ -10,13 +7,6 @@ namespace Database.Contexts
 {
     public class OdjfsEntities : BaseContext
     {
-        private IDictionary<string, County> _attachedCounties;
-
-        static OdjfsEntities()
-        {
-            System.Data.Entity.Database.SetInitializer(new Initializer());
-        }
-
         public OdjfsEntities() : base("Odjfs")
         {
         }
@@ -83,17 +73,6 @@ namespace Database.Contexts
                 .Property(c => c.Id).HasColumnName("CountyId");
         }
 
-        public County GetAttachedCounty(string name)
-        {
-            if (_attachedCounties == null)
-            {
-                // create a dictionary of counties, keyed on their name
-                _attachedCounties = Counties.ToDictionary(c => c.Name);
-            }
-
-            return _attachedCounties[name];
-        }
-
         #region Dependent Entites
 
         public IDbSet<County> Counties { get; set; }
@@ -120,45 +99,5 @@ namespace Database.Contexts
         public IDbSet<DayCamp> DayCamps { get; set; }
 
         #endregion
-
-        private class Initializer : IDatabaseInitializer<OdjfsEntities>
-        {
-            private static readonly string[] CountyNames =
-            {
-                "ADAMS", "ALLEN", "ASHLAND", "ASHTABULA", "ATHENS", "AUGLAIZE", "BELMONT", "BROWN",
-                "BUTLER", "CARROLL", "CHAMPAIGN", "CLARK", "CLERMONT", "CLINTON", "COLUMBIANA", "COSHOCTON",
-                "CRAWFORD", "CUYAHOGA", "DARKE", "DEFIANCE", "DELAWARE", "ERIE", "FAIRFIELD", "FAYETTE",
-                "FRANKLIN", "FULTON", "GALLIA", "GEAUGA", "GREENE", "GUERNSEY", "HAMILTON", "HANCOCK",
-                "HARDIN", "HARRISON", "HENRY", "HIGHLAND", "HOCKING", "HOLMES", "HURON", "JACKSON",
-                "JEFFERSON", "KNOX", "LAKE", "LAWRENCE", "LICKING", "LOGAN", "LORAIN", "LUCAS",
-                "MADISON", "MAHONING", "MARION", "MEDINA", "MEIGS", "MERCER", "MIAMI", "MONROE",
-                "MONTGOMERY", "MORGAN", "MORROW", "MUSKINGUM", "NOBLE", "OTTAWA", "PAULDING", "PERRY",
-                "PICKAWAY", "PIKE", "PORTAGE", "PREBLE", "PUTNAM", "RICHLAND", "ROSS", "SANDUSKY",
-                "SCIOTO", "SENECA", "SHELBY", "STARK", "SUMMIT", "TRUMBULL", "TUSCARAWAS", "UNION",
-                "VAN WERT", "VINTON", "WARREN", "WASHINGTON", "WAYNE", "WILLIAMS", "WOOD", "WYANDOT"
-            };
-
-            public void InitializeDatabase(OdjfsEntities context)
-            {
-                if (!context.Database.Exists())
-                {
-                    context.Database.Create();
-
-                    AddUniqueConstraint(context, typeof (ChildCareStub), "ExternalUrlId");
-                    AddUniqueConstraint(context, typeof (ChildCare), "ExternalUrlId");
-                    AddUniqueConstraint(context, typeof (County), "Name");
-
-                    context.Database.ExecuteSqlCommand(string.Format(
-                        "INSERT INTO {0} (Name) VALUES {1}",
-                        context.GetTableName(typeof (County)),
-                        string.Join(", ", CountyNames.Select(c => string.Format("('{0}')", c)))));
-                }
-            }
-
-            private void AddUniqueConstraint(OdjfsEntities context, Type entityType, string propertyName)
-            {
-                context.Database.ExecuteSqlCommand(string.Format("ALTER TABLE {0} ADD CONSTRAINT [UK_{0}_{1}] UNIQUE ({1})", context.GetTableName(entityType), propertyName));
-            }
-        }
     }
 }

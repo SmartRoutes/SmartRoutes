@@ -41,7 +41,7 @@ namespace OdjfsDataChecker
             ctx.ChildCareStubs.Remove(stub);
             if (newChildCare != null)
             {
-                SetAttachedCounty(ctx, newChildCare);
+                await SetAttachedCountyAsync(ctx, newChildCare);
                 ctx.ChildCares.AddOrUpdate(newChildCare);
             }
             else
@@ -72,7 +72,7 @@ namespace OdjfsDataChecker
             ChildCare newChildCare = await _childCareScraper.Scrape(oldChildCare);
             if (newChildCare != null)
             {
-                SetAttachedCounty(ctx, newChildCare);
+                await SetAttachedCountyAsync(ctx, newChildCare);
                 ctx.ChildCares.AddOrUpdate(newChildCare);
             }
             else
@@ -291,11 +291,11 @@ namespace OdjfsDataChecker
             await ctx.SaveChangesAsync();
         }
 
-        private void SetAttachedCounty(OdjfsEntities ctx, ChildCare childCare)
+        private async Task SetAttachedCountyAsync(OdjfsEntities ctx, ChildCare childCare)
         {
             if (childCare.County != null && childCare.County.Id == 0)
             {
-                childCare.County = ctx.GetAttachedCounty(childCare.County.Name);
+                childCare.County = await ctx.Counties.SingleAsync(c => c.Name == childCare.County.Name);
                 childCare.CountyId = childCare.County.Id;
             }
         }
