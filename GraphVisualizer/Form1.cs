@@ -17,6 +17,7 @@ using Ninject.Extensions.Conventions;
 using Model.Sorta;
 using Graph;
 using Graph.Node;
+using Graph.Comparers;
 using System.IO;
 using Model.Odjfs;
 
@@ -40,28 +41,11 @@ namespace GraphVisualizer
                 .SelectAllClasses()
                 .BindAllInterfaces());
 
-            var collection = kernel.Get<IEntityCollectionParser>().Parse(zipFileBytes);
+            var graph = kernel.Get<IGraph>();
 
-            foreach (StopTime entry in collection.StopTimes)
-            {
-                entry.Stop = collection.Stops.
-                    Single<Stop>(s => s.Id == entry.StopId);
-            }
+            var Nodes = graph.GraphNodes;
 
-            foreach (StopTime entry in collection.StopTimes)
-            {
-                entry.Trip = collection.Trips.
-                    Single<Trip>(s => s.Id == entry.TripId);
-            }
-
-            foreach (Trip entry in collection.Trips)
-            {
-                entry.Shape = collection.Shapes.
-                    Single<Shape>(s => s.Id == entry.ShapeId);
-            }
-            
-            var builder = kernel.Get<IGraphBuilder>();
-            INode[] MetroNodes = builder.BuildGraph(collection);
+            Array.Sort(Nodes, new ComparerForDisplay());
 
             var scene = new ILScene();
             var plotCube = new ILPlotCube(twoDMode: false);
@@ -72,17 +56,17 @@ namespace GraphVisualizer
             
             for (int i = 0; i < 500; i++)
             {
-                INode node = MetroNodes[i];
+                INode node = Nodes[i];
                 foreach (INode neighbor in node.DownwindNeighbors)
                 {               
                     float[] linePoints = 
                     { 
-                        (float)node.Latitude(),
-                        (float)node.Longitude(),
-                        (float)(node.Time() - (new DateTime(1970,1,1))).TotalSeconds / 3600,
-                        (float)neighbor.Latitude(), 
-                        (float)neighbor.Longitude(), 
-                        (float)(neighbor.Time() - (new DateTime(1970,1,1))).TotalSeconds / 3600
+                        (float)node.Latitude,
+                        (float)node.Longitude,
+                        (float)(node.Time - (new DateTime(1970,1,1))).TotalSeconds / 3600,
+                        (float)neighbor.Latitude, 
+                        (float)neighbor.Longitude, 
+                        (float)(neighbor.Time - (new DateTime(1970,1,1))).TotalSeconds / 3600
                     };
 
                     int dimensions = 3, numPoints = 2;

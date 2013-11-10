@@ -11,39 +11,20 @@ namespace Graph.Node
     {
         public ISet<INode> UpwindNeighbors { get; set; }
         public ISet<INode> DownwindNeighbors { get; set; }
-        private double _latitude;
-        private double _longitude;
-        private DateTime _time;
+        public DateTime Time { get; private set; }
+        public double Latitude { get; private set; }
+        public double Longitude { get; private set; }
+        public string Name { get; private set; }
 
-        public ChildCareNode(double latitude, double longitude, DateTime time)
+        public ChildCareNode(double Latitude, double Longitude, DateTime Time)
         {
-            _latitude = latitude;
-            _longitude = longitude;
-            _time = time;
             UpwindNeighbors = new HashSet<INode>();
             DownwindNeighbors = new HashSet<INode>();
+            this.Time = Time;
+            this.Latitude = Latitude;
+            this.Longitude = Longitude;
         }
 
         public ChildCareNode() { }
-
-        public DateTime Time()
-        {
-            return _time;
-        }
-
-        public double Latitude()
-        {
-            return _latitude;
-        }
-
-        public double Longitude()
-        {
-            return _longitude;
-        }
-
-        public string Name()
-        {
-            return "what what";
-        }
     }
 }

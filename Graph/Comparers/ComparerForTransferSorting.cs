@@ -9,24 +9,17 @@ namespace Graph.Comparers
 {
     public class ComparerForTransferSorting : IComparer<IMetroNode>
     {
-        // sorts nodes first by ShapeID, second by Sequence, third by Time
+        // sorts nodes first by StopID, second by by Time
         // allows for transfer connections to be made by iteration
         public int Compare(IMetroNode node1, IMetroNode node2)
         {
-            if (node1.ShapeID() == node2.ShapeID())
+            if (node1.StopID == node2.StopID)
             {
-                if (node1.Sequence() == node2.Sequence())
-                {
-                    return (int)(node1.Time() - node2.Time()).TotalSeconds;
-                }
-                else
-                {
-                    return node1.Sequence() - node2.Sequence();
-                }
+                return (int)(node1.Time - node2.Time).TotalSeconds;
             }
             else
             {
-                return node1.ShapeID() - node2.ShapeID();
+                return node1.StopID - node2.StopID;
             }
         }
     }
