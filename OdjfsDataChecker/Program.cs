@@ -43,14 +43,29 @@ namespace OdjfsDataChecker
                     break;
                 case "childcare":
                     var childCareOptions = (ChildCareOptions) verbOptions;
-                    Update((ctx, odjfs) => odjfs.UpdateChildCare(ctx, childCareOptions.ExternalUrlId));
+                    if (childCareOptions.ExternalUrlId != null)
+                    {
+                        Update((ctx, odjfs) => odjfs.UpdateChildCare(ctx, childCareOptions.ExternalUrlId));
+                    }
+                    else
+                    {
+                        Update((ctx, odjfs) => odjfs.UpdateNextChildCare(ctx));
+                    }
+
                     break;
                 case "county":
                     var countyOptions = (CountyOptions) verbOptions;
-                    Update((ctx, odjfs) => odjfs.UpdateCounty(ctx, countyOptions.Name));
+                    if (countyOptions.Name != null)
+                    {
+                        Update((ctx, odjfs) => odjfs.UpdateCounty(ctx, countyOptions.Name));
+                    }
+                    else
+                    {
+                        Update((ctx, odjfs) => odjfs.UpdateNextCounty(ctx));
+                    }
                     break;
                 case "geocode":
-                    var geocodeOptions = (GeocodeOptions)verbOptions;
+                    var geocodeOptions = (GeocodeOptions) verbOptions;
                     if (geocodeOptions.ExternalUrlId != null)
                     {
                         Update((ctx, odjfs) => odjfs.GeocodeChildCare(ctx, geocodeOptions.ExternalUrlId));
