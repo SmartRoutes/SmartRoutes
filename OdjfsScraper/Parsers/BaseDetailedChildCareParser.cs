@@ -48,8 +48,18 @@ namespace OdjfsScraper.Parsers
             // populate the base fields
             base.PopulateFields(childCare, details);
 
+            // if the address changes, re-geocode
+            string oldAddress = childCare.Address;
+            string newAddress = GetDetailString(details, "Address");
+            childCare.Address = newAddress;
+            if (oldAddress != newAddress)
+            {
+                childCare.Latitude = null;
+                childCare.Longitude = null;
+                childCare.LastGeocodedOn = null;
+            }
+
             // program details table
-            childCare.Address = GetDetailString(details, "Address");
             childCare.CenterStatus = GetDetailString(details, "Center Status");
             childCare.Administrators = GetDetailString(details, "Administrator", "Administrators");
             childCare.ProviderAgreement = GetDetailString(details, "Provider Agreement");
