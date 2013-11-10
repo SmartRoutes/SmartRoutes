@@ -322,8 +322,8 @@ namespace OdjfsDataChecker
         {
             ChildCare childCare = await ctx
                 .ChildCares
-                .Where(c => c.Address != null && (!c.Latitude.HasValue || !c.Longitude.HasValue))
-                .OrderBy(c => c.LastScrapedOn)
+                .Where(c => c.Address != null && (!c.Latitude.HasValue || !c.Longitude.HasValue || !c.LastGeocodedOn.HasValue))
+                .OrderByDescending(c => c.LastGeocodedOn)
                 .FirstOrDefaultAsync();
             if (childCare == null)
             {
@@ -344,7 +344,7 @@ namespace OdjfsDataChecker
                 return;
             }
 
-            childCare.LastScrapedOn = DateTime.Now;
+            childCare.LastGeocodedOn = DateTime.Now;
             ctx.ChildCares.AddOrUpdate(childCare);
             ctx.SaveChanges();
 
