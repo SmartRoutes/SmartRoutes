@@ -49,7 +49,7 @@ namespace Graph
 
                 var heap = new FibonacciHeap<double, double>();
 
-                int count = 1000000;
+                int count = 100000;
                 var rand = new Random();
                 var handles = new FibHeapHandle<double, double>[count];
 
