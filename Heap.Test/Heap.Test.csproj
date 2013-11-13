@@ -3,11 +3,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{995019AF-0B89-4104-8A91-6A35D6177C33}</ProjectGuid>
+    <ProjectGuid>{C68E9BFE-258E-4DD7-B7DC-760E9C6CCBD9}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SortaScraper.Test</RootNamespace>
-    <AssemblyName>SortaScraper.Test</AssemblyName>
+    <RootNamespace>Heap.Test</RootNamespace>
+    <AssemblyName>Heap.Test</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -52,25 +52,13 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="Parsers\AgencyCsvStreamParserTest.cs" />
-    <Compile Include="Parsers\AbstractCsvStreamParserTest.cs" />
-    <Compile Include="Parsers\CsvStreamParserTest.cs" />
-    <Compile Include="Parsers\Person.cs" />
-    <Compile Include="Parsers\PersonCsvStreamParser.cs" />
+    <Compile Include="FibonacciHeapTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Model\Model.csproj">
-      <Project>{711cc508-53a8-4edb-bbca-b911935da4b0}</Project>
-      <Name>Model</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Scraper\Scraper.csproj">
-      <Project>{4401fe23-f94a-4eda-aa76-ccd53548e10e}</Project>
-      <Name>Scraper</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\SortaScraper\SortaScraper.csproj">
-      <Project>{00d91962-12c1-4729-a893-8beeb1599c5e}</Project>
-      <Name>SortaScraper</Name>
+    <ProjectReference Include="..\Heap\Heap.csproj">
+      <Project>{b66c6d7d-6d28-41cd-9ad0-04a944ed5af1}</Project>
+      <Name>Heap</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
@@ -114,6 +102,6 @@
     <Time>
       <Output TaskParameter="Year" PropertyName="Year" />
     </Time>
-    <AssemblyInfo CodeLanguage="CS" OutputFile="Properties\AssemblyInfo.cs" AssemblyTitle="SortaScraper.Test" AssemblyDescription="" AssemblyCompany="" AssemblyProduct="SortaScraper.Test" AssemblyCopyright="Copyright (c) $(Year). All rights reserved." ComVisible="false" CLSCompliant="false" AssemblyInformationalVersion="$(Major).$(Minor).$(Build).$(Revision)" AssemblyVersion="$(Major).$(Minor).$(Build)" AssemblyFileVersion="$(Major).$(Minor).$(Build)" />
+    <AssemblyInfo CodeLanguage="CS" OutputFile="Properties\AssemblyInfo.cs" AssemblyTitle="Heap.Test" AssemblyDescription="" AssemblyCompany="" AssemblyProduct="Heap.Test" AssemblyCopyright="Copyright (c) $(Year). All rights reserved." ComVisible="false" CLSCompliant="false" AssemblyInformationalVersion="$(Major).$(Minor).$(Build).$(Revision)" AssemblyVersion="$(Major).$(Minor).$(Build)" AssemblyFileVersion="$(Major).$(Minor).$(Build)" />
   </Target>
 </Project>
