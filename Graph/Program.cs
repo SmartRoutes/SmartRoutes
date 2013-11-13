@@ -10,12 +10,14 @@ using Scraper;
 using SortaScraper.Parsers;
 using SortaScraper.Support;
 using Model.Sorta;
+using Model.Odjfs.ChildCares;
 using Ninject.Modules;
 using Graph.Node;
 using System.IO;
 using Ionic.Zip;
 using SortaScraper.Scrapers;
 using Heap;
+using Database.Contexts;
 
 namespace Graph
 {
@@ -34,6 +36,16 @@ namespace Graph
                     .SelectAllClasses()
                     .BindAllInterfaces());
 
+                using (var ctx = new OdjfsEntities())
+                {
+                    var childcares = (from c in ctx.ChildCares select c).ToList();
+
+                    foreach (var c in childcares)
+                    {
+                        Console.WriteLine(c.Address);
+                    }
+                }
+
                 // initialize database to small zip file
                 //DatabaseLoader dbloader = new DatabaseLoader(kernel.Get<IEntityCollectionParser>());
                 //dbloader.loadDatabaseFromFile(zipFileBytes).Wait();
@@ -47,24 +59,24 @@ namespace Graph
 
                 //Console.WriteLine("Graph created in {0} milliseconds.", (toc - tic).TotalMilliseconds);
 
-                var heap = new FibonacciHeap<double, double>();
+                //var heap = new FibonacciHeap<double, double>();
 
-                int count = 100000;
-                var rand = new Random();
-                var handles = new FibHeapHandle<double, double>[count];
+                //int count = 100000;
+                //var rand = new Random();
+                //var handles = new FibHeapHandle<double, double>[count];
 
-                for (int i = 0; i < count; i++)
-                {
-                    var num1 = rand.NextDouble();
-                    var num2 = rand.NextDouble();
-                    handles[i] = heap.Insert(num1, num1);
-                }
+                //for (int i = 0; i < count; i++)
+                //{
+                //    var num1 = rand.NextDouble();
+                //    var num2 = rand.NextDouble();
+                //    handles[i] = heap.Insert(num1, num1);
+                //}
 
-                while (!heap.Empty())
-                {
-                    //heap.DeleteMin();
-                    Console.WriteLine(heap.DeleteMin());
-                }
+                //while (!heap.Empty())
+                //{
+                //    //heap.DeleteMin();
+                //    Console.WriteLine(heap.DeleteMin());
+                //}
 
                 Console.ReadLine();
             }
