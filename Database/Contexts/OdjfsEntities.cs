@@ -1,6 +1,4 @@
-﻿using System;
-using System.Data.Entity;
-using System.Linq;
+﻿using System.Data.Entity;
 using Model.Odjfs;
 using Model.Odjfs.ChildCares;
 using Model.Odjfs.ChildCareStubs;
@@ -9,12 +7,7 @@ namespace Database.Contexts
 {
     public class OdjfsEntities : BaseContext
     {
-        static OdjfsEntities()
-        {
-            System.Data.Entity.Database.SetInitializer(new Initializer());
-        }
-
-        public OdjfsEntities() : base("odjfs")
+        public OdjfsEntities() : base("Odjfs")
         {
         }
 
@@ -46,7 +39,6 @@ namespace Database.Contexts
 
             // inheritance: table-per-hierarchy
             modelBuilder.Entity<ChildCareStub>()
-                .Ignore(e => e.ChildCareType)
                 .Map<TypeAHomeStub>(x => x.Requires("ChildCareType").HasValue(TypeAHomeStub.Discriminator))
                 .Map<TypeBHomeStub>(x => x.Requires("ChildCareType").HasValue(TypeBHomeStub.Discriminator))
                 .Map<LicensedCenterStub>(x => x.Requires("ChildCareType").HasValue(LicensedCenterStub.Discriminator))
@@ -60,7 +52,6 @@ namespace Database.Contexts
 
             // inheritance: table-per-type
             modelBuilder.Entity<ChildCare>()
-                .Ignore(e => e.ChildCareType)
                 .Map<TypeBHome>(x => x.Requires("ChildCareType").HasValue(TypeBHome.Discriminator))
                 .Map<DayCamp>(x => x.Requires("ChildCareType").HasValue(DayCamp.Discriminator))
                 .Map<DetailedChildCare>(x => x.Requires("ChildCareType").HasValue(DetailedChildCare.Discriminator));
@@ -108,45 +99,5 @@ namespace Database.Contexts
         public IDbSet<DayCamp> DayCamps { get; set; }
 
         #endregion
-
-        private class Initializer : IDatabaseInitializer<OdjfsEntities>
-        {
-            private static readonly string[] CountyNames =
-            {
-                "ADAMS", "ALLEN", "ASHLAND", "ASHTABULA", "ATHENS", "AUGLAIZE", "BELMONT", "BROWN",
-                "BUTLER", "CARROLL", "CHAMPAIGN", "CLARK", "CLERMONT", "CLINTON", "COLUMBIANA", "COSHOCTON",
-                "CRAWFORD", "CUYAHOGA", "DARKE", "DEFIANCE", "DELAWARE", "ERIE", "FAIRFIELD", "FAYETTE",
-                "FRANKLIN", "FULTON", "GALLIA", "GEAUGA", "GREENE", "GUERNSEY", "HAMILTON", "HANCOCK",
-                "HARDIN", "HARRISON", "HENRY", "HIGHLAND", "HOCKING", "HOLMES", "HURON", "JACKSON",
-                "JEFFERSON", "KNOX", "LAKE", "LAWRENCE", "LICKING", "LOGAN", "LORAIN", "LUCAS",
-                "MADISON", "MAHONING", "MARION", "MEDINA", "MEIGS", "MERCER", "MIAMI", "MONROE",
-                "MONTGOMERY", "MORGAN", "MORROW", "MUSKINGUM", "NOBLE", "OTTAWA", "PAULDING", "PERRY",
-                "PICKAWAY", "PIKE", "PORTAGE", "PREBLE", "PUTNAM", "RICHLAND", "ROSS", "SANDUSKY",
-                "SCIOTO", "SENECA", "SHELBY", "STARK", "SUMMIT", "TRUMBULL", "TUSCARAWAS", "UNION",
-                "VAN WERT", "VINTON", "WARREN", "WASHINGTON", "WAYNE", "WILLIAMS", "WOOD", "WYANDOT"
-            };
-
-            public void InitializeDatabase(OdjfsEntities context)
-            {
-                if (!context.Database.Exists())
-                {
-                    context.Database.Create();
-
-                    AddUniqueConstraint(context, typeof (ChildCareStub), "ExternalUrlId");
-                    AddUniqueConstraint(context, typeof (ChildCare), "ExternalUrlId");
-                    AddUniqueConstraint(context, typeof (County), "Name");
-
-                    context.Database.ExecuteSqlCommand(string.Format(
-                        "INSERT INTO {0} (Name) VALUES {1}",
-                        context.GetTableName(typeof (County)),
-                        string.Join(", ", CountyNames.Select(c => string.Format("('{0}')", c)))));
-                }
-            }
-
-            private void AddUniqueConstraint(OdjfsEntities context, Type entityType, string propertyName)
-            {
-                context.Database.ExecuteSqlCommand(string.Format("ALTER TABLE {0} ADD CONSTRAINT [UK_{0}_{1}] UNIQUE ({1})", context.GetTableName(entityType), propertyName));
-            }
-        }
     }
 }

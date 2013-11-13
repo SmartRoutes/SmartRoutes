@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
 using CsQuery;
@@ -47,8 +48,18 @@ namespace OdjfsScraper.Parsers
             // populate the base fields
             base.PopulateFields(childCare, details);
 
+            // if the address changes, re-geocode
+            string oldAddress = childCare.Address;
+            string newAddress = GetDetailString(details, "Address");
+            childCare.Address = newAddress;
+            if (oldAddress != newAddress)
+            {
+                childCare.Latitude = null;
+                childCare.Longitude = null;
+                childCare.LastGeocodedOn = null;
+            }
+
             // program details table
-            childCare.Address = GetDetailString(details, "Address");
             childCare.CenterStatus = GetDetailString(details, "Center Status");
             childCare.Administrators = GetDetailString(details, "Administrator", "Administrators");
             childCare.ProviderAgreement = GetDetailString(details, "Provider Agreement");
@@ -154,7 +165,7 @@ namespace OdjfsScraper.Parsers
             }
 
             // parse the string
-            Match match = Regex.Match(value, @"^(?<BeginHour>\d{2}):(?<BeginMinute>\d{2}) (?<BeginPeriod>AM|PM) to (?<EndHour>\d{2}):(?<EndMinute>\d{2}) (?<EndPeriod>AM|PM)$");
+            Match match = Regex.Match(value, @"^(?<Begin>\d{2}:\d{2} (?:AM|PM)) to (?<End>\d{2}:\d{2} (?:AM|PM))$");
             if (!match.Success)
             {
                 var exception = new ParserException("An hours of operation string was not in an expected format.");
@@ -162,16 +173,18 @@ namespace OdjfsScraper.Parsers
                 throw exception;
             }
 
-            // create DateTime instances
-            DateTime beginTime = new DateTime(1970, 1, 1)
-                .AddHours(int.Parse(match.Groups["BeginHour"].Value))
-                .AddMinutes(int.Parse(match.Groups["BeginMinute"].Value))
-                .AddHours(match.Groups["BeginPeriod"].Value == "PM" ? 12 : 0);
+            string beginTimeString = match.Groups["Begin"].Value;
+            string endTimeString = match.Groups["End"].Value;
 
-            DateTime endTime = new DateTime(1970, 1, 1)
-                .AddHours(int.Parse(match.Groups["EndHour"].Value))
-                .AddMinutes(int.Parse(match.Groups["EndMinute"].Value))
-                .AddHours(match.Groups["EndPeriod"].Value == "PM" ? 12 : 0);
+            // sometimes "12:00 AM" is listed as the end time... we assume this means midnight of the next day
+            string endDayString = "01";
+            if (endTimeString == "12:00 AM")
+            {
+                endDayString = "02";
+            }
+
+            DateTime beginTime = DateTime.ParseExact(string.Format("1970-01-01 {0}", beginTimeString), "yyyy-MM-dd hh:mm tt", CultureInfo.InvariantCulture);
+            DateTime endTime = DateTime.ParseExact(string.Format("1970-01-{0} {1}", endDayString, endTimeString), "yyyy-MM-dd hh:mm tt", CultureInfo.InvariantCulture);
 
             if (beginTime >= endTime)
             {

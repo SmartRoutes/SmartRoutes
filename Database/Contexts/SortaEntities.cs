@@ -8,7 +8,7 @@ namespace Database.Contexts
 {
     public class SortaEntities : BaseContext
     {
-        public SortaEntities() : base("sorta")
+        public SortaEntities() : base("Sorta")
         {
         }
 

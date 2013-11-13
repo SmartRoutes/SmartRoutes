@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Data.Entity.Migrations;
-using System.Data.SqlClient;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using Database.Contexts;
@@ -11,6 +11,8 @@ using Model.Odjfs.ChildCares;
 using Model.Odjfs.ChildCareStubs;
 using NLog;
 using OdjfsScraper.Scrapers;
+using PolyGeocoder.Geocoders;
+using PolyGeocoder.Support;
 using Scraper;
 
 namespace OdjfsDataChecker
@@ -28,107 +30,155 @@ namespace OdjfsDataChecker
             _childCareScraper = childCareScraper;
         }
 
-        public async Task UpdateChildCareStub(OdjfsEntities ctx, ChildCareStub stub)
+        private async Task UpdateChildCareStub(OdjfsEntities ctx, ChildCareStub stub)
         {
             // record this scrape
             stub.LastScrapedOn = DateTime.Now;
             await ctx.SaveChangesAsync();
 
             Logger.Trace("Stub with ID '{0}' will be scraped.", stub.ExternalUrlId);
-            ChildCare childCare = await _childCareScraper.Scrape(stub);
+            ChildCare newChildCare = await _childCareScraper.Scrape(stub);
             ctx.ChildCareStubs.Remove(stub);
-            if (childCare != null)
+            if (newChildCare != null)
             {
-                ctx.ChildCares.AddOrUpdate(childCare);
+                await SetAttachedCountyAsync(ctx, newChildCare);
+                ctx.ChildCares.AddOrUpdate(newChildCare);
             }
             else
             {
+                Logger.Trace("There was an permanent error getting the full detail page for the child care.");
                 ChildCare existingChildCare = await ctx
                     .ChildCares
                     .Where(c => c.ExternalUrlId == stub.ExternalUrlId)
                     .FirstOrDefaultAsync();
                 if (existingChildCare != null)
                 {
+                    Logger.Trace("The associated child care will be deleted.");
                     ctx.ChildCares.Remove(existingChildCare);
                 }
-                Logger.Trace("The full detail page for the stub could not be found so the child care was deleted.");
             }
 
+            Logger.Trace("Saving changes.");
             await ctx.SaveChangesAsync();
         }
 
-        public async Task UpdateChildCare(OdjfsEntities ctx, ChildCare childCare)
+        private async Task UpdateChildCare(OdjfsEntities ctx, ChildCare oldChildCare)
         {
             // record this scrape
-            childCare.LastScrapedOn = DateTime.Now;
+            oldChildCare.LastScrapedOn = DateTime.Now;
             await ctx.SaveChangesAsync();
 
-            Logger.Trace("Child care with ID '{0}' will be scraped.", childCare.ExternalUrlId);
-            ChildCare newChildCare = await _childCareScraper.Scrape(childCare);
+            Logger.Trace("Child care with ID '{0}' will be scraped.", oldChildCare.ExternalUrlId);
+            ChildCare newChildCare = await _childCareScraper.Scrape(oldChildCare);
             if (newChildCare != null)
             {
+                await SetAttachedCountyAsync(ctx, newChildCare);
                 ctx.ChildCares.AddOrUpdate(newChildCare);
             }
             else
             {
-                ctx.ChildCares.Remove(childCare);
+                Logger.Trace("There was an permanent error getting the full detail page for the child care.");
+                ctx.ChildCares.Remove(oldChildCare);
                 ChildCareStub stub = await ctx
                     .ChildCareStubs
-                    .Where(c => c.ExternalUrlId == childCare.ExternalUrlId)
+                    .Where(c => c.ExternalUrlId == oldChildCare.ExternalUrlId)
                     .FirstOrDefaultAsync();
                 if (stub != null)
                 {
+                    Logger.Trace("The associated stub was deleted.");
                     ctx.ChildCareStubs.Remove(stub);
                 }
-                Logger.Trace("The full detail page for the child care could not be found so the child care was deleted.");
             }
 
+            Logger.Trace("Saving changes.");
             await ctx.SaveChangesAsync();
+        }
+
+        private async Task UpdateChildCareOrStub(OdjfsEntities ctx, Func<IDbSet<ChildCareStub>, Task<ChildCareStub>> childCareStubSelector, Func<IDbSet<ChildCare>, Task<ChildCare>> childCareSelector)
+        {
+            Logger.Trace("Getting the child care to scrape.");
+            Logger.Trace("Checking for a stub matching the selector.");
+            ChildCareStub stub = await childCareStubSelector(ctx.ChildCareStubs);
+
+            Logger.Trace("Checking for a child care matching the selector.");
+            ChildCare childCare = await childCareSelector(ctx.ChildCares);
+
+            if (stub != null && (!stub.LastScrapedOn.HasValue || childCare == null || stub.LastScrapedOn.Value <= childCare.LastScrapedOn))
+            {
+                Logger.Trace("Updating stub with ExternalUrlId '{0}'.", stub.ExternalUrlId);
+                await UpdateChildCareStub(ctx, stub);
+                return;
+            }
+
+            if (childCare == null)
+            {
+                Logger.Trace("There are no child care or child care stub records matching the selector to scrape.");
+                return;
+            }
+
+            await UpdateChildCare(ctx, childCare);
         }
 
         public async Task UpdateNextChildCare(OdjfsEntities ctx)
         {
-            Logger.Trace("Getting the next child care to scrape.");
-            Logger.Trace("Checking for a stub that need to be scraped.");
-            ChildCareStub stub = await ctx
-                .ChildCareStubs
-                .OrderBy(c => c.Id)
-                .FirstOrDefaultAsync();
-            if (stub != null)
-            {
-                await UpdateChildCareStub(ctx, stub);
-            }
-            else
-            {
-                Logger.Trace("No stub was found, so a child care will be checked for updates.");
-                ChildCare childCare = await ctx
-                    .ChildCares
+            Logger.Trace("Fetching the next stub or child care to scrape.");
+            await UpdateChildCareOrStub(
+                ctx,
+                childCareStubs => childCareStubs
+                    .OrderBy(c => c.LastScrapedOn.HasValue)
+                    .ThenBy(c => c.LastScrapedOn)
+                    .FirstOrDefaultAsync(),
+                childCares => childCares
                     .OrderBy(c => c.LastScrapedOn)
-                    .FirstOrDefaultAsync();
+                    .FirstOrDefaultAsync());
+        }
 
-                if (childCare == null)
-                {
-                    Logger.Trace("There are not child care or child care stub records to scrape.");
-                }
-
-                await UpdateChildCare(ctx, childCare);
-            }
+        public async Task UpdateChildCare(OdjfsEntities ctx, string externalUrlId)
+        {
+            Logger.Trace("Fetching the stub or child care with ExternalUrlId '{0}' to scrape.", externalUrlId);
+            await UpdateChildCareOrStub(
+                ctx,
+                childCareStubs => childCareStubs
+                    .FirstOrDefaultAsync(c => c.ExternalUrlId == externalUrlId),
+                childCares => childCares
+                    .FirstOrDefaultAsync(c => c.ExternalUrlId == externalUrlId));
         }
 
         public async Task UpdateNextCounty(OdjfsEntities ctx)
         {
-            Logger.Trace("Getting the next County to scrape.");
-            County county = ctx
-                .Counties
-                .OrderBy(c => c.LastScrapedOn.HasValue)
-                .ThenByDescending(c => c.LastScrapedOn)
-                .First();
-            Logger.Trace("The next county to scrape is '{0}'.", county.Name);
+            Logger.Trace("Fetching the next county to scrape.");
+            await UpdateCounty(
+                ctx,
+                counties => counties
+                    .OrderBy(c => c.LastScrapedOn.HasValue)
+                    .ThenBy(c => c.LastScrapedOn)
+                    .FirstOrDefaultAsync());
+        }
 
+        public async Task UpdateCounty(OdjfsEntities ctx, string name)
+        {
+            Logger.Trace("Fetching the county with Name '{0}' to scrape.", name);
+            await UpdateCounty(
+                ctx,
+                counties => counties
+                    .FirstOrDefaultAsync(c => c.Name.ToUpper() == name.ToUpper()));
+        }
+
+        private async Task UpdateCounty(OdjfsEntities ctx, Func<IDbSet<County>, Task<County>> countySelector)
+        {
+            Logger.Trace("Getting the next County to scrape.");
+            County county = await countySelector(ctx.Counties);
+            if (county == null)
+            {
+                Logger.Trace("No county matching the provided selector was found.");
+                return;
+            }
+
+            Logger.Trace("The next county to scrape is '{0}'.", county.Name);
             await UpdateCounty(ctx, county);
         }
 
-        public async Task UpdateCounty(OdjfsEntities ctx, County county)
+        private async Task UpdateCounty(OdjfsEntities ctx, County county)
         {
             // record this scrape
             county.LastScrapedOn = DateTime.Now;
@@ -161,19 +211,22 @@ namespace OdjfsDataChecker
                 throw exception;
             }
 
-            // get all of the external IDs that could belong to this county
-            ISet<string> dbStubIds = new HashSet<string>(await ctx
+            // get all of the stub that belong to this county or do not have a county
+            // TODO: this code assumes a child care or stub never changed county
+            ChildCareStub[] dbStubs = await ctx
                 .ChildCareStubs
                 .Where(c => c.CountyId == null || c.CountyId == county.Id)
-                .Select(c => c.ExternalUrlId)
-                .ToArrayAsync());
+                .ToArrayAsync();
+            ISet<string> dbStubIds = new HashSet<string>(dbStubs.Select(s => s.ExternalUrlId));
+            IDictionary<string, ChildCareStub> idToDbStub = dbStubs.ToDictionary(s => s.ExternalUrlId);
             Logger.Trace("{0} stubs were found in the database.", dbStubIds.Count);
 
-            ISet<string> dbIds = new HashSet<string>(await ctx
+            ChildCare[] dbChildCares = await ctx
                 .ChildCares
                 .Where(c => c.CountyId == county.Id)
-                .Select(c => c.ExternalUrlId)
-                .ToArrayAsync());
+                .ToArrayAsync();
+            ISet<string> dbIds = new HashSet<string>(dbChildCares.Select(c => c.ExternalUrlId));
+            IDictionary<string, ChildCare> idToDbChildCare = dbChildCares.ToDictionary(c => c.ExternalUrlId);
             Logger.Trace("{0} child cares were found in the database.", dbIds.Count);
 
             if (dbStubIds.Overlaps(dbIds))
@@ -195,13 +248,19 @@ namespace OdjfsDataChecker
             // delete
             if (deleted.Count > 0)
             {
-                // TODO: keep an eye on https://github.com/loresoft/EntityFramework.Extended/issues/62#issuecomment-25361505
-                IEnumerable<SqlParameter> parameters = deleted.Select((id, i) => new SqlParameter("@p" + i, id));
-                string query = "DELETE FROM {0} WHERE ExternalUrlId IN (" + string.Join(", ", parameters.Select(p => p.ParameterName)) + ")";
-
-                // intentionally enumerate the parameters twice, to get new SqlParameter instances per query
-                await ctx.Database.ExecuteSqlCommandAsync(string.Format(query, "odjfs.ChildCareStub"), parameters.ToArray());
-                await ctx.Database.ExecuteSqlCommandAsync(string.Format(query, "odjfs.ChildCare"), parameters.ToArray());
+                foreach (string id in deleted)
+                {
+                    ChildCareStub stub;
+                    if (idToDbStub.TryGetValue(id, out stub))
+                    {
+                        ctx.ChildCareStubs.Remove(stub);
+                    }
+                    ChildCare childCare;
+                    if (idToDbChildCare.TryGetValue(id, out childCare))
+                    {
+                        ctx.ChildCares.Remove(childCare);
+                    }
+                }
             }
 
             // find the newly added child cares
@@ -215,6 +274,110 @@ namespace OdjfsDataChecker
                 ctx.ChildCareStubs.Add(stub);
             }
 
+            // find stubs that we already have records of
+            ISet<string> updated = new HashSet<string>(dbStubIds);
+            updated.IntersectWith(webIds);
+
+            // update
+            foreach (ChildCareStub webStub in webStubs.Where(c => updated.Contains(c.ExternalUrlId)))
+            {
+                ChildCareStub dbStub = idToDbStub[webStub.ExternalUrlId];
+                webStub.Id = dbStub.Id;
+                ctx.ChildCareStubs.AddOrUpdate(webStub);
+            }
+            Logger.Trace("{0} stubs will be updated.", updated.Count);
+
+            Logger.Trace("Saving changes.");
+            await ctx.SaveChangesAsync();
+        }
+
+        private async Task SetAttachedCountyAsync(OdjfsEntities ctx, ChildCare childCare)
+        {
+            if (childCare.County != null && childCare.County.Id == 0)
+            {
+                childCare.County = await ctx.Counties.SingleAsync(c => c.Name == childCare.County.Name);
+                childCare.CountyId = childCare.County.Id;
+            }
+        }
+
+        public async Task GeocodeChildCare(OdjfsEntities ctx, string externalUrlId)
+        {
+            // get the child care in question
+            Logger.Trace("Fecthing child care with ExternalUrlId '{0}' to geocode.", externalUrlId);
+            externalUrlId = (externalUrlId ?? string.Empty).Trim();
+            ChildCare childCare = await ctx
+                .ChildCares
+                .Where(c => c.ExternalUrlId == externalUrlId)
+                .FirstOrDefaultAsync();
+            if (childCare == null)
+            {
+                Logger.Trace("No child care with ExternalUrlId '{0}' was found.", externalUrlId);
+                return;
+            }
+
+            await GeocodeChildCare(ctx, childCare);
+        }
+
+        public async Task GeocodeNextChildCare(OdjfsEntities ctx)
+        {
+            ChildCare childCare = await ctx
+                .ChildCares
+                .Where(c => c.Address != null && (!c.Latitude.HasValue || !c.Longitude.HasValue) && !c.LastGeocodedOn.HasValue)
+                .FirstOrDefaultAsync();
+            if (childCare == null)
+            {
+                Logger.Trace("There are no child cares to geocode.");
+                return;
+            }
+
+            await GeocodeChildCare(ctx, childCare);
+        }
+
+        private async Task GeocodeChildCare(OdjfsEntities ctx, ChildCare childCare)
+        {
+            Logger.Trace("Geocoding child care '{0}'.", childCare.ExternalUrlId);
+
+            if (childCare.Address == null)
+            {
+                Logger.Trace("The provided child care does not have an address.");
+                return;
+            }
+
+            childCare.LastGeocodedOn = DateTime.Now;
+            ctx.ChildCares.AddOrUpdate(childCare);
+            ctx.SaveChanges();
+
+            // generate the address string
+            string address = string.Join(", ", new[]
+            {
+                childCare.Address,
+                childCare.ZipCode.ToString(CultureInfo.InvariantCulture)
+            });
+            Logger.Trace("Geocoding address '{0}'.", address);
+
+            // create the geocoder
+            IClient geocoderClient = new Client(ScraperClient.GetUserAgent());
+            ISimpleGeocoder geocoder = new OpenStreetMapGeocoder(geocoderClient);
+
+            // geocode
+            Response geocoderResponse = await geocoder.GeocodeAsync(address);
+            if (geocoderResponse.Locations.Length != 1)
+            {
+                Logger.Trace("Child care '{0}' could not be reliably geocoded. GeocodedLocationCount: {1}, GeocodedLocationNames: '{2}'.",
+                    childCare.ExternalUrlId,
+                    geocoderResponse.Locations.Length,
+                    string.Join(", ", geocoderResponse.Locations.Select(l => l.Name)));
+                return;
+            }
+            Location geocoderLocation = geocoderResponse.Locations[0];
+
+            // copy over the latitude and longitude from the response
+            Logger.Trace("Child care '{0}' is at {1}, {2}.", childCare.ExternalUrlId, geocoderLocation.Latitude, geocoderLocation.Longitude);
+            childCare.Latitude = geocoderLocation.Latitude;
+            childCare.Longitude = geocoderLocation.Longitude;
+
+            // save the changes
+            ctx.ChildCares.AddOrUpdate(childCare);
             Logger.Trace("Saving changes.");
             await ctx.SaveChangesAsync();
         }
