@@ -49,13 +49,14 @@ namespace Heap.Test
         }
 
         [TestMethod]
+        [ExpectedException(typeof(EmptyHeapException))]
         public void DeleteMin_WithEmptyHeap()
         {
             // ARRANGE
             IFibonacciHeap<int, int> heap = new FibonacciHeap<int, int>();
 
-            // ACT and ASSERT
-            Assert.IsNull(heap.DeleteMin());
+            // ACT
+            heap.DeleteMin();
         }
 
         [TestMethod]
