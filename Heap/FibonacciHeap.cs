@@ -6,16 +6,31 @@ using System.Threading.Tasks;
 
 namespace Heap
 {
-    public class FibonacciHeap<T, K> : IFibonacciHeap<T, K> where K : IComparable
+    [Serializable()]
+    public class EmptyHeapException : Exception
     {
-        private List<FibHeapNode<T, K>> Roots;
-        private FibHeapNode<T, K> Min;
-        private FibHeapNode<T, K>[] RootsOfRank; // index i contains root of rank i
+            public EmptyHeapException() : base() { }
+            public EmptyHeapException(string message) : base(message) { }
+            public EmptyHeapException(string message, System.Exception inner) : base(message, inner) { }
+
+            // A constructor is needed for serialization when an 
+            // exception propagates from a remoting server to the client.  
+            protected EmptyHeapException(System.Runtime.Serialization.SerializationInfo info,
+                System.Runtime.Serialization.StreamingContext context) { }
+    }
+
+
+    public class FibonacciHeap<TValue, TKey> : IFibonacciHeap<TValue, TKey> 
+        where TKey : IComparable
+    {
+        private List<FibHeapNode<TValue, TKey>> Roots;
+        private FibHeapNode<TValue, TKey> Min;
+        private FibHeapNode<TValue, TKey>[] RootsOfRank; // index i contains root of rank i
 
         public FibonacciHeap()
         {
-            Roots = new List<FibHeapNode<T, K>>();
-            RootsOfRank = new FibHeapNode<T,K>[1000]; // you would need a LOT of nodes to get tree of rank 1000
+            Roots = new List<FibHeapNode<TValue, TKey>>();
+            RootsOfRank = new FibHeapNode<TValue,TKey>[1000]; // you would need a LOT of nodes to get tree of rank 1000
 
             for (int i = 0; i < 1000; i++) RootsOfRank[i] = null;
         }
@@ -27,23 +42,25 @@ namespace Heap
         }
 
         // insert an element
-        public FibHeapHandle<T, K> Insert(T Element, K Key)
+        public FibHeapHandle<TValue, TKey> Insert(TValue Element, TKey Key)
         {
             // create new tree
-            var newTree = new FibHeapNode<T, K>(Element, Key);
+            var newTree = new FibHeapNode<TValue, TKey>(Element, Key);
 
             AddToRoot(newTree);
 
             ConsolidateTrees();
 
-            var handle = new FibHeapHandle<T, K>(newTree, this);
+            var handle = new FibHeapHandle<TValue, TKey>(newTree, this);
             newTree.HandleTo = handle;
             return handle;
         }
 
         // get min element and update heap
-        public T DeleteMin()
+        public TValue DeleteMin()
         {
+            if (Empty()) throw new EmptyHeapException();
+
             var ReturnMin = Min;
 
             // remove min from RootsOfRank array, if it is there
@@ -68,7 +85,7 @@ namespace Heap
             return ReturnMin.Element;
         }
 
-        public void UpdateKey(FibHeapHandle<T, K> handle, K newKey)
+        public void UpdateKey(FibHeapHandle<TValue, TKey> handle, TKey newKey)
         {
             if (handle.ValidHandle && handle.ParentHeap == this)
             {
@@ -78,7 +95,7 @@ namespace Heap
         }
 
         // merge two trees
-        private void Link(FibHeapNode<T, K> tree1, FibHeapNode<T, K> tree2)
+        private void Link(FibHeapNode<TValue, TKey> tree1, FibHeapNode<TValue, TKey> tree2)
         {
             if (tree1.Key.CompareTo(tree2.Key) > 0)
             {
@@ -107,7 +124,7 @@ namespace Heap
         private bool InnerConsolidateTrees()
         {
             bool linkNeeded = false;
-            FibHeapNode<T, K> tree1 = null, tree2 = null; // store roots to link while enumerating
+            FibHeapNode<TValue, TKey> tree1 = null, tree2 = null; // store roots to link while enumerating
 
             var RootsEnum = Roots.GetEnumerator();
 
@@ -123,7 +140,7 @@ namespace Heap
                 {
                     linkNeeded = true;
 
-                    if (root.Key.CompareTo(RootsOfRank[root.Rank].Key) <= 0)
+                    if (root.Key.CompareTo(RootsOfRank[root.Rank].Key) < 0)
                     {
                         tree1 = root;
                         tree2 = RootsOfRank[root.Rank];
@@ -146,7 +163,7 @@ namespace Heap
         }
 
         // prune the tree
-        private void CutOrMark(FibHeapNode<T, K> Tree)
+        private void CutOrMark(FibHeapNode<TValue, TKey> Tree)
         {
              // cut tree and it's ancestors
             while (Tree != null)
@@ -156,9 +173,9 @@ namespace Heap
         }
 
         // cuts tree and returns returns next node to cut, or returns null
-        private FibHeapNode<T, K> InnerCutOrMark(FibHeapNode<T, K> Tree)
+        private FibHeapNode<TValue, TKey> InnerCutOrMark(FibHeapNode<TValue, TKey> Tree)
         {
-            FibHeapNode<T, K> ReturnNode = null;
+            FibHeapNode<TValue, TKey> ReturnNode = null;
 
             // don't try to cut root
             if (Tree.Marked == true && Tree.Parent != null)
@@ -188,7 +205,7 @@ namespace Heap
         }
 
         // decrease key value and updates heap
-        private void DecreaseKey(FibHeapNode<T, K> Tree, K newKey)
+        private void DecreaseKey(FibHeapNode<TValue, TKey> Tree, TKey newKey)
         {
             Tree.Key = newKey;
             Tree.HandleTo.key = newKey;
@@ -211,12 +228,12 @@ namespace Heap
         }
 
         // increases key value and updates heap
-        private void IncreaseKey(FibHeapNode<T, K> Tree, K newKey)
+        private void IncreaseKey(FibHeapNode<TValue, TKey> Tree, TKey newKey)
         {
             Tree.Key = newKey;
             Tree.HandleTo.key = newKey;
 
-            FibHeapNode<T, K>[] HeapViolators = (from child in Tree.Children
+            FibHeapNode<TValue, TKey>[] HeapViolators = (from child in Tree.Children
                                 where child.Key.CompareTo(newKey) < 0
                                 select child).ToArray();
 
@@ -237,7 +254,7 @@ namespace Heap
             ConsolidateTrees();
         }
 
-        private void AddToRoot(FibHeapNode<T, K> Tree)
+        private void AddToRoot(FibHeapNode<TValue, TKey> Tree)
         {
             Tree.Marked = false;
             Tree.Parent = null;
