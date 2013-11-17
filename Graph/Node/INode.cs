@@ -11,9 +11,9 @@ namespace Graph.Node
     {
         ISet<INode> UpwindNeighbors { get; set; }
         ISet<INode> DownwindNeighbors { get; set; }
-        DateTime Time();
-        double Latitude();
-        double Longitude();
-        string Name();
+        DateTime Time { get; }
+        double Latitude { get; }
+        double Longitude { get; }
+        string Name { get; }
     }
 }

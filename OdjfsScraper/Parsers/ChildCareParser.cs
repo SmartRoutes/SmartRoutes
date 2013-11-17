@@ -48,6 +48,9 @@ namespace OdjfsScraper.Parsers
                 throw exception;
             }
 
+            // copy over the external URL ID
+            childCare.ExternalUrlId = childCareStub.ExternalUrlId;
+
             childCare = Parse(childCare, bytes);
 
             // TODO: UTC?

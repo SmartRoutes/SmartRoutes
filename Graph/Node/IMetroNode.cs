@@ -9,9 +9,10 @@ namespace Graph.Node
 {
     public interface IMetroNode : INode
     {
-        int TripID();
-        int Sequence();
-        int ShapeID();
+        int StopID { get; }
+        int TripID { get; }
+        int Sequence { get; }
+
         IMetroNode CreateNode(StopTime stopTime);
     }
 }

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Ninject;
 using Ninject.Modules;
 using Graph.Node;
+using Heap;
 
 namespace Graph
 {
@@ -17,6 +18,8 @@ namespace Graph
             Bind<IChildcareNode>().To<ChildCareNode>();
             Bind<IGraphBuilder>().To<GraphBuilder>();
             Bind<IGraph>().To<Graph>();
+            Bind<IFibonacciHeap<INode, TimeSpan>>()
+                .To<FibonacciHeap<INode, TimeSpan>>();
         }
     }
 }
