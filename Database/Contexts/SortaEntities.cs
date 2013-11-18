@@ -59,6 +59,17 @@ namespace Database.Contexts
                 .HasOptional(s => s.ParentStop)
                 .WithMany(s => s.ChildStops)
                 .HasForeignKey(s => s.ParentId);
+
+            // map the unidirectional many-to-many for Stop.CloseStops
+            modelBuilder
+                .Entity<Stop>()
+                .HasKey(s => s.Id)
+                .HasMany(s => s.CloseStops)
+                .WithMany()
+                .Map(c => c
+                    .ToTable("CloseStop")
+                    .MapLeftKey("StopId")
+                    .MapRightKey("CloseStopId"));
         }
     }
 }
