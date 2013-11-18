@@ -51,6 +51,14 @@ namespace Database.Contexts
             modelBuilder
                 .Types()
                 .Configure(c => c.ToTable(GetTableName(c.ClrType)));
+
+            // map the one-to-many for Stop.ChildStops
+            modelBuilder
+                .Entity<Stop>()
+                .HasKey(s => s.Id)
+                .HasOptional(s => s.ParentStop)
+                .WithMany(s => s.ChildStops)
+                .HasForeignKey(s => s.ParentId);
         }
     }
 }
