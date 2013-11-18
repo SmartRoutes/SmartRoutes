@@ -23,7 +23,7 @@ namespace Graph
 {
     class Program
     {
-        private static Byte[] zipFileBytes = File.ReadAllBytes("C:\\Users\\alcaz0r\\Documents\\School\\CS Senior Design\\streetsmartz\\Sandbox\\sorta\\google_transit_info.zip");
+        private static Byte[] zipFileBytes = File.ReadAllBytes("C:\\DatabaseBackups\\sorta_subset_1_16.zip");
 
         static void Main(string[] args)
         {
@@ -36,47 +36,17 @@ namespace Graph
                     .SelectAllClasses()
                     .BindAllInterfaces());
 
-                using (var ctx = new OdjfsEntities())
-                {
-                    var childcares = (from c in ctx.ChildCares select c).ToList();
+                //var loader = kernel.Get<DatabaseLoader>();
+                //loader.loadDatabaseFromFile(zipFileBytes).Wait();
 
-                    foreach (var c in childcares)
-                    {
-                        Console.WriteLine(c.Address);
-                    }
-                }
+                Console.WriteLine("Creating Graph.");
+                DateTime tic = DateTime.Now;
 
-                // initialize database to small zip file
-                //DatabaseLoader dbloader = new DatabaseLoader(kernel.Get<IEntityCollectionParser>());
-                //dbloader.loadDatabaseFromFile(zipFileBytes).Wait();
+                var graph = kernel.Get<IGraph>();
 
-                //Console.WriteLine("Creating Graph.");
-                //DateTime tic = DateTime.Now;
+                DateTime toc = DateTime.Now;
 
-                //var graph = kernel.Get<IGraph>();
-
-                //DateTime toc = DateTime.Now;
-
-                //Console.WriteLine("Graph created in {0} milliseconds.", (toc - tic).TotalMilliseconds);
-
-                //var heap = new FibonacciHeap<double, double>();
-
-                //int count = 100000;
-                //var rand = new Random();
-                //var handles = new FibHeapHandle<double, double>[count];
-
-                //for (int i = 0; i < count; i++)
-                //{
-                //    var num1 = rand.NextDouble();
-                //    var num2 = rand.NextDouble();
-                //    handles[i] = heap.Insert(num1, num1);
-                //}
-
-                //while (!heap.Empty())
-                //{
-                //    //heap.DeleteMin();
-                //    Console.WriteLine(heap.DeleteMin());
-                //}
+                Console.WriteLine("Graph created in {0} milliseconds.", (toc - tic).TotalMilliseconds);
 
                 Console.ReadLine();
             }

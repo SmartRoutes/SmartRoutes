@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Model.Odjfs;
+using Model.Odjfs.ChildCares;
 
 namespace Graph.Node
 {
@@ -16,15 +16,21 @@ namespace Graph.Node
         public double Longitude { get; private set; }
         public string Name { get; private set; }
 
-        public ChildCareNode(double Latitude, double Longitude, DateTime Time)
+        public ChildCareNode(ChildCare childcare, DateTime Time)
         {
             UpwindNeighbors = new HashSet<INode>();
             DownwindNeighbors = new HashSet<INode>();
             this.Time = Time;
-            this.Latitude = Latitude;
-            this.Longitude = Longitude;
-        }
+            this.Name = childcare.Name;
+            
+            // assume value is not null
+            if (childcare.Latitude == null || childcare.Longitude == null)
+            {
+                throw new ArgumentNullException("Attempt to create childcare node without Latitude / Longitude defined.");
+            }
 
-        public ChildCareNode() { }
+            this.Latitude = childcare.Latitude.Value;
+            this.Longitude = childcare.Longitude.Value;
+        }
     }
 }

@@ -5,11 +5,12 @@ using System.Text;
 using System.Threading.Tasks;
 using SortaScraper.Support;
 using Graph.Node;
+using Model.Odjfs.ChildCares;
 
 namespace Graph
 {
     public interface IGraphBuilder
     {
-        INode[] BuildGraph(EntityCollection collection);
+        INode[] BuildGraph(EntityCollection Collection, IEnumerable<ChildCare> ChildCares);
     }
 }

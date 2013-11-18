@@ -11,6 +11,7 @@ using SortaScraper.Support;
 using SortaScraper.Scrapers;
 using SortaDataChecker;
 using Model.Sorta;
+using Model.Odjfs.ChildCares;
 using Heap;
 
 namespace Graph
@@ -38,7 +39,8 @@ namespace Graph
     {
         private readonly IGraphBuilder Builder;
         private EntityCollection Collection;
-        private Dictionary<INode, NodeInfo> SearchInfo;
+        private ChildCare[] ChildCares;
+        private Dictionary<INode, NodeInfo> SearchInfo { get; set; }
         public INode[] GraphNodes { get; private set; }
         public IFibonacciHeap<INode, TimeSpan> Queue { get; set; }
 
@@ -46,11 +48,20 @@ namespace Graph
         {
             this.Queue = Queue;
             this.Builder = Builder;
-            updateSortaEntities();
-            GraphNodes = Builder.BuildGraph(Collection);
+            GetSortaEntities();
+            GetChildCares();
+            GraphNodes = Builder.BuildGraph(Collection, ChildCares);
         }
 
-        public void updateSortaEntities()
+        public void GetChildCares()
+        {
+            using (var ctx = new OdjfsEntities())
+            {
+                ChildCares = (from c in ctx.ChildCares select c).ToArray();
+            }
+        }
+
+        public void GetSortaEntities()
         {
             Collection = new EntityCollection();
 
@@ -73,6 +84,8 @@ namespace Graph
 
         public NodeInfo Dijkstras(ISet<INode> StartNodes, Func<INode, bool> GoalCheck, Direction direction)
         {
+            SearchInfo = new Dictionary<INode, NodeInfo>();
+
             // assign search info to StartNodes and place them in queue
             foreach (var node in StartNodes)
             {

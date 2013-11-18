@@ -25,8 +25,6 @@ namespace GraphVisualizer
 {
     public partial class Form1 : Form 
     {
-        private static Byte[] zipFileBytes = File.ReadAllBytes("C:\\Users\\alcaz0r\\Documents\\School\\CS Senior Design\\streetsmartz\\Sandbox\\sorta\\google_transit_info.zip");
-
         public Form1()
         {
             InitializeComponent();
@@ -54,7 +52,7 @@ namespace GraphVisualizer
             plotCube.Axes.YAxis.Label.Text = "Longitude";
             plotCube.Axes.ZAxis.Label.Text = "Time";
             
-            for (int i = 0; i < 500; i++)
+            for (int i = 0; i < 1000; i++)
             {
                 INode node = Nodes[i];
                 foreach (INode neighbor in node.DownwindNeighbors)
