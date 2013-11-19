@@ -10,8 +10,8 @@ namespace Graph
 {
     public interface IGraph
     {
-        IFibonacciHeap<INode, TimeSpan> Queue { get; set; }
-        void updateSortaEntities();
+        void GetSortaEntities();
+        void GetChildCares();
         NodeInfo Dijkstras(ISet<INode> StartNodes, Func<INode, bool> GoalCheck, Direction direction);
         INode[] GraphNodes { get; }
     }
