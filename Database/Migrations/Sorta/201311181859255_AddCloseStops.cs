@@ -18,6 +18,9 @@ namespace Database.Migrations.Sorta
                 .ForeignKey("dbo.Stop", t => t.CloseStopId)
                 .Index(t => t.StopId)
                 .Index(t => t.CloseStopId);
+
+            // after this migration, we need to re-parse
+            Sql("DELETE FROM dbo.Archive");
         }
 
         public override void Down()
@@ -27,6 +30,9 @@ namespace Database.Migrations.Sorta
             DropIndex("dbo.CloseStop", new[] {"CloseStopId"});
             DropIndex("dbo.CloseStop", new[] {"StopId"});
             DropTable("dbo.CloseStop");
+
+            // after this migration, we need to re-parse
+            Sql("DELETE FROM dbo.Archive");
         }
     }
 }
