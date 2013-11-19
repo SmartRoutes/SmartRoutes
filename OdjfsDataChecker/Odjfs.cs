@@ -350,7 +350,12 @@ namespace OdjfsDataChecker
 
             // create the geocoder
             IClient geocoderClient = new Client(ScraperClient.GetUserAgent());
-            ISimpleGeocoder geocoder = new MapQuestGeocoder(geocoderClient, MapQuestGeocoder.LicensedEndpoint, ConfigurationManager.AppSettings["MapQuestKey"]);
+            string mapQuestKey = ConfigurationManager.AppSettings["MapQuestKey"];
+            if (string.IsNullOrWhiteSpace(mapQuestKey))
+            {
+                throw new ConfigurationErrorsException("The MapQuestKey configuration key is not specified.");
+            }
+            ISimpleGeocoder geocoder = new MapQuestGeocoder(geocoderClient, MapQuestGeocoder.LicensedEndpoint, mapQuestKey);
 
             // geocode based off the full address
             Location geocoderLocation = await GetGeocodedLocation(geocoder, string.Join(", ", new[]
