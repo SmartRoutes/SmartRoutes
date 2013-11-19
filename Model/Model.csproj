@@ -37,6 +37,9 @@
     <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ExtensionMethods.cs" />
+    <Compile Include="INullableLocation.cs" />
+    <Compile Include="ILocation.cs" />
     <Compile Include="Odjfs\ChildCareStubs\TypeBHomeStub.cs" />
     <Compile Include="Odjfs\ChildCareStubs\TypeAHomeStub.cs" />
     <Compile Include="Odjfs\ChildCareStubs\LicensedCenterStub.cs" />

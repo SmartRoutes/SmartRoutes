@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Model;
 using Model.Odjfs.ChildCares;
 using SortaScraper.Support;
 using Model.Sorta;
@@ -135,7 +136,7 @@ namespace Graph
                     {
                         var Stop2 = enumerator2.Current;
 
-                        if (GetL1DistanceInFeet(Stop1, Stop2) < MaxFeetBetweenTransfers)
+                        if (Stop1.GetL1DistanceInFeet(Stop2) < MaxFeetBetweenTransfers)
                         {
                             Stop1NearestList.Add(Stop2.Id);
                         }
@@ -178,7 +179,7 @@ namespace Graph
                         if (Nodes.Count == 0) continue; // not sure if this is possible
 
                         // calculate walking time, will be same for all nodes in list, so use first
-                        double WalkingTime = GetL1DistanceInFeet(node1, Nodes.First()) / WalkingFeetPerSecond;
+                        double WalkingTime = node1.GetL1DistanceInFeet(Nodes.First()) / WalkingFeetPerSecond;
                         DateTime MinTime = node1.Time + new TimeSpan(0, 0, (int)Math.Ceiling(WalkingTime));
 
                         // thanks to sorting, these nodes are iterated in ascending time
@@ -235,7 +236,7 @@ namespace Graph
                 {
                     var stop = StopEnumerator.Current;
 
-                    double WalkingTime = GetL1DistanceInFeet(childcare, stop);
+                    double WalkingTime = childcare.GetL1DistanceInFeet(stop);
 
                     if (WalkingTime < MaxFeetFromChildCareToBuStop)
                     {
@@ -276,7 +277,7 @@ namespace Graph
                     // make sure we have some nodes to work with
                     if (nodes.Count == 0) continue;
 
-                    var distance = GetL1DistanceInFeet(childcare, nodes.First());
+                    var distance = childcare.GetL1DistanceInFeet(nodes.First());
                     var walkingTime = TimeSpan.FromSeconds(distance / WalkingFeetPerSecond);
 
                     // for each metro node, create upwind / downwind ChildCare nodes and connect them
@@ -317,37 +318,5 @@ namespace Graph
 
             return GraphNodeList.ToArray();
         }
-
-        private double GetL1DistanceInFeet(double Lat1, double Lon1, double Lat2, double Lon2)
-        {
-            double R = 20092000.0; // radius of earth in feet
-            double dx = R * Math.Cos(Lat1) * (Lon2 - Lon1);
-            double dy = R * (Lat2 - Lat1);
-            return Math.Abs(dx) + Math.Abs(dy);
-        }
-
-        #region GetL1DistanceInFeet overloads
-
-        private double GetL1DistanceInFeet(INode Node1, INode Node2)
-        {
-            return GetL1DistanceInFeet(Node1.Latitude, Node1.Longitude, Node2.Latitude, Node2.Longitude);
-        }
-
-        private double GetL1DistanceInFeet(Stop Stop1, Stop Stop2)
-        {
-            return GetL1DistanceInFeet(Stop1.Latitude, Stop1.Longitude, Stop2.Latitude, Stop2.Longitude);
-        }
-
-        private double GetL1DistanceInFeet(ChildCare childcare, Stop stop)
-        {
-            return GetL1DistanceInFeet(childcare.Latitude.Value, childcare.Longitude.Value, stop.Latitude, stop.Longitude);
-        }
-
-        private double GetL1DistanceInFeet(ChildCare childcare, INode node)
-        {
-            return GetL1DistanceInFeet(childcare.Latitude.Value, childcare.Longitude.Value, node.Latitude, node.Longitude);
-        }
-
-        #endregion
     }
 }

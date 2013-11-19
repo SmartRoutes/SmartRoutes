@@ -3,7 +3,7 @@ using System.Collections.ObjectModel;
 
 namespace Model.Sorta
 {
-    public class Stop
+    public class Stop : ILocation
     {
         private ICollection<Stop> _childStops;
         private ICollection<Stop> _closeStops;
