@@ -2,7 +2,9 @@
 using System.IO;
 using System.Linq;
 using Ionic.Zip;
+using Model;
 using Model.Sorta;
+using NLog;
 using Scraper;
 using SortaScraper.Support;
 
@@ -10,6 +12,9 @@ namespace SortaScraper.Parsers
 {
     public class EntityCollectionParser : IEntityCollectionParser
     {
+        private const double MaxFeetBetweenTransfers = 500;
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+
         private readonly ICsvStreamParser<Agency> _agencyParser;
         private readonly ICsvStreamParser<Route> _routeParser;
         private readonly ICsvStreamParser<ServiceException> _serviceExceptionParser;
@@ -37,6 +42,7 @@ namespace SortaScraper.Parsers
             var collection = new EntityCollection();
 
             // extract files from the zip
+            Logger.Trace("Parsing the zip file.");
             using (ZipFile zipFile = ZipFile.Read(new MemoryStream(bytes)))
             {
                 foreach (ZipEntry entry in zipFile.Entries)
@@ -89,10 +95,31 @@ namespace SortaScraper.Parsers
                 }
             }
 
-            // associate entities
+            Logger.Trace("Associating the resulting entities.");
             Associate(collection);
 
+            Logger.Trace("Calculating close stops.");
+            PopulateCloseStops(collection.Stops);
+
             return collection;
+        }
+
+        private void PopulateCloseStops(IEnumerable<Stop> stops)
+        {
+            // enumerate the stops
+            Stop[] stopArray = stops.ToArray();
+
+            // compare every stop against every other stop
+            foreach (Stop stopA in stopArray)
+            {
+                foreach (Stop stopB in stopArray)
+                {
+                    if (stopA.GetL1DistanceInFeet(stopB) < MaxFeetBetweenTransfers)
+                    {
+                        stopA.CloseStops.Add(stopB);
+                    }
+                }
+            }
         }
 
         private void Associate(EntityCollection collection)

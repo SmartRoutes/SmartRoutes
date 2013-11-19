@@ -20,7 +20,6 @@ namespace Graph
     {
         private readonly IMetroNode _metroNodeMaker;
         private Logger Logger = LogManager.GetCurrentClassLogger();
-        private static double MaxFeetBetweenTransfers = 500;
         private static double MaxFeetFromChildCareToBuStop = 5000; // just want to see connections get made for now
         private static double WalkingFeetPerSecond = 1.5;
         private Dictionary<int, List<int>> StopToNearest; // from StopID to list of StopID's of nearest Stops
@@ -127,22 +126,9 @@ namespace Graph
                 while (enumerator1.MoveNext())
                 {
                     var Stop1 = enumerator1.Current;
-                    var Stop1NearestList = new List<int>();
 
                     // associate Id's of closest stops with this stop
-                    var enumerator2 = collection.Stops.GetEnumerator();
-
-                    while (enumerator2.MoveNext())
-                    {
-                        var Stop2 = enumerator2.Current;
-
-                        if (Stop1.GetL1DistanceInFeet(Stop2) < MaxFeetBetweenTransfers)
-                        {
-                            Stop1NearestList.Add(Stop2.Id);
-                        }
-                    }
-
-                    StopToNearest.Add(Stop1.Id, Stop1NearestList);
+                    StopToNearest.Add(Stop1.Id, Stop1.ChildStops.Select(s => s.Id).ToList());
 
                     // associate MetroNodes which contain this stop with this stop
                     var Stop1NodeList = new List<IMetroNode>();

@@ -68,7 +68,7 @@ namespace Graph
             using (var ctx = new SortaEntities())
             {
                 Collection.StopTimes = (from e in ctx.StopTimes select e).ToList();
-                Collection.Stops = (from e in ctx.Stops select e).ToList();
+                Collection.Stops = (from e in ctx.Stops select e).Include(s => s.CloseStops).ToList();
                 Collection.Routes = (from e in ctx.Routes select e).ToList();
                 Collection.Shapes = (from e in ctx.Shapes select e).ToList();
                 Collection.ShapePoints = (from e in ctx.ShapePoints select e).ToList();
