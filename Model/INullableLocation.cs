@@ -1,4 +1,4 @@
-﻿namespace Model
+﻿namespace SmartRoutes.Model
 {
     public interface ILocation
     {

@@ -1,6 +1,6 @@
-﻿using Model.Odjfs.ChildCares;
+﻿using SmartRoutes.Model.Odjfs.ChildCares;
 
-namespace Model.Odjfs.ChildCareStubs
+namespace SmartRoutes.Model.Odjfs.ChildCareStubs
 {
     public class DayCampStub : ChildCareStub
     {

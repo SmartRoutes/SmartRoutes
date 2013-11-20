@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using Model.Odjfs;
-using Model.Odjfs.ChildCares;
-using Model.Odjfs.ChildCareStubs;
+using SmartRoutes.Model.Odjfs;
+using SmartRoutes.Model.Odjfs.ChildCares;
+using SmartRoutes.Model.Odjfs.ChildCareStubs;
 
 namespace OdjfsScraper.Scrapers
 {

@@ -1,7 +1,7 @@
 using System.Data.Entity.Migrations;
 using System.Linq;
 using Database.Contexts;
-using Model.Odjfs;
+using SmartRoutes.Model.Odjfs;
 
 namespace Database.Migrations.Odjfs
 {

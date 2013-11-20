@@ -5,7 +5,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using Database.Contexts;
-using Model.Odjfs.ChildCares;
+using SmartRoutes.Model.Odjfs.ChildCares;
 
 namespace GeocoderComparisonLoader
 {

@@ -2,8 +2,8 @@
 using System.IO;
 using System.Linq;
 using Ionic.Zip;
-using Model;
-using Model.Sorta;
+using SmartRoutes.Model;
+using SmartRoutes.Model.Sorta;
 using NLog;
 using Scraper;
 using SortaScraper.Support;

@@ -10,8 +10,8 @@ using Graph.Node;
 using SortaScraper.Support;
 using SortaScraper.Scrapers;
 using SortaDataChecker;
-using Model.Sorta;
-using Model.Odjfs.ChildCares;
+using SmartRoutes.Model.Sorta;
+using SmartRoutes.Model.Odjfs.ChildCares;
 using Heap;
 
 namespace Graph

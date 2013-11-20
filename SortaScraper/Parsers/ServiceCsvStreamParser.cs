@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
-using Model.Sorta;
+using SmartRoutes.Model.Sorta;
 using Scraper;
 
 namespace SortaScraper.Parsers

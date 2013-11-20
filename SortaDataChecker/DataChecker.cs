@@ -3,7 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Database;
 using Database.Contexts;
-using Model.Sorta;
+using SmartRoutes.Model.Sorta;
 using NLog;
 using SortaScraper.Scrapers;
 using SortaScraper.Support;

@@ -14,12 +14,12 @@ using SortaScraper.Parsers;
 using SortaScraper.Support;
 using Ninject;
 using Ninject.Extensions.Conventions;
-using Model.Sorta;
+using SmartRoutes.Model.Sorta;
 using Graph;
 using Graph.Node;
 using Graph.Comparers;
 using System.IO;
-using Model.Odjfs;
+using SmartRoutes.Model.Odjfs;
 
 namespace GraphVisualizer
 {

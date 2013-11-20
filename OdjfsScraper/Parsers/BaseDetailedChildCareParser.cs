@@ -4,7 +4,7 @@ using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
 using CsQuery;
-using Model.Odjfs.ChildCares;
+using SmartRoutes.Model.Odjfs.ChildCares;
 using NLog;
 using OdjfsScraper.Support;
 using Scraper;

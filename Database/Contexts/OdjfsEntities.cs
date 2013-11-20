@@ -1,7 +1,7 @@
 ﻿using System.Data.Entity;
-using Model.Odjfs;
-using Model.Odjfs.ChildCares;
-using Model.Odjfs.ChildCareStubs;
+using SmartRoutes.Model.Odjfs;
+using SmartRoutes.Model.Odjfs.ChildCares;
+using SmartRoutes.Model.Odjfs.ChildCareStubs;
 
 namespace Database.Contexts
 {
