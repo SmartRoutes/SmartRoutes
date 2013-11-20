@@ -8,7 +8,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>SmartRoutes.Model</RootNamespace>
-    <AssemblyName>Model</AssemblyName>
+    <AssemblyName>SmartRoutes.Model</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
@@ -87,6 +87,6 @@
     <Time>
       <Output TaskParameter="Year" PropertyName="Year" />
     </Time>
-    <AssemblyInfo CodeLanguage="CS" OutputFile="Properties\AssemblyInfo.cs" AssemblyTitle="Model" AssemblyDescription="" AssemblyCompany="" AssemblyProduct="Model" AssemblyCopyright="Copyright (c) $(Year). All rights reserved." ComVisible="false" CLSCompliant="false" AssemblyInformationalVersion="$(Major).$(Minor).$(Build).$(Revision)" AssemblyVersion="$(Major).$(Minor).$(Build)" AssemblyFileVersion="$(Major).$(Minor).$(Build)" />
+    <AssemblyInfo CodeLanguage="CS" OutputFile="Properties\AssemblyInfo.cs" AssemblyTitle="SmartRoutes.Model" AssemblyDescription="" AssemblyCompany="" AssemblyProduct="SmartRoutes.Model" AssemblyCopyright="Copyright (c) $(Year). All rights reserved." ComVisible="false" CLSCompliant="false" AssemblyInformationalVersion="$(Major).$(Minor).$(Build).$(Revision)" AssemblyVersion="$(Major).$(Minor).$(Build)" AssemblyFileVersion="$(Major).$(Minor).$(Build)" />
   </Target>
 </Project>
