@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Model
+namespace SmartRoutes.Model
 {
     public static class ExtensionMethods
     {

@@ -1,6 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Model.Sorta;
+using SmartRoutes.Model.Sorta;
 using SortaScraper.Parsers;
+using SortaScraper.Test.Parsers.Support;
 
 namespace SortaScraper.Test.Parsers
 {

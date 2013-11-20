@@ -2,7 +2,7 @@
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
-using Model.Sorta;
+using SmartRoutes.Model.Sorta;
 using NLog;
 using Scraper;
 using SortaScraper.Parsers;

@@ -53,10 +53,10 @@
   </Choose>
   <ItemGroup>
     <Compile Include="Parsers\AgencyCsvStreamParserTest.cs" />
-    <Compile Include="Parsers\AbstractCsvStreamParserTest.cs" />
+    <Compile Include="Parsers\Support\AbstractCsvStreamParserTest.cs" />
     <Compile Include="Parsers\CsvStreamParserTest.cs" />
-    <Compile Include="Parsers\Person.cs" />
-    <Compile Include="Parsers\PersonCsvStreamParser.cs" />
+    <Compile Include="Parsers\Support\Person.cs" />
+    <Compile Include="Parsers\Support\PersonCsvStreamParser.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

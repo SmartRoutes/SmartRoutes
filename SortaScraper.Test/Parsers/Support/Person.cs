@@ -1,4 +1,4 @@
-﻿namespace SortaScraper.Test.Parsers
+﻿namespace SortaScraper.Test.Parsers.Support
 {
     public class Person
     {

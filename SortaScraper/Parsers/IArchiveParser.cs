@@ -1,5 +1,5 @@
 ﻿using System.Net.Http.Headers;
-using Model.Sorta;
+using SmartRoutes.Model.Sorta;
 
 namespace SortaScraper.Parsers
 {

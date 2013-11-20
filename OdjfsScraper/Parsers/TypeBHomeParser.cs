@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using Model.Odjfs.ChildCares;
+using SmartRoutes.Model.Odjfs.ChildCares;
 
 namespace OdjfsScraper.Parsers
 {
@@ -11,7 +11,7 @@ namespace OdjfsScraper.Parsers
             base.PopulateFields(childCare, details);
 
             childCare.CertificationBeginDate = GetDetailString(details, "Certification Begin Date");
-            childCare.CertificationEndDate = GetDetailString(details, "Certification Expiration Date");
+            childCare.CertificationExpirationDate = GetDetailString(details, "Certification Expiration Date");
         }
     }
 }

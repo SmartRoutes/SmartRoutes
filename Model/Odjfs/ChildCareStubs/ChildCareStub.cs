@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Model.Odjfs.ChildCareStubs
+namespace SmartRoutes.Model.Odjfs.ChildCareStubs
 {
     public abstract class ChildCareStub
     {

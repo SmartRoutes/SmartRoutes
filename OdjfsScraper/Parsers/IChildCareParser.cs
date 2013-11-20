@@ -1,5 +1,5 @@
-﻿using Model.Odjfs.ChildCares;
-using Model.Odjfs.ChildCareStubs;
+﻿using SmartRoutes.Model.Odjfs.ChildCares;
+using SmartRoutes.Model.Odjfs.ChildCareStubs;
 
 namespace OdjfsScraper.Parsers
 {

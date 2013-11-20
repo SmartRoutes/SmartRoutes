@@ -6,7 +6,7 @@ using System.Text;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Scraper;
 
-namespace SortaScraper.Test.Parsers
+namespace SortaScraper.Test.Parsers.Support
 {
     public abstract class AbstractCsvStreamParserTest<T>
     {

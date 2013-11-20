@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Model.Sorta
+namespace SmartRoutes.Model.Sorta
 {
     public class StopTime
     {

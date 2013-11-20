@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
-using Model.Odjfs;
-using Model.Odjfs.ChildCareStubs;
+using SmartRoutes.Model.Odjfs;
+using SmartRoutes.Model.Odjfs.ChildCareStubs;
 using NLog;
 using OdjfsScraper.Parsers;
 using OdjfsScraper.Support;

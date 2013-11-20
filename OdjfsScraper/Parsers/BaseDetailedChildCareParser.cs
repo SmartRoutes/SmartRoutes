@@ -4,7 +4,7 @@ using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
 using CsQuery;
-using Model.Odjfs.ChildCares;
+using SmartRoutes.Model.Odjfs.ChildCares;
 using NLog;
 using OdjfsScraper.Support;
 using Scraper;
@@ -65,7 +65,7 @@ namespace OdjfsScraper.Parsers
             childCare.ProviderAgreement = GetDetailString(details, "Provider Agreement");
             childCare.InitialApplicationDate = GetDetailString(details, "Initial Application Date");
             childCare.LicenseBeginDate = GetDetailString(details, "License Begin Date");
-            childCare.LicenseEndDate = GetDetailString(details, "License Expiration Date");
+            childCare.LicenseExpirationDate = GetDetailString(details, "License Expiration Date");
             childCare.PhoneNumber = GetDetailString(details, "Phone");
 
             string sutqRating = GetDetailString(details, "SUTQ Rating");
@@ -83,7 +83,7 @@ namespace OdjfsScraper.Parsers
             childCare.Naeyc = GetDetailBool(details, "NAEYC");
             childCare.Necpa = GetDetailBool(details, "NECPA");
             childCare.Naccp = GetDetailBool(details, "NACCP");
-            childCare.Naccp = GetDetailBool(details, "NAFCC");
+            childCare.Nafcc = GetDetailBool(details, "NAFCC");
             childCare.Coa = GetDetailBool(details, "COA");
             childCare.Acsi = GetDetailBool(details, "ACSI");
 

@@ -5,7 +5,7 @@ using System.IO;
 using System.Linq;
 using CsQuery;
 using CsQuery.Implementation;
-using Model.Odjfs.ChildCares;
+using SmartRoutes.Model.Odjfs.ChildCares;
 using NLog;
 using OdjfsScraper.Support;
 using Scraper;

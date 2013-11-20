@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using SortaScraper.Test.Parsers.Support;
 
 namespace SortaScraper.Test.Parsers
 {

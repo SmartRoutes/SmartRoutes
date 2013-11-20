@@ -1,5 +1,5 @@
 using System.Threading.Tasks;
-using Model.Sorta;
+using SmartRoutes.Model.Sorta;
 using SortaScraper.Support;
 
 namespace SortaScraper.Scrapers

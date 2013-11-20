@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Model;
-using Model.Sorta;
+using SmartRoutes.Model;
+using SmartRoutes.Model.Sorta;
 
 namespace Graph.Node
 {

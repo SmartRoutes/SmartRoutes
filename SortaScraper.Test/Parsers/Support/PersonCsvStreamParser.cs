@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Scraper;
 
-namespace SortaScraper.Test.Parsers
+namespace SortaScraper.Test.Parsers.Support
 {
     public class PersonCsvStreamParser : CsvStreamParser<Person>
     {

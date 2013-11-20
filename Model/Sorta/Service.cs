@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
-namespace Model.Sorta
+namespace SmartRoutes.Model.Sorta
 {
     public class Service
     {

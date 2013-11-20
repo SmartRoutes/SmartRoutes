@@ -1,4 +1,4 @@
-﻿namespace Model.Odjfs.ChildCares
+﻿namespace SmartRoutes.Model.Odjfs.ChildCares
 {
     public class TypeBHome : ChildCare
     {
@@ -12,7 +12,7 @@
         #region HTML
 
         public string CertificationBeginDate { get; set; }
-        public string CertificationEndDate { get; set; }
+        public string CertificationExpirationDate { get; set; }
 
         #endregion
     }
