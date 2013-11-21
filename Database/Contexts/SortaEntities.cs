@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity;
-using Model.Sorta;
+using SmartRoutes.Model.Sorta;
 
-namespace Database.Contexts
+namespace SmartRoutes.Database.Contexts
 {
     public class SortaEntities : BaseContext
     {
@@ -51,6 +51,25 @@ namespace Database.Contexts
             modelBuilder
                 .Types()
                 .Configure(c => c.ToTable(GetTableName(c.ClrType)));
+
+            // map the one-to-many for Stop.ChildStops
+            modelBuilder
+                .Entity<Stop>()
+                .HasKey(s => s.Id)
+                .HasOptional(s => s.ParentStop)
+                .WithMany(s => s.ChildStops)
+                .HasForeignKey(s => s.ParentId);
+
+            // map the unidirectional many-to-many for Stop.CloseStops
+            modelBuilder
+                .Entity<Stop>()
+                .HasKey(s => s.Id)
+                .HasMany(s => s.CloseStops)
+                .WithMany()
+                .Map(c => c
+                    .ToTable("CloseStop")
+                    .MapLeftKey("StopId")
+                    .MapRightKey("CloseStopId"));
         }
     }
 }

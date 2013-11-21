@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Model.Sorta;
+using SmartRoutes.Model.Sorta;
 
-namespace Graph.Node
+namespace SmartRoutes.Graph.Node
 {
     public interface IMetroNode : INode
     {

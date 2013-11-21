@@ -10,23 +10,21 @@ using System.Windows.Forms;
 using ILNumerics;
 using ILNumerics.Drawing;
 using ILNumerics.Drawing.Plotting;
-using SortaScraper.Parsers;
-using SortaScraper.Support;
+using SmartRoutes.SortaScraper.Parsers;
+using SmartRoutes.SortaScraper.Support;
 using Ninject;
 using Ninject.Extensions.Conventions;
-using Model.Sorta;
-using Graph;
-using Graph.Node;
-using Graph.Comparers;
+using SmartRoutes.Model.Sorta;
+using SmartRoutes.Graph;
+using SmartRoutes.Graph.Node;
+using SmartRoutes.Graph.Comparers;
 using System.IO;
-using Model.Odjfs;
+using SmartRoutes.Model.Odjfs;
 
-namespace GraphVisualizer
+namespace SmartRoutes.GraphVisualizer
 {
     public partial class Form1 : Form 
     {
-        private static Byte[] zipFileBytes = File.ReadAllBytes("C:\\Users\\alcaz0r\\Documents\\School\\CS Senior Design\\streetsmartz\\Sandbox\\sorta\\google_transit_info.zip");
-
         public Form1()
         {
             InitializeComponent();
@@ -54,7 +52,7 @@ namespace GraphVisualizer
             plotCube.Axes.YAxis.Label.Text = "Longitude";
             plotCube.Axes.ZAxis.Label.Text = "Time";
             
-            for (int i = 0; i < 500; i++)
+            for (int i = 0; i < 1000; i++)
             {
                 INode node = Nodes[i];
                 foreach (INode neighbor in node.DownwindNeighbors)

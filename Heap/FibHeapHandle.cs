@@ -4,18 +4,18 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Heap
+namespace SmartRoutes.Heap
 {
     // provide handles to inserted objects
-    public class FibHeapHandle<T, K> where K : IComparable
+    public class FibHeapHandle<TValue, TKey> where TKey : IComparable
     {
-        internal readonly FibHeapNode<T, K> Node;
-        internal readonly IFibonacciHeap<T, K> ParentHeap;
+        internal readonly FibHeapNode<TValue, TKey> Node;
+        internal readonly IFibonacciHeap<TValue, TKey> ParentHeap;
         internal bool ValidHandle;
-        public readonly T value;
-        internal K key;
+        public readonly TValue value;
+        internal TKey key;
 
-        internal FibHeapHandle(FibHeapNode<T, K> Element, FibonacciHeap<T, K> ParentHeap)
+        internal FibHeapHandle(FibHeapNode<TValue, TKey> Element, FibonacciHeap<TValue, TKey> ParentHeap)
         {
             value = Element.Element;
             key = Element.Key;

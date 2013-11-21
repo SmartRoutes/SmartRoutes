@@ -1,6 +1,6 @@
 ﻿using CommandLine;
 
-namespace OdjfsDataChecker
+namespace SmartRoutes.OdjfsDataChecker
 {
     public class ChildCareOptions
     {

@@ -1,14 +1,14 @@
 ﻿using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
-using Database;
-using Database.Contexts;
-using Model.Sorta;
+using SmartRoutes.Database;
+using SmartRoutes.Database.Contexts;
+using SmartRoutes.Model.Sorta;
 using NLog;
-using SortaScraper.Scrapers;
-using SortaScraper.Support;
+using SmartRoutes.SortaScraper.Scrapers;
+using SmartRoutes.SortaScraper.Support;
 
-namespace SortaDataChecker
+namespace SmartRoutes.SortaDataChecker
 {
     public class DataChecker
     {
@@ -94,8 +94,13 @@ namespace SortaDataChecker
                     Logger.Trace("Adding {0} new Trip records.", entityCollection.Trips.Count());
                     await inserter.AddRangeAsync(entityCollection.Trips);
 
+                    // the stops must be inserted in a single transaction, because the table is self-referential
                     Logger.Trace("Adding {0} new Stop records.", entityCollection.Stops.Count());
-                    await inserter.AddRangeAsync(entityCollection.Stops);
+                    foreach (Stop stop in entityCollection.Stops)
+                    {
+                        ctx.Stops.Add(stop);
+                    }
+                    ctx.SaveChanges();
 
                     Logger.Trace("Adding {0} new StopTime records.", entityCollection.StopTimes.Count());
                     await inserter.AddRangeAsync(entityCollection.StopTimes);

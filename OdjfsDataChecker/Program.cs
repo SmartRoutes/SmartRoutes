@@ -5,16 +5,16 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using CommandLine;
-using Database.Contexts;
+using SmartRoutes.Database.Contexts;
 using Ninject;
 using Ninject.Extensions.Conventions;
 using Ninject.Parameters;
 using NLog;
 using NLog.Config;
-using OdjfsScraper.Scrapers;
-using OdjfsScraper.Support;
+using SmartRoutes.OdjfsScraper.Scrapers;
+using SmartRoutes.OdjfsScraper.Support;
 
-namespace OdjfsDataChecker
+namespace SmartRoutes.OdjfsDataChecker
 {
     internal class Program
     {

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace SortaScraper.Test.Parsers
+namespace SmartRoutes.SortaScraper.Test.Parsers
 {
     [TestClass]
     public class CsvStreamParserTest : AbstractCsvStreamParserTest<Person>

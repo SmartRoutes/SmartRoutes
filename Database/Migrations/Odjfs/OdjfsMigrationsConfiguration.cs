@@ -1,9 +1,9 @@
 using System.Data.Entity.Migrations;
 using System.Linq;
-using Database.Contexts;
-using Model.Odjfs;
+using SmartRoutes.Database.Contexts;
+using SmartRoutes.Model.Odjfs;
 
-namespace Database.Migrations.Odjfs
+namespace SmartRoutes.Database.Migrations.Odjfs
 {
     internal sealed class OdjfsMigrationsConfiguration : DbMigrationsConfiguration<OdjfsEntities>
     {

@@ -3,7 +3,7 @@ using System.IO;
 using System.Linq;
 using Microsoft.VisualBasic.FileIO;
 
-namespace Scraper
+namespace SmartRoutes.Scraper
 {
     public abstract class CsvStreamParser<TOut> : ICsvStreamParser<TOut>
     {

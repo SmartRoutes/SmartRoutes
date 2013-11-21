@@ -1,7 +1,7 @@
 ﻿using System.Net.Http.Headers;
-using Model.Sorta;
+using SmartRoutes.Model.Sorta;
 
-namespace SortaScraper.Parsers
+namespace SmartRoutes.SortaScraper.Parsers
 {
     public interface IArchiveParser
     {

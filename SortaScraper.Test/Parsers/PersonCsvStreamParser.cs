@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
-using Scraper;
+using SmartRoutes.Scraper;
 
-namespace SortaScraper.Test.Parsers
+namespace SmartRoutes.SortaScraper.Test.Parsers
 {
     public class PersonCsvStreamParser : CsvStreamParser<Person>
     {

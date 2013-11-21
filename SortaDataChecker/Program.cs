@@ -2,9 +2,9 @@
 using Ninject;
 using Ninject.Extensions.Conventions;
 using NLog;
-using SortaScraper.Scrapers;
+using SmartRoutes.SortaScraper.Scrapers;
 
-namespace SortaDataChecker
+namespace SmartRoutes.SortaDataChecker
 {
     internal class Program
     {

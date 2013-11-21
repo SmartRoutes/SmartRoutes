@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Heap
+namespace SmartRoutes.Heap
 {
     [Serializable()]
     public class EmptyHeapException : Exception
@@ -111,6 +111,7 @@ namespace Heap
 
                 tree1.Children.Add(tree2);
                 tree2.Parent = tree1;
+                Roots.RemoveAll(x => x == tree2);
             }
         }
 
@@ -156,7 +157,6 @@ namespace Heap
             if (linkNeeded)
             {
                 Link(tree1, tree2);
-                Roots.RemoveAll(x => x == tree2);
             }
 
             return linkNeeded;

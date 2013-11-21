@@ -7,8 +7,8 @@
     <ProjectGuid>{1E30E5FD-25B1-4F18-A2C2-5F8AC2B80683}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Database</RootNamespace>
-    <AssemblyName>Database</AssemblyName>
+    <RootNamespace>SmartRoutes.Database</RootNamespace>
+    <AssemblyName>SmartRoutes.Database</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
@@ -49,6 +49,14 @@
     <Compile Include="Contexts\BaseContext.cs" />
     <Compile Include="ExtensionMethods.cs" />
     <Compile Include="FastInserter.cs" />
+    <Compile Include="Migrations\Sorta\201311181859255_AddCloseStops.cs" />
+    <Compile Include="Migrations\Sorta\201311181859255_AddCloseStops.Designer.cs">
+      <DependentUpon>201311181859255_AddCloseStops.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Sorta\201311181851115_FixParentStop.cs" />
+    <Compile Include="Migrations\Sorta\201311181851115_FixParentStop.Designer.cs">
+      <DependentUpon>201311181851115_FixParentStop.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Sorta\201311100713562_InitialCreate.cs" />
     <Compile Include="Migrations\Sorta\201311100713562_InitialCreate.Designer.cs">
       <DependentUpon>201311100713562_InitialCreate.cs</DependentUpon>
@@ -81,6 +89,12 @@
     <Folder Include="Mappings\Sorta\" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Migrations\Sorta\201311181859255_AddCloseStops.resx">
+      <DependentUpon>201311181859255_AddCloseStops.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\Sorta\201311181851115_FixParentStop.resx">
+      <DependentUpon>201311181851115_FixParentStop.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Migrations\Sorta\201311100713562_InitialCreate.resx">
       <DependentUpon>201311100713562_InitialCreate.cs</DependentUpon>
     </EmbeddedResource>
@@ -110,6 +124,6 @@
     <Time>
       <Output TaskParameter="Year" PropertyName="Year" />
     </Time>
-    <AssemblyInfo CodeLanguage="CS" OutputFile="Properties\AssemblyInfo.cs" AssemblyTitle="Database" AssemblyDescription="" AssemblyCompany="" AssemblyProduct="Database" AssemblyCopyright="Copyright (c) $(Year). All rights reserved." ComVisible="false" CLSCompliant="false" AssemblyInformationalVersion="$(Major).$(Minor).$(Build).$(Revision)" AssemblyVersion="$(Major).$(Minor).$(Build)" AssemblyFileVersion="$(Major).$(Minor).$(Build)" />
+    <AssemblyInfo CodeLanguage="CS" OutputFile="Properties\AssemblyInfo.cs" AssemblyTitle="SmartRoutes.Database" AssemblyDescription="" AssemblyCompany="" AssemblyProduct="Database" AssemblyCopyright="Copyright (c) $(Year). All rights reserved." ComVisible="false" CLSCompliant="false" AssemblyInformationalVersion="$(Major).$(Minor).$(Build).$(Revision)" AssemblyVersion="$(Major).$(Minor).$(Build)" AssemblyFileVersion="$(Major).$(Minor).$(Build)" />
   </Target>
 </Project>

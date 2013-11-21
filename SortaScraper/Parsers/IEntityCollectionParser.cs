@@ -1,6 +1,6 @@
-﻿using SortaScraper.Support;
+﻿using SmartRoutes.SortaScraper.Support;
 
-namespace SortaScraper.Parsers
+namespace SmartRoutes.SortaScraper.Parsers
 {
     public interface IEntityCollectionParser
     {

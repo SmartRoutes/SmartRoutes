@@ -1,21 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Data.Entity;
 using System.Data.Entity.Migrations;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
-using Database.Contexts;
-using Model.Odjfs;
-using Model.Odjfs.ChildCares;
-using Model.Odjfs.ChildCareStubs;
+using SmartRoutes.Database.Contexts;
+using SmartRoutes.Model.Odjfs;
+using SmartRoutes.Model.Odjfs.ChildCares;
+using SmartRoutes.Model.Odjfs.ChildCareStubs;
 using NLog;
-using OdjfsScraper.Scrapers;
+using SmartRoutes.OdjfsScraper.Scrapers;
 using PolyGeocoder.Geocoders;
 using PolyGeocoder.Support;
-using Scraper;
+using SmartRoutes.Scraper;
 
-namespace OdjfsDataChecker
+namespace SmartRoutes.OdjfsDataChecker
 {
     public class Odjfs
     {
@@ -347,29 +348,36 @@ namespace OdjfsDataChecker
             ctx.ChildCares.AddOrUpdate(childCare);
             ctx.SaveChanges();
 
-            // generate the address string
-            string address = string.Join(", ", new[]
-            {
-                childCare.Address,
-                childCare.ZipCode.ToString(CultureInfo.InvariantCulture)
-            });
-            Logger.Trace("Geocoding address '{0}'.", address);
-
             // create the geocoder
             IClient geocoderClient = new Client(ScraperClient.GetUserAgent());
-            ISimpleGeocoder geocoder = new OpenStreetMapGeocoder(geocoderClient);
-
-            // geocode
-            Response geocoderResponse = await geocoder.GeocodeAsync(address);
-            if (geocoderResponse.Locations.Length != 1)
+            string mapQuestKey = ConfigurationManager.AppSettings["MapQuestKey"];
+            if (string.IsNullOrWhiteSpace(mapQuestKey))
             {
-                Logger.Trace("Child care '{0}' could not be reliably geocoded. GeocodedLocationCount: {1}, GeocodedLocationNames: '{2}'.",
-                    childCare.ExternalUrlId,
-                    geocoderResponse.Locations.Length,
-                    string.Join(", ", geocoderResponse.Locations.Select(l => l.Name)));
-                return;
+                throw new ConfigurationErrorsException("The MapQuestKey configuration key is not specified.");
             }
-            Location geocoderLocation = geocoderResponse.Locations[0];
+            ISimpleGeocoder geocoder = new MapQuestGeocoder(geocoderClient, MapQuestGeocoder.LicensedEndpoint, mapQuestKey);
+
+            // geocode based off the full address
+            Location geocoderLocation = await GetGeocodedLocation(geocoder, string.Join(", ", new[]
+            {
+                childCare.Address,
+                childCare.City,
+                childCare.State,
+                childCare.ZipCode.ToString(CultureInfo.InvariantCulture)
+            }));
+            if (geocoderLocation == null)
+            {
+                geocoderLocation = await GetGeocodedLocation(geocoder, string.Join(", ", new[]
+                {
+                    childCare.Address,
+                    childCare.ZipCode.ToString(CultureInfo.InvariantCulture)
+                }));
+
+                if (geocoderLocation == null)
+                {
+                    return;
+                }
+            }
 
             // copy over the latitude and longitude from the response
             Logger.Trace("Child care '{0}' is at {1}, {2}.", childCare.ExternalUrlId, geocoderLocation.Latitude, geocoderLocation.Longitude);
@@ -380,6 +388,23 @@ namespace OdjfsDataChecker
             ctx.ChildCares.AddOrUpdate(childCare);
             Logger.Trace("Saving changes.");
             await ctx.SaveChangesAsync();
+        }
+
+        private async Task<Location> GetGeocodedLocation(ISimpleGeocoder geocoder, string query)
+        {
+            Logger.Trace("Geocoding address '{0}'.", query);
+            Response geocoderResponse = await geocoder.GeocodeAsync(query);
+
+            if (geocoderResponse.Locations.Length != 1)
+            {
+                Logger.Trace("Address '{0}' could not be reliably geocoded. GeocodedLocationCount: {1}, GeocodedLocationNames: '{2}'.",
+                    query,
+                    geocoderResponse.Locations.Length,
+                    string.Join(", ", geocoderResponse.Locations.Select(l => l.Name)));
+                return null;
+            }
+
+            return geocoderResponse.Locations[0];
         }
     }
 }

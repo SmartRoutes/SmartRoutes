@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace GraphVisualizer.Properties {
+namespace SmartRoutes.GraphVisualizer.Properties {
     using System;
     
     

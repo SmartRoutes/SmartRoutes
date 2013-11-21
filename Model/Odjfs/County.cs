@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Model.Odjfs
+namespace SmartRoutes.Model.Odjfs
 {
     public class County
     {

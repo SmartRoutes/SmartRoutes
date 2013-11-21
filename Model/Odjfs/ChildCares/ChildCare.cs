@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace Model.Odjfs.ChildCares
+namespace SmartRoutes.Model.Odjfs.ChildCares
 {
-    public abstract class ChildCare
+    public abstract class ChildCare : INullableLocation
     {
         public int Id { get; set; }
         public string ChildCareType { get; set; }

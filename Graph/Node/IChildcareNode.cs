@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Model.Odjfs;
+using SmartRoutes.Model.Odjfs;
 
-namespace Graph.Node
+namespace SmartRoutes.Graph.Node
 {
     public interface IChildcareNode : INode
     {

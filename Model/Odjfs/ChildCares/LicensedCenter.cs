@@ -1,4 +1,4 @@
-﻿namespace Model.Odjfs.ChildCares
+﻿namespace SmartRoutes.Model.Odjfs.ChildCares
 {
     public class LicensedCenter : DetailedChildCare
     {

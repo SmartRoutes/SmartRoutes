@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Graph.Node;
+using SmartRoutes.Graph.Node;
 
-namespace Graph.Comparers
+namespace SmartRoutes.Graph.Comparers
 {
     public class ComparerForDisplay : IComparer<INode>
     {

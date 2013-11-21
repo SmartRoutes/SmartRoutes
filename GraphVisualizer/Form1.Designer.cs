@@ -1,4 +1,4 @@
-﻿namespace GraphVisualizer
+﻿namespace SmartRoutes.GraphVisualizer
 {
     partial class Form1
     {

@@ -2,7 +2,7 @@
 using System.Net.Http;
 using System.Reflection;
 
-namespace Scraper
+namespace SmartRoutes.Scraper
 {
     public class ScraperClient : HttpClient
     {

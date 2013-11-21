@@ -4,22 +4,22 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Heap
+namespace SmartRoutes.Heap
 {
-    internal class FibHeapNode<T, K> where K : IComparable
+    internal class FibHeapNode<TValue, TKey> where TKey : IComparable
     {
-        internal readonly T Element;
-        internal List<FibHeapNode<T, K>> Children;
-        internal FibHeapNode<T, K> Parent;
+        internal readonly TValue Element;
+        internal List<FibHeapNode<TValue, TKey>> Children;
+        internal FibHeapNode<TValue, TKey> Parent;
         internal bool Marked; // marked for pruning if previously lost child
-        internal FibHeapHandle<T, K> HandleTo;
-        internal K Key;
+        internal FibHeapHandle<TValue, TKey> HandleTo;
+        internal TKey Key;
 
-        internal FibHeapNode(T Element, K Key)
+        internal FibHeapNode(TValue Element, TKey Key)
         {
             this.Element = Element;
             this.Key = Key;
-            Children = new List<FibHeapNode<T, K>>();
+            Children = new List<FibHeapNode<TValue, TKey>>();
             Marked = false;
         }
 

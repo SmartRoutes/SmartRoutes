@@ -5,9 +5,9 @@ using System.Net.Http;
 using System.Threading;
 using System.Xml.Serialization;
 using NLog;
-using Scraper;
+using SmartRoutes.Scraper;
 
-namespace OdjfsStatusChecker
+namespace SmartRoutes.OdjfsStatusChecker
 {
     public class Program
     {

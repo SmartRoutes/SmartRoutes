@@ -1,17 +1,19 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
-namespace Model.Sorta
+namespace SmartRoutes.Model.Sorta
 {
-    public class Stop
+    public class Stop : ILocation
     {
         private ICollection<Stop> _childStops;
+        private ICollection<Stop> _closeStops;
         private ICollection<StopTime> _stopTimes;
 
         public Stop()
         {
             _childStops = new Collection<Stop>();
             _stopTimes = new Collection<StopTime>();
+            _closeStops = new Collection<Stop>();
         }
 
         #region Navigation Properties
@@ -28,6 +30,12 @@ namespace Model.Sorta
         {
             get { return _stopTimes; }
             set { _stopTimes = value; }
+        }
+
+        public virtual ICollection<Stop> CloseStops
+        {
+            get { return _closeStops; }
+            set { _closeStops = value; }
         }
 
         #endregion

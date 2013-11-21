@@ -4,13 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Heap
+namespace SmartRoutes.Heap
 {
-    public interface IFibonacciHeap<T, K> where K : IComparable
+    public interface IFibonacciHeap<TValue, TKey> where TKey : IComparable
     {
         bool Empty();
-        FibHeapHandle<T, K> Insert(T Element, K Key);
-        T DeleteMin();
-        void UpdateKey(FibHeapHandle<T, K> handle, K newKey);
+        FibHeapHandle<TValue, TKey> Insert(TValue Element, TKey Key);
+        TValue DeleteMin();
+        void UpdateKey(FibHeapHandle<TValue, TKey> handle, TKey newKey);
     }
 }

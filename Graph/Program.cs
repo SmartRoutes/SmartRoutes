@@ -6,24 +6,24 @@ using System.Threading.Tasks;
 using NLog;
 using Ninject;
 using Ninject.Extensions.Conventions;
-using Scraper;
-using SortaScraper.Parsers;
-using SortaScraper.Support;
-using Model.Sorta;
-using Model.Odjfs.ChildCares;
+using SmartRoutes.Scraper;
+using SmartRoutes.SortaScraper.Parsers;
+using SmartRoutes.SortaScraper.Support;
+using SmartRoutes.Model.Sorta;
+using SmartRoutes.Model.Odjfs.ChildCares;
 using Ninject.Modules;
-using Graph.Node;
+using SmartRoutes.Graph.Node;
 using System.IO;
 using Ionic.Zip;
-using SortaScraper.Scrapers;
-using Heap;
-using Database.Contexts;
+using SmartRoutes.SortaScraper.Scrapers;
+using SmartRoutes.Heap;
+using SmartRoutes.Database.Contexts;
 
-namespace Graph
+namespace SmartRoutes.Graph
 {
     class Program
     {
-        private static Byte[] zipFileBytes = File.ReadAllBytes("C:\\Users\\alcaz0r\\Documents\\School\\CS Senior Design\\streetsmartz\\Sandbox\\sorta\\google_transit_info.zip");
+        private static Byte[] zipFileBytes = File.ReadAllBytes("C:\\DatabaseBackups\\sorta_subset_1_16.zip");
 
         static void Main(string[] args)
         {
@@ -36,47 +36,17 @@ namespace Graph
                     .SelectAllClasses()
                     .BindAllInterfaces());
 
-                using (var ctx = new OdjfsEntities())
-                {
-                    var childcares = (from c in ctx.ChildCares select c).ToList();
+                //var loader = kernel.Get<DatabaseLoader>();
+                //loader.loadDatabaseFromFile(zipFileBytes).Wait();
 
-                    foreach (var c in childcares)
-                    {
-                        Console.WriteLine(c.Address);
-                    }
-                }
+                Console.WriteLine("Creating Graph.");
+                DateTime tic = DateTime.Now;
 
-                // initialize database to small zip file
-                //DatabaseLoader dbloader = new DatabaseLoader(kernel.Get<IEntityCollectionParser>());
-                //dbloader.loadDatabaseFromFile(zipFileBytes).Wait();
+                var graph = kernel.Get<IGraph>();
 
-                //Console.WriteLine("Creating Graph.");
-                //DateTime tic = DateTime.Now;
+                DateTime toc = DateTime.Now;
 
-                //var graph = kernel.Get<IGraph>();
-
-                //DateTime toc = DateTime.Now;
-
-                //Console.WriteLine("Graph created in {0} milliseconds.", (toc - tic).TotalMilliseconds);
-
-                //var heap = new FibonacciHeap<double, double>();
-
-                //int count = 100000;
-                //var rand = new Random();
-                //var handles = new FibHeapHandle<double, double>[count];
-
-                //for (int i = 0; i < count; i++)
-                //{
-                //    var num1 = rand.NextDouble();
-                //    var num2 = rand.NextDouble();
-                //    handles[i] = heap.Insert(num1, num1);
-                //}
-
-                //while (!heap.Empty())
-                //{
-                //    //heap.DeleteMin();
-                //    Console.WriteLine(heap.DeleteMin());
-                //}
+                Console.WriteLine("Graph created in {0} milliseconds.", (toc - tic).TotalMilliseconds);
 
                 Console.ReadLine();
             }

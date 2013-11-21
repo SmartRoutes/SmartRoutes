@@ -4,7 +4,7 @@ using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Database
+namespace SmartRoutes.Database
 {
     /// <summary>
     ///     This is a convenience class is the ideas introduced here:
