@@ -4,17 +4,17 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Data.Entity;
-using Database;
-using Database.Contexts;
-using Graph.Node;
-using SortaScraper.Support;
-using SortaScraper.Scrapers;
-using SortaDataChecker;
+using SmartRoutes.Database;
+using SmartRoutes.Database.Contexts;
+using SmartRoutes.Graph.Node;
+using SmartRoutes.SortaScraper.Support;
+using SmartRoutes.SortaScraper.Scrapers;
+using SmartRoutes.SortaDataChecker;
 using SmartRoutes.Model.Sorta;
 using SmartRoutes.Model.Odjfs.ChildCares;
-using Heap;
+using SmartRoutes.Heap;
 
-namespace Graph
+namespace SmartRoutes.Graph
 {
     internal enum NodeState
     {

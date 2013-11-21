@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Scraper
+namespace SmartRoutes.Scraper
 {
     public class ParserException : Exception
     {

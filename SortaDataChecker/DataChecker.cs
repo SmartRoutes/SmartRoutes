@@ -1,14 +1,14 @@
 ﻿using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
-using Database;
-using Database.Contexts;
+using SmartRoutes.Database;
+using SmartRoutes.Database.Contexts;
 using SmartRoutes.Model.Sorta;
 using NLog;
-using SortaScraper.Scrapers;
-using SortaScraper.Support;
+using SmartRoutes.SortaScraper.Scrapers;
+using SmartRoutes.SortaScraper.Support;
 
-namespace SortaDataChecker
+namespace SmartRoutes.SortaDataChecker
 {
     public class DataChecker
     {

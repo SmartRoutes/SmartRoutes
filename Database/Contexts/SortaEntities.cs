@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity;
 using SmartRoutes.Model.Sorta;
 
-namespace Database.Contexts
+namespace SmartRoutes.Database.Contexts
 {
     public class SortaEntities : BaseContext
     {

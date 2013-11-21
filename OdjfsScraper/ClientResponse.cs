@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Net;
 
-namespace OdjfsScraper
+namespace SmartRoutes.OdjfsScraper
 {
     public class ClientResponse
     {

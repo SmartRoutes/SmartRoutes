@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Heap
+namespace SmartRoutes.Heap
 {
     // provide handles to inserted objects
     public class FibHeapHandle<TValue, TKey> where TKey : IComparable

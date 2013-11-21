@@ -5,10 +5,10 @@ using System.Text;
 using System.Threading.Tasks;
 using Ninject;
 using Ninject.Modules;
-using Graph.Node;
-using Heap;
+using SmartRoutes.Graph.Node;
+using SmartRoutes.Heap;
 
-namespace Graph
+namespace SmartRoutes.Graph
 {
     public class GraphModule : NinjectModule
     {

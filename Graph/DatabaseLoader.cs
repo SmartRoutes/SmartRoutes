@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Database;
-using Database.Contexts;
-using SortaScraper.Support;
-using SortaScraper.Parsers;
+using SmartRoutes.Database;
+using SmartRoutes.Database.Contexts;
+using SmartRoutes.SortaScraper.Support;
+using SmartRoutes.SortaScraper.Parsers;
 
-namespace Graph
+namespace SmartRoutes.Graph
 {
     class DatabaseLoader
     {

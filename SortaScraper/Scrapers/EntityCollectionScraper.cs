@@ -4,11 +4,11 @@ using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using SmartRoutes.Model.Sorta;
 using NLog;
-using Scraper;
-using SortaScraper.Parsers;
-using SortaScraper.Support;
+using SmartRoutes.Scraper;
+using SmartRoutes.SortaScraper.Parsers;
+using SmartRoutes.SortaScraper.Support;
 
-namespace SortaScraper.Scrapers
+namespace SmartRoutes.SortaScraper.Scrapers
 {
     public class EntityCollectionScraper : IEntityCollectionScraper
     {

@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 using SmartRoutes.Model.Odjfs;
 using SmartRoutes.Model.Odjfs.ChildCares;
 using SmartRoutes.Model.Odjfs.ChildCareStubs;
-using Scraper;
+using SmartRoutes.Scraper;
 
-namespace OdjfsScraper.Support
+namespace SmartRoutes.OdjfsScraper.Support
 {
     public class OdjfsClient : IOdjfsClient
     {

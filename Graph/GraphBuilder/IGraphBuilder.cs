@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using SortaScraper.Support;
-using Graph.Node;
+using SmartRoutes.Graph.Node;
+using SmartRoutes.SortaScraper.Support;
 using SmartRoutes.Model.Odjfs.ChildCares;
 
-namespace Graph
+namespace SmartRoutes.Graph
 {
     public interface IGraphBuilder
     {

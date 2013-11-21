@@ -3,7 +3,7 @@ using SmartRoutes.Model.Odjfs;
 using SmartRoutes.Model.Odjfs.ChildCares;
 using SmartRoutes.Model.Odjfs.ChildCareStubs;
 
-namespace OdjfsScraper.Parsers
+namespace SmartRoutes.OdjfsScraper.Parsers
 {
     public interface IListDocumentParser
     {

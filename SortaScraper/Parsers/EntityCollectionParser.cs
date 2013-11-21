@@ -5,10 +5,10 @@ using Ionic.Zip;
 using SmartRoutes.Model;
 using SmartRoutes.Model.Sorta;
 using NLog;
-using Scraper;
-using SortaScraper.Support;
+using SmartRoutes.Scraper;
+using SmartRoutes.SortaScraper.Support;
 
-namespace SortaScraper.Parsers
+namespace SmartRoutes.SortaScraper.Parsers
 {
     public class EntityCollectionParser : IEntityCollectionParser
     {

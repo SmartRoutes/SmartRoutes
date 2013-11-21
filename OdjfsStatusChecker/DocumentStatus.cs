@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Net;
 
-namespace OdjfsStatusChecker
+namespace SmartRoutes.OdjfsStatusChecker
 {
     [Serializable]
     public class DocumentStatus : IEquatable<DocumentStatus>

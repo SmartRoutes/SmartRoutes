@@ -1,7 +1,7 @@
 using System.Data.Entity.Migrations;
-using Database.Contexts;
+using SmartRoutes.Database.Contexts;
 
-namespace Database.Migrations.Sorta
+namespace SmartRoutes.Database.Migrations.Sorta
 {
     internal sealed class SortaMigrationsConfiguration : DbMigrationsConfiguration<SortaEntities>
     {

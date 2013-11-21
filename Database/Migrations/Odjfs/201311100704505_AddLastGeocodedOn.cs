@@ -1,6 +1,6 @@
 using System.Data.Entity.Migrations;
 
-namespace Database.Migrations.Odjfs
+namespace SmartRoutes.Database.Migrations.Odjfs
 {
     public partial class AddLastGeocodedOn : DbMigration
     {

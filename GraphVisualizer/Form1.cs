@@ -10,18 +10,18 @@ using System.Windows.Forms;
 using ILNumerics;
 using ILNumerics.Drawing;
 using ILNumerics.Drawing.Plotting;
-using SortaScraper.Parsers;
-using SortaScraper.Support;
+using SmartRoutes.SortaScraper.Parsers;
+using SmartRoutes.SortaScraper.Support;
 using Ninject;
 using Ninject.Extensions.Conventions;
 using SmartRoutes.Model.Sorta;
-using Graph;
-using Graph.Node;
-using Graph.Comparers;
+using SmartRoutes.Graph;
+using SmartRoutes.Graph.Node;
+using SmartRoutes.Graph.Comparers;
 using System.IO;
 using SmartRoutes.Model.Odjfs;
 
-namespace GraphVisualizer
+namespace SmartRoutes.GraphVisualizer
 {
     public partial class Form1 : Form 
     {

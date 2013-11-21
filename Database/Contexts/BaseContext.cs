@@ -5,7 +5,7 @@ using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Database.Contexts
+namespace SmartRoutes.Database.Contexts
 {
     public abstract class BaseContext : DbContext
     {

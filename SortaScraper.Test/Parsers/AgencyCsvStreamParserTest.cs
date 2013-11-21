@@ -1,8 +1,8 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SmartRoutes.Model.Sorta;
-using SortaScraper.Parsers;
+using SmartRoutes.SortaScraper.Parsers;
 
-namespace SortaScraper.Test.Parsers
+namespace SmartRoutes.SortaScraper.Test.Parsers
 {
     [TestClass]
     public class AgencyCsvStreamParserTest : AbstractCsvStreamParserTest<Agency>

@@ -5,7 +5,7 @@ using System.Security.Cryptography;
 using System.Text.RegularExpressions;
 using CsQuery;
 
-namespace OdjfsScraper.Support
+namespace SmartRoutes.OdjfsScraper.Support
 {
     public static class ExtensionMethods
     {

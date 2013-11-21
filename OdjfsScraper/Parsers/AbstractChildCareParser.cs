@@ -7,10 +7,10 @@ using CsQuery;
 using CsQuery.Implementation;
 using SmartRoutes.Model.Odjfs.ChildCares;
 using NLog;
-using OdjfsScraper.Support;
-using Scraper;
+using SmartRoutes.OdjfsScraper.Support;
+using SmartRoutes.Scraper;
 
-namespace OdjfsScraper.Parsers
+namespace SmartRoutes.OdjfsScraper.Parsers
 {
     public abstract class AbstractChildCareParser<T> : IChildCareParser<T> where T : ChildCare
     {

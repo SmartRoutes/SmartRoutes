@@ -7,7 +7,7 @@ using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Reflection;
 
-namespace Database
+namespace SmartRoutes.Database
 {
     public static class ExtensionMethods
     {

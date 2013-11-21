@@ -3,7 +3,7 @@ using SmartRoutes.Model.Odjfs;
 using SmartRoutes.Model.Odjfs.ChildCares;
 using SmartRoutes.Model.Odjfs.ChildCareStubs;
 
-namespace Database.Contexts
+namespace SmartRoutes.Database.Contexts
 {
     public class OdjfsEntities : BaseContext
     {

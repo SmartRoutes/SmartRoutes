@@ -6,10 +6,10 @@ using System.Text.RegularExpressions;
 using CsQuery;
 using SmartRoutes.Model.Odjfs.ChildCares;
 using NLog;
-using OdjfsScraper.Support;
-using Scraper;
+using SmartRoutes.OdjfsScraper.Support;
+using SmartRoutes.Scraper;
 
-namespace OdjfsScraper.Parsers
+namespace SmartRoutes.OdjfsScraper.Parsers
 {
     public class BaseDetailedChildCareParser<T> : BaseChildCareParser<T> where T : DetailedChildCare
     {

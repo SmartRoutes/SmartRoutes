@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using SmartRoutes.Model.Sorta;
 
-namespace Graph.Node
+namespace SmartRoutes.Graph.Node
 {
     class MetroNode : IMetroNode
     {
