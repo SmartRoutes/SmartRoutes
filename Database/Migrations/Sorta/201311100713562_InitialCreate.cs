@@ -1,6 +1,6 @@
 using System.Data.Entity.Migrations;
 
-namespace Database.Migrations.Sorta
+namespace SmartRoutes.Database.Migrations.Sorta
 {
     public partial class InitialCreate : DbMigration
     {

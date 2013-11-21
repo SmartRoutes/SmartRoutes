@@ -6,20 +6,20 @@ using System.Threading.Tasks;
 using NLog;
 using Ninject;
 using Ninject.Extensions.Conventions;
-using Scraper;
-using SortaScraper.Parsers;
-using SortaScraper.Support;
+using SmartRoutes.Scraper;
+using SmartRoutes.SortaScraper.Parsers;
+using SmartRoutes.SortaScraper.Support;
 using SmartRoutes.Model.Sorta;
 using SmartRoutes.Model.Odjfs.ChildCares;
 using Ninject.Modules;
-using Graph.Node;
+using SmartRoutes.Graph.Node;
 using System.IO;
 using Ionic.Zip;
-using SortaScraper.Scrapers;
-using Heap;
-using Database.Contexts;
+using SmartRoutes.SortaScraper.Scrapers;
+using SmartRoutes.Heap;
+using SmartRoutes.Database.Contexts;
 
-namespace Graph
+namespace SmartRoutes.Graph
 {
     class Program
     {

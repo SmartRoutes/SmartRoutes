@@ -2,7 +2,7 @@
 using System.Linq;
 using SmartRoutes.Model.Odjfs.ChildCares;
 
-namespace OdjfsScraper.Test.Parsers.Support
+namespace SmartRoutes.OdjfsScraper.Test.Parsers.Support
 {
     public class BaseDetailedChildCareHomeTemplate<T> : BaseChildCareTemplate<T> where T : DetailedChildCare
     {

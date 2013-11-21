@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 
-namespace OdjfsStatusChecker
+namespace SmartRoutes.OdjfsStatusChecker
 {
     [Serializable]
     public class Document

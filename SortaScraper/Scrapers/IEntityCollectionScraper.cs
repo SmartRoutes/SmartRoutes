@@ -1,8 +1,8 @@
 using System.Threading.Tasks;
 using SmartRoutes.Model.Sorta;
-using SortaScraper.Support;
+using SmartRoutes.SortaScraper.Support;
 
-namespace SortaScraper.Scrapers
+namespace SmartRoutes.SortaScraper.Scrapers
 {
     public interface IEntityCollectionScraper
     {

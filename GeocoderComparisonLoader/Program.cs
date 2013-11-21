@@ -4,10 +4,10 @@ using System.Data.SqlServerCe;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using Database.Contexts;
+using SmartRoutes.Database.Contexts;
 using SmartRoutes.Model.Odjfs.ChildCares;
 
-namespace GeocoderComparisonLoader
+namespace SmartRoutes.GeocoderComparisonLoader
 {
     internal class Program
     {

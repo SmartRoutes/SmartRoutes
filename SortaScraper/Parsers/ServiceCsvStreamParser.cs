@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Globalization;
 using SmartRoutes.Model.Sorta;
-using Scraper;
+using SmartRoutes.Scraper;
 
-namespace SortaScraper.Parsers
+namespace SmartRoutes.SortaScraper.Parsers
 {
     public class ServiceCsvStreamParser : CsvStreamParser<Service>
     {

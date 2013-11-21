@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Heap
+namespace SmartRoutes.Heap
 {
     [Serializable()]
     public class EmptyHeapException : Exception

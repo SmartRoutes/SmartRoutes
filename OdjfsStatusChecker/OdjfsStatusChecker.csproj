@@ -7,8 +7,8 @@
     <ProjectGuid>{A80C87E0-65AA-4DCE-8AA8-7D82042769A9}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>OdjfsStatusChecker</RootNamespace>
-    <AssemblyName>OdjfsStatusChecker</AssemblyName>
+    <RootNamespace>SmartRoutes.OdjfsStatusChecker</RootNamespace>
+    <AssemblyName>SmartRoutes.OdjfsStatusChecker</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
@@ -84,6 +84,6 @@
     <Time>
       <Output TaskParameter="Year" PropertyName="Year" />
     </Time>
-    <AssemblyInfo CodeLanguage="CS" OutputFile="Properties\AssemblyInfo.cs" AssemblyTitle="OdjfsStatusChecker" AssemblyDescription="" AssemblyCompany="" AssemblyProduct="OdjfsStatusChecker" AssemblyCopyright="Copyright (c) $(Year). All rights reserved." ComVisible="false" CLSCompliant="false" AssemblyInformationalVersion="$(Major).$(Minor).$(Build).$(Revision)" AssemblyVersion="$(Major).$(Minor).$(Build)" AssemblyFileVersion="$(Major).$(Minor).$(Build)" />
+    <AssemblyInfo CodeLanguage="CS" OutputFile="Properties\AssemblyInfo.cs" AssemblyTitle="SmartRoutes.OdjfsStatusChecker" AssemblyDescription="" AssemblyCompany="" AssemblyProduct="OdjfsStatusChecker" AssemblyCopyright="Copyright (c) $(Year). All rights reserved." ComVisible="false" CLSCompliant="false" AssemblyInformationalVersion="$(Major).$(Minor).$(Build).$(Revision)" AssemblyVersion="$(Major).$(Minor).$(Build)" AssemblyFileVersion="$(Major).$(Minor).$(Build)" />
   </Target>
 </Project>

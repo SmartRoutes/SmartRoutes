@@ -7,10 +7,10 @@ using CsQuery;
 using SmartRoutes.Model.Odjfs;
 using SmartRoutes.Model.Odjfs.ChildCareStubs;
 using NLog;
-using OdjfsScraper.Support;
-using Scraper;
+using SmartRoutes.OdjfsScraper.Support;
+using SmartRoutes.Scraper;
 
-namespace OdjfsScraper.Parsers
+namespace SmartRoutes.OdjfsScraper.Parsers
 {
     public class ListDocumentParser : IListDocumentParser
     {

@@ -6,17 +6,17 @@ using System.Data.Entity.Migrations;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
-using Database.Contexts;
+using SmartRoutes.Database.Contexts;
 using SmartRoutes.Model.Odjfs;
 using SmartRoutes.Model.Odjfs.ChildCares;
 using SmartRoutes.Model.Odjfs.ChildCareStubs;
 using NLog;
-using OdjfsScraper.Scrapers;
+using SmartRoutes.OdjfsScraper.Scrapers;
 using PolyGeocoder.Geocoders;
 using PolyGeocoder.Support;
-using Scraper;
+using SmartRoutes.Scraper;
 
-namespace OdjfsDataChecker
+namespace SmartRoutes.OdjfsDataChecker
 {
     public class Odjfs
     {

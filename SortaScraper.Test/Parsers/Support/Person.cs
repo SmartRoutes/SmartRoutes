@@ -1,4 +1,4 @@
-﻿namespace SortaScraper.Test.Parsers.Support
+﻿namespace SmartRoutes.SortaScraper.Test.Parsers
 {
     public class Person
     {

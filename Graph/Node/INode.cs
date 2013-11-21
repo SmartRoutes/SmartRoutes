@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using SmartRoutes.Model;
 using SmartRoutes.Model.Sorta;
 
-namespace Graph.Node
+namespace SmartRoutes.Graph.Node
 {
     public interface INode : ILocation
     {

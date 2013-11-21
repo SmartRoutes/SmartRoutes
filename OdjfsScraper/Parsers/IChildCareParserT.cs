@@ -1,4 +1,4 @@
-﻿namespace OdjfsScraper.Parsers
+﻿namespace SmartRoutes.OdjfsScraper.Parsers
 {
     public interface IChildCareParser<T>
     {

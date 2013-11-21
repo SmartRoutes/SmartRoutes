@@ -3,18 +3,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using SmartRoutes.Graph.Node;
 using SmartRoutes.Model;
 using SmartRoutes.Model.Odjfs.ChildCares;
-using SortaScraper.Support;
+using SmartRoutes.SortaScraper.Support;
 using SmartRoutes.Model.Sorta;
 using SmartRoutes.Model.Odjfs;
 using Ninject;
 using Ninject.Extensions.Conventions;
 using Ninject.Modules;
 using NLog;
-using Graph.Node;
 
-namespace Graph
+namespace SmartRoutes.Graph
 {
     public class GraphBuilder : IGraphBuilder
     {

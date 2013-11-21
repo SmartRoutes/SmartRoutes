@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace GeocoderComparisonLoader
+namespace SmartRoutes.GeocoderComparisonLoader
 {
     public class GeocodedData : Tuple<double, double, DateTime>
     {

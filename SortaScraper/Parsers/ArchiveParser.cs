@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using SmartRoutes.Model.Sorta;
 
-namespace SortaScraper.Parsers
+namespace SmartRoutes.SortaScraper.Parsers
 {
     public class ArchiveParser : IArchiveParser
     {

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Heap
+namespace SmartRoutes.Heap
 {
     internal class FibHeapNode<TValue, TKey> where TKey : IComparable
     {

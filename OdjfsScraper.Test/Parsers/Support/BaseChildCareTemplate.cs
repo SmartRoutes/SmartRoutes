@@ -2,7 +2,7 @@
 using SmartRoutes.Model.Odjfs;
 using SmartRoutes.Model.Odjfs.ChildCares;
 
-namespace OdjfsScraper.Test.Parsers.Support
+namespace SmartRoutes.OdjfsScraper.Test.Parsers.Support
 {
     public abstract class BaseChildCareTemplate<T> : TemplateBase<T> where T : ChildCare
     {

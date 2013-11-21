@@ -2,9 +2,9 @@
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
-using Scraper;
+using SmartRoutes.Scraper;
 
-namespace SortaScraper.Support
+namespace SmartRoutes.SortaScraper.Support
 {
     public class SortaClient : ISortaClient
     {

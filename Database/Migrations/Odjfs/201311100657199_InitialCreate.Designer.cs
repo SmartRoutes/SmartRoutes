@@ -4,7 +4,7 @@ using System.CodeDom.Compiler;
 using System.Data.Entity.Migrations.Infrastructure;
 using System.Resources;
 
-namespace Database.Migrations.Odjfs
+namespace SmartRoutes.Database.Migrations.Odjfs
 {
     [GeneratedCode("EntityFramework.Migrations", "6.0.1-21010")]
     public sealed partial class InitialCreate : IMigrationMetadata
