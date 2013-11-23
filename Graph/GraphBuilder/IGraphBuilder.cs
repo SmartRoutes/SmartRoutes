@@ -1,16 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using SmartRoutes.Graph.Node;
-using SmartRoutes.SortaScraper.Support;
 using SmartRoutes.Model.Odjfs.ChildCares;
+using SmartRoutes.Model.Sorta;
 
 namespace SmartRoutes.Graph
 {
     public interface IGraphBuilder
     {
-        INode[] BuildGraph(EntityCollection Collection, IEnumerable<ChildCare> ChildCares);
+        INode[] BuildGraph(IEnumerable<StopTime> StopTimes, IEnumerable<ChildCare> ChildCares);
     }
 }

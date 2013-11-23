@@ -9,7 +9,6 @@ using SmartRoutes.Database.Contexts;
 using SmartRoutes.Graph.Node;
 using SmartRoutes.SortaScraper.Support;
 using SmartRoutes.SortaScraper.Scrapers;
-using SmartRoutes.SortaDataChecker;
 using SmartRoutes.Model.Sorta;
 using SmartRoutes.Model.Odjfs.ChildCares;
 using SmartRoutes.Heap;
@@ -50,7 +49,7 @@ namespace SmartRoutes.Graph
             this.Builder = Builder;
             GetSortaEntities();
             GetChildCares();
-            GraphNodes = Builder.BuildGraph(Collection, ChildCares);
+            GraphNodes = Builder.BuildGraph(Collection.StopTimes, ChildCares);
         }
 
         public void GetChildCares()
