@@ -51,6 +51,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Heap.Test", "Heap.Test\Heap
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GeocoderComparisonLoader", "GeocoderComparisonLoader\GeocoderComparisonLoader.csproj", "{4EAC30A3-361C-4FC2-A86D-B3C0FACE9E54}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Graph.Test", "Graph.Test\Graph.Test.csproj", "{FD947449-37E6-462B-88B9-8326194990E6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -231,6 +233,18 @@ Global
 		{4EAC30A3-361C-4FC2-A86D-B3C0FACE9E54}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{4EAC30A3-361C-4FC2-A86D-B3C0FACE9E54}.Release|Win32.ActiveCfg = Release|Any CPU
 		{4EAC30A3-361C-4FC2-A86D-B3C0FACE9E54}.Release|x64.ActiveCfg = Release|Any CPU
+		{FD947449-37E6-462B-88B9-8326194990E6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FD947449-37E6-462B-88B9-8326194990E6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FD947449-37E6-462B-88B9-8326194990E6}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{FD947449-37E6-462B-88B9-8326194990E6}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{FD947449-37E6-462B-88B9-8326194990E6}.Debug|Win32.ActiveCfg = Debug|Any CPU
+		{FD947449-37E6-462B-88B9-8326194990E6}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{FD947449-37E6-462B-88B9-8326194990E6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FD947449-37E6-462B-88B9-8326194990E6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FD947449-37E6-462B-88B9-8326194990E6}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{FD947449-37E6-462B-88B9-8326194990E6}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{FD947449-37E6-462B-88B9-8326194990E6}.Release|Win32.ActiveCfg = Release|Any CPU
+		{FD947449-37E6-462B-88B9-8326194990E6}.Release|x64.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -246,5 +260,6 @@ Global
 		{4EAC30A3-361C-4FC2-A86D-B3C0FACE9E54} = {1607392B-A045-412C-B08D-883692A03005}
 		{995019AF-0B89-4104-8A91-6A35D6177C33} = {A7C97D81-BA09-405B-ABD7-23872311D68C}
 		{C68E9BFE-258E-4DD7-B7DC-760E9C6CCBD9} = {F3D569E6-113E-4CEA-AA23-E0B9CA8DA77A}
+		{FD947449-37E6-462B-88B9-8326194990E6} = {F3D569E6-113E-4CEA-AA23-E0B9CA8DA77A}
 	EndGlobalSection
 EndGlobal
