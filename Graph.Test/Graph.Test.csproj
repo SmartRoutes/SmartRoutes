@@ -52,11 +52,21 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="GraphBuilder\GraphBuilderTest.cs" />
+    <Compile Include="GraphBuilderTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Graph\Graph.csproj">
+      <Project>{efd2fc16-9536-4c25-9402-f728ba2f35da}</Project>
+      <Name>Graph</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Model\Model.csproj">
+      <Project>{711cc508-53a8-4edb-bbca-b911935da4b0}</Project>
+      <Name>Model</Name>
+    </ProjectReference>
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
