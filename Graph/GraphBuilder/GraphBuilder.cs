@@ -134,7 +134,7 @@ namespace SmartRoutes.Graph
                     var Stop1 = enumerator1.Current;
 
                     // associate Id's of closest stops with this stop
-                    StopToNearest.Add(Stop1.Id, Stop1.ChildStops.Select(s => s.Id).ToList());
+                    StopToNearest.Add(Stop1.Id, Stop1.CloseStops.Select(s => s.Id).ToList());
 
                     // associate MetroNodes which contain this stop with this stop
                     var Stop1NodeList = new List<IMetroNode>();

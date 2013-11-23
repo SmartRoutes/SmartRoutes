@@ -63,6 +63,32 @@ namespace SmartRoutes.Graph.Test
             VerifyCircuit(trip2, subgraphs[1]);
         }
 
+        [TestMethod]
+        public void Transfer_SameStop()
+        {
+            // ARRANGE
+            IMetroNode metroNodeMaker = new MetroNode();
+            IGraphBuilder graphBuilder = new GraphBuilder(metroNodeMaker);
+
+            var stop = new Stop {Id = 1, Latitude = 38.892221, Longitude = -77.036395};
+            stop.CloseStops.Add(stop);
+
+            var time1 = new DateTime(1970, 1, 1, 10, 0, 0);
+            DateTime time2 = time1.AddMinutes(1);
+            var stopTime1 = new StopTime {ArrivalTime = time1, Stop = stop, StopId = stop.Id, TripId = 1};
+            var stopTime2 = new StopTime {ArrivalTime = time2, Stop = stop, StopId = stop.Id, TripId = 2};
+            IEnumerable<StopTime> stoptimes = new[] {stopTime1, stopTime2};
+
+            // ACT
+            INode[] nodes = graphBuilder.BuildGraph(stoptimes, Enumerable.Empty<ChildCare>());
+
+            // ASSERT
+            INode[][] subgraphs = GetSortedDisconnectedSubgraphs(nodes).ToArray();
+            Assert.AreEqual(1, subgraphs);
+            Assert.AreEqual(subgraphs[0][0].Time, time1);
+            Assert.AreEqual(subgraphs[0][1].Time, time2);
+        }
+
         private static void VerifyCircuit(StopTime[] trip, INode[] nodes)
         {
             // ASSERT
@@ -99,7 +125,6 @@ namespace SmartRoutes.Graph.Test
                 var stopTime = new StopTime
                 {
                     ArrivalTime = time,
-                    DepartureTime = time,
                     Sequence = i,
                     Stop = stop,
                     StopId = stop.Id,
@@ -114,7 +139,6 @@ namespace SmartRoutes.Graph.Test
             stopTimes.Add(new StopTime
             {
                 ArrivalTime = time,
-                DepartureTime = time,
                 Sequence = stopTimeCount,
                 Stop = stopTimes[0].Stop,
                 StopId = stopTimes[0].StopId,
@@ -126,6 +150,7 @@ namespace SmartRoutes.Graph.Test
 
         private static IEnumerable<INode[]> GetSortedDisconnectedSubgraphs(IEnumerable<INode> node)
         {
+            // use depth-first search to explore the entire graph, finding disconnected subgraphs
             ISet<INode> unvisitedNodes = new HashSet<INode>(node);
             while (unvisitedNodes.Count > 0)
             {
