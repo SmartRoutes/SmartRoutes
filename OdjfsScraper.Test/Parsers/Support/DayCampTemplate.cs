@@ -4,7 +4,7 @@ namespace SmartRoutes.OdjfsScraper.Test.Parsers.Support
 {
     public class DayCampTemplate : BaseChildCareTemplate<DayCamp>
     {
-        public DayCampTemplate() : base(new DayCamp())
+        public DayCampTemplate()
         {
             Model.EffectiveDates = "EffectiveDates";
             Model.Owner = "Owner";

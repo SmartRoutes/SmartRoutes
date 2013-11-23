@@ -4,13 +4,13 @@ using SmartRoutes.Model.Odjfs.ChildCares;
 
 namespace SmartRoutes.OdjfsScraper.Test.Parsers.Support
 {
-    public class BaseDetailedChildCareHomeTemplate<T> : BaseChildCareTemplate<T> where T : DetailedChildCare
+    public abstract class BaseDetailedChildCareHomeTemplate<T> : BaseChildCareTemplate<T> where T : DetailedChildCare
     {
-        public BaseDetailedChildCareHomeTemplate(T childCare) : base(childCare)
+        protected BaseDetailedChildCareHomeTemplate()
         {
-            childCare.ProviderAgreement = "ProviderAgreement";
-            childCare.Administrators = "Adminitrators";
-            childCare.CenterStatus = "CenterStatus";
+            Model.ProviderAgreement = "ProviderAgreement";
+            Model.Administrators = "Adminitrators";
+            Model.CenterStatus = "CenterStatus";
             Model.InitialApplicationDate = "InitialApplicationDate";
             Model.LicenseBeginDate = "LicenseBeginDate";
             Model.LicenseExpirationDate = "LicenseExpirationDate";
