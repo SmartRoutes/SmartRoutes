@@ -70,7 +70,7 @@ namespace SmartRoutes.Graph.Test
             IMetroNode metroNodeMaker = new MetroNode();
             IGraphBuilder graphBuilder = new GraphBuilder(metroNodeMaker);
 
-            var stop = new Stop {Id = 1, Latitude = 38.892221, Longitude = -77.036395};
+            var stop = new Stop {Id = 1, Latitude = 38.892416, Longitude = -77.028277};
             stop.CloseStops.Add(stop);
 
             var time1 = new DateTime(1970, 1, 1, 10, 0, 0);
@@ -84,7 +84,37 @@ namespace SmartRoutes.Graph.Test
 
             // ASSERT
             INode[][] subgraphs = GetSortedDisconnectedSubgraphs(nodes).ToArray();
-            Assert.AreEqual(1, subgraphs);
+            Assert.AreEqual(1, subgraphs.Length);
+            Assert.AreEqual(subgraphs[0][0].Time, time1);
+            Assert.AreEqual(subgraphs[0][1].Time, time2);
+        }
+
+        [TestMethod]
+        public void Transfer_DifferentStop()
+        {
+            // ARRANGE
+            IMetroNode metroNodeMaker = new MetroNode();
+            IGraphBuilder graphBuilder = new GraphBuilder(metroNodeMaker);
+
+            var stop1 = new Stop {Id = 1, Latitude = 38.892416, Longitude = -77.028277};
+            stop1.CloseStops.Add(stop1);
+            var stop2 = new Stop {Id = 1, Latitude = 38.892093, Longitude = -77.028042};
+            stop2.CloseStops.Add(stop2);
+            stop1.CloseStops.Add(stop2);
+            stop2.CloseStops.Add(stop1);
+
+            var time1 = new DateTime(1970, 1, 1, 10, 0, 0);
+            DateTime time2 = time1.AddMinutes(1);
+            var stopTime1 = new StopTime {ArrivalTime = time1, Stop = stop1, StopId = stop1.Id, TripId = 1};
+            var stopTime2 = new StopTime {ArrivalTime = time2, Stop = stop2, StopId = stop2.Id, TripId = 2};
+            IEnumerable<StopTime> stoptimes = new[] {stopTime1, stopTime2};
+
+            // ACT
+            INode[] nodes = graphBuilder.BuildGraph(stoptimes, Enumerable.Empty<ChildCare>());
+
+            // ASSERT
+            INode[][] subgraphs = GetSortedDisconnectedSubgraphs(nodes).ToArray();
+            Assert.AreEqual(1, subgraphs.Length);
             Assert.AreEqual(subgraphs[0][0].Time, time1);
             Assert.AreEqual(subgraphs[0][1].Time, time2);
         }
