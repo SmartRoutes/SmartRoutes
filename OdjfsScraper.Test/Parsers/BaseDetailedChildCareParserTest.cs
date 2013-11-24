@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SmartRoutes.Model.Odjfs.ChildCares;
 using SmartRoutes.OdjfsScraper.Parsers;
 using SmartRoutes.OdjfsScraper.Test.Parsers.Support;
@@ -25,6 +22,14 @@ namespace SmartRoutes.OdjfsScraper.Test.Parsers
                     string.Format("A parser exception should have been thrown because {0}'s start time is after the end time.", day),
                     t => t.ReplaceDetails(key, m => "03:00 PM to 01:00 PM"));
             }
+        }
+
+        [TestMethod]
+        public virtual void InvalidSutqRating()
+        {
+            TestUnsuccessfulParse(
+                string.Format("A parser exception should have been thrown because the SUTQ rating was not formatted properly."),
+                t => t.ReplaceDetails("SUTQ Rating", m => "+++"));
         }
 
         protected override void VerifyAreEqual(TModel expected, TModel actual)
