@@ -40,17 +40,23 @@ namespace SmartRoutes.Graph
             }
         }
 
-        public INode[] BuildGraph(EntityCollection Collection, IEnumerable<ChildCare> ChildCares)
+        public INode[] BuildGraph(IEnumerable<StopTime> StopTimes, IEnumerable<ChildCare> ChildCares)
         {
             try
             {
                 Logger.Trace("Creating new graph.");
 
-                var MetroNodes = CreateMetroNodes(Collection);
+                // collect all the stops
+                Stop[] Stops = StopTimes
+                    .GroupBy(s => s.StopId)
+                    .Select(g => g.First().Stop)
+                    .ToArray();
+
+                var MetroNodes = CreateMetroNodes(StopTimes);
                 ConnectTrips(MetroNodes);
                 //ConnectTransfers(MetroNodes);
-                ConnectTransfers(MetroNodes, Collection);
-                var GraphNodes = InsertChildCareNodes(Collection, ChildCares, MetroNodes);
+                ConnectTransfers(MetroNodes, Stops);
+                var GraphNodes = InsertChildCareNodes(Stops, ChildCares, MetroNodes);
                 Logger.Trace("Graph created successfully.");
                 return GraphNodes;
             }
@@ -62,13 +68,13 @@ namespace SmartRoutes.Graph
             }
         }
 
-        private IMetroNode[] CreateMetroNodes(EntityCollection Collection)
+        private IMetroNode[] CreateMetroNodes(IEnumerable<StopTime> stopTimes)
         {
             Logger.Trace("Creating Metro Nodes.");
 
             try
             {
-                var MetroNodes = (from stopTime in Collection.StopTimes
+                var MetroNodes = (from stopTime in stopTimes
                                   select _metroNodeMaker.CreateNode(stopTime))
                                  .ToArray();
 
@@ -109,7 +115,7 @@ namespace SmartRoutes.Graph
             }
         }
 
-        private void ConnectTransfers(IMetroNode[] MetroNodes, EntityCollection collection)
+        private void ConnectTransfers(IMetroNode[] MetroNodes, IEnumerable<Stop> stops)
         {
             Logger.Trace("Connecting Metro Transfers.");
 
@@ -121,14 +127,14 @@ namespace SmartRoutes.Graph
                 StopToNearest = new Dictionary<int, List<int>>();
                 StopToNodes = new Dictionary<int, List<IMetroNode>>();
 
-                var enumerator1 = collection.Stops.GetEnumerator();
+                var enumerator1 = stops.GetEnumerator();
 
                 while (enumerator1.MoveNext())
                 {
                     var Stop1 = enumerator1.Current;
 
                     // associate Id's of closest stops with this stop
-                    StopToNearest.Add(Stop1.Id, Stop1.ChildStops.Select(s => s.Id).ToList());
+                    StopToNearest.Add(Stop1.Id, Stop1.CloseStops.Select(s => s.Id).ToList());
 
                     // associate MetroNodes which contain this stop with this stop
                     var Stop1NodeList = new List<IMetroNode>();
@@ -190,9 +196,9 @@ namespace SmartRoutes.Graph
             }
         }
 
-        private INode[] InsertChildCareNodes(EntityCollection Collection, IEnumerable<ChildCare> ChildCares, INode[] GraphNodes)
+        private INode[] InsertChildCareNodes(IEnumerable<Stop> Stops, IEnumerable<ChildCare> ChildCares, INode[] GraphNodes)
         {
-            if (Collection == null || ChildCares == null || GraphNodes == null)
+            if (Stops == null || ChildCares == null || GraphNodes == null)
             {
                 throw new ArgumentNullException();
             }
@@ -216,7 +222,7 @@ namespace SmartRoutes.Graph
 
                 var nearestStops = new List<int>();
 
-                var StopEnumerator = Collection.Stops.GetEnumerator();
+                var StopEnumerator = Stops.GetEnumerator();
 
                 while (StopEnumerator.MoveNext())
                 {

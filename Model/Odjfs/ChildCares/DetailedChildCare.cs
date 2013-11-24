@@ -20,7 +20,7 @@ namespace SmartRoutes.Model.Odjfs.ChildCares
         public string CenterStatus { get; set; }
         public string InitialApplicationDate { get; set; }
         public string LicenseBeginDate { get; set; }
-        public string LicenseEndDate { get; set; }
+        public string LicenseExpirationDate { get; set; }
 
         public int? SutqRating { get; set; }
 
@@ -35,6 +35,7 @@ namespace SmartRoutes.Model.Odjfs.ChildCares
         public bool Naeyc { get; set; }
         public bool Necpa { get; set; }
         public bool Naccp { get; set; }
+        public bool Nafcc { get; set; }
         public bool Coa { get; set; }
         public bool Acsi { get; set; }
 

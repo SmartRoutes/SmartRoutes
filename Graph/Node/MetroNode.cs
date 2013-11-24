@@ -7,7 +7,7 @@ using SmartRoutes.Model.Sorta;
 
 namespace SmartRoutes.Graph.Node
 {
-    class MetroNode : IMetroNode
+    public class MetroNode : IMetroNode
     {
         // INode properties
         public ISet<INode> UpwindNeighbors { get; set; }

@@ -3,11 +3,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{995019AF-0B89-4104-8A91-6A35D6177C33}</ProjectGuid>
+    <ProjectGuid>{CC50EB03-A13A-4551-A2F9-E433E3F6CB18}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SmartRoutes.SortaScraper.Test</RootNamespace>
-    <AssemblyName>SmartRoutes.SortaScraper.Test</AssemblyName>
+    <RootNamespace>SmartRoutes.OdjfsScraper.Test</RootNamespace>
+    <AssemblyName>SmartRoutes.OdjfsScraper.Test</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -38,6 +38,8 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.XML" />
   </ItemGroup>
   <Choose>
     <When Condition="('$(VisualStudioVersion)' == '10.0' or '$(VisualStudioVersion)' == '') and '$(TargetFrameworkVersion)' == 'v3.5'">
@@ -52,11 +54,18 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="Parsers\AgencyCsvStreamParserTest.cs" />
-    <Compile Include="Parsers\Support\AbstractCsvStreamParserTest.cs" />
-    <Compile Include="Parsers\CsvStreamParserTest.cs" />
-    <Compile Include="Parsers\Support\Person.cs" />
-    <Compile Include="Parsers\Support\PersonCsvStreamParser.cs" />
+    <Compile Include="Parsers\BaseChildCareParserTest.cs" />
+    <Compile Include="Parsers\BaseDetailedChildCareParserTest.cs" />
+    <Compile Include="Parsers\TypeAHomeParserTest.cs" />
+    <Compile Include="Parsers\LicensedCenterParserTest.cs" />
+    <Compile Include="Parsers\DayCampParserTest.cs" />
+    <Compile Include="Parsers\TypeBHomeParserTest.cs" />
+    <Compile Include="Parsers\Support\ChildCareTemplate.cs" />
+    <Compile Include="Parsers\Support\DetailedChildCareHomeTemplate.cs" />
+    <Compile Include="Parsers\Support\LicensedCenterTemplate.cs" />
+    <Compile Include="Parsers\Support\TypeAHomeTemplate.cs" />
+    <Compile Include="Parsers\Support\DayCampTemplate.cs" />
+    <Compile Include="Parsers\Support\TypeBHomeTemplate.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -64,17 +73,18 @@
       <Project>{711cc508-53a8-4edb-bbca-b911935da4b0}</Project>
       <Name>Model</Name>
     </ProjectReference>
+    <ProjectReference Include="..\OdjfsScraper\OdjfsScraper.csproj">
+      <Project>{393f1b81-3f51-45dc-976c-3bd31d2a71de}</Project>
+      <Name>OdjfsScraper</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\OdjfsStatusChecker\OdjfsStatusChecker.csproj">
+      <Project>{A80C87E0-65AA-4DCE-8AA8-7D82042769A9}</Project>
+      <Name>OdjfsStatusChecker</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Scraper\Scraper.csproj">
       <Project>{4401fe23-f94a-4eda-aa76-ccd53548e10e}</Project>
       <Name>Scraper</Name>
     </ProjectReference>
-    <ProjectReference Include="..\SortaScraper\SortaScraper.csproj">
-      <Project>{00d91962-12c1-4729-a893-8beeb1599c5e}</Project>
-      <Name>SortaScraper</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
@@ -114,6 +124,6 @@
     <Time>
       <Output TaskParameter="Year" PropertyName="Year" />
     </Time>
-    <AssemblyInfo CodeLanguage="CS" OutputFile="Properties\AssemblyInfo.cs" AssemblyTitle="SmartRoutes.SortaScraper.Test" AssemblyDescription="" AssemblyCompany="" AssemblyProduct="SmartRoutes.SortaScraper.Test" AssemblyCopyright="Copyright (c) $(Year). All rights reserved." ComVisible="false" CLSCompliant="false" AssemblyInformationalVersion="$(Major).$(Minor).$(Build).$(Revision)" AssemblyVersion="$(Major).$(Minor).$(Build)" AssemblyFileVersion="$(Major).$(Minor).$(Build)" />
+    <AssemblyInfo CodeLanguage="CS" OutputFile="Properties\AssemblyInfo.cs" AssemblyTitle="SmartRoutes.OdjfsScraper.Test" AssemblyDescription="" AssemblyCompany="" AssemblyProduct="SmartRoutes.OdjfsScraper.Test" AssemblyCopyright="Copyright (c) $(Year). All rights reserved." ComVisible="false" CLSCompliant="false" AssemblyInformationalVersion="$(Major).$(Minor).$(Build).$(Revision)" AssemblyVersion="$(Major).$(Minor).$(Build)" AssemblyFileVersion="$(Major).$(Minor).$(Build)" />
   </Target>
 </Project>
