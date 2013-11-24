@@ -49,6 +49,10 @@
     <Compile Include="Contexts\BaseContext.cs" />
     <Compile Include="ExtensionMethods.cs" />
     <Compile Include="FastInserter.cs" />
+    <Compile Include="Migrations\Odjfs\201311240119336_RemoveEffectiveDatesColumn.cs" />
+    <Compile Include="Migrations\Odjfs\201311240119336_RemoveEffectiveDatesColumn.Designer.cs">
+      <DependentUpon>201311240119336_RemoveEffectiveDatesColumn.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Odjfs\201311240034010_AddNafccColumn.cs" />
     <Compile Include="Migrations\Odjfs\201311240034010_AddNafccColumn.Designer.cs">
       <DependentUpon>201311240034010_AddNafccColumn.cs</DependentUpon>
@@ -97,6 +101,9 @@
     <Folder Include="Mappings\Sorta\" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Migrations\Odjfs\201311240119336_RemoveEffectiveDatesColumn.resx">
+      <DependentUpon>201311240119336_RemoveEffectiveDatesColumn.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Migrations\Odjfs\201311240034010_AddNafccColumn.resx">
       <DependentUpon>201311240034010_AddNafccColumn.cs</DependentUpon>
     </EmbeddedResource>

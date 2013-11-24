@@ -15,7 +15,6 @@
         public string RegistrationStatus { get; set; }
         public string RegistrationBeginDate { get; set; }
         public string RegistrationEndDate { get; set; }
-        public string EffectiveDates { get; set; }
 
         #endregion
     }
