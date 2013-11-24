@@ -51,11 +51,26 @@ namespace SmartRoutes.OdjfsScraper.Test.Parsers
             }
         }
 
+        public virtual void IgnoreSpacerImages()
+        {
+            // ARRANGE
+            var template = Activator.CreateInstance<TTemplate>();
+            var parser = Activator.CreateInstance<TParser>();
+            var actualModel = Activator.CreateInstance<TModel>();
+
+            // ACT
+            actualModel = parser.Parse(actualModel, template.GetDocument());
+
+            // ASSERT
+            VerifyAreEqual(template.Model, actualModel);
+        }
+
         protected virtual void VerifyAreEqual(TModel expected, TModel actual)
         {
             Assert.IsNotNull(actual);
             Assert.AreEqual(expected.ExternalId, actual.ExternalId);
             Assert.AreEqual(expected.Name, actual.Name);
+            Assert.AreEqual(expected.Address, actual.Address);
             Assert.AreEqual(expected.City, actual.City);
             Assert.AreEqual(expected.State, actual.State);
             Assert.AreEqual(expected.ZipCode, actual.ZipCode);

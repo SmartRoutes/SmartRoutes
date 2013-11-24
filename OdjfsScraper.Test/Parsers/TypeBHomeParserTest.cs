@@ -6,7 +6,7 @@ using SmartRoutes.OdjfsScraper.Test.Parsers.Support;
 namespace SmartRoutes.OdjfsScraper.Test.Parsers
 {
     [TestClass]
-    public class TypeAHomeParserTest : BaseChildCareParserTest<TypeAHome, TypeAHomeTemplate, TypeAHomeParser>
+    public class TypeBHomeParserTest : BaseChildCareParserTest<TypeBHome, TypeBHomeTemplate, TypeBHomeParser>
     {
         [TestMethod]
         public override void HappyPath()
@@ -18,6 +18,14 @@ namespace SmartRoutes.OdjfsScraper.Test.Parsers
         public override void MissingDetail()
         {
             base.MissingDetail();
+        }
+
+        protected override void VerifyAreEqual(TypeBHome expected, TypeBHome actual)
+        {
+            base.VerifyAreEqual(expected, actual);
+
+            Assert.AreEqual(expected.CertificationBeginDate, actual.CertificationBeginDate);
+            Assert.AreEqual(expected.CertificationExpirationDate, actual.CertificationExpirationDate);
         }
     }
 }

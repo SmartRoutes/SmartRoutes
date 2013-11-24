@@ -55,6 +55,7 @@
   </Choose>
   <ItemGroup>
     <Compile Include="Parsers\BaseChildCareParserTest.cs" />
+    <Compile Include="Parsers\BaseDetailedChildCareParserTest.cs" />
     <Compile Include="Parsers\TypeAHomeParserTest.cs" />
     <Compile Include="Parsers\LicensedCenterParserTest.cs" />
     <Compile Include="Parsers\DayCampParserTest.cs" />

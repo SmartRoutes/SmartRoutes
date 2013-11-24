@@ -6,7 +6,7 @@ using SmartRoutes.OdjfsScraper.Test.Parsers.Support;
 namespace SmartRoutes.OdjfsScraper.Test.Parsers
 {
     [TestClass]
-    public class TypeBHomeParserTest : BaseChildCareParserTest<TypeBHome, TypeBHomeTemplate, TypeBHomeParser>
+    public class TypeAHomeParserTest : BaseChildCareParserTest<TypeAHome, TypeAHomeTemplate, TypeAHomeParser>
     {
         [TestMethod]
         public override void HappyPath()
