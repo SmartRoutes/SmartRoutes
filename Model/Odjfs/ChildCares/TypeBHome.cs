@@ -12,7 +12,7 @@
         #region HTML
 
         public string CertificationBeginDate { get; set; }
-        public string CertificationEndDate { get; set; }
+        public string CertificationExpirationDate { get; set; }
 
         #endregion
     }

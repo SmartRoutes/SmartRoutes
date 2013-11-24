@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using CsQuery;
+using NLog;
 using SmartRoutes.Model.Odjfs;
 using SmartRoutes.Model.Odjfs.ChildCares;
-using NLog;
 using SmartRoutes.OdjfsScraper.Support;
 using SmartRoutes.Scraper;
 
@@ -46,9 +46,20 @@ namespace SmartRoutes.OdjfsScraper.Parsers
             // TODO: verify Type string is the expected value per typeof(T)
             childCare.ExternalId = GetDetailString(details, "Number");
             childCare.Name = GetDetailString(details, "Name");
+            childCare.Address = GetDetailString(details, "Address");
             childCare.City = GetDetailString(details, "City");
             childCare.State = GetDetailString(details, "State");
-            childCare.ZipCode = int.Parse(GetDetailString(details, "Zip"));
+
+            string zipCodeString = GetDetailString(details, "Zip");
+            int zipCode;
+            if (!int.TryParse(zipCodeString, out zipCode))
+            {
+                var exception = new ParserException("The zip code was not parsable as an integer.");
+                Logger.ErrorException(string.Format("Type: '{0}', Zip: '{1}'", typeof (T).Name, zipCodeString), exception);
+                throw exception;
+            }
+            childCare.ZipCode = zipCode;
+
             childCare.PhoneNumber = GetDetailString(details, "Phone");
             childCare.County = new County {Name = GetDetailString(details, "County")};
         }

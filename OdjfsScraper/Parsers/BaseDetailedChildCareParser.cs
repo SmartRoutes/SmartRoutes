@@ -65,11 +65,17 @@ namespace SmartRoutes.OdjfsScraper.Parsers
             childCare.ProviderAgreement = GetDetailString(details, "Provider Agreement");
             childCare.InitialApplicationDate = GetDetailString(details, "Initial Application Date");
             childCare.LicenseBeginDate = GetDetailString(details, "License Begin Date");
-            childCare.LicenseEndDate = GetDetailString(details, "License Expiration Date");
+            childCare.LicenseExpirationDate = GetDetailString(details, "License Expiration Date");
             childCare.PhoneNumber = GetDetailString(details, "Phone");
 
             string sutqRating = GetDetailString(details, "SUTQ Rating");
-            childCare.SutqRating = sutqRating != null ? details["SUTQ Rating"].Length : (int?) null;
+            if (sutqRating != null && Regex.Match(sutqRating, @"[^\*]").Success)
+            {
+                var exception = new ParserException("The SUTQ Rating field was not formatted as expected.");
+                Logger.ErrorException(string.Format("Value: '{0}'", sutqRating), exception);
+                throw exception;
+            }
+            childCare.SutqRating = sutqRating != null ? sutqRating.Length : (int?)null;
 
             // children served column
             childCare.Infants = GetDetailBool(details, "Infants");
@@ -83,7 +89,7 @@ namespace SmartRoutes.OdjfsScraper.Parsers
             childCare.Naeyc = GetDetailBool(details, "NAEYC");
             childCare.Necpa = GetDetailBool(details, "NECPA");
             childCare.Naccp = GetDetailBool(details, "NACCP");
-            childCare.Naccp = GetDetailBool(details, "NAFCC");
+            childCare.Nafcc = GetDetailBool(details, "NAFCC");
             childCare.Coa = GetDetailBool(details, "COA");
             childCare.Acsi = GetDetailBool(details, "ACSI");
 

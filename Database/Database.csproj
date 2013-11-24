@@ -49,6 +49,18 @@
     <Compile Include="Contexts\BaseContext.cs" />
     <Compile Include="ExtensionMethods.cs" />
     <Compile Include="FastInserter.cs" />
+    <Compile Include="Migrations\Odjfs\201311240119336_RemoveEffectiveDatesColumn.cs" />
+    <Compile Include="Migrations\Odjfs\201311240119336_RemoveEffectiveDatesColumn.Designer.cs">
+      <DependentUpon>201311240119336_RemoveEffectiveDatesColumn.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Odjfs\201311240034010_AddNafccColumn.cs" />
+    <Compile Include="Migrations\Odjfs\201311240034010_AddNafccColumn.Designer.cs">
+      <DependentUpon>201311240034010_AddNafccColumn.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Odjfs\201311200515290_RenameEndDateColumns.cs" />
+    <Compile Include="Migrations\Odjfs\201311200515290_RenameEndDateColumns.Designer.cs">
+      <DependentUpon>201311200515290_RenameEndDateColumns.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Sorta\201311181859255_AddCloseStops.cs" />
     <Compile Include="Migrations\Sorta\201311181859255_AddCloseStops.Designer.cs">
       <DependentUpon>201311181859255_AddCloseStops.cs</DependentUpon>
@@ -89,6 +101,15 @@
     <Folder Include="Mappings\Sorta\" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Migrations\Odjfs\201311240119336_RemoveEffectiveDatesColumn.resx">
+      <DependentUpon>201311240119336_RemoveEffectiveDatesColumn.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\Odjfs\201311240034010_AddNafccColumn.resx">
+      <DependentUpon>201311240034010_AddNafccColumn.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\Odjfs\201311200515290_RenameEndDateColumns.resx">
+      <DependentUpon>201311200515290_RenameEndDateColumns.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Migrations\Sorta\201311181859255_AddCloseStops.resx">
       <DependentUpon>201311181859255_AddCloseStops.cs</DependentUpon>
     </EmbeddedResource>

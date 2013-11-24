@@ -15,7 +15,6 @@ namespace SmartRoutes.OdjfsScraper.Parsers
             childCare.Owner = GetDetailString(details, "Owner");
             childCare.RegistrationBeginDate = GetDetailString(details, "Registration Begin Date");
             childCare.RegistrationEndDate = GetDetailString(details, "Registration End Date");
-            childCare.EffectiveDates = GetDetailString(details, "Effective Dates");
         }
     }
 }
