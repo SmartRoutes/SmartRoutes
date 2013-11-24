@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using SmartRoutes.Model.Odjfs;
@@ -28,7 +29,7 @@ namespace SmartRoutes.OdjfsScraper.Test.Parsers.Support
         protected ChildCareTemplate(IEnumerable<KeyValuePair<string, Func<T, string>>> parentPageContentDetails)
         {
             // intialize properties
-            Details = new Dictionary<string, Func<T, string>>();
+            Details = new Collection<KeyValuePair<string, Func<T, string>>>();
 
             // initialize the value getters
             foreach (var pair in DefaultDetails.Concat(parentPageContentDetails))
@@ -48,6 +49,27 @@ namespace SmartRoutes.OdjfsScraper.Test.Parsers.Support
         }
 
         public ICollection<KeyValuePair<string, Func<T, string>>> Details { get; private set; }
+
+        public void AddDetail(string key, Func<T, string> value)
+        {
+            Details.Add(new KeyValuePair<string, Func<T, string>>(key, value));
+        }
+
+        public void RemoveDetails(string key)
+        {
+            KeyValuePair<string, Func<T, string>> pair;
+            do
+            {
+                pair = Details.FirstOrDefault(p => p.Key == key);
+                Details.Remove(pair);
+            } while (pair.Equals(default(KeyValuePair<string, Func<T, string>>)));
+        }
+
+        public void ReplaceDetails(string key, Func<T, string> value)
+        {
+            RemoveDetails(key);
+            AddDetail(key, value);
+        }
 
         public T Model { get; private set; }
 

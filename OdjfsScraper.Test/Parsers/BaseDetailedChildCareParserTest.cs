@@ -20,14 +20,10 @@ namespace SmartRoutes.OdjfsScraper.Test.Parsers
 
             foreach (string day in days)
             {
+                string key = day + ":";
                 TestUnsuccessfulParse(
                     string.Format("A parser exception should have been thrown because {0}'s start time is after the end time.", day),
-                    t =>
-                    {
-                        KeyValuePair<string, Func<TModel, string>> detail = t.Details.First(p => p.Key == day + ":");
-                        t.Details.Remove(detail);
-                        t.Details.Add(new KeyValuePair<string, Func<TModel, string>>(detail.Key, m => "03:00 PM to 01:00 PM"));
-                    });
+                    t => t.ReplaceDetails(key, m => "03:00 PM to 01:00 PM"));
             }
         }
 

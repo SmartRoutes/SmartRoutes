@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SmartRoutes.Model.Odjfs.ChildCares;
@@ -48,25 +47,37 @@ namespace SmartRoutes.OdjfsScraper.Test.Parsers
         [TestMethod]
         public virtual void SpacerImage()
         {
-            TestSuccessfulParse(t => t.Details.Add(new KeyValuePair<string, Func<TModel, string>>(
-                "UNUSED",
-                m => "<img src='http://jfs.ohio.gov/_assets/images/web_graphics/common/spacer.gif'>")));
+            TestSuccessfulParse(t => t.AddDetail("UNUSED", m => "<img src='http://jfs.ohio.gov/_assets/images/web_graphics/common/spacer.gif'>"));
         }
 
         [TestMethod]
         public virtual void ValueWithNoKey()
         {
-            TestSuccessfulParse(t => t.Details.Add(new KeyValuePair<string, Func<TModel, string>>(
-                string.Empty,
-                m => "UNUSED")));
+            TestSuccessfulParse(t => t.AddDetail(string.Empty, m => "UNUSED"));
         }
 
         [TestMethod]
         public virtual void UnusedKeyWithNoValue()
         {
-            TestSuccessfulParse(t => t.Details.Add(new KeyValuePair<string, Func<TModel, string>>(
-                "UNUSED",
-                m => string.Empty)));
+            TestSuccessfulParse(t => t.AddDetail("UNUSED", m => string.Empty));
+        }
+
+        [TestMethod]
+        public virtual void UnusedDuplicateKeys()
+        {
+            TestUnsuccessfulParse("An exception should have been thrown because there were duplicate detail keys.",
+                t =>
+                {
+                    t.AddDetail("UNUSED", m => string.Empty);
+                    t.AddDetail("UNUSED", m => string.Empty);
+                });
+        }
+
+        [TestMethod]
+        public virtual void NonIntegerZip()
+        {
+            TestUnsuccessfulParse("An exception should have been thrown because the zip code was not an integer.",
+                t => t.ReplaceDetails("Zip", m => "FOO"));
         }
 
         protected void TestSuccessfulParse(Action<TTemplate> mutateTemplate)
