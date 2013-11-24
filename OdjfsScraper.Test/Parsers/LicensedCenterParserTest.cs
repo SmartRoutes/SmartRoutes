@@ -8,16 +8,5 @@ namespace SmartRoutes.OdjfsScraper.Test.Parsers
     [TestClass]
     public class LicensedCenterParserTest : BaseChildCareParserTest<LicensedCenter, LicensedCenterTemplate, LicensedCenterParser>
     {
-        [TestMethod]
-        public override void HappyPath()
-        {
-            base.HappyPath();
-        }
-
-        [TestMethod]
-        public override void MissingDetail()
-        {
-            base.MissingDetail();
-        }
     }
 }

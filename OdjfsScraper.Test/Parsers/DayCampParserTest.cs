@@ -8,18 +8,6 @@ namespace SmartRoutes.OdjfsScraper.Test.Parsers
     [TestClass]
     public class DayCampParserTest : BaseChildCareParserTest<DayCamp, DayCampTemplate, DayCampParser>
     {
-        [TestMethod]
-        public override void HappyPath()
-        {
-            base.HappyPath();
-        }
-
-        [TestMethod]
-        public override void MissingDetail()
-        {
-            base.MissingDetail();
-        }
-
         protected override void VerifyAreEqual(DayCamp expected, DayCamp actual)
         {
             base.VerifyAreEqual(expected, actual);

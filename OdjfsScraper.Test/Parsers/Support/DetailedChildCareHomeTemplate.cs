@@ -87,21 +87,21 @@ namespace SmartRoutes.OdjfsScraper.Test.Parsers.Support
             Model.MondayBegin = new DateTime(1970, 1, 1, 1, 0, 0);
             Model.MondayEnd = new DateTime(1970, 1, 1, 15, 0, 0);
 
-            Model.TuesdayReported = true;
-            Model.TuesdayBegin = new DateTime(1970, 1, 1, 2, 0, 0);
-            Model.TuesdayEnd = new DateTime(1970, 1, 1, 16, 0, 0);
+            Model.TuesdayReported = false;
+            Model.TuesdayBegin = null;
+            Model.TuesdayEnd = null;
 
             Model.WednesdayReported = true;
-            Model.WednesdayBegin = new DateTime(1970, 1, 1, 3, 0, 0);
-            Model.WednesdayEnd = new DateTime(1970, 1, 1, 17, 0, 0);
+            Model.WednesdayBegin = null;
+            Model.WednesdayEnd = null;
 
             Model.ThursdayReported = true;
-            Model.ThursdayBegin = new DateTime(1970, 1, 1, 4, 0, 0);
+            Model.ThursdayBegin = new DateTime(1970, 1, 1, 0, 0, 0);
             Model.ThursdayEnd = new DateTime(1970, 1, 1, 18, 0, 0);
 
             Model.FridayReported = true;
             Model.FridayBegin = new DateTime(1970, 1, 1, 5, 0, 0);
-            Model.FridayEnd = new DateTime(1970, 1, 1, 19, 0, 0);
+            Model.FridayEnd = new DateTime(1970, 1, 2, 0, 0, 0);
 
             Model.SaturdayReported = true;
             Model.SaturdayBegin = new DateTime(1970, 1, 1, 6, 0, 0);

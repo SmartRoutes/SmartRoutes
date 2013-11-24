@@ -9,7 +9,7 @@ namespace SmartRoutes.OdjfsScraper.Test.Parsers.Support
 {
     public class ChildCareTemplate<T> where T : ChildCare
     {
-        private static readonly IDictionary<string, Func<T, string>> DefaultDetails = new Dictionary<string, Func<T, string>>
+        private static readonly ICollection<KeyValuePair<string, Func<T, string>>> DefaultDetails = new Dictionary<string, Func<T, string>>
         {
             {"Number", c => c.ExternalId},
             {"Name", c => c.Name},
@@ -47,7 +47,7 @@ namespace SmartRoutes.OdjfsScraper.Test.Parsers.Support
             Model.PhoneNumber = "PhoneNumber";
         }
 
-        public IDictionary<string, Func<T, string>> Details { get; private set; }
+        public ICollection<KeyValuePair<string, Func<T, string>>> Details { get; private set; }
 
         public T Model { get; private set; }
 

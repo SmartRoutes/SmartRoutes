@@ -8,18 +8,6 @@ namespace SmartRoutes.OdjfsScraper.Test.Parsers
     [TestClass]
     public class TypeBHomeParserTest : BaseChildCareParserTest<TypeBHome, TypeBHomeTemplate, TypeBHomeParser>
     {
-        [TestMethod]
-        public override void HappyPath()
-        {
-            base.HappyPath();
-        }
-
-        [TestMethod]
-        public override void MissingDetail()
-        {
-            base.MissingDetail();
-        }
-
         protected override void VerifyAreEqual(TypeBHome expected, TypeBHome actual)
         {
             base.VerifyAreEqual(expected, actual);
