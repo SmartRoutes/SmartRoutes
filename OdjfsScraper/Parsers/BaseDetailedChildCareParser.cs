@@ -69,7 +69,13 @@ namespace SmartRoutes.OdjfsScraper.Parsers
             childCare.PhoneNumber = GetDetailString(details, "Phone");
 
             string sutqRating = GetDetailString(details, "SUTQ Rating");
-            childCare.SutqRating = sutqRating != null ? details["SUTQ Rating"].Length : (int?) null;
+            if (sutqRating != null && Regex.Match(sutqRating, @"[^\*]").Success)
+            {
+                var exception = new ParserException("The SUTQ Rating field was not formatted as expected.");
+                Logger.ErrorException(string.Format("Value: '{0}'", sutqRating), exception);
+                throw exception;
+            }
+            childCare.SutqRating = sutqRating != null ? sutqRating.Length : (int?)null;
 
             // children served column
             childCare.Infants = GetDetailBool(details, "Infants");
