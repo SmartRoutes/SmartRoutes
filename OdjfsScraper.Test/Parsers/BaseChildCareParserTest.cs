@@ -16,7 +16,7 @@ namespace SmartRoutes.OdjfsScraper.Test.Parsers
         [TestMethod]
         public virtual void HappyPath()
         {
-            TestSuccessfulParse(t => { });
+            TestSuccessfulParseOfTemplate(t => { });
         }
 
         [TestMethod]
@@ -47,25 +47,25 @@ namespace SmartRoutes.OdjfsScraper.Test.Parsers
         [TestMethod]
         public virtual void SpacerImage()
         {
-            TestSuccessfulParse(t => t.AddDetail("UNUSED", m => "<img src='http://jfs.ohio.gov/_assets/images/web_graphics/common/spacer.gif'>"));
+            TestSuccessfulParseOfTemplate(t => t.AddDetail("UNUSED", m => "<img src='http://jfs.ohio.gov/_assets/images/web_graphics/common/spacer.gif'>"));
         }
 
         [TestMethod]
         public virtual void ValueWithNoKey()
         {
-            TestSuccessfulParse(t => t.AddDetail(string.Empty, m => "UNUSED"));
+            TestSuccessfulParseOfTemplate(t => t.AddDetail(string.Empty, m => "UNUSED"));
         }
 
         [TestMethod]
         public virtual void UnusedKeyWithNoValue()
         {
-            TestSuccessfulParse(t => t.AddDetail("UNUSED", m => string.Empty));
+            TestSuccessfulParseOfTemplate(t => t.AddDetail("UNUSED", m => string.Empty));
         }
 
         [TestMethod]
         public virtual void UnusedDuplicateKeys()
         {
-            TestUnsuccessfulParse("An exception should have been thrown because there were duplicate detail keys.",
+            TestUnsuccessfulParseOfTemplate("An exception should have been thrown because there were duplicate detail keys.",
                 t =>
                 {
                     t.AddDetail("UNUSED", m => string.Empty);
@@ -76,11 +76,27 @@ namespace SmartRoutes.OdjfsScraper.Test.Parsers
         [TestMethod]
         public virtual void NonIntegerZip()
         {
-            TestUnsuccessfulParse("An exception should have been thrown because the zip code was not an integer.",
+            TestUnsuccessfulParseOfTemplate("An exception should have been thrown because the zip code was not an integer.",
                 t => t.ReplaceDetails("Zip", m => "FOO"));
         }
 
-        protected void TestSuccessfulParse(Action<TTemplate> mutateTemplate)
+        [TestMethod]
+        public virtual void MissingPageContent()
+        {
+            TestUnsuccessfulParseOfDocument(
+                "An exception should have been thrown because the #PageContent <div> was missing.",
+                "<p>Nothing here, boss.</p>");
+        }
+
+        [TestMethod]
+        public virtual void MissingTablePageContent()
+        {
+            TestUnsuccessfulParseOfDocument(
+                "An exception should have been thrown because the table in #PageContent was missing.",
+                "<div id='PageContent></div>");
+        }
+
+        protected void TestSuccessfulParseOfTemplate(Action<TTemplate> mutateTemplate)
         {
             // ARRANGE
             var template = Activator.CreateInstance<TTemplate>();
@@ -96,19 +112,31 @@ namespace SmartRoutes.OdjfsScraper.Test.Parsers
             VerifyAreEqual(template.Model, actualModel);
         }
 
-        protected void TestUnsuccessfulParse(string message, Action<TTemplate> mutateTemplate)
+        protected void TestUnsuccessfulParseOfTemplate(string message, Action<TTemplate> mutateTemplate)
         {
             // ARRANGE
             var template = Activator.CreateInstance<TTemplate>();
             mutateTemplate(template);
 
+            // ACT, ASSERT
+            TestUnsuccessfulParseOfDocument(message, template.GetDocument());
+        }
+
+        protected void TestUnsuccessfulParseOfDocument(string message, string document)
+        {
+            TestUnsuccessfulParseOfDocument(message, ChildCareTemplate<ChildCare>.GetBytes(document));
+        }
+
+        protected void TestUnsuccessfulParseOfDocument(string message, byte[] document)
+        {
+            // ARRANGE
             var parser = Activator.CreateInstance<TParser>();
             var actualModel = Activator.CreateInstance<TModel>();
 
             // ACT
             try
             {
-                parser.Parse(actualModel, template.GetDocument());
+                parser.Parse(actualModel, document);
 
                 // ASSERT
                 Assert.Fail(message);

@@ -73,7 +73,7 @@ namespace SmartRoutes.OdjfsScraper.Test.Parsers.Support
 
         public T Model { get; private set; }
 
-        protected static byte[] GetBytes(string input)
+        public static byte[] GetBytes(string input)
         {
             return Encoding.UTF8.GetBytes(input);
         }

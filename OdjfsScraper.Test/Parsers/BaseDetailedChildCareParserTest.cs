@@ -1,4 +1,5 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using System;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SmartRoutes.Model.Odjfs.ChildCares;
 using SmartRoutes.OdjfsScraper.Parsers;
 using SmartRoutes.OdjfsScraper.Test.Parsers.Support;
@@ -11,25 +12,69 @@ namespace SmartRoutes.OdjfsScraper.Test.Parsers
         where TParser : BaseChildCareParser<TModel>
     {
         [TestMethod]
+        public virtual void MissingProviderInfo()
+        {
+            TestUnsuccessfulParseOfDocument(
+                "A parser exception should have been thrown because the #providerinfo <table> element was missing.",
+                "<p>Nope, nothing at all.</p>");
+        }
+
+        [TestMethod]
         public virtual void StartTimeAfterEndTime()
         {
-            var days = new[] {"Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"};
+            TestUnsuccessfulParseOfTemplateHours(
+                "A parser exception should have been thrown because {0}'s start time is after the end time.",
+                (t, d) => t.ReplaceDetails(d + ":", m => "03:00 PM to 01:00 PM"));
+        }
 
-            foreach (string day in days)
-            {
-                string key = day + ":";
-                TestUnsuccessfulParse(
-                    string.Format("A parser exception should have been thrown because {0}'s start time is after the end time.", day),
-                    t => t.ReplaceDetails(key, m => "03:00 PM to 01:00 PM"));
-            }
+        [TestMethod]
+        public virtual void InvalidHours()
+        {
+            TestUnsuccessfulParseOfTemplateHours(
+                "A parser exception should have been thrown because {0}'s hours are not formatted properly.",
+                (t, d) => t.ReplaceDetails(d + ":", m => "FOO"));
         }
 
         [TestMethod]
         public virtual void InvalidSutqRating()
         {
-            TestUnsuccessfulParse(
+            TestUnsuccessfulParseOfTemplate(
                 string.Format("A parser exception should have been thrown because the SUTQ rating was not formatted properly."),
                 t => t.ReplaceDetails("SUTQ Rating", m => "+++"));
+        }
+
+        [TestMethod]
+        public virtual void InvalidBoolean()
+        {
+            var booleans = new[]
+            {
+                "Infants", "Younger Toddler", "Older Toddler", "Preschool", "School Age",
+                "Child Care", "NAEYC", "NECPA", "NACCP", "NAFCC", "COA", "ACSI"
+            };
+
+            foreach (string boolean in booleans)
+            {
+                string key = boolean;
+                TestUnsuccessfulParseOfTemplate(
+                    string.Format("A parser exception should have been thrown because {0} was not a valid boolean string.", key),
+                    t => t.ReplaceDetails(key, m => "FOO"));
+            }
+        }
+
+        protected void TestUnsuccessfulParseOfTemplateHours(string messageTemplate, Action<TTemplate, string> mutateTemplateWithDay)
+        {
+            var days = new[]
+            {
+                "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"
+            };
+
+            foreach (string day in days)
+            {
+                string localDay = day;
+                TestUnsuccessfulParseOfTemplate(
+                    string.Format(messageTemplate, day),
+                    t => mutateTemplateWithDay(t, localDay));
+            }
         }
 
         protected override void VerifyAreEqual(TModel expected, TModel actual)
