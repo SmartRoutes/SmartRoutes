@@ -12,7 +12,7 @@ namespace SmartRoutes.Graph.Test
     public class GraphBuilderTest
     {
         [TestMethod]
-        public void OneTrip()
+        public void Trips_One()
         {
             // ARRANGE
             IMetroNode metroNodeMaker = new MetroNode();
@@ -28,7 +28,7 @@ namespace SmartRoutes.Graph.Test
         }
 
         [TestMethod]
-        public void TwoTrips_NoOverlappingTimes()
+        public void Trips_Two_NoOverlappingTimes()
         {
             // ARRANGE
             IMetroNode metroNodeMaker = new MetroNode();
@@ -46,7 +46,7 @@ namespace SmartRoutes.Graph.Test
         }
 
         [TestMethod]
-        public void TwoTrips_OverlappingTimes()
+        public void Trips_Two_OverlappingTimes()
         {
             // ARRANGE
             IMetroNode metroNodeMaker = new MetroNode();
@@ -64,13 +64,13 @@ namespace SmartRoutes.Graph.Test
         }
 
         [TestMethod]
-        public void Transfer_SameStop()
+        public void Transfers_SameStop()
         {
             // ARRANGE
             IMetroNode metroNodeMaker = new MetroNode();
             IGraphBuilder graphBuilder = new GraphBuilder(metroNodeMaker);
 
-            var stop = new Stop {Id = 1, Latitude = 38.892416, Longitude = -77.028277};
+            var stop = new Stop {Id = 1};
             stop.CloseStops.Add(stop);
 
             var time1 = new DateTime(1970, 1, 1, 10, 0, 0);
@@ -90,15 +90,15 @@ namespace SmartRoutes.Graph.Test
         }
 
         [TestMethod]
-        public void Transfer_DifferentStop()
+        public void Transfers_DifferentStop()
         {
             // ARRANGE
             IMetroNode metroNodeMaker = new MetroNode();
             IGraphBuilder graphBuilder = new GraphBuilder(metroNodeMaker);
 
-            var stop1 = new Stop {Id = 1, Latitude = 38.892416, Longitude = -77.028277};
+            var stop1 = new Stop {Id = 1, Latitude = 0.0, Longitude = 0.00001};
             stop1.CloseStops.Add(stop1);
-            var stop2 = new Stop {Id = 1, Latitude = 38.892093, Longitude = -77.028042};
+            var stop2 = new Stop {Id = 1, Latitude = 0.0, Longitude = 0.00002};
             stop2.CloseStops.Add(stop2);
             stop1.CloseStops.Add(stop2);
             stop2.CloseStops.Add(stop1);
@@ -120,21 +120,21 @@ namespace SmartRoutes.Graph.Test
         }
 
         [TestMethod]
-        public void Transfer_DifferentStop_NotEnoughTime()
+        public void Transfers_DifferentStop_NotEnoughTime()
         {
             // ARRANGE
             IMetroNode metroNodeMaker = new MetroNode();
             IGraphBuilder graphBuilder = new GraphBuilder(metroNodeMaker);
 
-            var stop1 = new Stop {Id = 1, Latitude = 38.892416, Longitude = -77.028277};
+            var stop1 = new Stop {Id = 1, Latitude = 0.0, Longitude = 0.00001};
             stop1.CloseStops.Add(stop1);
-            var stop2 = new Stop {Id = 1, Latitude = 38.892093, Longitude = -77.028042};
+            var stop2 = new Stop {Id = 1, Latitude = 0.0, Longitude = 0.00002};
             stop2.CloseStops.Add(stop2);
             stop1.CloseStops.Add(stop2);
             stop2.CloseStops.Add(stop1);
 
             var time1 = new DateTime(1970, 1, 1, 10, 0, 0);
-            DateTime time2 = time1;
+            DateTime time2 = time1; // the same instant
             var stopTime1 = new StopTime {ArrivalTime = time1, Stop = stop1, StopId = stop1.Id, TripId = 1};
             var stopTime2 = new StopTime {ArrivalTime = time2, Stop = stop2, StopId = stop2.Id, TripId = 2};
             IEnumerable<StopTime> stoptimes = new[] {stopTime1, stopTime2};
@@ -145,6 +145,102 @@ namespace SmartRoutes.Graph.Test
             // ASSERT
             INode[][] subgraphs = GetSortedDisconnectedSubgraphs(nodes).ToArray();
             Assert.AreEqual(2, subgraphs.Length);
+        }
+
+        [TestMethod]
+        public void ChildCares_One()
+        {
+            // ARRANGE
+            IMetroNode metroNodeMaker = new MetroNode();
+            IGraphBuilder graphBuilder = new GraphBuilder(metroNodeMaker);
+
+            var stop = new Stop {Id = 1, Latitude = 0.0, Longitude = 0.00001};
+            var time = new DateTime(1970, 1, 1, 10, 0, 0);
+            var stopTime = new StopTime {ArrivalTime = time, Stop = stop, StopId = stop.Id, TripId = 1};
+
+            var childCare = new LicensedCenter { Id = 1, Latitude = 0.0, Longitude = 0.00002 };
+
+            // ACT
+            INode[] nodes = graphBuilder.BuildGraph(new[] {stopTime}, new[] {childCare});
+
+            // ASSERT
+            INode[][] subgraphs = GetSortedDisconnectedSubgraphs(nodes).ToArray();
+
+            Assert.AreEqual(1, subgraphs.Length);
+            INode[] subgraph = subgraphs[0];
+
+            VerifyChildCare(subgraph, time);
+        }
+
+        [TestMethod]
+        public void ChildCares_One_NotCloseEnough()
+        {
+            // ARRANGE
+            IMetroNode metroNodeMaker = new MetroNode();
+            IGraphBuilder graphBuilder = new GraphBuilder(metroNodeMaker);
+
+            var stop = new Stop { Id = 1, Latitude = 0.0, Longitude = 0.00001 };
+            var time = new DateTime(1970, 1, 1, 10, 0, 0);
+            var stopTime = new StopTime { ArrivalTime = time, Stop = stop, StopId = stop.Id, TripId = 1 };
+
+            var childCare = new LicensedCenter { Id = 1, Latitude = 0.0, Longitude = 1.0 };
+
+            // ACT
+            INode[] nodes = graphBuilder.BuildGraph(new[] { stopTime }, new[] { childCare });
+
+            // ASSERT
+            INode[][] subgraphs = GetSortedDisconnectedSubgraphs(nodes).ToArray();
+
+            Assert.AreEqual(1, subgraphs.Length);
+            INode[] subgraph = subgraphs[0];
+
+            Assert.AreEqual(1, subgraph.Length);
+            INode node = subgraph[0]; // the bus stop
+            Assert.AreEqual(node.Time, time);
+        }
+
+        [TestMethod]
+        public void ChildCares_Two()
+        {
+            // ARRANGE
+            IMetroNode metroNodeMaker = new MetroNode();
+            IGraphBuilder graphBuilder = new GraphBuilder(metroNodeMaker);
+
+            var stop1 = new Stop { Id = 1, Latitude = 0.0, Longitude = 0.00001 };
+            var stop2 = new Stop { Id = 2, Latitude = 0.0, Longitude = 0.00002 };
+            var time1 = new DateTime(1970, 1, 1, 10, 0, 0);
+            var time2 = new DateTime(1970, 1, 1, 16, 0, 0);
+            var stopTime1 = new StopTime { ArrivalTime = time1, Stop = stop1, StopId = stop1.Id, TripId = 1 };
+            var stopTime2 = new StopTime { ArrivalTime = time2, Stop = stop2, StopId = stop2.Id, TripId = 2 };
+
+            var childCare = new LicensedCenter { Id = 1, Latitude = 0.0, Longitude = 0.000015 };
+
+            // ACT
+            INode[] nodes = graphBuilder.BuildGraph(new[] { stopTime1, stopTime2 }, new[] { childCare });
+
+            // ASSERT
+            INode[][] subgraphs = GetSortedDisconnectedSubgraphs(nodes)
+                .OrderBy(n => n.First().Time)
+                .ToArray();
+
+            Assert.AreEqual(2, subgraphs.Length);
+            INode[] subgraph1 = subgraphs[0];
+            INode[] subgraph2 = subgraphs[1];
+
+            VerifyChildCare(subgraph1, time1);
+            VerifyChildCare(subgraph2, time2);
+        }
+
+        private static void VerifyChildCare(INode[] nodes, DateTime time)
+        {
+            Assert.AreEqual(3, nodes.Length);
+            INode node1 = nodes[0]; // coming from the child care
+            INode node2 = nodes[1]; // the bus stop
+            INode node3 = nodes[2]; // going to the child care
+
+            Assert.IsTrue(node1.Time < time);
+            Assert.AreEqual(node2.Time, time);
+            Assert.IsTrue(node3.Time > node2.Time);
         }
 
         private static void VerifyCircuit(StopTime[] trip, INode[] nodes)
