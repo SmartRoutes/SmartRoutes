@@ -62,7 +62,7 @@ namespace SmartRoutes.OdjfsScraper.Test.Parsers.Support
             {
                 pair = Details.FirstOrDefault(p => p.Key == key);
                 Details.Remove(pair);
-            } while (pair.Equals(default(KeyValuePair<string, Func<T, string>>)));
+            } while (!pair.Equals(default(KeyValuePair<string, Func<T, string>>)));
         }
 
         public void ReplaceDetails(string key, Func<T, string> value)

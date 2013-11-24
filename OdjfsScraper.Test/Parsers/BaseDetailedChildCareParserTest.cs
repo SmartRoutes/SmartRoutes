@@ -12,6 +12,17 @@ namespace SmartRoutes.OdjfsScraper.Test.Parsers
         where TParser : BaseChildCareParser<TModel>
     {
         [TestMethod]
+        public virtual void SingularAdministrator()
+        {
+            TestSuccessfulParseOfTemplate(t =>
+            {
+                t.Model.Administrators = "John Galt";
+                t.RemoveDetails("Administrators");
+                t.ReplaceDetails("Administrator", m => m.Administrators);
+            });
+        }
+
+        [TestMethod]
         public virtual void MissingProviderInfo()
         {
             TestUnsuccessfulParseOfDocument(
