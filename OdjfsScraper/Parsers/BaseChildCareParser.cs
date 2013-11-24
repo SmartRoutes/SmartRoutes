@@ -46,6 +46,7 @@ namespace SmartRoutes.OdjfsScraper.Parsers
             // TODO: verify Type string is the expected value per typeof(T)
             childCare.ExternalId = GetDetailString(details, "Number");
             childCare.Name = GetDetailString(details, "Name");
+            childCare.Address = GetDetailString(details, "Address");
             childCare.City = GetDetailString(details, "City");
             childCare.State = GetDetailString(details, "State");
             childCare.ZipCode = int.Parse(GetDetailString(details, "Zip"));

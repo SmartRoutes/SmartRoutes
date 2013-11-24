@@ -38,6 +38,8 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.XML" />
   </ItemGroup>
   <Choose>
     <When Condition="('$(VisualStudioVersion)' == '10.0' or '$(VisualStudioVersion)' == '') and '$(TargetFrameworkVersion)' == 'v3.5'">
@@ -53,8 +55,12 @@
   </Choose>
   <ItemGroup>
     <Compile Include="Parsers\BaseChildCareParserTest.cs" />
-    <Compile Include="Parsers\Support\BaseChildCareTemplate.cs" />
-    <Compile Include="Parsers\Support\BaseDetailedChildCareHomeTemplate.cs" />
+    <Compile Include="Parsers\TypeAHomeParserTest.cs" />
+    <Compile Include="Parsers\LicensedCenterParserTest.cs" />
+    <Compile Include="Parsers\DayCampParserTest.cs" />
+    <Compile Include="Parsers\TypeBHomeParserTest.cs" />
+    <Compile Include="Parsers\Support\ChildCareTemplate.cs" />
+    <Compile Include="Parsers\Support\DetailedChildCareHomeTemplate.cs" />
     <Compile Include="Parsers\Support\LicensedCenterTemplate.cs" />
     <Compile Include="Parsers\Support\TypeAHomeTemplate.cs" />
     <Compile Include="Parsers\Support\DayCampTemplate.cs" />

@@ -10,6 +10,10 @@ namespace SmartRoutes.OdjfsScraper.Parsers
             // populate the base fields
             base.PopulateFields(childCare, details);
 
+            // type B homes do not have their address exposed
+            // TODO: verify the expected placeholder
+            childCare.Address = null;
+
             childCare.CertificationBeginDate = GetDetailString(details, "Certification Begin Date");
             childCare.CertificationExpirationDate = GetDetailString(details, "Certification Expiration Date");
         }

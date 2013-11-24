@@ -2,7 +2,7 @@
 
 namespace SmartRoutes.OdjfsScraper.Test.Parsers.Support
 {
-    public class TypeAHomeTemplate : BaseDetailedChildCareHomeTemplate<TypeAHome>
+    public class TypeAHomeTemplate : DetailedChildCareHomeTemplate<TypeAHome>
     {
     }
 }
