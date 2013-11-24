@@ -1,16 +1,36 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SmartRoutes.Model.Odjfs.ChildCares;
 using SmartRoutes.OdjfsScraper.Parsers;
 using SmartRoutes.OdjfsScraper.Test.Parsers.Support;
 
 namespace SmartRoutes.OdjfsScraper.Test.Parsers
 {
-    [TestClass]
     public class BaseDetailedChildCareParserTest<TModel, TTemplate, TParser> : BaseChildCareParserTest<TModel, TTemplate, TParser>
         where TModel : DetailedChildCare
         where TTemplate : ChildCareTemplate<TModel>
         where TParser : BaseChildCareParser<TModel>
     {
+        [TestMethod]
+        public virtual void StartTimeAfterEndTime()
+        {
+            var days = new[] {"Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"};
+
+            foreach (string day in days)
+            {
+                TestUnsuccessfulParse(
+                    string.Format("A parser exception should have been thrown because {0}'s start time is after the end time.", day),
+                    t =>
+                    {
+                        KeyValuePair<string, Func<TModel, string>> detail = t.Details.First(p => p.Key == day + ":");
+                        t.Details.Remove(detail);
+                        t.Details.Add(new KeyValuePair<string, Func<TModel, string>>(detail.Key, m => "03:00 PM to 01:00 PM"));
+                    });
+            }
+        }
+
         protected override void VerifyAreEqual(TModel expected, TModel actual)
         {
             base.VerifyAreEqual(expected, actual);

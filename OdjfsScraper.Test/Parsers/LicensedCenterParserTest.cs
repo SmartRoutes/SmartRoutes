@@ -6,7 +6,7 @@ using SmartRoutes.OdjfsScraper.Test.Parsers.Support;
 namespace SmartRoutes.OdjfsScraper.Test.Parsers
 {
     [TestClass]
-    public class LicensedCenterParserTest : BaseChildCareParserTest<LicensedCenter, LicensedCenterTemplate, LicensedCenterParser>
+    public class LicensedCenterParserTest : BaseDetailedChildCareParserTest<LicensedCenter, LicensedCenterTemplate, LicensedCenterParser>
     {
     }
 }

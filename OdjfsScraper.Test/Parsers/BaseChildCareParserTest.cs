@@ -85,6 +85,28 @@ namespace SmartRoutes.OdjfsScraper.Test.Parsers
             VerifyAreEqual(template.Model, actualModel);
         }
 
+        protected void TestUnsuccessfulParse(string message, Action<TTemplate> mutateTemplate)
+        {
+            // ARRANGE
+            var template = Activator.CreateInstance<TTemplate>();
+            mutateTemplate(template);
+
+            var parser = Activator.CreateInstance<TParser>();
+            var actualModel = Activator.CreateInstance<TModel>();
+
+            // ACT
+            try
+            {
+                parser.Parse(actualModel, template.GetDocument());
+
+                // ASSERT
+                Assert.Fail(message);
+            }
+            catch (ParserException)
+            {
+            }
+        }
+
         protected virtual void VerifyAreEqual(TModel expected, TModel actual)
         {
             Assert.IsNotNull(actual);

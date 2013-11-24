@@ -6,7 +6,7 @@ using SmartRoutes.OdjfsScraper.Test.Parsers.Support;
 namespace SmartRoutes.OdjfsScraper.Test.Parsers
 {
     [TestClass]
-    public class TypeAHomeParserTest : BaseChildCareParserTest<TypeAHome, TypeAHomeTemplate, TypeAHomeParser>
+    public class TypeAHomeParserTest : BaseDetailedChildCareParserTest<TypeAHome, TypeAHomeTemplate, TypeAHomeParser>
     {
     }
 }

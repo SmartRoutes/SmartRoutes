@@ -32,7 +32,7 @@ namespace SmartRoutes.OdjfsScraper.Test.Parsers.Support
             {"Monday:", c => DayTimesToString(c.MondayReported, c.MondayBegin, c.MondayEnd)},
             {"Tuesday:", c => DayTimesToString(c.TuesdayReported, c.TuesdayBegin, c.TuesdayEnd)},
             {"Wednesday:", c => DayTimesToString(c.WednesdayReported, c.WednesdayBegin, c.WednesdayEnd)},
-            {"Thursday:", c => DayTimesToString(c.ThursdayReported, c.TuesdayBegin, c.ThursdayEnd)},
+            {"Thursday:", c => DayTimesToString(c.ThursdayReported, c.ThursdayBegin, c.ThursdayEnd)},
             {"Friday:", c => DayTimesToString(c.FridayReported, c.FridayBegin, c.FridayEnd)},
             {"Saturday:", c => DayTimesToString(c.SaturdayReported, c.SaturdayBegin, c.SaturdayEnd)},
             {"Sunday:", c => DayTimesToString(c.SundayReported, c.SundayBegin, c.SundayEnd)}
