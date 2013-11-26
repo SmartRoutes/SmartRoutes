@@ -1,4 +1,4 @@
-﻿namespace SmartRoutes.SortaScraper.Test.Parsers
+﻿namespace SmartRoutes.Scraper.Test.Support
 {
     public class Person
     {
