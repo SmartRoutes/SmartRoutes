@@ -28,6 +28,7 @@ namespace SmartRoutes.OdjfsScraper.Parsers
 
             // select the table
             CQ table = document["table"];
+            // TODO: there is not table when the search returns zero results
             if (table.Length != 1)
             {
                 var exception = new ParserException("Exactly one table on the search results page is expected.");
@@ -36,6 +37,8 @@ namespace SmartRoutes.OdjfsScraper.Parsers
             }
 
             // select all of the relevant rows in the table
+            // TODO: verify the column headers
+            // TODO: verify that every other row is empty
             IEnumerable<IDomElement> rows = table["tr"]
                 .Elements
                 .Where((e, i) => i%2 == 0) // every other row is empty...
@@ -106,6 +109,7 @@ namespace SmartRoutes.OdjfsScraper.Parsers
             childCareStub.City = cells[10].GetCollapsedInnerText();
 
             // type B child cares do not have public addresses
+            // TODO: verify TypeBHome address placeholder
             if (!(childCareStub is TypeBHomeStub))
             {
                 // parse out the address
