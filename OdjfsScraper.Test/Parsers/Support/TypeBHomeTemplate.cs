@@ -16,6 +16,9 @@ namespace SmartRoutes.OdjfsScraper.Test.Parsers.Support
         {
             Model.CertificationBeginDate = "CertificationBeginDate";
             Model.CertificationExpirationDate = "CertificationExpirationDate";
+
+            // Type B homes do not have their addresses exposed
+            ReplaceDetails("Address", m => "Contact County CDJFS");
         }
     }
 }
