@@ -4,15 +4,15 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using CsQuery;
+using NLog;
 using SmartRoutes.Model.Odjfs;
 using SmartRoutes.Model.Odjfs.ChildCareStubs;
-using NLog;
 using SmartRoutes.OdjfsScraper.Support;
 using SmartRoutes.Scraper;
 
 namespace SmartRoutes.OdjfsScraper.Parsers
 {
-    public class ListDocumentParser : IListDocumentParser
+    public class ListParser : IListParser
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
