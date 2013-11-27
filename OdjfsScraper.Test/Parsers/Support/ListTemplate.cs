@@ -9,7 +9,37 @@ namespace SmartRoutes.OdjfsScraper.Test.Parsers.Support
     {
         public ListTemplate()
         {
-            Model = new List<ChildCareStub>();
+            Model = new List<ChildCareStub>
+            {
+                new TypeAHomeStub
+                {
+                    ExternalUrlId = "AAAAAAAAAAAAAAAAAA",
+                    Name = "Type A Home Name",
+                    Address = "Type A Home Address",
+                    City = "Type A Home City"
+                },
+                new TypeBHomeStub
+                {
+                    ExternalUrlId = "BBBBBBBBBBBBBBBBBB",
+                    Name = "Type B Home Name",
+                    Address = null,
+                    City = "Type B Home City"
+                },
+                new LicensedCenterStub
+                {
+                    ExternalUrlId = "CCCCCCCCCCCCCCCCCC",
+                    Name = "Licensed Center Name",
+                    Address = "Licensed Center Address",
+                    City = "Licensed Center City"
+                },
+                new DayCampStub
+                {
+                    ExternalUrlId = "DDDDDDDDDDDDDDDDDD",
+                    Name = "Day Camp Name",
+                    Address = "Day Camp Address",
+                    City = "Day Camp City"
+                }
+            };
         }
 
         public IList<ChildCareStub> Model { get; private set; }
@@ -27,7 +57,7 @@ namespace SmartRoutes.OdjfsScraper.Test.Parsers.Support
             foreach (ChildCareStub stub in Model)
             {
                 sb.AppendLine("  <tr>");
-                sb.AppendLine("    <td></td>");
+                sb.AppendLine("    <td></td><td></td>");
                 sb.AppendFormat("    <td><a href='results2.asp?provider_number={0}'>{1}</a></td>", stub.ExternalUrlId, stub.Name);
                 sb.AppendLine();
                 sb.AppendLine("    <td></td><td></td><td></td>");
@@ -45,6 +75,9 @@ namespace SmartRoutes.OdjfsScraper.Test.Parsers.Support
                 sb.AppendLine("    <td></td><td></td><td></td>");
                 sb.AppendLine("    <td></td><td></td>");
                 sb.AppendLine("  </tr>");
+
+                // every data row has an empty row after it
+                AddEmptyRow(sb);
             }
 
             sb.AppendLine("</table>");

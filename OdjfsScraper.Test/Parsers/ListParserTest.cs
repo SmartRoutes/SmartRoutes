@@ -2,12 +2,28 @@
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SmartRoutes.Model.Odjfs.ChildCareStubs;
+using SmartRoutes.OdjfsScraper.Parsers;
+using SmartRoutes.OdjfsScraper.Test.Parsers.Support;
 
 namespace SmartRoutes.OdjfsScraper.Test.Parsers
 {
     [TestClass]
     public class ListParserTest
     {
+        [TestMethod]
+        public void HappyPath()
+        {
+            // ARRANGE
+            var template = new ListTemplate();
+            var parser = new ListParser();
+
+            // ACT
+            IEnumerable<ChildCareStub> actual = parser.Parse(template.GetDocument());
+
+            // ASSERT
+            VerifyAreEqual(template.Model, actual);
+        }
+
         public void VerifyAreEqual(IEnumerable<ChildCareStub> expected, IEnumerable<ChildCareStub> actual)
         {
             ChildCareStub[] expectedArray = expected.ToArray();
