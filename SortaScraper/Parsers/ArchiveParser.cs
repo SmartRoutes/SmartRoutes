@@ -13,7 +13,6 @@ namespace SmartRoutes.SortaScraper.Parsers
         public Archive Parse(HttpResponseHeaders headers)
         {
             // the output instance
-            // TODO: UTC or local time?
             var archive = new Archive {DownloadedOn = DateTime.Now};
 
             // parse the headers

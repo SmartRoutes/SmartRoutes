@@ -43,8 +43,6 @@ namespace SmartRoutes.OdjfsScraper.Parsers
 
             // parse the rows using the child parser
             IEnumerable<ChildCareStub> stubs = rows.Select(r => ParseRow(r, county));
-
-            // TODO: UTC?
             if (county != null)
             {
                 county.LastScrapedOn = DateTime.Now;

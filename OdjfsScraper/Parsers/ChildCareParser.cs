@@ -50,10 +50,7 @@ namespace SmartRoutes.OdjfsScraper.Parsers
 
             // copy over the external URL ID
             childCare.ExternalUrlId = childCareStub.ExternalUrlId;
-
             childCare = Parse(childCare, bytes);
-
-            // TODO: UTC?
             childCareStub.LastScrapedOn = DateTime.Now;
 
             return childCare;

@@ -43,7 +43,6 @@ namespace SmartRoutes.OdjfsScraper.Parsers
             PopulateFields(childCare, details);
 
             // record this execution
-            // TODO: UTC?
             childCare.LastScrapedOn = DateTime.Now;
 
             return childCare;
