@@ -8,7 +8,7 @@ using SmartRoutes.Model.Odjfs.ChildCares;
 
 namespace SmartRoutes.OdjfsScraper.Test.Parsers.Support
 {
-    public class ChildCareTemplate<T> where T : ChildCare
+    public class ChildCareTemplate<T> : BaseTemplate, ITemplate<T> where T : ChildCare
     {
         private static readonly ICollection<KeyValuePair<string, Func<T, string>>> DefaultDetails = new Dictionary<string, Func<T, string>>
         {
@@ -49,6 +49,17 @@ namespace SmartRoutes.OdjfsScraper.Test.Parsers.Support
         }
 
         public ICollection<KeyValuePair<string, Func<T, string>>> Details { get; private set; }
+        public T Model { get; protected set; }
+
+        public virtual byte[] GetDocument()
+        {
+            // fetch the values for the details
+            IEnumerable<KeyValuePair<string, string>> details = Details.Select(p => new KeyValuePair<string, string>(p.Key, p.Value(Model)));
+
+            var sb = new StringBuilder();
+            BuildPageContent(sb, details);
+            return GetBytes(sb.ToString());
+        }
 
         public void AddDetail(string key, Func<T, string> value)
         {
@@ -69,23 +80,6 @@ namespace SmartRoutes.OdjfsScraper.Test.Parsers.Support
         {
             RemoveDetails(key);
             AddDetail(key, value);
-        }
-
-        public T Model { get; private set; }
-
-        public static byte[] GetBytes(string input)
-        {
-            return Encoding.UTF8.GetBytes(input);
-        }
-
-        public virtual byte[] GetDocument()
-        {
-            // fetch the values for the details
-            IEnumerable<KeyValuePair<string, string>> details = Details.Select(p => new KeyValuePair<string, string>(p.Key, p.Value(Model)));
-
-            var sb = new StringBuilder();
-            BuildPageContent(sb, details);
-            return GetBytes(sb.ToString());
         }
 
         protected static void BuildPageContent(StringBuilder sb, IEnumerable<KeyValuePair<string, string>> details)
