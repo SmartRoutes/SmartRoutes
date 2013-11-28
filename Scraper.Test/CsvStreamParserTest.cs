@@ -1,8 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using SmartRoutes.Scraper.Test.Support;
 
-namespace SmartRoutes.SortaScraper.Test.Parsers
+namespace SmartRoutes.Scraper.Test
 {
     [TestClass]
     public class CsvStreamParserTest : AbstractCsvStreamParserTest<Person>
@@ -177,7 +176,7 @@ namespace SmartRoutes.SortaScraper.Test.Parsers
         }
 
         [TestMethod]
-        [ExpectedException(typeof (KeyNotFoundException))]
+        [ExpectedException(typeof (ParserException))]
         public void ThrowsIfMissingHeaderField()
         {
             // ARRANGE
@@ -193,7 +192,7 @@ namespace SmartRoutes.SortaScraper.Test.Parsers
         }
 
         [TestMethod]
-        [ExpectedException(typeof (IndexOutOfRangeException))]
+        [ExpectedException(typeof (ParserException))]
         public void ThrowsIfMissingDataField()
         {
             // ARRANGE
@@ -202,6 +201,22 @@ namespace SmartRoutes.SortaScraper.Test.Parsers
             {
                 "Name,FavoriteColor",
                 "Joel"
+            };
+
+            // ACT
+            Parse(parser, lines);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ParserException))]
+        public void ThrowsIfDuplicateHeading()
+        {
+            // ARRANGE
+            var parser = new PersonCsvStreamParser();
+            var lines = new[]
+            {
+                "Name,Name",
+                "Joel,Verhagen"
             };
 
             // ACT

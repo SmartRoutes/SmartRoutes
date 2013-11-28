@@ -1,5 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SmartRoutes.Model.Sorta;
+using SmartRoutes.Scraper.Test.Support;
 using SmartRoutes.SortaScraper.Parsers;
 
 namespace SmartRoutes.SortaScraper.Test.Parsers
