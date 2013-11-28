@@ -22,17 +22,36 @@ namespace SmartRoutes.OdjfsScraper.Test.Parsers.Support
             {"Phone", c => c.PhoneNumber}
         };
 
+        private static readonly IDictionary<Type, string> TypeNames = new Dictionary<Type, string>
+        {
+            {typeof (TypeAHome), "Type A Family Child Care Homes"},
+            {typeof (TypeBHome), "Type B Family Child Care Homes"},
+            {typeof (LicensedCenter), "Licensed Center"},
+            {typeof (DayCamp), "Registered Day Camp"},
+        };
+
+        static ChildCareTemplate()
+        {
+            if (!TypeNames.ContainsKey(typeof (T)))
+            {
+                throw new ArgumentException("The type must be a supported ChildCare subclass.");
+            }
+        }
+
         public ChildCareTemplate() : this(Enumerable.Empty<KeyValuePair<string, Func<T, string>>>())
         {
         }
 
-        protected ChildCareTemplate(IEnumerable<KeyValuePair<string, Func<T, string>>> parentPageContentDetails)
+        protected ChildCareTemplate(IEnumerable<KeyValuePair<string, Func<T, string>>> parentDetails)
         {
             // intialize properties
             Details = new Collection<KeyValuePair<string, Func<T, string>>>();
 
+            // add the type detail
+            AddDetail("Type", m => TypeNames[typeof (T)]);
+
             // initialize the value getters
-            foreach (var pair in DefaultDetails.Concat(parentPageContentDetails))
+            foreach (var pair in DefaultDetails.Concat(parentDetails))
             {
                 Details.Add(pair);
             }

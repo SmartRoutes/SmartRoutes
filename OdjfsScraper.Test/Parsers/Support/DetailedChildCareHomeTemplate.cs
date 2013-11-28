@@ -8,7 +8,7 @@ namespace SmartRoutes.OdjfsScraper.Test.Parsers.Support
 {
     public abstract class DetailedChildCareHomeTemplate<T> : ChildCareTemplate<T> where T : DetailedChildCare
     {
-        private static readonly IDictionary<string, Func<T, string>> DefaultDetails = new Dictionary<string, Func<T, string>>
+        private static readonly ICollection<KeyValuePair<string, Func<T, string>>> DefaultDetails = new Dictionary<string, Func<T, string>>
         {
             {"Center Status", c => c.CenterStatus},
             {"Administrators", c => c.Administrators},
@@ -50,7 +50,7 @@ namespace SmartRoutes.OdjfsScraper.Test.Parsers.Support
             "Monday:", "Tuesday:", "Wednesday:", "Thursday:", "Friday:", "Saturday:", "Sunday:"
         };
 
-        protected DetailedChildCareHomeTemplate() : base(DefaultDetails)
+        protected DetailedChildCareHomeTemplate(IEnumerable<KeyValuePair<string, Func<T, string>>> parentDetails) : base(DefaultDetails.Concat(parentDetails))
         {
             // initialize templat properties
             ProviderInfoDetails = DefaultProviderInfoDetails;
