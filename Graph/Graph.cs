@@ -81,8 +81,9 @@ namespace SmartRoutes.Graph
             }
         }
 
-        public NodeInfo Dijkstras(ISet<INode> StartNodes, Func<INode, bool> GoalCheck, Direction direction)
+        public List<NodeInfo> Dijkstras(ISet<INode> StartNodes, Func<INode, bool> GoalCheck, Direction direction)
         {
+            var Results = new List<NodeInfo>();
             SearchInfo = new Dictionary<INode, NodeInfo>();
 
             // assign search info to StartNodes and place them in queue
@@ -109,7 +110,7 @@ namespace SmartRoutes.Graph
                 // check for completion
                 if (GoalCheck(current))
                 {
-                    return currentInfo;
+                    Results.Add(currentInfo);
                 }
 
                 // loop through neighbors and handle business
@@ -155,7 +156,7 @@ namespace SmartRoutes.Graph
                 currentInfo.state = NodeState.Closed;
             }
 
-            throw new Exception("Dijkstras did not reach a goal node.");
+            return Results;
         }
     }
 }

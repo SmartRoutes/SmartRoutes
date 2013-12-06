@@ -12,7 +12,7 @@ namespace SmartRoutes.Graph
     {
         void GetSortaEntities();
         void GetChildCares();
-        NodeInfo Dijkstras(ISet<INode> StartNodes, Func<INode, bool> GoalCheck, Direction direction);
+        List<NodeInfo> Dijkstras(ISet<INode> StartNodes, Func<INode, bool> GoalCheck, Direction direction);
         INode[] GraphNodes { get; }
     }
 }
