@@ -28,172 +28,132 @@ namespace SmartRoutes.Graph
 
         public GraphBuilder(IMetroNode metroNodeMaker) 
         {
-            try
-            {
-                _metroNodeMaker = metroNodeMaker;
-                Logger.Trace("GraphBuilder object created.");
-            }
-            catch (Exception e)
-            {
-                Logger.ErrorException("Exception encountered during GraphBuilder object creation.", e);
-                throw e;
-            }
+            _metroNodeMaker = metroNodeMaker;
+            Logger.Trace("GraphBuilder object created.");
         }
 
         public INode[] BuildGraph(IEnumerable<StopTime> StopTimes, IEnumerable<ChildCare> ChildCares)
         {
-            try
-            {
-                Logger.Trace("Creating new graph.");
+            Logger.Trace("Creating new graph.");
 
-                // collect all the stops
-                Stop[] Stops = StopTimes
-                    .GroupBy(s => s.StopId)
-                    .Select(g => g.First().Stop)
-                    .ToArray();
+            // collect all the stops
+            Stop[] Stops = StopTimes
+                .GroupBy(s => s.StopId)
+                .Select(g => g.First().Stop)
+                .ToArray();
 
-                var MetroNodes = CreateMetroNodes(StopTimes);
-                ConnectTrips(MetroNodes);
-                //ConnectTransfers(MetroNodes);
-                ConnectTransfers(MetroNodes, Stops);
-                var GraphNodes = InsertChildCareNodes(Stops, ChildCares, MetroNodes);
-                Logger.Trace("Graph created successfully.");
-                return GraphNodes;
-            }
-            catch (Exception e)
-            {
-                Logger.ErrorException("Exception encountered during creation of graph.", e);
-                Console.WriteLine(e);
-                throw e;
-            }
+            var MetroNodes = CreateMetroNodes(StopTimes);
+            ConnectTrips(MetroNodes);
+            //ConnectTransfers(MetroNodes);
+            ConnectTransfers(MetroNodes, Stops);
+            var GraphNodes = InsertChildCareNodes(Stops, ChildCares, MetroNodes);
+            Logger.Trace("Graph created successfully.");
+            return GraphNodes;
         }
 
         private IMetroNode[] CreateMetroNodes(IEnumerable<StopTime> stopTimes)
         {
             Logger.Trace("Creating Metro Nodes.");
 
-            try
-            {
-                var MetroNodes = (from stopTime in stopTimes
-                                  select _metroNodeMaker.CreateNode(stopTime))
-                                 .ToArray();
+            var MetroNodes = (from stopTime in stopTimes
+                                select _metroNodeMaker.CreateNode(stopTime))
+                                .ToArray();
 
-                Logger.Trace("Metro Nodes created successfully.");
-                return MetroNodes;
-            }
-            catch (Exception e)
-            {
-                Logger.ErrorException("Exception encountered during creation of Metro nodes.", e);
-                throw e;
-            }
+            Logger.Trace("Metro Nodes created successfully.");
+            return MetroNodes;
         }
 
         private void ConnectTrips(IMetroNode[] MetroNodes)
         {
             Logger.Trace("Connecting Metro Trips.");
-            try
-            {
-                Array.Sort(MetroNodes, new Comparers.ComparerForTripSorting());
 
-                for (int i = 1; i < MetroNodes.Count(); i++)
+            Array.Sort(MetroNodes, new Comparers.ComparerForTripSorting());
+
+            for (int i = 1; i < MetroNodes.Count(); i++)
+            {
+                IMetroNode node = MetroNodes[i];
+                IMetroNode previousNode = MetroNodes[i-1];
+
+                if (node.TripID == previousNode.TripID)
                 {
-                    IMetroNode node = MetroNodes[i];
-                    IMetroNode previousNode = MetroNodes[i-1];
-
-                    if (node.TripID == previousNode.TripID)
-                    {
-                        node.DownwindNeighbors.Add(previousNode);
-                        previousNode.UpwindNeighbors.Add(node);
-                    }
+                    node.DownwindNeighbors.Add(previousNode);
+                    previousNode.UpwindNeighbors.Add(node);
                 }
-                Logger.Trace("Metro Trips connected successfully.");
             }
-            catch (Exception e)
-            {
-                Logger.ErrorException("Exception encountered during connection of Metro Trips.", e);
-                throw e;
-            }
+            Logger.Trace("Metro Trips connected successfully.");
         }
 
         private void ConnectTransfers(IMetroNode[] MetroNodes, IEnumerable<Stop> stops)
         {
             Logger.Trace("Connecting Metro Transfers.");
 
-            try
+            // this sorting assures Nodes which have same stopID are sorted by ascending Time
+            Array.Sort(MetroNodes, new Comparers.ComparerForTransferSorting());
+
+            StopToNearest = new Dictionary<int, List<int>>();
+            StopToNodes = new Dictionary<int, List<IMetroNode>>();
+
+            var enumerator1 = stops.GetEnumerator();
+
+            while (enumerator1.MoveNext())
             {
-                // this sorting assures Nodes which have same stopID are sorted by ascending Time
-                Array.Sort(MetroNodes, new Comparers.ComparerForTransferSorting());
+                var Stop1 = enumerator1.Current;
 
-                StopToNearest = new Dictionary<int, List<int>>();
-                StopToNodes = new Dictionary<int, List<IMetroNode>>();
+                // associate Id's of closest stops with this stop
+                StopToNearest.Add(Stop1.Id, Stop1.CloseStops.Select(s => s.Id).ToList());
 
-                var enumerator1 = stops.GetEnumerator();
+                // associate MetroNodes which contain this stop with this stop
+                var Stop1NodeList = new List<IMetroNode>();
 
-                while (enumerator1.MoveNext())
+                for (int i = 0; i < MetroNodes.Count(); i++)
                 {
-                    var Stop1 = enumerator1.Current;
-
-                    // associate Id's of closest stops with this stop
-                    StopToNearest.Add(Stop1.Id, Stop1.CloseStops.Select(s => s.Id).ToList());
-
-                    // associate MetroNodes which contain this stop with this stop
-                    var Stop1NodeList = new List<IMetroNode>();
-
-                    for (int i = 0; i < MetroNodes.Count(); i++)
+                    if (MetroNodes[i].StopID == Stop1.Id)
                     {
-                        if (MetroNodes[i].StopID == Stop1.Id)
-                        {
-                            Stop1NodeList.Add(MetroNodes[i]);
-                        }
+                        Stop1NodeList.Add(MetroNodes[i]);
                     }
-
-                    StopToNodes.Add(Stop1.Id, Stop1NodeList);
                 }
 
-                // loop through MetroNodes and connect transfers
-                foreach (var node1 in MetroNodes)
+                StopToNodes.Add(Stop1.Id, Stop1NodeList);
+            }
+
+            // loop through MetroNodes and connect transfers
+            foreach (var node1 in MetroNodes)
+            {
+                // obtain stopID's of nodes in transfer distance
+                List<int> NearestIDs = null;
+                if (!StopToNearest.TryGetValue(node1.StopID, out NearestIDs))
                 {
-                    // obtain stopID's of nodes in transfer distance
-                    List<int> NearestIDs = null;
-                    if (!StopToNearest.TryGetValue(node1.StopID, out NearestIDs))
+                    continue;
+                }
+
+                foreach (var ID in NearestIDs)
+                {
+                    List<IMetroNode> Nodes = null;
+                    if (!StopToNodes.TryGetValue(ID, out Nodes))
                     {
                         continue;
                     }
 
-                    foreach (var ID in NearestIDs)
+                    if (Nodes.Count == 0) continue; // not sure if this is possible
+
+                    // calculate walking time, will be same for all nodes in list, so use first
+                    double WalkingTime = node1.GetL1DistanceInFeet(Nodes.First()) / WalkingFeetPerSecond;
+                    DateTime MinTime = node1.Time + new TimeSpan(0, 0, (int)Math.Ceiling(WalkingTime));
+
+                    // thanks to sorting, these nodes are iterated in ascending time
+                    foreach (var node2 in Nodes)
                     {
-                        List<IMetroNode> Nodes = null;
-                        if (!StopToNodes.TryGetValue(ID, out Nodes))
+                        if (node2.Time > MinTime)
                         {
-                            continue;
-                        }
-
-                        if (Nodes.Count == 0) continue; // not sure if this is possible
-
-                        // calculate walking time, will be same for all nodes in list, so use first
-                        double WalkingTime = node1.GetL1DistanceInFeet(Nodes.First()) / WalkingFeetPerSecond;
-                        DateTime MinTime = node1.Time + new TimeSpan(0, 0, (int)Math.Ceiling(WalkingTime));
-
-                        // thanks to sorting, these nodes are iterated in ascending time
-                        foreach (var node2 in Nodes)
-                        {
-                            if (node2.Time > MinTime)
-                            {
-                                node1.UpwindNeighbors.Add(node2);
-                                node2.DownwindNeighbors.Add(node1);
-                                break;
-                            }
+                            node1.UpwindNeighbors.Add(node2);
+                            node2.DownwindNeighbors.Add(node1);
+                            break;
                         }
                     }
                 }
+            }
 
-                Logger.Trace("Metro Transfers connected successfully.");
-            }
-            catch (Exception e)
-            {
-                Logger.ErrorException("Exception encountered during connection of Metro Transfers.", e);
-                throw e;
-            }
+            Logger.Trace("Metro Transfers connected successfully.");
         }
 
         private INode[] InsertChildCareNodes(IEnumerable<Stop> Stops, IEnumerable<ChildCare> ChildCares, INode[] GraphNodes)
