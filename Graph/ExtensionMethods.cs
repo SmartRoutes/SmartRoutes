@@ -29,7 +29,7 @@ namespace SmartRoutes.Graph
 
     public static class ExtensionMethods
     {
-        public static List<NodeInfo> Dijkstras(ISet<INode> StartNodes, Func<INode, bool> GoalCheck, Direction direction)
+        public static List<NodeInfo> Dijkstras(IEnumerable<INode> StartNodes, Func<INode, bool> GoalCheck, Direction direction)
         {
             var Results = new List<NodeInfo>();
             var SearchInfo = new Dictionary<INode, NodeInfo>();
@@ -39,6 +39,7 @@ namespace SmartRoutes.Graph
             foreach (var node in StartNodes)
             {
                 var nodeInfo = new NodeInfo();
+                nodeInfo.node = node;
                 nodeInfo.state = NodeState.Closed;
                 nodeInfo.travelTime = new TimeSpan(0);
                 nodeInfo.handle = heap.Insert(node, nodeInfo.travelTime);
@@ -80,6 +81,7 @@ namespace SmartRoutes.Graph
                             ? currentInfo.travelTime + (neighbor.Time - current.Time)
                             : currentInfo.travelTime + (current.Time - neighbor.Time);
                         neighborInfo.handle = heap.Insert(neighbor, neighborInfo.travelTime);
+                        SearchInfo.Add(neighbor, neighborInfo);
                     }
                     else
                     { 
