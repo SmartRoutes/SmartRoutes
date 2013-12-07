@@ -60,7 +60,23 @@ namespace SmartRoutes.Graph
                 // check for completion
                 if (GoalCheck(current))
                 {
-                    Results.Add(currentInfo);
+                    // ensure node at this location has not already been added to Results
+                    bool uniqueLocation = true;
+
+                    foreach (var result in Results)
+                    {
+                        if (current.Longitude == result.node.Longitude && current.Latitude == result.node.Latitude)
+                        {
+                            uniqueLocation = false;
+                        }
+                    }
+
+                    if (uniqueLocation)
+                    {
+                        Results.Add(currentInfo);
+                    }
+
+                    continue; // no need to continue searching along this path
                 }
 
                 // loop through neighbors and handle business
