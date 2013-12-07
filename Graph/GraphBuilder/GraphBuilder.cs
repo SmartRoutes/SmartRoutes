@@ -83,34 +83,42 @@ namespace SmartRoutes.Graph
             Logger.Trace("Metro Trips connected successfully.");
         }
 
-        private void ConnectTransfers(IMetroNode[] MetroNodes, IEnumerable<Stop> stops)
+        private void ConnectTransfers(IMetroNode[] MetroNodes, Stop[] Stops)
         {
             Logger.Trace("Connecting Metro Transfers.");
 
-            // this sorting assures Nodes which have same stopID are sorted by ascending Time
+            // sorts Nodes first by ascending stopID, second by ascending Time
             Array.Sort(MetroNodes, new Comparers.ComparerForTransferSorting());
+
+            // sort stops by ascending StopID
+            Array.Sort(Stops, new Comparers.ComparerForStopSorting());
+
+            // exploit similar ordering between MetroNodes and Stops to associate Stops with MetroNodes in one pass
+            int MetroNodeCounter = 0;
 
             StopToNearest = new Dictionary<int, List<int>>();
             StopToNodes = new Dictionary<int, List<IMetroNode>>();
 
-            var enumerator1 = stops.GetEnumerator();
-
-            while (enumerator1.MoveNext())
+            foreach (var Stop1 in Stops)
             {
-                var Stop1 = enumerator1.Current;
-
                 // associate Id's of closest stops with this stop
                 StopToNearest.Add(Stop1.Id, Stop1.CloseStops.Select(s => s.Id).ToList());
 
                 // associate MetroNodes which contain this stop with this stop
-                var Stop1NodeList = new List<IMetroNode>();
+                List<IMetroNode> Stop1NodeList = new List<IMetroNode>();
 
-                for (int i = 0; i < MetroNodes.Count(); i++)
+                // in case some metronodes need to be skipped
+                while (MetroNodeCounter < MetroNodes.Count()
+                       && MetroNodes[MetroNodeCounter].StopID < Stop1.Id)
                 {
-                    if (MetroNodes[i].StopID == Stop1.Id)
-                    {
-                        Stop1NodeList.Add(MetroNodes[i]);
-                    }
+                    MetroNodeCounter++;
+                }
+
+                while (MetroNodeCounter < MetroNodes.Count()
+                       && MetroNodes[MetroNodeCounter].StopID == Stop1.Id)
+                {
+                    Stop1NodeList.Add(MetroNodes[MetroNodeCounter]);
+                    MetroNodeCounter++;
                 }
 
                 StopToNodes.Add(Stop1.Id, Stop1NodeList);

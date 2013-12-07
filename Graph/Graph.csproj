@@ -77,6 +77,7 @@
   <ItemGroup>
     <Compile Include="Comparers\ComparerForChildCares.cs" />
     <Compile Include="Comparers\ComparerForDisplay.cs" />
+    <Compile Include="Comparers\ComparerForStopSorting.cs" />
     <Compile Include="Comparers\ComparerForTransferSorting.cs" />
     <Compile Include="Comparers\ComparerForTripSorting.cs" />
     <Compile Include="DatabaseLoader.cs" />
@@ -95,7 +96,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="NLog.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
