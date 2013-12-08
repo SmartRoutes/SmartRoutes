@@ -20,7 +20,7 @@ namespace SmartRoutes.Graph
     {
         private readonly IMetroNode _metroNodeMaker;
         private Logger Logger = LogManager.GetCurrentClassLogger();
-        private static double MaxFeetFromChildCareToBuStop = 5000; // just want to see connections get made for now
+        private static double MaxFeetFromChildCareToBuStop = 7000; // just want to see connections get made for now
         private static double WalkingFeetPerSecond = 1.5;
         private Dictionary<int, List<int>> StopToNearest; // from StopID to list of StopID's of nearest Stops
         private Dictionary<int, List<IMetroNode>> StopToNodes; // from StopID to set of Nodes with given StopID
@@ -42,7 +42,7 @@ namespace SmartRoutes.Graph
                 .Select(g => g.First().Stop)
                 .ToArray();
 
-            var MetroNodes = CreateMetroNodes(StopTimes);
+            var MetroNodes = CreateMetroNodes(Stops, StopTimes);
             ConnectTrips(MetroNodes);
             //ConnectTransfers(MetroNodes);
             ConnectTransfers(MetroNodes, Stops);
@@ -51,16 +51,40 @@ namespace SmartRoutes.Graph
             return GraphNodes;
         }
 
-        private IMetroNode[] CreateMetroNodes(IEnumerable<StopTime> stopTimes)
+        private IMetroNode[] CreateMetroNodes(IEnumerable<Stop> Stops, IEnumerable<StopTime> StopTimes)
         {
             Logger.Trace("Creating Metro Nodes.");
 
-            var MetroNodes = (from stopTime in stopTimes
-                                select _metroNodeMaker.CreateNode(stopTime))
-                                .ToArray();
+            // sort StopTimes by TripID first, StopID second
+            var StopTimesArray = StopTimes.ToArray();
+            Array.Sort(StopTimesArray, new Comparers.ComparerForStopTimeSorting());
+
+            var MetroNodeList = new List<IMetroNode>();
+            int counter = 0;
+
+            // nodes with same StopID and same TripID reference the same NodeBase
+            while (counter < StopTimesArray.Count())
+            {
+                var stoptime = StopTimesArray[counter];
+                int CurrentStopID = stoptime.StopId;
+                int CurrentShapeID = stoptime.Trip.ShapeId.Value;
+                
+                var BaseNode = new NodeBase(
+                    String.Concat(new string[] { stoptime.Stop.Name, String.Format(" <ShapeID {0}>", stoptime.Trip.ShapeId.Value) }), 
+                    stoptime.Stop.Latitude, 
+                    stoptime.Stop.Longitude);
+
+                while (counter < StopTimesArray.Count()
+                    && StopTimesArray[counter].StopId == CurrentStopID
+                    && StopTimesArray[counter].Trip.ShapeId.Value == CurrentShapeID)
+                {
+                    MetroNodeList.Add(new MetroNode(StopTimesArray[counter], BaseNode));
+                    counter++;
+                }
+            }
 
             Logger.Trace("Metro Nodes created successfully.");
-            return MetroNodes;
+            return MetroNodeList.ToArray();
         }
 
         private void ConnectTrips(IMetroNode[] MetroNodes)
@@ -99,29 +123,29 @@ namespace SmartRoutes.Graph
             StopToNearest = new Dictionary<int, List<int>>();
             StopToNodes = new Dictionary<int, List<IMetroNode>>();
 
-            foreach (var Stop1 in Stops)
+            foreach (var stop in Stops)
             {
                 // associate Id's of closest stops with this stop
-                StopToNearest.Add(Stop1.Id, Stop1.CloseStops.Select(s => s.Id).ToList());
+                StopToNearest.Add(stop.Id, stop.CloseStops.Select(s => s.Id).ToList());
 
                 // associate MetroNodes which contain this stop with this stop
-                List<IMetroNode> Stop1NodeList = new List<IMetroNode>();
+                List<IMetroNode> stopNodeList = new List<IMetroNode>();
 
                 // in case some metronodes need to be skipped
                 while (MetroNodeCounter < MetroNodes.Count()
-                       && MetroNodes[MetroNodeCounter].StopID < Stop1.Id)
+                       && MetroNodes[MetroNodeCounter].StopID < stop.Id)
                 {
                     MetroNodeCounter++;
                 }
 
                 while (MetroNodeCounter < MetroNodes.Count()
-                       && MetroNodes[MetroNodeCounter].StopID == Stop1.Id)
+                       && MetroNodes[MetroNodeCounter].StopID == stop.Id)
                 {
-                    Stop1NodeList.Add(MetroNodes[MetroNodeCounter]);
+                    stopNodeList.Add(MetroNodes[MetroNodeCounter]);
                     MetroNodeCounter++;
                 }
 
-                StopToNodes.Add(Stop1.Id, Stop1NodeList);
+                StopToNodes.Add(stop.Id, stopNodeList);
             }
 
             // loop through MetroNodes and connect transfers
@@ -220,6 +244,14 @@ namespace SmartRoutes.Graph
                     continue;
                 }
 
+                if (!childcare.Latitude.HasValue || !childcare.Longitude.HasValue)
+                {
+                    continue;
+                }
+
+                // create base node which all ChildCare nodes for this ChildCare whill reference
+                var BaseNode = new NodeBase(childcare.Name, childcare.Latitude.Value, childcare.Longitude.Value);
+
                 foreach (var stop in nearestStops)
                 {
                     // retrieve nodes that have to be connected to
@@ -246,8 +278,8 @@ namespace SmartRoutes.Graph
                         var downWindTime = node.Time - walkingTime;
                         var upWindTime = node.Time + walkingTime;
 
-                        var DownWindChildCareNode = new ChildCareNode(childcare, downWindTime);
-                        var UpWindChildCareNode = new ChildCareNode(childcare, upWindTime);
+                        var DownWindChildCareNode = new ChildCareNode(childcare, downWindTime, BaseNode);
+                        var UpWindChildCareNode = new ChildCareNode(childcare, upWindTime, BaseNode);
 
                         node.UpwindNeighbors.Add(UpWindChildCareNode);
                         node.DownwindNeighbors.Add(DownWindChildCareNode);

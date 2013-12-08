@@ -20,7 +20,7 @@ namespace SmartRoutes.Graph
 
     public class NodeInfo
     {
-        internal FibHeapHandle<INode, TimeSpan> handle;
+        internal FibHeapHandle<NodeBase, TimeSpan> handle;
         internal TimeSpan travelTime;
         internal NodeState state;
         public INode node;
@@ -32,8 +32,8 @@ namespace SmartRoutes.Graph
         public static List<NodeInfo> Dijkstras(IEnumerable<INode> StartNodes, Func<INode, bool> GoalCheck, Direction direction)
         {
             var Results = new List<NodeInfo>();
-            var SearchInfo = new Dictionary<INode, NodeInfo>();
-            var heap = new FibonacciHeap<INode, TimeSpan>();
+            var SearchInfo = new Dictionary<NodeBase, NodeInfo>();
+            var heap = new FibonacciHeap<NodeBase, TimeSpan>();
 
             // assign search info to StartNodes and place them in queue
             foreach (var node in StartNodes)
@@ -42,41 +42,32 @@ namespace SmartRoutes.Graph
                 nodeInfo.node = node;
                 nodeInfo.state = NodeState.Closed;
                 nodeInfo.travelTime = new TimeSpan(0);
-                nodeInfo.handle = heap.Insert(node, nodeInfo.travelTime);
-                SearchInfo.Add(node, nodeInfo);
+                nodeInfo.handle = heap.Insert(node.BaseNode, nodeInfo.travelTime);
+                SearchInfo.Add(node.BaseNode, nodeInfo);
             }
 
             while (!heap.Empty())
             {
-                INode current = heap.DeleteMin();
+                NodeBase currentBase = heap.DeleteMin();
 
                 // get search info
                 NodeInfo currentInfo = null;
-                if (!SearchInfo.TryGetValue(current, out currentInfo))
+                if (!SearchInfo.TryGetValue(currentBase, out currentInfo))
                 { 
                     throw new KeyNotFoundException("Node removed from heap did not have associated search info: ");
                 }
 
+                var current = currentInfo.node;
+
+                //Console.WriteLine("{0} ---- {1}", current.Name, current.Time);
+                //System.Threading.Thread.Sleep(20);
+
                 // check for completion
                 if (GoalCheck(current))
                 {
-                    // ensure node at this location has not already been added to Results
-                    bool uniqueLocation = true;
-
-                    foreach (var result in Results)
-                    {
-                        if (current.Longitude == result.node.Longitude && current.Latitude == result.node.Latitude)
-                        {
-                            uniqueLocation = false;
-                        }
-                    }
-
-                    if (uniqueLocation)
-                    {
-                        Results.Add(currentInfo);
-                    }
-
-                    continue; // no need to continue searching along this path
+                    Results.Add(currentInfo);
+                    currentInfo.state = NodeState.Closed;
+                    continue;
                 }
 
                 // loop through neighbors and handle business
@@ -85,8 +76,10 @@ namespace SmartRoutes.Graph
 
                 foreach (var neighbor in Neighbors)
                 {
+                    if (neighbor.BaseNode == current.BaseNode) continue;
+
                     NodeInfo neighborInfo = null;
-                    if (!SearchInfo.TryGetValue(neighbor, out neighborInfo))
+                    if (!SearchInfo.TryGetValue(neighbor.BaseNode, out neighborInfo))
                     { 
                         // node is new, give it search info and place in queue
                         neighborInfo = new NodeInfo();
@@ -96,8 +89,8 @@ namespace SmartRoutes.Graph
                         neighborInfo.travelTime = (direction == Direction.Upwind)
                             ? currentInfo.travelTime + (neighbor.Time - current.Time)
                             : currentInfo.travelTime + (current.Time - neighbor.Time);
-                        neighborInfo.handle = heap.Insert(neighbor, neighborInfo.travelTime);
-                        SearchInfo.Add(neighbor, neighborInfo);
+                        neighborInfo.handle = heap.Insert(neighbor.BaseNode, neighborInfo.travelTime);
+                        SearchInfo.Add(neighbor.BaseNode, neighborInfo);
                     }
                     else
                     { 
@@ -111,6 +104,7 @@ namespace SmartRoutes.Graph
                             if (newTravelTime < neighborInfo.travelTime)
                             {
                                 // update search info and update queue for new key
+                                neighborInfo.node = current;
                                 neighborInfo.travelTime = newTravelTime;
                                 neighborInfo.parent = currentInfo;
                                 heap.UpdateKey(neighborInfo.handle, newTravelTime);

@@ -9,30 +9,28 @@ namespace SmartRoutes.Graph.Node
 {
     public class MetroNode : IMetroNode
     {
-        // INode properties
-        public ISet<INode> UpwindNeighbors { get; set; }
-        public ISet<INode> DownwindNeighbors { get; set; }
         public DateTime Time { get; private set; }
-        public double Latitude { get; private set; }
-        public double Longitude { get; private set; }
-        public string Name { get; private set; }
+        public NodeBase BaseNode { get; private set; }
+        public int StopID { get; private set; }
         public int TripID { get; private set; }
         public int Sequence { get; private set; }
+        public ISet<INode> UpwindNeighbors { get; private set; }
+        public ISet<INode> DownwindNeighbors { get; private set; }
 
-        // MetroNode property
-        public int StopID { get; private set; }
+        // legacy properties
+        public string Name { get { return BaseNode.Name; } }
+        public double Latitude { get { return BaseNode.Latitude; } }
+        public double Longitude { get { return BaseNode.Longitude; } }
 
-        public MetroNode(StopTime stopTime)
+        public MetroNode(StopTime stopTime, NodeBase BaseNode)
         {
-            UpwindNeighbors = new HashSet<INode>();
-            DownwindNeighbors = new HashSet<INode>();
+            this.BaseNode = BaseNode;
             Time = stopTime.ArrivalTime;
-            Latitude = stopTime.Stop.Latitude;
-            Longitude = stopTime.Stop.Longitude;
-            Name = stopTime.Stop.Name;
             StopID = stopTime.StopId;
             TripID = stopTime.TripId;
             Sequence = stopTime.Sequence;
+            UpwindNeighbors = new HashSet<INode>();
+            DownwindNeighbors = new HashSet<INode>();
         }
 
         public MetroNode()
@@ -40,10 +38,10 @@ namespace SmartRoutes.Graph.Node
         }
 
         // inelegant way to create nodes w/o revealing implementation
-        // and without making 10000000000 calls to dependency injector
-        public IMetroNode CreateNode(StopTime stopTime)
+        // and without making a million calls to dependency injector
+        public IMetroNode CreateMetroNode(StopTime stopTime, NodeBase Node)
         {
-            return new MetroNode(stopTime);
+            return new MetroNode(stopTime, Node);
         }
     }
 }

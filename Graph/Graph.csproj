@@ -90,6 +90,7 @@
     <Compile Include="Node\ChildCareNode.cs" />
     <Compile Include="Node\IChildcareNode.cs" />
     <Compile Include="Node\IMetroNode.cs" />
+    <Compile Include="Node\NodeBase.cs" />
     <Compile Include="Node\INode.cs" />
     <Compile Include="Node\MetroNode.cs" />
     <Compile Include="Program.cs" />
