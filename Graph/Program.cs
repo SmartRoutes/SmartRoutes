@@ -23,8 +23,6 @@ namespace SmartRoutes.Graph
 {
     class Program
     {
-        private static Byte[] zipFileBytes = File.ReadAllBytes("C:\\DatabaseBackups\\sorta_subset_1_16.zip");
-
         static void Main(string[] args)
         {
             try
@@ -36,9 +34,6 @@ namespace SmartRoutes.Graph
                     .SelectAllClasses()
                     .BindAllInterfaces());
 
-                //var loader = kernel.Get<DatabaseLoader>();
-                //loader.loadDatabaseFromFile(zipFileBytes).Wait();
-
                 Console.WriteLine("Creating Graph.");
                 DateTime tic = DateTime.Now;
 
@@ -47,6 +42,24 @@ namespace SmartRoutes.Graph
                 DateTime toc = DateTime.Now;
 
                 Console.WriteLine("Graph created in {0} milliseconds.", (toc - tic).TotalMilliseconds);
+                Console.WriteLine("Performing Dijkstras...");
+                tic = DateTime.Now;
+
+                int count = 0;
+
+                Func<INode, bool> GoalCheck = node =>
+                {
+                    var check = node as ChildCareNode;
+                    return check != null;
+                };
+
+                var Results = new List<NodeInfo>();
+
+                var StartNodes = new INode[] { graph.GraphNodes[count] };
+                Results = ExtensionMethods.Dijkstras(StartNodes, GoalCheck, Direction.Upwind);
+
+                toc = DateTime.Now;
+                Console.WriteLine("Dijkstra's completed in {0} milliseconds.", (toc - tic).TotalMilliseconds);
 
                 Console.ReadLine();
             }
