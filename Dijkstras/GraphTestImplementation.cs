@@ -9,6 +9,7 @@ namespace SmartRoutes.Graph.Test
 {
     class NodeTestImplementation : INode
     {
+        public NodeBase BaseNode { get; set; }
         public ISet<INode> UpwindNeighbors { get; set; }
         public ISet<INode> DownwindNeighbors { get; set; }
         public DateTime Time { get; set; }
@@ -24,6 +25,7 @@ namespace SmartRoutes.Graph.Test
             this.Time = Time;
             Latitude = LatLon;
             Longitude = LatLon;
+            BaseNode = new NodeBase(Name, Latitude, Longitude);
         }
     }
 

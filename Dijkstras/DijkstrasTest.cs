@@ -202,25 +202,25 @@ namespace SmartRoutes.Graph.Test
             Assert.IsNull(Result[0].parent.parent.parent);
         }
 
-        [TestMethod]
-        public void Dijkstras5()
-        {
-            // Start node "A", Goal nodes are "B" and "E", duplicate locations so "E"
-            // should be only return since it is faster
-            var Nodes = GraphCreationMethods.FiveNodes();
-            var StartNodes = new INode[] { Nodes[0] };
+        //[TestMethod]
+        //public void Dijkstras5()
+        //{
+        //    // Start node "A", Goal nodes are "B" and "E", duplicate locations so "E"
+        //    // should be only return since it is faster
+        //    var Nodes = GraphCreationMethods.FiveNodes();
+        //    var StartNodes = new INode[] { Nodes[0] };
 
-            var Result = SmartRoutes.Graph.ExtensionMethods.Dijkstras(
-                StartNodes,
-                x => x.Name == "B" || x.Name == "E",
-                SmartRoutes.Graph.Direction.Upwind);
+        //    var Result = SmartRoutes.Graph.ExtensionMethods.Dijkstras(
+        //        StartNodes,
+        //        x => x.Name == "B" || x.Name == "E",
+        //        SmartRoutes.Graph.Direction.Upwind);
 
-            Assert.AreEqual(1, Result.Count);
-            Assert.AreEqual("E", Result[0].node.Name);
-            Assert.AreEqual("D", Result[0].parent.node.Name);
-            Assert.AreEqual("C", Result[0].parent.parent.node.Name);
-            Assert.AreEqual("A", Result[0].parent.parent.parent.node.Name);
-            Assert.IsNull(Result[0].parent.parent.parent.parent);
-        }
+        //    Assert.AreEqual(1, Result.Count);
+        //    Assert.AreEqual("E", Result[0].node.Name);
+        //    Assert.AreEqual("D", Result[0].parent.node.Name);
+        //    Assert.AreEqual("C", Result[0].parent.parent.node.Name);
+        //    Assert.AreEqual("A", Result[0].parent.parent.parent.node.Name);
+        //    Assert.IsNull(Result[0].parent.parent.parent.parent);
+        //}
     }
 }
