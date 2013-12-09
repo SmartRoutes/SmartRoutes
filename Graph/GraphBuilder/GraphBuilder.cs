@@ -20,7 +20,8 @@ namespace SmartRoutes.Graph
     {
         private readonly IMetroNode _metroNodeMaker;
         private Logger Logger = LogManager.GetCurrentClassLogger();
-        private static double MaxFeetFromChildCareToBuStop = 7000; // just want to see connections get made for now
+        private static double MaxFeetFromChildCareToBuStop = 10000;
+        private static int MaxChildCareCloseStops = 5;
         private static double WalkingFeetPerSecond = 1.5;
         private Dictionary<int, List<int>> StopToNearest; // from StopID to list of StopID's of nearest Stops
         private Dictionary<int, List<IMetroNode>> StopToNodes; // from StopID to set of Nodes with given StopID
@@ -175,6 +176,9 @@ namespace SmartRoutes.Graph
                     // thanks to sorting, these nodes are iterated in ascending time
                     foreach (var node2 in Nodes)
                     {
+                        // don't connect same stop on same trip (why just sit there?)
+                        if (node1.BaseNode == node2.BaseNode) continue;
+
                         if (node2.Time > MinTime)
                         {
                             node1.UpwindNeighbors.Add(node2);
@@ -200,43 +204,54 @@ namespace SmartRoutes.Graph
             // associate ChildCares with StopID's of closest stops
             ChildCareToStops = new Dictionary<int, List<int>>();
 
-            var ChildCareEnumerator = ChildCares.GetEnumerator();
-
-            while (ChildCareEnumerator.MoveNext())
+            foreach(var childcare in ChildCares)
             {
-                var childcare = ChildCareEnumerator.Current;
-
                 // make sure lat/long are not null
-                if (childcare.Latitude == null || childcare.Longitude == null)
+                if (!childcare.Latitude.HasValue || !childcare.Longitude.HasValue)
                 {
                     continue;
                 }
 
-                var nearestStops = new List<int>();
-
-                var StopEnumerator = Stops.GetEnumerator();
-
-                while (StopEnumerator.MoveNext())
+                var nearestStopIDs = new int[MaxChildCareCloseStops];
+                for (int i = 0; i < MaxChildCareCloseStops; i++) nearestStopIDs[i] = int.MinValue;
+                var nearestDistances = new double[MaxChildCareCloseStops];
+                for (int i = 0; i < MaxChildCareCloseStops; i++) nearestDistances[i] = double.MaxValue;
+                
+                foreach (var stop in Stops)
                 {
-                    var stop = StopEnumerator.Current;
+                    double distance = childcare.GetL1DistanceInFeet(stop);
 
-                    double WalkingTime = childcare.GetL1DistanceInFeet(stop);
-
-                    if (WalkingTime < MaxFeetFromChildCareToBuStop)
+                    if (distance < MaxFeetFromChildCareToBuStop)
                     {
-                        nearestStops.Add(stop.Id);
+                        // store the closest stops to this childcare
+                        var StopID = stop.Id;
+                        for (int i = 0; i < MaxChildCareCloseStops; i++)
+                        {
+                            if (distance < nearestDistances[i])
+                            {
+                                var tempID = StopID; var tempDistance = distance;
+                                StopID = nearestStopIDs[i];
+                                distance = nearestDistances[i];
+                                nearestStopIDs[i] = tempID;
+                                nearestDistances[i] = tempDistance;
+                            }
+                        }
                     }
                 }
 
-                ChildCareToStops.Add(childcare.Id, nearestStops);
+                var nearestStopList = nearestStopIDs.ToList();
+                nearestStopList.RemoveAll(x => x == int.MinValue);
+                
+                if (nearestStopList.Count() > 0)
+                {
+                    ChildCareToStops.Add(childcare.Id, nearestStopList);
+                }
             }
 
             // now for each ChildCare we insert many nodes into the graph
-            ChildCareEnumerator.Reset();
 
-            while (ChildCareEnumerator.MoveNext())
+            foreach (var childcare in ChildCares)
             {
-                var childcare = ChildCareEnumerator.Current;
                 List<int> nearestStops = null;
 
                 if (!ChildCareToStops.TryGetValue(childcare.Id, out nearestStops))
@@ -275,19 +290,19 @@ namespace SmartRoutes.Graph
                     // for each metro node, create upwind / downwind ChildCare nodes and connect them
                     foreach (var node in nodes)
                     {
-                        var downWindTime = node.Time - walkingTime;
-                        var upWindTime = node.Time + walkingTime;
+                        var downWindTime = node.Time + walkingTime;
+                        var upWindTime = node.Time - walkingTime;
 
-                        var DownWindChildCareNode = new ChildCareNode(childcare, downWindTime, BaseNode);
-                        var UpWindChildCareNode = new ChildCareNode(childcare, upWindTime, BaseNode);
+                        var DownwindChildCareNode = new ChildCareNode(childcare, downWindTime, BaseNode);
+                        var UpwindChildCareNode = new ChildCareNode(childcare, upWindTime, BaseNode);
 
-                        node.UpwindNeighbors.Add(UpWindChildCareNode);
-                        node.DownwindNeighbors.Add(DownWindChildCareNode);
-                        DownWindChildCareNode.UpwindNeighbors.Add(node);
-                        UpWindChildCareNode.DownwindNeighbors.Add(node);
+                        node.UpwindNeighbors.Add(UpwindChildCareNode);
+                        node.DownwindNeighbors.Add(DownwindChildCareNode);
+                        DownwindChildCareNode.UpwindNeighbors.Add(node);
+                        UpwindChildCareNode.DownwindNeighbors.Add(node);
 
-                        ChildCareNodesAdded.Add(DownWindChildCareNode);
-                        ChildCareNodesAdded.Add(UpWindChildCareNode);
+                        ChildCareNodesAdded.Add(DownwindChildCareNode);
+                        ChildCareNodesAdded.Add(UpwindChildCareNode);
                     }
 
                     // add new ChildCare nodes to list of Graph nodes
