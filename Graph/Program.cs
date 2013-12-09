@@ -18,6 +18,7 @@ using Ionic.Zip;
 using SmartRoutes.SortaScraper.Scrapers;
 using SmartRoutes.Heap;
 using SmartRoutes.Database.Contexts;
+using SmartRoutes.Model;
 
 namespace SmartRoutes.Graph
 {
@@ -59,9 +60,24 @@ namespace SmartRoutes.Graph
                 Results = ExtensionMethods.Dijkstras(StartNodes, GoalCheck, Direction.Upwind);
 
                 toc = DateTime.Now;
-                Console.WriteLine("Dijkstra's completed in {0} milliseconds.", (toc - tic).TotalMilliseconds);
+                Console.WriteLine("Dijkstra's completed in {0} milliseconds, {1} results found.", 
+                    (toc - tic).TotalMilliseconds, Results.Count());
 
-                Console.ReadLine();
+                List<NodeBase> UniqueChildCareBases = new List<NodeBase>();
+
+                foreach (var node in graph.GraphNodes)
+                {
+                    var cnode = node as ChildCareNode;
+                    if (cnode == null) continue;
+                    if (!UniqueChildCareBases.Contains(cnode.BaseNode))
+                    {
+                        UniqueChildCareBases.Add(cnode.BaseNode);
+                    }
+                }
+
+                Console.WriteLine("{0} unique child cares found in graph.", UniqueChildCareBases.Count());
+
+            Console.ReadLine();
             }
             catch (Exception e)
             {
