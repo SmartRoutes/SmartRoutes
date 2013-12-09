@@ -59,15 +59,11 @@ namespace SmartRoutes.Graph
 
                 var current = currentInfo.node;
 
-                //Console.WriteLine("{0} ---- {1}", current.Name, current.Time);
-                //System.Threading.Thread.Sleep(20);
-
                 // check for completion
                 if (GoalCheck(current))
                 {
                     Results.Add(currentInfo);
                     currentInfo.state = NodeState.Closed;
-                    continue;
                 }
 
                 // loop through neighbors and handle business

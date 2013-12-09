@@ -105,15 +105,7 @@ namespace SmartRoutes.Heap
         // merge two trees
         private void Link(FibHeapNode<TValue, TKey> root1, FibHeapNode<TValue, TKey> root2)
         {
-            if (root1 == root2)
-            {
-                throw new ArgumentException("Attempt to link node to itself.");
-            }
-            else if (root1.Parent != null || root2.Parent != null)
-            {
-                throw new ArgumentException("Attempt to link nodes which are not roots.");
-            }
-            else if (root1.Key.CompareTo(root2.Key) > 0)
+            if (root1.Key.CompareTo(root2.Key) > 0)
             {
                 Link(root2, root1);
             }
@@ -126,9 +118,7 @@ namespace SmartRoutes.Heap
                 if (RootsOfRank[root2.Rank] == root2) RootsOfRank[root2.Rank] = null;
 
                 // remove tree2 from roots
-                var OldRootsCount = Roots.Count();
                 Roots.RemoveAll(x => x == root2);
-                if (Roots.Count() == OldRootsCount) throw new Exception("Failed to remove tree from Roots during Link");
 
                 root1.Children.Add(root2);
                 root2.Parent = root1;
@@ -159,10 +149,6 @@ namespace SmartRoutes.Heap
                 }
                 else if (root != RootsOfRank[root.Rank]) // two roots have same rank
                 {
-                    if (RootsOfRank[root.Rank].Parent != null)
-                    {
-                        throw new Exception("RootsOfRank contains non-root node.");
-                    }
                     root1 = RootsOfRank[root.Rank];
                     root2 = root;
                     linkNeeded = true;
