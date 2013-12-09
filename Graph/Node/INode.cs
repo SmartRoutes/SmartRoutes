@@ -11,8 +11,8 @@ namespace SmartRoutes.Graph.Node
     {
         NodeBase BaseNode { get; }
         DateTime Time { get; }
-        ISet<INode> UpwindNeighbors { get; }
-        ISet<INode> DownwindNeighbors { get; }
+        ISet<INode> TimeBackwardNeighbors { get; }
+        ISet<INode> TimeForwardNeighbors { get; }
 
         // legacy properties, these will redirect to BaseNode properties
         string Name { get; }

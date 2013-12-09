@@ -14,8 +14,8 @@ namespace SmartRoutes.Graph.Node
         public int StopID { get; private set; }
         public int TripID { get; private set; }
         public int Sequence { get; private set; }
-        public ISet<INode> UpwindNeighbors { get; private set; }
-        public ISet<INode> DownwindNeighbors { get; private set; }
+        public ISet<INode> TimeBackwardNeighbors { get; private set; }
+        public ISet<INode> TimeForwardNeighbors { get; private set; }
 
         // legacy properties
         public string Name { get { return BaseNode.Name; } }
@@ -29,8 +29,8 @@ namespace SmartRoutes.Graph.Node
             StopID = stopTime.StopId;
             TripID = stopTime.TripId;
             Sequence = stopTime.Sequence;
-            UpwindNeighbors = new HashSet<INode>();
-            DownwindNeighbors = new HashSet<INode>();
+            TimeBackwardNeighbors = new HashSet<INode>();
+            TimeForwardNeighbors = new HashSet<INode>();
         }
 
         public MetroNode()

@@ -324,12 +324,12 @@ namespace SmartRoutes.Graph.Test
                 INode node = nodes[i];
                 if (i > 0)
                 {
-                    Assert.IsTrue(node.DownwindNeighbors.Contains(nodes[i - 1]));
+                    Assert.IsTrue(node.TimeBackwardNeighbors.Contains(nodes[i - 1]));
                 }
                 Assert.AreEqual(trip[i].ArrivalTime, node.Time);
                 if (i < trip.Length - 1)
                 {
-                    Assert.IsTrue(node.UpwindNeighbors.Contains(nodes[i + 1]));
+                    Assert.IsTrue(node.TimeForwardNeighbors.Contains(nodes[i + 1]));
                 }
             }
         }
@@ -392,7 +392,7 @@ namespace SmartRoutes.Graph.Test
                     }
                     unvisitedNodes.Remove(current);
                     visistedNodes.Add(current);
-                    foreach (INode neighbor in current.DownwindNeighbors.Concat(current.UpwindNeighbors))
+                    foreach (INode neighbor in current.TimeForwardNeighbors.Concat(current.TimeBackwardNeighbors))
                     {
                         stack.Push(neighbor);
                     }

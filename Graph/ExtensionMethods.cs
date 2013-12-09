@@ -59,6 +59,9 @@ namespace SmartRoutes.Graph
 
                 var current = currentInfo.node;
 
+                Console.WriteLine("{0} --------- {1}", current.BaseNode.Name, current.Time);
+                //System.Threading.Thread.Sleep(50);
+
                 // check for completion
                 if (GoalCheck(current))
                 {
@@ -68,7 +71,7 @@ namespace SmartRoutes.Graph
 
                 // loop through neighbors and handle business
                 var Neighbors = (direction == TimeDirection.Forwards) ?
-                    current.UpwindNeighbors : current.DownwindNeighbors;
+                    current.TimeForwardNeighbors : current.TimeBackwardNeighbors;
 
                 foreach (var neighbor in Neighbors)
                 {

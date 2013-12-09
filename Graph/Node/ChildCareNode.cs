@@ -11,8 +11,8 @@ namespace SmartRoutes.Graph.Node
     {
         public DateTime Time { get; private set; }
         public NodeBase BaseNode { get; private set; }
-        public ISet<INode> UpwindNeighbors { get; private set; }
-        public ISet<INode> DownwindNeighbors { get; private set; }
+        public ISet<INode> TimeBackwardNeighbors { get; private set; }
+        public ISet<INode> TimeForwardNeighbors { get; private set; }
 
         // legacy properties
         public string Name { get { return BaseNode.Name; } }
@@ -23,8 +23,8 @@ namespace SmartRoutes.Graph.Node
         {
             this.BaseNode = BaseNode;
             this.Time = Time;
-            UpwindNeighbors = new HashSet<INode>();
-            DownwindNeighbors = new HashSet<INode>();
+            TimeBackwardNeighbors = new HashSet<INode>();
+            TimeForwardNeighbors = new HashSet<INode>();
         }
     }
 }

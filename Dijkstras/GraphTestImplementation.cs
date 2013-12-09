@@ -10,8 +10,8 @@ namespace SmartRoutes.Graph.Test
     class NodeTestImplementation : INode
     {
         public NodeBase BaseNode { get; set; }
-        public ISet<INode> UpwindNeighbors { get; set; }
-        public ISet<INode> DownwindNeighbors { get; set; }
+        public ISet<INode> TimeForwardNeighbors { get; set; }
+        public ISet<INode> TimeBackwardNeighbors { get; set; }
         public DateTime Time { get; set; }
         public string Name { get; set; }
         public double Latitude { get; set; }
@@ -19,8 +19,8 @@ namespace SmartRoutes.Graph.Test
 
         public NodeTestImplementation(string Name, DateTime Time, double LatLon)
         {
-            DownwindNeighbors = new HashSet<INode>();
-            UpwindNeighbors = new HashSet<INode>();
+            TimeBackwardNeighbors = new HashSet<INode>();
+            TimeForwardNeighbors = new HashSet<INode>();
             this.Name = Name;
             this.Time = Time;
             Latitude = LatLon;
@@ -36,8 +36,8 @@ namespace SmartRoutes.Graph.Test
             var NodeA = new NodeTestImplementation("A", new DateTime(1970, 1, 1, 10, 0, 0), 1);
             var NodeB = new NodeTestImplementation("B", new DateTime(1970, 1, 1, 12, 0, 0), 2);
 
-            NodeA.UpwindNeighbors.Add(NodeB);
-            NodeB.DownwindNeighbors.Add(NodeA);
+            NodeA.TimeForwardNeighbors.Add(NodeB);
+            NodeB.TimeBackwardNeighbors.Add(NodeA);
 
             return new INode[] { NodeA, NodeB };
         }
@@ -48,10 +48,10 @@ namespace SmartRoutes.Graph.Test
             var NodeB = new NodeTestImplementation("B", new DateTime(1970, 1, 1, 12, 0, 0), 2);
             var NodeC = new NodeTestImplementation("C", new DateTime(1970, 1, 1, 13, 0, 0), 3);
 
-            NodeA.UpwindNeighbors.Add(NodeB);
-            NodeA.UpwindNeighbors.Add(NodeC);
-            NodeB.DownwindNeighbors.Add(NodeA);
-            NodeC.DownwindNeighbors.Add(NodeA);
+            NodeA.TimeForwardNeighbors.Add(NodeB);
+            NodeA.TimeForwardNeighbors.Add(NodeC);
+            NodeB.TimeBackwardNeighbors.Add(NodeA);
+            NodeC.TimeBackwardNeighbors.Add(NodeA);
 
             return new INode[] { NodeA, NodeB, NodeC };
         }
@@ -65,10 +65,10 @@ namespace SmartRoutes.Graph.Test
             var NodeC = new NodeTestImplementation("C", new DateTime(1970, 1, 1, 13, 0, 0), 3);
             NodeC.Latitude = 3; NodeC.Longitude = 3;
 
-            NodeA.UpwindNeighbors.Add(NodeB);
-            NodeB.DownwindNeighbors.Add(NodeA);
-            NodeB.UpwindNeighbors.Add(NodeC);
-            NodeC.DownwindNeighbors.Add(NodeB);
+            NodeA.TimeForwardNeighbors.Add(NodeB);
+            NodeB.TimeBackwardNeighbors.Add(NodeA);
+            NodeB.TimeForwardNeighbors.Add(NodeC);
+            NodeC.TimeBackwardNeighbors.Add(NodeB);
 
             return new INode[] { NodeA, NodeB, NodeC };
         }
@@ -83,10 +83,10 @@ namespace SmartRoutes.Graph.Test
             var NodeD = new NodeTestImplementation("D", new DateTime(1970, 1, 1, 3, 0, 0), 4);
             var NodeE = new NodeTestImplementation("E", new DateTime(1970, 1, 1, 4, 0, 0), 2);
 
-            NodeA.UpwindNeighbors.Add(NodeB);
-            NodeA.UpwindNeighbors.Add(NodeC);
-            NodeC.UpwindNeighbors.Add(NodeD);
-            NodeD.UpwindNeighbors.Add(NodeE);
+            NodeA.TimeForwardNeighbors.Add(NodeB);
+            NodeA.TimeForwardNeighbors.Add(NodeC);
+            NodeC.TimeForwardNeighbors.Add(NodeD);
+            NodeD.TimeForwardNeighbors.Add(NodeE);
 
             return new INode[] { NodeA, NodeB, NodeC, NodeD, NodeE };
         }

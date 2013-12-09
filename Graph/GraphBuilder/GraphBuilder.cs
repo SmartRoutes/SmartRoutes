@@ -45,7 +45,6 @@ namespace SmartRoutes.Graph
 
             var MetroNodes = CreateMetroNodes(Stops, StopTimes);
             ConnectTrips(MetroNodes);
-            //ConnectTransfers(MetroNodes);
             ConnectTransfers(MetroNodes, Stops);
             var GraphNodes = InsertChildCareNodes(Stops, ChildCares, MetroNodes);
             Logger.Trace("Graph created successfully.");
@@ -101,8 +100,8 @@ namespace SmartRoutes.Graph
 
                 if (node.TripID == previousNode.TripID)
                 {
-                    node.DownwindNeighbors.Add(previousNode);
-                    previousNode.UpwindNeighbors.Add(node);
+                    node.TimeBackwardNeighbors.Add(previousNode);
+                    previousNode.TimeForwardNeighbors.Add(node);
                 }
             }
             Logger.Trace("Metro Trips connected successfully.");
@@ -181,8 +180,8 @@ namespace SmartRoutes.Graph
 
                         if (node2.Time > MinTime)
                         {
-                            node1.UpwindNeighbors.Add(node2);
-                            node2.DownwindNeighbors.Add(node1);
+                            node1.TimeForwardNeighbors.Add(node2);
+                            node2.TimeBackwardNeighbors.Add(node1);
                             break;
                         }
                     }
@@ -264,6 +263,11 @@ namespace SmartRoutes.Graph
                     continue;
                 }
 
+                // maintain list of childcare nodes added, these nodes will be
+                // connected to each other, and this connection will correspond to waiting
+                // at that childcare between two specific times
+                var ChildCareNodesAdded = new List<IChildcareNode>();
+
                 // create base node which all ChildCare nodes for this ChildCare whill reference
                 var BaseNode = new NodeBase(childcare.Name, childcare.Latitude.Value, childcare.Longitude.Value);
 
@@ -276,11 +280,6 @@ namespace SmartRoutes.Graph
                         continue;
                     }
 
-                    // maintain list of childcare nodes added, these nodes will be
-                    // connected to each other, and this connection will correspond to waiting
-                    // at that childcare between two specific times
-                    var ChildCareNodesAdded = new List<IChildcareNode>();
-
                     // make sure we have some nodes to work with
                     if (nodes.Count == 0) continue;
 
@@ -290,37 +289,44 @@ namespace SmartRoutes.Graph
                     // for each metro node, create upwind / downwind ChildCare nodes and connect them
                     foreach (var node in nodes)
                     {
-                        var downWindTime = node.Time + walkingTime;
-                        var upWindTime = node.Time - walkingTime;
+                        var forwardTime = node.Time + walkingTime;
+                        var backwardTime = node.Time - walkingTime;
 
-                        var DownwindChildCareNode = new ChildCareNode(childcare, downWindTime, BaseNode);
-                        var UpwindChildCareNode = new ChildCareNode(childcare, upWindTime, BaseNode);
+                        var ForwardChildCareNode = new ChildCareNode(childcare, forwardTime, BaseNode);
+                        var BackwardChildCareNode = new ChildCareNode(childcare, backwardTime, BaseNode);
 
-                        node.UpwindNeighbors.Add(UpwindChildCareNode);
-                        node.DownwindNeighbors.Add(DownwindChildCareNode);
-                        DownwindChildCareNode.UpwindNeighbors.Add(node);
-                        UpwindChildCareNode.DownwindNeighbors.Add(node);
+                        node.TimeBackwardNeighbors.Add(BackwardChildCareNode);
+                        node.TimeForwardNeighbors.Add(ForwardChildCareNode);
+                        ForwardChildCareNode.TimeBackwardNeighbors.Add(node);
+                        BackwardChildCareNode.TimeForwardNeighbors.Add(node);
 
-                        ChildCareNodesAdded.Add(DownwindChildCareNode);
-                        ChildCareNodesAdded.Add(UpwindChildCareNode);
-                    }
-
-                    // add new ChildCare nodes to list of Graph nodes
-                    GraphNodeList.AddRange(ChildCareNodesAdded);
-                    
-                    // now connect child care nodes together. Fist sort by time
-                    var ChildCareNodesArray = ChildCareNodesAdded.ToArray();
-                    Array.Sort(ChildCareNodesArray, new Comparers.ComparerForChildCares());
-
-                    for (int i = 1; i < ChildCareNodesArray.Count(); i++)
-                    {
-                        var DownWindChildCareNode = ChildCareNodesArray[i - 1];
-                        var UpWindChildCareNode = ChildCareNodesArray[i];
-
-                        DownWindChildCareNode.UpwindNeighbors.Add(UpWindChildCareNode);
-                        UpWindChildCareNode.DownwindNeighbors.Add(DownWindChildCareNode);
+                        ChildCareNodesAdded.Add(ForwardChildCareNode);
+                        ChildCareNodesAdded.Add(BackwardChildCareNode);
                     }
                 }
+
+                // add new ChildCare nodes to list of Graph nodes
+                GraphNodeList.AddRange(ChildCareNodesAdded);
+                    
+                // now connect child care nodes together. Fist sort by time
+                //var ChildCareNodesArray = ChildCareNodesAdded.ToArray();
+                //Array.Sort(ChildCareNodesArray, new Comparers.ComparerForChildCares());
+
+                //for (int i = 0; i < ChildCareNodesArray.Count() - 1; i++)
+                //{
+                //    for (int j = i + 1; j < ChildCareNodesArray.Count(); j++)
+                //    {
+                //        var previousChildCareNode = ChildCareNodesArray[i];
+                //        var currentChildCareNode = ChildCareNodesArray[j];
+
+                //        if (previousChildCareNode.BaseNode != currentChildCareNode.BaseNode)
+                //        {
+                //            previousChildCareNode.TimeForwardNeighbors.Add(currentChildCareNode);
+                //            currentChildCareNode.TimeBackwardNeighbors.Add(previousChildCareNode);
+                //            break;
+                //        }
+                //    }
+                //}
             }
 
             return GraphNodeList.ToArray();

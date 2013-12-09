@@ -58,28 +58,28 @@ namespace SmartRoutes.Graph.Test
         {
             // two node graph, connected, second node is goal node
             var Nodes = GraphCreationMethods.TwoConnectedNodes();
-            var UpWindStartNodes = new INode[] { Nodes[0] };
-            var DownWindStartNodes = new INode[] { Nodes[1] };
+            var TimeForwardStartNodes = new INode[] { Nodes[0] };
+            var TimeBackwardStartNodes = new INode[] { Nodes[1] };
 
-            var UpWindResult = SmartRoutes.Graph.ExtensionMethods.Dijkstras(
-                UpWindStartNodes,
+            var ForwardResult = SmartRoutes.Graph.ExtensionMethods.Dijkstras(
+                TimeForwardStartNodes,
                 x => x.Name == "B",
                 SmartRoutes.Graph.TimeDirection.Forwards);
 
-            var DownWindResult = SmartRoutes.Graph.ExtensionMethods.Dijkstras(
-                DownWindStartNodes,
+            var BackwardResult = SmartRoutes.Graph.ExtensionMethods.Dijkstras(
+                TimeBackwardStartNodes,
                 x => x.Name == "A",
                 SmartRoutes.Graph.TimeDirection.Backwards);
 
-            Assert.AreEqual(1, UpWindResult.Count);
-            Assert.AreEqual("B", UpWindResult[0].node.Name);
-            Assert.AreEqual("A", UpWindResult[0].parent.node.Name);
-            Assert.IsNull(UpWindResult[0].parent.parent);
+            Assert.AreEqual(1, ForwardResult.Count);
+            Assert.AreEqual("B", ForwardResult[0].node.Name);
+            Assert.AreEqual("A", ForwardResult[0].parent.node.Name);
+            Assert.IsNull(ForwardResult[0].parent.parent);
 
-            Assert.AreEqual(1, DownWindResult.Count);
-            Assert.AreEqual("A", DownWindResult[0].node.Name);
-            Assert.AreEqual("B", DownWindResult[0].parent.node.Name);
-            Assert.IsNull(DownWindResult[0].parent.parent);
+            Assert.AreEqual(1, BackwardResult.Count);
+            Assert.AreEqual("A", BackwardResult[0].node.Name);
+            Assert.AreEqual("B", BackwardResult[0].parent.node.Name);
+            Assert.IsNull(BackwardResult[0].parent.parent);
         }
 
         [TestMethod]
@@ -87,26 +87,26 @@ namespace SmartRoutes.Graph.Test
         {
             // two node graph, connected, first node is goal node
             var Nodes = GraphCreationMethods.TwoConnectedNodes();
-            var UpWindStartNodes = new INode[] { Nodes[0] };
-            var DownWindStartNodes = new INode[] { Nodes[1] };
+            var TimeForwardStartNodes = new INode[] { Nodes[0] };
+            var TimeBackwardStartNodes = new INode[] { Nodes[1] };
 
-            var UpWindResult = SmartRoutes.Graph.ExtensionMethods.Dijkstras(
-                UpWindStartNodes,
+            var ForwardResult = SmartRoutes.Graph.ExtensionMethods.Dijkstras(
+                TimeForwardStartNodes,
                 x => x.Name == "A",
                 SmartRoutes.Graph.TimeDirection.Forwards);
 
-            var DownWindResult = SmartRoutes.Graph.ExtensionMethods.Dijkstras(
-                DownWindStartNodes,
+            var BackwardResult = SmartRoutes.Graph.ExtensionMethods.Dijkstras(
+                TimeBackwardStartNodes,
                 x => x.Name == "B",
                 SmartRoutes.Graph.TimeDirection.Backwards);
 
-            Assert.AreEqual(1, UpWindResult.Count);
-            Assert.AreEqual("A", UpWindResult[0].node.Name);
-            Assert.IsNull(UpWindResult[0].parent);
+            Assert.AreEqual(1, ForwardResult.Count);
+            Assert.AreEqual("A", ForwardResult[0].node.Name);
+            Assert.IsNull(ForwardResult[0].parent);
 
-            Assert.AreEqual(1, DownWindResult.Count);
-            Assert.AreEqual("B", DownWindResult[0].node.Name);
-            Assert.IsNull(DownWindResult[0].parent);
+            Assert.AreEqual(1, BackwardResult.Count);
+            Assert.AreEqual("B", BackwardResult[0].node.Name);
+            Assert.IsNull(BackwardResult[0].parent);
         }
 
         [TestMethod]
@@ -114,26 +114,26 @@ namespace SmartRoutes.Graph.Test
         {
             // two node graph, both in starting set
             var Nodes = GraphCreationMethods.TwoConnectedNodes();
-            var UpWindStartNodes = Nodes;
-            var DownWindStartNodes = Nodes;
+            var TimeForwardStartNodes = Nodes;
+            var TimeBackwardStartNodes = Nodes;
 
-            var UpWindResult = SmartRoutes.Graph.ExtensionMethods.Dijkstras(
-                UpWindStartNodes,
+            var ForwardResult = SmartRoutes.Graph.ExtensionMethods.Dijkstras(
+                TimeForwardStartNodes,
                 x => x.Name == "A",
                 SmartRoutes.Graph.TimeDirection.Forwards);
 
-            var DownWindResult = SmartRoutes.Graph.ExtensionMethods.Dijkstras(
-                DownWindStartNodes,
+            var BackwardResult = SmartRoutes.Graph.ExtensionMethods.Dijkstras(
+                TimeBackwardStartNodes,
                 x => x.Name == "B",
                 SmartRoutes.Graph.TimeDirection.Backwards);
 
-            Assert.AreEqual(1, UpWindResult.Count);
-            Assert.AreEqual("A", UpWindResult[0].node.Name);
-            Assert.IsNull(UpWindResult[0].parent);
+            Assert.AreEqual(1, ForwardResult.Count);
+            Assert.AreEqual("A", ForwardResult[0].node.Name);
+            Assert.IsNull(ForwardResult[0].parent);
 
-            Assert.AreEqual(1, DownWindResult.Count);
-            Assert.AreEqual("B", DownWindResult[0].node.Name);
-            Assert.IsNull(DownWindResult[0].parent);
+            Assert.AreEqual(1, BackwardResult.Count);
+            Assert.AreEqual("B", BackwardResult[0].node.Name);
+            Assert.IsNull(BackwardResult[0].parent);
         }
 
         [TestMethod]
