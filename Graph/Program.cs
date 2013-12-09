@@ -57,7 +57,7 @@ namespace SmartRoutes.Graph
                 var Results = new List<NodeInfo>();
 
                 var StartNodes = new INode[] { graph.GraphNodes[count] };
-                Results = ExtensionMethods.Dijkstras(StartNodes, GoalCheck, Direction.Upwind);
+                Results = ExtensionMethods.Dijkstras(StartNodes, GoalCheck, TimeDirection.Forwards);
 
                 toc = DateTime.Now;
                 Console.WriteLine("Dijkstra's completed in {0} milliseconds, {1} results found.", 

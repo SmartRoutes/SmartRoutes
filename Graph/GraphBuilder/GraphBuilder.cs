@@ -20,7 +20,7 @@ namespace SmartRoutes.Graph
     {
         private readonly IMetroNode _metroNodeMaker;
         private Logger Logger = LogManager.GetCurrentClassLogger();
-        private static double MaxFeetFromChildCareToBuStop = 10000;
+        private static double MaxFeetFromChildCareToBuStop = 1000000;
         private static int MaxChildCareCloseStops = 5;
         private static double WalkingFeetPerSecond = 1.5;
         private Dictionary<int, List<int>> StopToNearest; // from StopID to list of StopID's of nearest Stops

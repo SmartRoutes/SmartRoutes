@@ -16,7 +16,7 @@ namespace SmartRoutes.Graph.Test
             var Result = SmartRoutes.Graph.ExtensionMethods.Dijkstras(
                 StartNodes,
                 x => false,
-                SmartRoutes.Graph.Direction.Upwind);
+                SmartRoutes.Graph.TimeDirection.Forwards);
 
             Assert.AreEqual(0, Result.Count);
         }
@@ -31,7 +31,7 @@ namespace SmartRoutes.Graph.Test
             var Result = SmartRoutes.Graph.ExtensionMethods.Dijkstras(
                 StartNodes,
                 x => false,
-                SmartRoutes.Graph.Direction.Upwind);
+                SmartRoutes.Graph.TimeDirection.Forwards);
 
             Assert.AreEqual(0, Result.Count);
         }
@@ -46,7 +46,7 @@ namespace SmartRoutes.Graph.Test
             var Result = SmartRoutes.Graph.ExtensionMethods.Dijkstras(
                 StartNodes,
                 x => x.Name == "A",
-                SmartRoutes.Graph.Direction.Upwind);
+                SmartRoutes.Graph.TimeDirection.Forwards);
 
             Assert.AreEqual(1, Result.Count);
             Assert.AreEqual("A", Result[0].node.Name);
@@ -64,12 +64,12 @@ namespace SmartRoutes.Graph.Test
             var UpWindResult = SmartRoutes.Graph.ExtensionMethods.Dijkstras(
                 UpWindStartNodes,
                 x => x.Name == "B",
-                SmartRoutes.Graph.Direction.Upwind);
+                SmartRoutes.Graph.TimeDirection.Forwards);
 
             var DownWindResult = SmartRoutes.Graph.ExtensionMethods.Dijkstras(
                 DownWindStartNodes,
                 x => x.Name == "A",
-                SmartRoutes.Graph.Direction.Downwind);
+                SmartRoutes.Graph.TimeDirection.Backwards);
 
             Assert.AreEqual(1, UpWindResult.Count);
             Assert.AreEqual("B", UpWindResult[0].node.Name);
@@ -93,12 +93,12 @@ namespace SmartRoutes.Graph.Test
             var UpWindResult = SmartRoutes.Graph.ExtensionMethods.Dijkstras(
                 UpWindStartNodes,
                 x => x.Name == "A",
-                SmartRoutes.Graph.Direction.Upwind);
+                SmartRoutes.Graph.TimeDirection.Forwards);
 
             var DownWindResult = SmartRoutes.Graph.ExtensionMethods.Dijkstras(
                 DownWindStartNodes,
                 x => x.Name == "B",
-                SmartRoutes.Graph.Direction.Downwind);
+                SmartRoutes.Graph.TimeDirection.Backwards);
 
             Assert.AreEqual(1, UpWindResult.Count);
             Assert.AreEqual("A", UpWindResult[0].node.Name);
@@ -120,12 +120,12 @@ namespace SmartRoutes.Graph.Test
             var UpWindResult = SmartRoutes.Graph.ExtensionMethods.Dijkstras(
                 UpWindStartNodes,
                 x => x.Name == "A",
-                SmartRoutes.Graph.Direction.Upwind);
+                SmartRoutes.Graph.TimeDirection.Forwards);
 
             var DownWindResult = SmartRoutes.Graph.ExtensionMethods.Dijkstras(
                 DownWindStartNodes,
                 x => x.Name == "B",
-                SmartRoutes.Graph.Direction.Downwind);
+                SmartRoutes.Graph.TimeDirection.Backwards);
 
             Assert.AreEqual(1, UpWindResult.Count);
             Assert.AreEqual("A", UpWindResult[0].node.Name);
@@ -146,7 +146,7 @@ namespace SmartRoutes.Graph.Test
             var Result = SmartRoutes.Graph.ExtensionMethods.Dijkstras(
                 StartNodes,
                 x => x.Name == "B" || x.Name == "C",
-                SmartRoutes.Graph.Direction.Upwind);
+                SmartRoutes.Graph.TimeDirection.Forwards);
 
             Assert.AreEqual(2, Result.Count);
             Assert.AreEqual("B", Result[0].node.Name);
@@ -170,7 +170,7 @@ namespace SmartRoutes.Graph.Test
             var Result = SmartRoutes.Graph.ExtensionMethods.Dijkstras(
                 StartNodes,
                 x => x.Name == "B" || x.Name == "C",
-                SmartRoutes.Graph.Direction.Upwind);
+                SmartRoutes.Graph.TimeDirection.Forwards);
 
             Assert.AreEqual(2, Result.Count);
             Assert.AreEqual("C", Result[0].node.Name);
@@ -193,7 +193,7 @@ namespace SmartRoutes.Graph.Test
             var Result = SmartRoutes.Graph.ExtensionMethods.Dijkstras(
                 StartNodes,
                 x => x.Name == "C",
-                SmartRoutes.Graph.Direction.Upwind);
+                SmartRoutes.Graph.TimeDirection.Forwards);
 
             Assert.AreEqual(1, Result.Count);
             Assert.AreEqual("C", Result[0].node.Name);
@@ -213,7 +213,7 @@ namespace SmartRoutes.Graph.Test
         //    var Result = SmartRoutes.Graph.ExtensionMethods.Dijkstras(
         //        StartNodes,
         //        x => x.Name == "B" || x.Name == "E",
-        //        SmartRoutes.Graph.Direction.Upwind);
+        //        SmartRoutes.GrapTimeDirectionoBackwardsnd);
 
         //    Assert.AreEqual(1, Result.Count);
         //    Assert.AreEqual("E", Result[0].node.Name);

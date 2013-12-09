@@ -13,9 +13,9 @@ namespace SmartRoutes.Graph
         Open, Closed
     }
 
-    public enum Direction 
+    public enum TimeDirection 
     { 
-        Upwind, Downwind 
+        Backwards, Forwards 
     }
 
     public class NodeInfo
@@ -29,7 +29,7 @@ namespace SmartRoutes.Graph
 
     public static class ExtensionMethods
     {
-        public static List<NodeInfo> Dijkstras(IEnumerable<INode> StartNodes, Func<INode, bool> GoalCheck, Direction direction)
+        public static List<NodeInfo> Dijkstras(IEnumerable<INode> StartNodes, Func<INode, bool> GoalCheck, TimeDirection direction)
         {
             var Results = new List<NodeInfo>();
             var SearchInfo = new Dictionary<NodeBase, NodeInfo>();
@@ -67,7 +67,7 @@ namespace SmartRoutes.Graph
                 }
 
                 // loop through neighbors and handle business
-                var Neighbors = (direction == Direction.Upwind) ?
+                var Neighbors = (direction == TimeDirection.Forwards) ?
                     current.UpwindNeighbors : current.DownwindNeighbors;
 
                 foreach (var neighbor in Neighbors)
@@ -82,7 +82,7 @@ namespace SmartRoutes.Graph
                         neighborInfo.node = neighbor;
                         neighborInfo.parent = currentInfo;
                         neighborInfo.state = NodeState.Open;
-                        neighborInfo.travelTime = (direction == Direction.Upwind)
+                        neighborInfo.travelTime = (direction == TimeDirection.Forwards)
                             ? currentInfo.travelTime + (neighbor.Time - current.Time)
                             : currentInfo.travelTime + (current.Time - neighbor.Time);
                         neighborInfo.handle = heap.Insert(neighbor.BaseNode, neighborInfo.travelTime);
@@ -94,7 +94,7 @@ namespace SmartRoutes.Graph
                         if (neighborInfo.state == NodeState.Open)
                         {
                             // update neighborInfo if this route is better
-                            TimeSpan newTravelTime = (direction == Direction.Upwind)
+                            TimeSpan newTravelTime = (direction == TimeDirection.Forwards)
                                 ? currentInfo.travelTime + (neighbor.Time - current.Time)
                                 : currentInfo.travelTime + (current.Time - neighbor.Time);
                             if (newTravelTime < neighborInfo.travelTime)
