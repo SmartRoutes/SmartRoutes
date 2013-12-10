@@ -55,7 +55,7 @@ namespace SmartRoutes.SortaScraper.Scrapers
             Logger.Trace("The newest archive has {0} bytes ({1} megabytes).", response.Content.LongLength, Math.Round(response.Content.LongLength/(1024.0*1024.0), 2));
 
             newestArchive.Hash = response.Content.GetSha256Hash();
-            Logger.Trace("The newest archive has the follow SHA-2 (SHA-256) hash: {0}", newestArchive.Hash);
+            Logger.Trace("The newest archive has the following hash: {0}", newestArchive.Hash);
 
             if (currentArchive != null &&
                 currentArchive.Hash == newestArchive.Hash)
