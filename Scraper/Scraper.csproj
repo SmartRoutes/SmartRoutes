@@ -43,6 +43,8 @@
     <Reference Include="System.Net.Http.WebRequest" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ClientResponseHeaders.cs" />
+    <Compile Include="ClientResponse.cs" />
     <Compile Include="CsvStreamParser.cs" />
     <Compile Include="ExtensionMethods.cs" />
     <Compile Include="ScraperException.cs" />

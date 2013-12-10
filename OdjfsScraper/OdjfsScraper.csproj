@@ -45,7 +45,6 @@
     <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ClientResponse.cs" />
     <Compile Include="Parsers\AbstractChildCareParser.cs" />
     <Compile Include="Parsers\ChildCareParser.cs" />
     <Compile Include="Parsers\IChildCareParser.cs" />

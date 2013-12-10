@@ -105,15 +105,7 @@ namespace SmartRoutes.OdjfsScraper.Support
             // get the response bytes
             var request = new HttpRequestMessage(HttpMethod.Get, requestUri);
             HttpResponseMessage response = await _scraperClient.SendAsync(request, HttpCompletionOption.ResponseContentRead);
-
-            byte[] bytes = await response.Content.ReadAsByteArrayAsync();
-
-            var clientResponse = new ClientResponse
-            {
-                RequestUri = requestUri.ToString(),
-                StatusCode = response.StatusCode,
-                Content = bytes
-            };
+            ClientResponse clientResponse = await ClientResponse.Create(requestUri, response);
 
             // 500 returned are usually 503, e.g. the Oracle database is shutting down or is shut down
             if (clientResponse.StatusCode == HttpStatusCode.InternalServerError)

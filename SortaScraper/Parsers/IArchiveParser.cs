@@ -1,10 +1,10 @@
-﻿using System.Net.Http.Headers;
-using SmartRoutes.Model.Sorta;
+﻿using SmartRoutes.Model.Sorta;
+using SmartRoutes.Scraper;
 
 namespace SmartRoutes.SortaScraper.Parsers
 {
     public interface IArchiveParser
     {
-        Archive Parse(HttpResponseHeaders headers);
+        Archive Parse(ClientResponseHeaders headers);
     }
 }

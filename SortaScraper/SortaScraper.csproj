@@ -60,7 +60,8 @@
     <Compile Include="Scrapers\IEntityCollectionScraper.cs" />
     <Compile Include="Support\EntityCollection.cs" />
     <Compile Include="Scrapers\EntityCollectionScraper.cs" />
-    <Compile Include="Support\SortaClient.cs" />
+    <Compile Include="Support\OfflineSortaClient.cs" />
+    <Compile Include="Support\OnlineSortaClient.cs" />
     <Compile Include="Support\ISortaClient.cs" />
   </ItemGroup>
   <ItemGroup>
