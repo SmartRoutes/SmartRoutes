@@ -26,13 +26,14 @@ namespace SmartRoutes.Heap
         private List<FibHeapNode<TValue, TKey>> Roots;
         private FibHeapNode<TValue, TKey> Min;
         private FibHeapNode<TValue, TKey>[] RootsOfRank; // index i contains root of rank i
+        private static int MaxRoots = 1000;
 
         public FibonacciHeap()
         {
             Roots = new List<FibHeapNode<TValue, TKey>>();
-            RootsOfRank = new FibHeapNode<TValue,TKey>[1000]; // you would need a LOT of nodes to get tree of rank 1000
+            RootsOfRank = new FibHeapNode<TValue, TKey>[MaxRoots]; // you would need 2^MaxRoots nodes to get root of rank 100
 
-            for (int i = 0; i < 1000; i++) RootsOfRank[i] = null;
+            for (int i = 0; i < MaxRoots; i++) RootsOfRank[i] = null;
         }
 
         // check for emptiness
@@ -48,8 +49,6 @@ namespace SmartRoutes.Heap
             var newTree = new FibHeapNode<TValue, TKey>(Element, Key);
 
             AddToRoot(newTree);
-
-            ConsolidateTrees();
 
             var handle = new FibHeapHandle<TValue, TKey>(newTree, this);
             newTree.HandleTo = handle;
@@ -68,8 +67,7 @@ namespace SmartRoutes.Heap
 
             // remove min from roots and merge children of min into roots
             Roots.RemoveAll(x => x == Min);
-            foreach (var child in Min.Children) AddToRoot(child);
-            ConsolidateTrees();
+            foreach (var child in Min.Children.ToArray()) AddToRoot(child);
 
             // update min
             if (Roots.Count > 0)
@@ -80,6 +78,10 @@ namespace SmartRoutes.Heap
                     if (root.Key.CompareTo(Min.Key) < 0) Min = root;
                 }
             }
+            else
+            {
+                Min = null;
+            }
 
             if (ReturnMin.HandleTo != null) ReturnMin.HandleTo.ValidHandle = false;
             return ReturnMin.Element;
@@ -89,74 +91,74 @@ namespace SmartRoutes.Heap
         {
             if (handle.ValidHandle && handle.ParentHeap == this)
             {
-                if (newKey.CompareTo(handle.Node.Key) < 0) DecreaseKey(handle.Node, newKey);
-                else IncreaseKey(handle.Node, newKey);
+                if (newKey.CompareTo(handle.Node.Key) > 0)
+                {
+                    IncreaseKey(handle.Node, newKey);
+                }
+                else if (newKey.CompareTo(handle.Node.Key) < 0)
+                {
+                    DecreaseKey(handle.Node, newKey);
+                }
             }
         }
 
         // merge two trees
-        private void Link(FibHeapNode<TValue, TKey> tree1, FibHeapNode<TValue, TKey> tree2)
+        private void Link(FibHeapNode<TValue, TKey> root1, FibHeapNode<TValue, TKey> root2)
         {
-            if (tree1.Key.CompareTo(tree2.Key) > 0)
+            if (root1.Key.CompareTo(root2.Key) > 0)
             {
-                Link(tree2, tree1);
+                Link(root2, root1);
             }
             else
             {
                 // tree1's rank will increase, remove reference to it from RootsOfRank array
-                if (RootsOfRank[tree1.Rank] == tree1) RootsOfRank[tree1.Rank] = null;
+                if (RootsOfRank[root1.Rank] == root1) RootsOfRank[root1.Rank] = null;
 
                 // tree2 is no longer a root, remove reference to it as well
-                if (RootsOfRank[tree2.Rank] == tree2) RootsOfRank[tree2.Rank] = null;
+                if (RootsOfRank[root2.Rank] == root2) RootsOfRank[root2.Rank] = null;
 
-                tree1.Children.Add(tree2);
-                tree2.Parent = tree1;
-                Roots.RemoveAll(x => x == tree2);
+                // remove tree2 from roots
+                Roots.RemoveAll(x => x == root2);
+
+                root1.Children.Add(root2);
+                root2.Parent = root1;
             }
         }
 
         // link any root trees of same rank
         private void ConsolidateTrees()
         {
-            while (InnerConsolidateTrees()) ;
+            bool linkNeeded = true;
+            while (linkNeeded)
+            {
+                linkNeeded = InnerConsolidateTrees();
+            }
         }
 
         // having inner function prevents stack from overflowing with too many recursions
         private bool InnerConsolidateTrees()
         {
             bool linkNeeded = false;
-            FibHeapNode<TValue, TKey> tree1 = null, tree2 = null; // store roots to link while enumerating
+            FibHeapNode<TValue, TKey> root1 = null, root2 = null; // store roots to link while enumerating
 
-            var RootsEnum = Roots.GetEnumerator();
-
-            while (RootsEnum.MoveNext() && !linkNeeded)
+            foreach(var root in Roots.ToArray())
             {
-                var root = RootsEnum.Current;
-
                 if (RootsOfRank[root.Rank] == null)
                 {
                     RootsOfRank[root.Rank] = root;
                 }
                 else if (root != RootsOfRank[root.Rank]) // two roots have same rank
                 {
+                    root1 = RootsOfRank[root.Rank];
+                    root2 = root;
                     linkNeeded = true;
-
-                    if (root.Key.CompareTo(RootsOfRank[root.Rank].Key) < 0)
-                    {
-                        tree1 = root;
-                        tree2 = RootsOfRank[root.Rank];
-                    }
-                    else
-                    {
-                        tree1 = RootsOfRank[root.Rank];
-                        tree2 = root;
-                    }
+                    break;
                 }
             }
 
             if (linkNeeded)
             {
-                Link(tree1, tree2);
+                Link(root1, root2);
             }
 
             return linkNeeded;
@@ -175,25 +177,25 @@ namespace SmartRoutes.Heap
         // cuts tree and returns returns next node to cut, or returns null
         private FibHeapNode<TValue, TKey> InnerCutOrMark(FibHeapNode<TValue, TKey> Tree)
         {
-            FibHeapNode<TValue, TKey> ReturnNode = null;
+            FibHeapNode<TValue, TKey> ReturnNode = Tree.Parent;
 
             // don't try to cut root
-            if (Tree.Marked == true && Tree.Parent != null)
+            if (Tree.Parent == null)
             {
-                ReturnNode = Tree.Parent;
+                // do nothing
+            }
+            else if (Tree.Marked == true)
+            {
+                ReturnNode.Marked = true; // parent has now lost a child
 
-                Tree.Parent.Marked = true; // parent has now lost a child
-
-                // Tree.Parent rank will chang, remove it from RootsOfRank array
+                // Tree.Parent rank will change, remove it from RootsOfRank array
                 if (RootsOfRank[Tree.Parent.Rank] == Tree.Parent)
                 {
                     RootsOfRank[Tree.Parent.Rank] = null;
                 }
 
                 Tree.Parent.Children.RemoveAll(x => x == Tree); // cut tree is no longer child of parent
-                Tree.Parent = null; // cut tree will no longer have parent
-                Tree.Marked = false; // cut Tree no longer marked
-
+                
                 AddToRoot(Tree);
             }
             else
@@ -213,9 +215,9 @@ namespace SmartRoutes.Heap
             if (Tree.Parent == null)
             { 
                 // element is a root
-                if (newKey.CompareTo(Min.Key) < 0) Min = Tree;
+                if (Tree != Min && newKey.CompareTo(Min.Key) < 0) Min = Tree;
             }
-            else if (Tree.Parent.Key.CompareTo(newKey) < 0)
+            else if (Tree.Parent.Key.CompareTo(newKey) <= 0)
             { 
                 // heap order not violated
             }
@@ -237,29 +239,39 @@ namespace SmartRoutes.Heap
                                 where child.Key.CompareTo(newKey) < 0
                                 select child).ToArray();
 
-            // if rank of Tree will change, remove it from RootsOfRank array
-            if (HeapViolators.Count() > 0 && RootsOfRank[Tree.Rank] == Tree)
+            int childrenLost = 0;
+
+            for (int i = 0; i < HeapViolators.Count(); i++)
             {
-                RootsOfRank[Tree.Rank] = null;
+                AddToRoot(HeapViolators[i]);
+                childrenLost++;
             }
 
-            foreach (var child in HeapViolators)
+            if (childrenLost > 0)
             {
-                Tree.Children.RemoveAll(x => x == child);
-                if (child.Key.CompareTo(Min.Key) < 0) Min = child;
-                AddToRoot(child);
+                if (RootsOfRank[Tree.Rank] == Tree) RootsOfRank[Tree.Rank] = null;
                 CutOrMark(Tree);
             }
-
-            ConsolidateTrees();
+            if (childrenLost > 1)
+            {
+                CutOrMark(Tree);
+            }
         }
 
         private void AddToRoot(FibHeapNode<TValue, TKey> Tree)
         {
             Tree.Marked = false;
-            Tree.Parent = null;
 
-            if (RootsOfRank[Tree.Rank] == null) RootsOfRank[Tree.Rank] = Tree;
+            if (Tree.Parent != null)
+            {
+                if (RootsOfRank[Tree.Parent.Rank] == Tree.Parent)
+                {
+                    RootsOfRank[Tree.Parent.Rank] = null;
+                }
+                Tree.Parent.Children.RemoveAll(x => x == Tree);
+                CutOrMark(Tree.Parent);
+                Tree.Parent = null;
+            }
 
             if (Roots.Count() > 0)
             {
@@ -271,6 +283,7 @@ namespace SmartRoutes.Heap
             }
 
             Roots.Add(Tree);
+            ConsolidateTrees();
         }
     }
 }

@@ -13,6 +13,6 @@ namespace SmartRoutes.Graph.Node
         int TripID { get; }
         int Sequence { get; }
 
-        IMetroNode CreateNode(StopTime stopTime);
+        IMetroNode CreateMetroNode(StopTime stopTime, NodeBase Node);
     }
 }

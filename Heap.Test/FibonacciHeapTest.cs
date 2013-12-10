@@ -24,6 +24,7 @@ namespace SmartRoutes.Heap.Test
             Assert.AreEqual("a", heap.DeleteMin());
             Assert.AreEqual("b", heap.DeleteMin());
             Assert.AreEqual("c", heap.DeleteMin());
+            Assert.IsTrue(heap.Empty());
         }
 
         [TestMethod]
@@ -46,6 +47,7 @@ namespace SmartRoutes.Heap.Test
             Assert.AreEqual("b", heap.DeleteMin());
             Assert.AreEqual("c", heap.DeleteMin());
             Assert.AreEqual("d", heap.DeleteMin());
+            Assert.IsTrue(heap.Empty());
         }
 
         [TestMethod]
@@ -148,6 +150,44 @@ namespace SmartRoutes.Heap.Test
         public void InsertAndDeleteMin_StableSort()
         {
             VerifyInsertAndDeleteMin(new[] {5, 1, 1, 1, 3});
+        }
+
+        [TestMethod, Timeout(1000)]
+        public void InfiniteLoop()
+        {
+            // ARRANGE
+            var heap = new FibonacciHeap<string, string>();
+            var handleR = heap.Insert("R", "R");
+            var handleT = heap.Insert("T", "T");
+            
+            // ACT
+            heap.UpdateKey(handleT, "R");
+            heap.DeleteMin();
+            heap.DeleteMin();
+
+            // ASSERT
+            Assert.IsTrue(heap.Empty());
+        }
+
+        [TestMethod]
+        public void IllegalLink()
+        {
+            // ARRANGE
+            var heap = new FibonacciHeap<int, int>();
+            int count = 4;
+            FibHeapHandle<int, int>[] handles = new FibHeapHandle<int, int>[count];
+            for (int i = 0; i < count; i++)
+            {
+                handles[i] = heap.Insert(i, i);
+            }
+
+            // ACT
+            var rand = new Random();
+            for (int i = 0; i < count; i++) heap.UpdateKey(handles[i], 0);
+            for (int i = 0; i < count; i++) heap.DeleteMin();
+
+            // ASSERT
+            Assert.IsTrue(heap.Empty());
         }
 
         private void VerifyInsertAndDeleteMin<TKey>(IEnumerable<TKey> keys)

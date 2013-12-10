@@ -77,9 +77,11 @@
   <ItemGroup>
     <Compile Include="Comparers\ComparerForChildCares.cs" />
     <Compile Include="Comparers\ComparerForDisplay.cs" />
+    <Compile Include="Comparers\ComparerForStopSorting.cs" />
     <Compile Include="Comparers\ComparerForTransferSorting.cs" />
     <Compile Include="Comparers\ComparerForTripSorting.cs" />
     <Compile Include="DatabaseLoader.cs" />
+    <Compile Include="ExtensionMethods.cs" />
     <Compile Include="Graph.cs" />
     <Compile Include="GraphBuilder\GraphBuilder.cs" />
     <Compile Include="GraphBuilder\IGraphBuilder.cs" />
@@ -88,13 +90,17 @@
     <Compile Include="Node\ChildCareNode.cs" />
     <Compile Include="Node\IChildcareNode.cs" />
     <Compile Include="Node\IMetroNode.cs" />
+    <Compile Include="Node\NodeBase.cs" />
     <Compile Include="Node\INode.cs" />
     <Compile Include="Node\MetroNode.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="NLog.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
