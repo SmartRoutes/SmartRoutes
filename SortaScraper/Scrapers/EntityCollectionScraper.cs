@@ -34,7 +34,7 @@ namespace SmartRoutes.SortaScraper.Scrapers
                 ClientResponseHeaders headers = await _sortaClient.GetArchiveHeaders();
                 newestArchive = _archiveParser.Parse(headers);
 
-                if (newestArchive.ETag == currentArchive.ETag)
+                if (newestArchive.ETag != null && newestArchive.ETag == currentArchive.ETag)
                 {
                     Logger.Trace("The ETag has not changed.");
                     return null;
