@@ -20,10 +20,10 @@ namespace SmartRoutes.Graph
     {
         private readonly IMetroNode _metroNodeMaker;
         private Logger Logger = LogManager.GetCurrentClassLogger();
-        private GraphBuilderSettings Settings;
-        private Dictionary<int, List<int>> StopToNearest; // from StopID to list of StopID's of nearest Stops
-        private Dictionary<int, List<IMetroNode>> StopToNodes; // from StopID to set of Nodes with given StopID
-        Dictionary<int, List<int>> ChildCareToStops; // from ChildCare ID to closest metro stops
+        public GraphBuilderSettings Settings { get; private set; }
+        public Dictionary<int, List<int>> StopToNearest { get; private set; } // from StopID to list of StopID's of nearest Stops
+        public Dictionary<int, List<IMetroNode>> StopToNodes { get; private set; } // from StopID to set of Nodes with given StopID
+        public Dictionary<int, List<int>> ChildCareToStops { get; private set; } // from ChildCare ID to closest metro stops
 
         public GraphBuilder(IMetroNode metroNodeMaker) 
         {

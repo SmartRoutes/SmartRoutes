@@ -18,9 +18,9 @@ namespace SmartRoutes.Graph
             {
                 return new GraphBuilderSettings
                 {
-                    MaxFeetFromChildCareToBuStop = 1000000,
+                    MaxFeetFromChildCareToBuStop = 5000,
                     MaxChildCareCloseStops = 5,
-                    WalkingFeetPerSecond = 1.5
+                    WalkingFeetPerSecond = 2.2
                 };
             }
         }
