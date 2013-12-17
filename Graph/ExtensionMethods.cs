@@ -32,8 +32,25 @@ namespace SmartRoutes.Graph
         public static List<NodeInfo> Dijkstras(IEnumerable<INode> StartNodes, Func<INode, bool> GoalCheck, TimeDirection direction)
         {
             var Results = new List<NodeInfo>();
+
+            if (StartNodes.Count() == 0) return Results;
+
             var SearchInfo = new Dictionary<NodeBase, NodeInfo>();
             var heap = new FibonacciHeap<NodeBase, TimeSpan>();
+
+            // find base time
+            DateTime BaseTime = StartNodes.First().Time;
+            foreach (var node in StartNodes)
+            {
+                if (direction == TimeDirection.Backwards)
+                {
+                    if (node.Time > BaseTime) BaseTime = node.Time;
+                }
+                else
+                {
+                    if (node.Time < BaseTime) BaseTime = node.Time;
+                }
+            }
 
             // assign search info to StartNodes and place them in queue
             foreach (var node in StartNodes)
@@ -41,7 +58,9 @@ namespace SmartRoutes.Graph
                 var nodeInfo = new NodeInfo();
                 nodeInfo.node = node;
                 nodeInfo.state = NodeState.Closed;
-                nodeInfo.travelTime = new TimeSpan(0);
+                nodeInfo.travelTime = (direction == TimeDirection.Backwards)
+                    ? BaseTime - node.Time
+                    : node.Time - BaseTime;
                 nodeInfo.handle = heap.Insert(node.BaseNode, nodeInfo.travelTime);
                 SearchInfo.Add(node.BaseNode, nodeInfo);
             }
