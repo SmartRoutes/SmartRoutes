@@ -66,6 +66,11 @@ namespace SmartRoutes.SortaDataChecker
 
                 // truncate the old data
                 Logger.Trace("Truncating all of the old entities.");
+                if (currentArchive != null)
+                {
+                    ctx.Archives.Remove(currentArchive);
+                    await ctx.SaveChangesAsync();
+                }
                 ctx.Truncate();
 
                 ctx.Configuration.AutoDetectChangesEnabled = false;
