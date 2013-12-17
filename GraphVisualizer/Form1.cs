@@ -55,7 +55,7 @@ namespace SmartRoutes.GraphVisualizer
             for (int i = 0; i < 1000 && i < Nodes.Length; i++)
             {
                 INode node = Nodes[i];
-                foreach (INode neighbor in node.DownwindNeighbors)
+                foreach (INode neighbor in node.TimeForwardNeighbors)
                 {               
                     float[] linePoints = 
                     { 

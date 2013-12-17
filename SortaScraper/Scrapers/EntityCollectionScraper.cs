@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Net.Http;
-using System.Net.Http.Headers;
 using System.Threading.Tasks;
-using SmartRoutes.Model.Sorta;
 using NLog;
+using SmartRoutes.Model.Sorta;
 using SmartRoutes.Scraper;
 using SmartRoutes.SortaScraper.Parsers;
 using SmartRoutes.SortaScraper.Support;
@@ -33,10 +31,10 @@ namespace SmartRoutes.SortaScraper.Scrapers
             {
                 Logger.Trace("An Archive instance was provided. Checking the newest headers.");
                 // do the headers indicate a change?
-                HttpResponseHeaders headers = await _sortaClient.GetArchiveHeaders();
+                ClientResponseHeaders headers = await _sortaClient.GetArchiveHeaders();
                 newestArchive = _archiveParser.Parse(headers);
 
-                if (newestArchive.ETag == currentArchive.ETag)
+                if (newestArchive.ETag != null && newestArchive.ETag == currentArchive.ETag)
                 {
                     Logger.Trace("The ETag has not changed.");
                     return null;
@@ -50,15 +48,14 @@ namespace SmartRoutes.SortaScraper.Scrapers
 
             // does the content indicate a change?
             Logger.Trace("Fetching the newest archive bytes.");
-            HttpResponseMessage response = await _sortaClient.GetArchiveContent();
+            ClientResponse response = await _sortaClient.GetArchiveContent();
             newestArchive = _archiveParser.Parse(response.Headers);
 
             // get the archive contents
-            byte[] bytes = await response.Content.ReadAsByteArrayAsync();
-            Logger.Trace("The newest archive has {0} bytes ({1} megabytes).", bytes.LongLength, Math.Round(bytes.LongLength/(1024.0*1024.0), 2));
+            Logger.Trace("The newest archive has {0} bytes ({1} megabytes).", response.Content.LongLength, Math.Round(response.Content.LongLength/(1024.0*1024.0), 2));
 
-            newestArchive.Hash = bytes.GetSha256Hash();
-            Logger.Trace("The newest archive has the follow SHA-2 (SHA-256) hash: {0}", newestArchive.Hash);
+            newestArchive.Hash = response.Content.GetSha256Hash();
+            Logger.Trace("The newest archive has the following hash: {0}", newestArchive.Hash);
 
             if (currentArchive != null &&
                 currentArchive.Hash == newestArchive.Hash)
@@ -73,7 +70,7 @@ namespace SmartRoutes.SortaScraper.Scrapers
 
             // parse the entities
             Logger.Trace("The newest archive is different. Parsing the newest archive.");
-            EntityCollection entities = _entityCollectionParser.Parse(bytes);
+            EntityCollection entities = _entityCollectionParser.Parse(response.Content);
             entities.Archive = newestArchive;
             entities.ContainsEntities = true;
 

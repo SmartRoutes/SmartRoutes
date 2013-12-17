@@ -15,9 +15,9 @@ namespace SmartRoutes.OdjfsScraper.Scrapers
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
         private readonly IOdjfsClient _odjfsClient;
-        private readonly IListDocumentParser _parser;
+        private readonly IListParser _parser;
 
-        public ChildCareStubListScraper(IOdjfsClient odjfsClient, IListDocumentParser parser)
+        public ChildCareStubListScraper(IOdjfsClient odjfsClient, IListParser parser)
         {
             _odjfsClient = odjfsClient;
             _parser = parser;

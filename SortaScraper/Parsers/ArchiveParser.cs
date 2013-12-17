@@ -1,23 +1,22 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http.Headers;
-using System.Text;
-using System.Threading.Tasks;
 using SmartRoutes.Model.Sorta;
+using SmartRoutes.Scraper;
 
 namespace SmartRoutes.SortaScraper.Parsers
 {
     public class ArchiveParser : IArchiveParser
     {
-        public Archive Parse(HttpResponseHeaders headers)
+        public Archive Parse(ClientResponseHeaders headers)
         {
             // the output instance
-            // TODO: UTC or local time?
             var archive = new Archive {DownloadedOn = DateTime.Now};
 
             // parse the headers
-            archive.ETag = headers.ETag.Tag;
+            string[] values;
+            if (headers.TryGetValue("ETag", out values) && values.Length == 1)
+            {
+                archive.ETag = values[0];
+            }
 
             return archive;
         }

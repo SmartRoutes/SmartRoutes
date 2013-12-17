@@ -53,7 +53,7 @@ namespace SmartRoutes.Database.Contexts
                 "ALTER TABLE {0} NOCHECK CONSTRAINT all",
                 "DELETE FROM {0}",
                 "ALTER TABLE {0} WITH CHECK CHECK CONSTRAINT all",
-                "IF EXISTS (SELECT 1 FROM sys.objects o INNER JOIN sys.columns c ON o.object_id = c.object_id WHERE c.is_identity = 1 AND o.[object_id] = object_id('{0}')) DBCC CHECKIDENT ('{0}', RESEED, 1)"
+                "IF EXISTS (SELECT 1 FROM sys.objects o INNER JOIN sys.columns c ON o.object_id = c.object_id WHERE c.is_identity = 1 AND o.[object_id] = object_id('{0}')) DBCC CHECKIDENT ('{0}', RESEED, 0)"
             };
 
             string[] tableNames = this.GetTableNames().ToArray();

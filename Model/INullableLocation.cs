@@ -1,8 +1,8 @@
 ﻿namespace SmartRoutes.Model
 {
-    public interface ILocation
+    public interface INullableLocation
     {
-        double Latitude { get; }
-        double Longitude { get; }
+        double? Latitude { get; }
+        double? Longitude { get; }
     }
 }

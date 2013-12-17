@@ -12,40 +12,19 @@ using SmartRoutes.SortaScraper.Scrapers;
 using SmartRoutes.Model.Sorta;
 using SmartRoutes.Model.Odjfs.ChildCares;
 using SmartRoutes.Heap;
+using SmartRoutes.Model;
 
 namespace SmartRoutes.Graph
 {
-    internal enum NodeState
-    {
-        Open, Closed
-    }
-
-    public enum Direction 
-    { 
-        Upwind, Downwind 
-    }
-
-    public class NodeInfo
-    {
-        internal FibHeapHandle<INode, TimeSpan> handle;
-        internal TimeSpan travelTime;
-        internal NodeState state;
-        public INode node;
-        public NodeInfo parent;
-    }
-
     public class Graph : IGraph
     {
         private readonly IGraphBuilder Builder;
         private EntityCollection Collection;
         private ChildCare[] ChildCares;
-        private Dictionary<INode, NodeInfo> SearchInfo { get; set; }
         public INode[] GraphNodes { get; private set; }
-        public IFibonacciHeap<INode, TimeSpan> Queue { get; set; }
 
         public Graph(IGraphBuilder Builder, IFibonacciHeap<INode, TimeSpan> Queue)
         {
-            this.Queue = Queue;
             this.Builder = Builder;
             GetSortaEntities();
             GetChildCares();
@@ -81,81 +60,118 @@ namespace SmartRoutes.Graph
             }
         }
 
-        public NodeInfo Dijkstras(ISet<INode> StartNodes, Func<INode, bool> GoalCheck, Direction direction)
+        public Stop closestMetroStop(ILocation location)
         {
-            SearchInfo = new Dictionary<INode, NodeInfo>();
+            double minDistance = double.MaxValue;
+            Stop closestStop = null;
 
-            // assign search info to StartNodes and place them in queue
-            foreach (var node in StartNodes)
+            foreach (var stop in Collection.Stops)
             {
-                var nodeInfo = new NodeInfo();
-                nodeInfo.state = NodeState.Closed;
-                nodeInfo.travelTime = new TimeSpan(0);
-                nodeInfo.handle = Queue.Insert(node, nodeInfo.travelTime);
-                SearchInfo.Add(node, nodeInfo);
+                double Distance = location.GetL1DistanceInFeet(stop);
+
+                if (Distance < minDistance)
+                {
+                    minDistance = Distance;
+                    closestStop = stop;
+                }
             }
 
-            while (!Queue.Empty())
+            if (closestStop == null)
             {
-                INode current = Queue.DeleteMin();
-
-                // get search info
-                NodeInfo currentInfo = null;
-                if (!SearchInfo.TryGetValue(current, out currentInfo))
-                { 
-                    throw new KeyNotFoundException("Node removed from heap did not have associated search info: ");
-                }
-
-                // check for completion
-                if (GoalCheck(current))
-                {
-                    return currentInfo;
-                }
-
-                // loop through neighbors and handle business
-                var Neighbors = (direction == Direction.Upwind) ?
-                    current.UpwindNeighbors : current.DownwindNeighbors;
-
-                foreach (var neighbor in Neighbors)
-                {
-                    NodeInfo neighborInfo = null;
-                    if (!SearchInfo.TryGetValue(neighbor, out neighborInfo))
-                    { 
-                        // node is new, give it search info and place in queue
-                        neighborInfo = new NodeInfo();
-                        neighborInfo.node = neighbor;
-                        neighborInfo.parent = currentInfo;
-                        neighborInfo.state = NodeState.Open;
-                        neighborInfo.travelTime = (direction == Direction.Upwind)
-                            ? currentInfo.travelTime + (neighbor.Time - current.Time)
-                            : currentInfo.travelTime + (current.Time - neighbor.Time);
-                        neighborInfo.handle = Queue.Insert(neighbor, neighborInfo.travelTime);
-                    }
-                    else
-                    { 
-                        // neighbor is in queue, check state
-                        if (neighborInfo.state == NodeState.Open)
-                        {
-                            // update neighborInfo if this route is better
-                            TimeSpan newTravelTime = (direction == Direction.Upwind)
-                                ? currentInfo.travelTime + (neighbor.Time - current.Time)
-                                : currentInfo.travelTime + (current.Time - neighbor.Time);
-                            if (newTravelTime < neighborInfo.travelTime)
-                            {
-                                // update search info and update queue for new key
-                                neighborInfo.travelTime = newTravelTime;
-                                neighborInfo.parent = currentInfo;
-                                Queue.UpdateKey(neighborInfo.handle, newTravelTime);
-                            }
-                        }
-                    }
-                }
-
-                // and we're done with current
-                currentInfo.state = NodeState.Closed;
+                throw new Exception("Closest stop to given location not found.");
             }
 
-            throw new Exception("Dijkstras did not reach a goal node.");
+            return closestStop;
+        }
+
+        public IMetroNode closestMetroNode(ILocation location, DateTime Time, TimeDirection Direction)
+        {
+            Stop closestStop = closestMetroStop(location);
+
+            // retrieve metronodes corresponding to this stop
+            List<IMetroNode> nodes = null;
+            if (!Builder.StopToNodes.TryGetValue(closestStop.Id, out nodes))
+            {
+                throw new Exception("Failed to find metro nodes associated with closest stop.");
+            }
+
+            double distance = closestStop.GetL1DistanceInFeet(location);
+            double walkingTime = distance / Builder.Settings.WalkingFeetPerSecond;
+            
+            // sort nodes by increasing time;
+            var nodesArray = nodes.ToArray();
+            Array.Sort(nodesArray, new Comparers.ComparerForTransferSorting());
+            IMetroNode returnNode = null;
+
+            if (Direction == TimeDirection.Forwards)
+            {
+                DateTime TimeThreshhold = Time + TimeSpan.FromSeconds(walkingTime);
+                foreach (var node in nodesArray)
+                {
+                    if (node.Time >= TimeThreshhold)
+                    {
+                        returnNode = node;
+                        break;
+                    }
+                }
+            }
+            else
+            {
+                DateTime TimeThreshhold = Time - TimeSpan.FromSeconds(walkingTime);
+                for (int i = nodesArray.Count() - 1; i >= 0; i--)
+                {
+                    if (nodesArray[i].Time <= TimeThreshhold)
+                    {
+                        returnNode = nodesArray[i];
+                        break;
+                    }
+                }
+            }
+
+            if (returnNode == null)
+            {
+                throw new Exception("Failed to find nearby metro node.");
+            }
+
+            return returnNode;
+        }
+
+        public List<IMetroNode> GetChildCareNeighbors(IChildcareNode childCareNode, TimeDirection Direction)
+        {
+            List<NodeBase> UniqueNodeBases = new List<NodeBase>();
+            List<IMetroNode> ReturnNodes = new List<IMetroNode>();
+
+            var current = childCareNode;
+            bool done = false;
+            while (!done)
+            {
+                var neighbors = (Direction == TimeDirection.Backwards)
+                    ? current.TimeBackwardNeighbors
+                    : current.TimeForwardNeighbors;
+
+                foreach (var neighbor in neighbors.OfType<IMetroNode>())
+                {
+                    if (!UniqueNodeBases.Contains(neighbor.BaseNode))
+                    {
+                        UniqueNodeBases.Add(neighbor.BaseNode);
+                        ReturnNodes.Add(neighbor);
+                    }
+                }
+
+                done = true;
+
+                foreach (var neighbor in neighbors.OfType<IChildcareNode>())
+                {
+                    if (neighbor.BaseNode == current.BaseNode)
+                    {
+                        done = false;
+                        current = neighbor;
+                        break;
+                    }
+                }
+            }
+
+            return ReturnNodes;
         }
     }
 }

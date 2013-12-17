@@ -1,10 +1,10 @@
 ﻿using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
+using NLog;
 using SmartRoutes.Database;
 using SmartRoutes.Database.Contexts;
 using SmartRoutes.Model.Sorta;
-using NLog;
 using SmartRoutes.SortaScraper.Scrapers;
 using SmartRoutes.SortaScraper.Support;
 
@@ -21,19 +21,23 @@ namespace SmartRoutes.SortaDataChecker
             _scraper = scraper;
         }
 
-        public async Task UpdateDatabase()
+        public async Task UpdateDatabase(bool force)
         {
             Logger.Trace("Initializing SortaEntities.");
             using (var ctx = new SortaEntities())
             {
-                // get the current archive from the database (if any)
-                Logger.Trace("Getting the current Archive instance (if any).");
-                Archive currentArchive = await ctx.Archives
-                    .OrderByDescending(a => a.DownloadedOn)
-                    .FirstOrDefaultAsync();
+                Archive currentArchive = null;
+                if (!force)
+                {
+                    // get the current archive from the database (if any)
+                    Logger.Trace("Getting the current Archive instance (if any).");
+                    currentArchive = await ctx.Archives
+                        .OrderByDescending(a => a.DownloadedOn)
+                        .FirstOrDefaultAsync();
+                }
                 if (currentArchive == null)
                 {
-                    Logger.Trace("No current archive is recorded.");
+                    Logger.Trace(force ? "Any existing archive record has been ignored." : "No current archive is recorded.");
                 }
                 else
                 {
@@ -62,6 +66,11 @@ namespace SmartRoutes.SortaDataChecker
 
                 // truncate the old data
                 Logger.Trace("Truncating all of the old entities.");
+                if (currentArchive != null)
+                {
+                    ctx.Archives.Remove(currentArchive);
+                    await ctx.SaveChangesAsync();
+                }
                 ctx.Truncate();
 
                 ctx.Configuration.AutoDetectChangesEnabled = false;

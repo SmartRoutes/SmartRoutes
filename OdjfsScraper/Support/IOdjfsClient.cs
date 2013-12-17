@@ -2,6 +2,7 @@
 using SmartRoutes.Model.Odjfs;
 using SmartRoutes.Model.Odjfs.ChildCares;
 using SmartRoutes.Model.Odjfs.ChildCareStubs;
+using SmartRoutes.Scraper;
 
 namespace SmartRoutes.OdjfsScraper.Support
 {

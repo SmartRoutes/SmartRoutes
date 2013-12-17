@@ -1,0 +1,42 @@
+﻿using System;
+using System.IO;
+using System.Net;
+using System.Threading.Tasks;
+using SmartRoutes.Scraper;
+
+namespace SmartRoutes.SortaScraper.Support
+{
+    public class OfflineSortaClient : ISortaClient
+    {
+        private readonly string _archivePath;
+
+        public OfflineSortaClient(string archivePath)
+        {
+            _archivePath = archivePath;
+        }
+
+        public Task<ClientResponseHeaders> GetArchiveHeaders()
+        {
+            return Task.FromResult(new ClientResponseHeaders());
+        }
+
+        public async Task<ClientResponse> GetArchiveContent()
+        {
+            // read the bytes
+            var memoryStream = new MemoryStream();
+            using (var fileStream = new FileStream(_archivePath, FileMode.Open))
+            {
+                await fileStream.CopyToAsync(memoryStream);
+            }
+
+            // generate the response
+            return new ClientResponse
+            {
+                RequestUri = new Uri(_archivePath, UriKind.RelativeOrAbsolute),
+                StatusCode = HttpStatusCode.OK,
+                Headers = new ClientResponseHeaders(),
+                Content = memoryStream.ToArray()
+            };
+        }
+    }
+}

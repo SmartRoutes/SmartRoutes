@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using CsQuery;
 using NLog;
@@ -12,6 +13,24 @@ namespace SmartRoutes.OdjfsScraper.Parsers
     public class BaseChildCareParser<T> : AbstractChildCareParser<T> where T : ChildCare
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+
+        private static readonly IDictionary<Type, string> TypeNames = new Dictionary<Type, string>
+        {
+            {typeof (TypeAHome), "Type A Family Child Care Homes"},
+            {typeof (TypeBHome), "Type B Family Child Care Homes"},
+            {typeof (LicensedCenter), "Licensed Center"},
+            {typeof (DayCamp), "Registered Day Camp"},
+        };
+
+        static BaseChildCareParser()
+        {
+            if (!TypeNames.ContainsKey(typeof (T)))
+            {
+                var exception = new ArgumentException("The type must be a supported ChildCare subclass.");
+                Logger.ErrorException(string.Format("Type: '{0}'", typeof (T).Name), exception);
+                throw exception;
+            }
+        }
 
         protected override IEnumerable<KeyValuePair<string, string>> GetDetailKeyValuePairs(CQ document)
         {
@@ -42,8 +61,20 @@ namespace SmartRoutes.OdjfsScraper.Parsers
 
         protected override void PopulateFields(T childCare, IDictionary<string, string> details)
         {
+            // verify the Type detail
+            string actualTypeName = GetDetailString(details, "Type");
+            string expectedTypeName = TypeNames[typeof (T)];
+            if (expectedTypeName != actualTypeName)
+            {
+                var exception = new ParserException("The type name is not the expected value.");
+                Logger.ErrorException(string.Format("Type: '{0}', ExpectedTypeName: '{1}', ActualTypeName: '{2}'",
+                    typeof (T).Name,
+                    expectedTypeName,
+                    actualTypeName), exception);
+                throw exception;
+            }
+
             // fill in fields shared by all subclasses
-            // TODO: verify Type string is the expected value per typeof(T)
             childCare.ExternalId = GetDetailString(details, "Number");
             childCare.Name = GetDetailString(details, "Name");
             childCare.Address = GetDetailString(details, "Address");

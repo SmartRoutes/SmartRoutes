@@ -8,7 +8,7 @@ using SmartRoutes.Model.Odjfs.ChildCares;
 
 namespace SmartRoutes.OdjfsScraper.Test.Parsers.Support
 {
-    public class ChildCareTemplate<T> where T : ChildCare
+    public class ChildCareTemplate<T> : BaseTemplate, ITemplate<T> where T : ChildCare
     {
         private static readonly ICollection<KeyValuePair<string, Func<T, string>>> DefaultDetails = new Dictionary<string, Func<T, string>>
         {
@@ -22,17 +22,36 @@ namespace SmartRoutes.OdjfsScraper.Test.Parsers.Support
             {"Phone", c => c.PhoneNumber}
         };
 
+        private static readonly IDictionary<Type, string> TypeNames = new Dictionary<Type, string>
+        {
+            {typeof (TypeAHome), "Type A Family Child Care Homes"},
+            {typeof (TypeBHome), "Type B Family Child Care Homes"},
+            {typeof (LicensedCenter), "Licensed Center"},
+            {typeof (DayCamp), "Registered Day Camp"},
+        };
+
+        static ChildCareTemplate()
+        {
+            if (!TypeNames.ContainsKey(typeof (T)))
+            {
+                throw new ArgumentException("The type must be a supported ChildCare subclass.");
+            }
+        }
+
         public ChildCareTemplate() : this(Enumerable.Empty<KeyValuePair<string, Func<T, string>>>())
         {
         }
 
-        protected ChildCareTemplate(IEnumerable<KeyValuePair<string, Func<T, string>>> parentPageContentDetails)
+        protected ChildCareTemplate(IEnumerable<KeyValuePair<string, Func<T, string>>> parentDetails)
         {
             // intialize properties
             Details = new Collection<KeyValuePair<string, Func<T, string>>>();
 
+            // add the type detail
+            AddDetail("Type", m => TypeNames[typeof (T)]);
+
             // initialize the value getters
-            foreach (var pair in DefaultDetails.Concat(parentPageContentDetails))
+            foreach (var pair in DefaultDetails.Concat(parentDetails))
             {
                 Details.Add(pair);
             }
@@ -49,6 +68,17 @@ namespace SmartRoutes.OdjfsScraper.Test.Parsers.Support
         }
 
         public ICollection<KeyValuePair<string, Func<T, string>>> Details { get; private set; }
+        public T Model { get; protected set; }
+
+        public virtual byte[] GetDocument()
+        {
+            // fetch the values for the details
+            IEnumerable<KeyValuePair<string, string>> details = Details.Select(p => new KeyValuePair<string, string>(p.Key, p.Value(Model)));
+
+            var sb = new StringBuilder();
+            BuildPageContent(sb, details);
+            return GetBytes(sb.ToString());
+        }
 
         public void AddDetail(string key, Func<T, string> value)
         {
@@ -69,23 +99,6 @@ namespace SmartRoutes.OdjfsScraper.Test.Parsers.Support
         {
             RemoveDetails(key);
             AddDetail(key, value);
-        }
-
-        public T Model { get; private set; }
-
-        public static byte[] GetBytes(string input)
-        {
-            return Encoding.UTF8.GetBytes(input);
-        }
-
-        public virtual byte[] GetDocument()
-        {
-            // fetch the values for the details
-            IEnumerable<KeyValuePair<string, string>> details = Details.Select(p => new KeyValuePair<string, string>(p.Key, p.Value(Model)));
-
-            var sb = new StringBuilder();
-            BuildPageContent(sb, details);
-            return GetBytes(sb.ToString());
         }
 
         protected static void BuildPageContent(StringBuilder sb, IEnumerable<KeyValuePair<string, string>> details)

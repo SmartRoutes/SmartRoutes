@@ -75,8 +75,22 @@ namespace SmartRoutes.Graph.Test
 
             var time1 = new DateTime(1970, 1, 1, 10, 0, 0);
             DateTime time2 = time1.AddMinutes(1);
-            var stopTime1 = new StopTime {ArrivalTime = time1, Stop = stop, StopId = stop.Id, TripId = 1};
-            var stopTime2 = new StopTime {ArrivalTime = time2, Stop = stop, StopId = stop.Id, TripId = 2};
+            var stopTime1 = new StopTime
+            {
+                ArrivalTime = time1,
+                Stop = stop,
+                StopId = stop.Id,
+                TripId = 1,
+                Trip = new Trip { ShapeId = 0 }
+            };
+            var stopTime2 = new StopTime
+            {
+                ArrivalTime = time2,
+                Stop = stop,
+                StopId = stop.Id,
+                TripId = 2,
+                Trip = new Trip { ShapeId = 1 }
+            };
             IEnumerable<StopTime> stoptimes = new[] {stopTime1, stopTime2};
 
             // ACT
@@ -98,15 +112,29 @@ namespace SmartRoutes.Graph.Test
 
             var stop1 = new Stop {Id = 1, Latitude = 0.0, Longitude = 0.00001};
             stop1.CloseStops.Add(stop1);
-            var stop2 = new Stop {Id = 1, Latitude = 0.0, Longitude = 0.00002};
+            var stop2 = new Stop {Id = 2, Latitude = 0.0, Longitude = 0.00002};
             stop2.CloseStops.Add(stop2);
             stop1.CloseStops.Add(stop2);
             stop2.CloseStops.Add(stop1);
 
             var time1 = new DateTime(1970, 1, 1, 10, 0, 0);
-            DateTime time2 = time1.AddMinutes(1);
-            var stopTime1 = new StopTime {ArrivalTime = time1, Stop = stop1, StopId = stop1.Id, TripId = 1};
-            var stopTime2 = new StopTime {ArrivalTime = time2, Stop = stop2, StopId = stop2.Id, TripId = 2};
+            DateTime time2 = time1.AddMinutes(10);
+            var stopTime1 = new StopTime
+            {
+                ArrivalTime = time1,
+                Stop = stop1,
+                StopId = stop1.Id,
+                TripId = 1,
+                Trip = new Trip { ShapeId = 0 }
+            };
+            var stopTime2 = new StopTime
+            {
+                ArrivalTime = time2,
+                Stop = stop2,
+                StopId = stop2.Id,
+                TripId = 2,
+                Trip = new Trip { ShapeId = 1 }
+            };
             IEnumerable<StopTime> stoptimes = new[] {stopTime1, stopTime2};
 
             // ACT
@@ -128,15 +156,29 @@ namespace SmartRoutes.Graph.Test
 
             var stop1 = new Stop {Id = 1, Latitude = 0.0, Longitude = 0.00001};
             stop1.CloseStops.Add(stop1);
-            var stop2 = new Stop {Id = 1, Latitude = 0.0, Longitude = 0.00002};
+            var stop2 = new Stop {Id = 2, Latitude = 0.0, Longitude = 0.00002};
             stop2.CloseStops.Add(stop2);
             stop1.CloseStops.Add(stop2);
             stop2.CloseStops.Add(stop1);
 
             var time1 = new DateTime(1970, 1, 1, 10, 0, 0);
             DateTime time2 = time1; // the same instant
-            var stopTime1 = new StopTime {ArrivalTime = time1, Stop = stop1, StopId = stop1.Id, TripId = 1};
-            var stopTime2 = new StopTime {ArrivalTime = time2, Stop = stop2, StopId = stop2.Id, TripId = 2};
+            var stopTime1 = new StopTime
+            {
+                ArrivalTime = time1,
+                Stop = stop1,
+                StopId = stop1.Id,
+                TripId = 1,
+                Trip = new Trip { ShapeId = 0 }
+            };
+            var stopTime2 = new StopTime
+            {
+                ArrivalTime = time2,
+                Stop = stop2,
+                StopId = stop2.Id,
+                TripId = 2,
+                Trip = new Trip { ShapeId = 1 }
+            };
             IEnumerable<StopTime> stoptimes = new[] {stopTime1, stopTime2};
 
             // ACT
@@ -156,7 +198,14 @@ namespace SmartRoutes.Graph.Test
 
             var stop = new Stop {Id = 1, Latitude = 0.0, Longitude = 0.00001};
             var time = new DateTime(1970, 1, 1, 10, 0, 0);
-            var stopTime = new StopTime {ArrivalTime = time, Stop = stop, StopId = stop.Id, TripId = 1};
+            var stopTime = new StopTime
+            {
+                ArrivalTime = time,
+                Stop = stop,
+                StopId = stop.Id,
+                TripId = 1,
+                Trip = new Trip { ShapeId = 0 }
+            };
 
             var childCare = new LicensedCenter { Id = 1, Latitude = 0.0, Longitude = 0.00002 };
 
@@ -181,7 +230,14 @@ namespace SmartRoutes.Graph.Test
 
             var stop = new Stop { Id = 1, Latitude = 0.0, Longitude = 0.00001 };
             var time = new DateTime(1970, 1, 1, 10, 0, 0);
-            var stopTime = new StopTime { ArrivalTime = time, Stop = stop, StopId = stop.Id, TripId = 1 };
+            var stopTime = new StopTime
+            {
+                ArrivalTime = time,
+                Stop = stop,
+                StopId = stop.Id,
+                TripId = 1,
+                Trip = new Trip { ShapeId = 0 }
+            };
 
             var childCare = new LicensedCenter { Id = 1, Latitude = 0.0, Longitude = 1.0 };
 
@@ -210,8 +266,22 @@ namespace SmartRoutes.Graph.Test
             var stop2 = new Stop { Id = 2, Latitude = 0.0, Longitude = 0.00002 };
             var time1 = new DateTime(1970, 1, 1, 10, 0, 0);
             var time2 = new DateTime(1970, 1, 1, 16, 0, 0);
-            var stopTime1 = new StopTime { ArrivalTime = time1, Stop = stop1, StopId = stop1.Id, TripId = 1 };
-            var stopTime2 = new StopTime { ArrivalTime = time2, Stop = stop2, StopId = stop2.Id, TripId = 2 };
+            var stopTime1 = new StopTime
+            {
+                ArrivalTime = time1,
+                Stop = stop1,
+                StopId = stop1.Id,
+                TripId = 1,
+                Trip = new Trip { ShapeId = 0 }
+            };
+            var stopTime2 = new StopTime
+            {
+                ArrivalTime = time2,
+                Stop = stop2,
+                StopId = stop2.Id,
+                TripId = 2,
+                Trip = new Trip { ShapeId = 0 }
+            };
 
             var childCare = new LicensedCenter { Id = 1, Latitude = 0.0, Longitude = 0.000015 };
 
@@ -254,12 +324,12 @@ namespace SmartRoutes.Graph.Test
                 INode node = nodes[i];
                 if (i > 0)
                 {
-                    Assert.IsTrue(node.DownwindNeighbors.Contains(nodes[i - 1]));
+                    Assert.IsTrue(node.TimeBackwardNeighbors.Contains(nodes[i - 1]));
                 }
                 Assert.AreEqual(trip[i].ArrivalTime, node.Time);
                 if (i < trip.Length - 1)
                 {
-                    Assert.IsTrue(node.UpwindNeighbors.Contains(nodes[i + 1]));
+                    Assert.IsTrue(node.TimeForwardNeighbors.Contains(nodes[i + 1]));
                 }
             }
         }
@@ -282,7 +352,8 @@ namespace SmartRoutes.Graph.Test
                     Sequence = i,
                     Stop = stop,
                     StopId = stop.Id,
-                    TripId = tripId
+                    TripId = tripId,
+                    Trip = new Trip { ShapeId = tripId }
                 };
                 stopTimes.Add(stopTime);
 
@@ -296,7 +367,8 @@ namespace SmartRoutes.Graph.Test
                 Sequence = stopTimeCount,
                 Stop = stopTimes[0].Stop,
                 StopId = stopTimes[0].StopId,
-                TripId = tripId
+                TripId = tripId,
+                Trip = new Trip { ShapeId = tripId }
             });
 
             return stopTimes.ToArray();
@@ -320,7 +392,7 @@ namespace SmartRoutes.Graph.Test
                     }
                     unvisitedNodes.Remove(current);
                     visistedNodes.Add(current);
-                    foreach (INode neighbor in current.DownwindNeighbors.Concat(current.UpwindNeighbors))
+                    foreach (INode neighbor in current.TimeForwardNeighbors.Concat(current.TimeBackwardNeighbors))
                     {
                         stack.Push(neighbor);
                     }

@@ -5,6 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using SmartRoutes.Graph.Node;
 using SmartRoutes.Heap;
+using SmartRoutes.Model;
+using SmartRoutes.Model.Sorta;
 
 namespace SmartRoutes.Graph
 {
@@ -12,7 +14,9 @@ namespace SmartRoutes.Graph
     {
         void GetSortaEntities();
         void GetChildCares();
-        NodeInfo Dijkstras(ISet<INode> StartNodes, Func<INode, bool> GoalCheck, Direction direction);
         INode[] GraphNodes { get; }
+        Stop closestMetroStop(ILocation location);
+        IMetroNode closestMetroNode(ILocation location, DateTime Time, TimeDirection Direction);
+        List<IMetroNode> GetChildCareNeighbors(IChildcareNode childCareNode, TimeDirection Direction);
     }
 }

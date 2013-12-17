@@ -1,17 +1,26 @@
 ﻿using System.Collections.Generic;
+using NLog;
 using SmartRoutes.Model.Odjfs.ChildCares;
+using SmartRoutes.Scraper;
 
 namespace SmartRoutes.OdjfsScraper.Parsers
 {
     public class TypeBHomeParser : BaseChildCareParser<TypeBHome>
     {
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+
         protected override void PopulateFields(TypeBHome childCare, IDictionary<string, string> details)
         {
             // populate the base fields
             base.PopulateFields(childCare, details);
 
             // type B homes do not have their address exposed
-            // TODO: verify the expected placeholder
+            if (childCare.Address != "Contact County CDJFS")
+            {
+                var exception = new ParserException("A type B home does not have the expected address placeholder.");
+                Logger.ErrorException(string.Format("Address: '{0}', ExternalUrlId: '{1}'", childCare.Address, childCare.ExternalUrlId), exception);
+                throw exception;
+            }
             childCare.Address = null;
 
             childCare.CertificationBeginDate = GetDetailString(details, "Certification Begin Date");

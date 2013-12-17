@@ -2,11 +2,14 @@
 using System.IO;
 using System.Linq;
 using Microsoft.VisualBasic.FileIO;
+using NLog;
 
 namespace SmartRoutes.Scraper
 {
     public abstract class CsvStreamParser<TOut> : ICsvStreamParser<TOut>
     {
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+
         public IEnumerable<TOut> Parse(Stream csvStream)
         {
             // use the .NET library that parses CSVs
@@ -23,6 +26,21 @@ namespace SmartRoutes.Scraper
                 yield break;
             }
 
+            // verify the headings are unique
+            ISet<string> uniqueKeys = new HashSet<string>(keys);
+            if (uniqueKeys.Count != keys.Length)
+            {
+                IEnumerable<string> duplicateKeys = keys
+                    .GroupBy(k => k)
+                    .ToDictionary(g => g.Key, g => g.Count())
+                    .Where(p => p.Value > 1)
+                    .Select(p => p.Key);
+
+                var exception = new ParserException("The provided CSV does not have unique column headings.");
+                Logger.ErrorException(string.Format("DuplicateHeadings: {0}", string.Join(", ", duplicateKeys)), exception);
+                throw exception;
+            }
+
             // parse each line
             string[] values;
             while ((values = parser.ReadFields()) != null)
@@ -32,9 +50,18 @@ namespace SmartRoutes.Scraper
                     .Select(v => string.IsNullOrWhiteSpace(v) ? null : v.Trim())
                     .ToArray();
 
+                // verify the correct number of columns in this row
+                if (values.Length != keys.Length)
+                {
+                    var exception = new ParserException("A row in the provided CSV does not have the same number of columns as the heading row.");
+                    Logger.ErrorException(string.Format("HeadingCount: {0}, ColumnCount: {1}, Values: {2}",
+                        keys.Length,
+                        values.Length,
+                        string.Join(", ", values)), exception);
+                    throw exception;
+                }
+
                 // associate values with headings
-                // TODO: assumes that headings are unique
-                // TODO: assumes the number of keys and values is the same
                 IDictionary<string, string> valueDictionary = Enumerable
                     .Range(0, keys.Length)
                     .ToDictionary(i => keys[i], i => values[i]);

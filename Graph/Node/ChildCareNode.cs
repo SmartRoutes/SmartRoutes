@@ -9,28 +9,22 @@ namespace SmartRoutes.Graph.Node
 {
     public class ChildCareNode : IChildcareNode
     {
-        public ISet<INode> UpwindNeighbors { get; set; }
-        public ISet<INode> DownwindNeighbors { get; set; }
         public DateTime Time { get; private set; }
-        public double Latitude { get; private set; }
-        public double Longitude { get; private set; }
-        public string Name { get; private set; }
+        public NodeBase BaseNode { get; private set; }
+        public ISet<INode> TimeBackwardNeighbors { get; private set; }
+        public ISet<INode> TimeForwardNeighbors { get; private set; }
 
-        public ChildCareNode(ChildCare childcare, DateTime Time)
+        // legacy properties
+        public string Name { get { return BaseNode.Name; } }
+        public double Latitude { get { return BaseNode.Latitude; } }
+        public double Longitude { get { return BaseNode.Longitude; } }
+
+        public ChildCareNode(ChildCare childcare, DateTime Time, NodeBase BaseNode)
         {
-            UpwindNeighbors = new HashSet<INode>();
-            DownwindNeighbors = new HashSet<INode>();
+            this.BaseNode = BaseNode;
             this.Time = Time;
-            this.Name = childcare.Name;
-            
-            // assume value is not null
-            if (childcare.Latitude == null || childcare.Longitude == null)
-            {
-                throw new ArgumentNullException("Attempt to create childcare node without Latitude / Longitude defined.");
-            }
-
-            this.Latitude = childcare.Latitude.Value;
-            this.Longitude = childcare.Longitude.Value;
+            TimeBackwardNeighbors = new HashSet<INode>();
+            TimeForwardNeighbors = new HashSet<INode>();
         }
     }
 }

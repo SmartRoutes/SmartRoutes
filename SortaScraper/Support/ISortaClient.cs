@@ -1,12 +1,11 @@
-﻿using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
+using SmartRoutes.Scraper;
 
 namespace SmartRoutes.SortaScraper.Support
 {
     public interface ISortaClient
     {
-        Task<HttpResponseHeaders> GetArchiveHeaders();
-        Task<HttpResponseMessage> GetArchiveContent();
+        Task<ClientResponseHeaders> GetArchiveHeaders();
+        Task<ClientResponse> GetArchiveContent();
     }
 }
