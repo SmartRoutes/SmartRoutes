@@ -60,10 +60,9 @@ namespace SmartRoutes.Graph
             }
         }
 
-        public IMetroNode closestMetroNode(ILocation location, DateTime Time, TimeDirection Direction)
+        public Stop closestMetroStop(ILocation location)
         {
             double minDistance = double.MaxValue;
-            int closestStopID = int.MinValue;
             Stop closestStop = null;
 
             foreach (var stop in Collection.Stops)
@@ -73,22 +72,35 @@ namespace SmartRoutes.Graph
                 if (Distance < minDistance)
                 {
                     minDistance = Distance;
-                    closestStopID = stop.Id;
                     closestStop = stop;
                 }
             }
 
+            if (closestStop == null)
+            {
+                throw new Exception("Closest stop to given location not found.");
+            }
+
+            return closestStop;
+        }
+
+        public IMetroNode closestMetroNode(ILocation location, DateTime Time, TimeDirection Direction)
+        {
+            Stop closestStop = closestMetroStop(location);
+
             // retrieve metronodes corresponding to this stop
             List<IMetroNode> nodes = null;
-            if (!Builder.StopToNodes.TryGetValue(closestStopID, out nodes))
+            if (!Builder.StopToNodes.TryGetValue(closestStop.Id, out nodes))
             {
                 throw new Exception("Failed to find metro nodes associated with closest stop.");
             }
+
+            double distance = closestStop.GetL1DistanceInFeet(location);
+            double walkingTime = distance / Builder.Settings.WalkingFeetPerSecond;
             
             // sort nodes by increasing time;
             var nodesArray = nodes.ToArray();
             Array.Sort(nodesArray, new Comparers.ComparerForTransferSorting());
-            double walkingTime = minDistance / Builder.Settings.WalkingFeetPerSecond;
             IMetroNode returnNode = null;
 
             if (Direction == TimeDirection.Forwards)
@@ -122,6 +134,44 @@ namespace SmartRoutes.Graph
             }
 
             return returnNode;
+        }
+
+        public List<IMetroNode> GetChildCareNeighbors(IChildcareNode childCareNode, TimeDirection Direction)
+        {
+            List<NodeBase> UniqueNodeBases = new List<NodeBase>();
+            List<IMetroNode> ReturnNodes = new List<IMetroNode>();
+
+            var current = childCareNode;
+            bool done = false;
+            while (!done)
+            {
+                var neighbors = (Direction == TimeDirection.Backwards)
+                    ? current.TimeBackwardNeighbors
+                    : current.TimeForwardNeighbors;
+
+                foreach (var neighbor in neighbors.OfType<IMetroNode>())
+                {
+                    if (!UniqueNodeBases.Contains(neighbor.BaseNode))
+                    {
+                        UniqueNodeBases.Add(neighbor.BaseNode);
+                        ReturnNodes.Add(neighbor);
+                    }
+                }
+
+                done = true;
+
+                foreach (var neighbor in neighbors.OfType<IChildcareNode>())
+                {
+                    if (neighbor.BaseNode == current.BaseNode)
+                    {
+                        done = false;
+                        current = neighbor;
+                        break;
+                    }
+                }
+            }
+
+            return ReturnNodes;
         }
     }
 }
