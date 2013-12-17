@@ -274,7 +274,7 @@ namespace SmartRoutes.Graph
                 // at that childcare between two specific times
                 var ChildCareNodesAdded = new List<IChildcareNode>();
 
-                // create base node which all ChildCare nodes for this ChildCare whill reference
+                // give each child care node the same base node
                 var BaseNode = new NodeBase(childcare.Name, childcare.Latitude.Value, childcare.Longitude.Value);
 
                 foreach (var stop in nearestStops)
@@ -313,26 +313,19 @@ namespace SmartRoutes.Graph
 
                 // add new ChildCare nodes to list of Graph nodes
                 GraphNodeList.AddRange(ChildCareNodesAdded);
-                    
-                // now connect child care nodes together. Fist sort by time
-                //var ChildCareNodesArray = ChildCareNodesAdded.ToArray();
-                //Array.Sort(ChildCareNodesArray, new Comparers.ComparerForChildCares());
 
-                //for (int i = 0; i < ChildCareNodesArray.Count() - 1; i++)
-                //{
-                //    for (int j = i + 1; j < ChildCareNodesArray.Count(); j++)
-                //    {
-                //        var previousChildCareNode = ChildCareNodesArray[i];
-                //        var currentChildCareNode = ChildCareNodesArray[j];
+                // sort child care nodes by ascending time
+                var ChildCareNodesArray = ChildCareNodesAdded.ToArray();
+                Array.Sort(ChildCareNodesArray, new Comparers.ComparerForChildCares());
 
-                //        if (previousChildCareNode.BaseNode != currentChildCareNode.BaseNode)
-                //        {
-                //            previousChildCareNode.TimeForwardNeighbors.Add(currentChildCareNode);
-                //            currentChildCareNode.TimeBackwardNeighbors.Add(previousChildCareNode);
-                //            break;
-                //        }
-                //    }
-                //}
+                for (int i = 1; i < ChildCareNodesArray.Count(); i++)
+                {
+                    var current = ChildCareNodesArray[i];
+                    var previous = ChildCareNodesArray[i - 1];
+
+                    current.TimeBackwardNeighbors.Add(previous);
+                    previous.TimeForwardNeighbors.Add(current);
+                }
             }
 
             return GraphNodeList.ToArray();
