@@ -84,6 +84,7 @@
     <Compile Include="ExtensionMethods.cs" />
     <Compile Include="Graph.cs" />
     <Compile Include="GraphBuilder\GraphBuilder.cs" />
+    <Compile Include="GraphBuilder\GraphBuilderSettings.cs" />
     <Compile Include="GraphBuilder\IGraphBuilder.cs" />
     <Compile Include="GraphModule.cs" />
     <Compile Include="IGraph.cs" />

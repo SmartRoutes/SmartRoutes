@@ -6,9 +6,9 @@ namespace SmartRoutes.Model
     {
         private static double GetL1DistanceInFeet(double Lat1, double Lon1, double Lat2, double Lon2)
         {
-            double R = 20092000.0; // radius of earth in feet
-            double dx = R*Math.Cos(Lat1)*(Lon2 - Lon1);
-            double dy = R*(Lat2 - Lat1);
+            double R = 20925524.9; // radius of earth in feet
+            double dx = R * Math.Cos(Lat1) * (Lon2 - Lon1) * Math.PI / 180;
+            double dy = R * (Lat2 - Lat1) * Math.PI / 180;
             return Math.Abs(dx) + Math.Abs(dy);
         }
 

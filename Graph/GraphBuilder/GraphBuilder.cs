@@ -20,12 +20,10 @@ namespace SmartRoutes.Graph
     {
         private readonly IMetroNode _metroNodeMaker;
         private Logger Logger = LogManager.GetCurrentClassLogger();
-        private static double MaxFeetFromChildCareToBuStop = 1000000;
-        private static int MaxChildCareCloseStops = 5;
-        private static double WalkingFeetPerSecond = 1.5;
-        private Dictionary<int, List<int>> StopToNearest; // from StopID to list of StopID's of nearest Stops
-        private Dictionary<int, List<IMetroNode>> StopToNodes; // from StopID to set of Nodes with given StopID
-        Dictionary<int, List<int>> ChildCareToStops; // from ChildCare ID to closest metro stops
+        public GraphBuilderSettings Settings { get; private set; }
+        public Dictionary<int, List<int>> StopToNearest { get; private set; } // from StopID to list of StopID's of nearest Stops
+        public Dictionary<int, List<IMetroNode>> StopToNodes { get; private set; } // from StopID to set of Nodes with given StopID
+        public Dictionary<int, List<int>> ChildCareToStops { get; private set; } // from ChildCare ID to closest metro stops
 
         public GraphBuilder(IMetroNode metroNodeMaker) 
         {
@@ -36,6 +34,8 @@ namespace SmartRoutes.Graph
         public INode[] BuildGraph(IEnumerable<StopTime> StopTimes, IEnumerable<ChildCare> ChildCares)
         {
             Logger.Trace("Creating new graph.");
+
+            Settings = GraphBuilderSettings.Default;
 
             // collect all the stops
             Stop[] Stops = StopTimes
@@ -49,6 +49,12 @@ namespace SmartRoutes.Graph
             var GraphNodes = InsertChildCareNodes(Stops, ChildCares, MetroNodes);
             Logger.Trace("Graph created successfully.");
             return GraphNodes;
+        }
+
+        public INode[] BuildGraph(IEnumerable<StopTime> StopTimes, IEnumerable<ChildCare> ChildCares, GraphBuilderSettings Settings)
+        {
+            this.Settings = Settings;
+            return BuildGraph(StopTimes, ChildCares);
         }
 
         private IMetroNode[] CreateMetroNodes(IEnumerable<Stop> Stops, IEnumerable<StopTime> StopTimes)
@@ -169,7 +175,7 @@ namespace SmartRoutes.Graph
                     if (Nodes.Count == 0) continue; // not sure if this is possible
 
                     // calculate walking time, will be same for all nodes in list, so use first
-                    double WalkingTime = node1.GetL1DistanceInFeet(Nodes.First()) / WalkingFeetPerSecond;
+                    double WalkingTime = node1.GetL1DistanceInFeet(Nodes.First()) / Settings.WalkingFeetPerSecond;
                     DateTime MinTime = node1.Time + new TimeSpan(0, 0, (int)Math.Ceiling(WalkingTime));
 
                     // thanks to sorting, these nodes are iterated in ascending time
@@ -211,20 +217,20 @@ namespace SmartRoutes.Graph
                     continue;
                 }
 
-                var nearestStopIDs = new int[MaxChildCareCloseStops];
-                for (int i = 0; i < MaxChildCareCloseStops; i++) nearestStopIDs[i] = int.MinValue;
-                var nearestDistances = new double[MaxChildCareCloseStops];
-                for (int i = 0; i < MaxChildCareCloseStops; i++) nearestDistances[i] = double.MaxValue;
+                var nearestStopIDs = new int[Settings.MaxChildCareCloseStops];
+                for (int i = 0; i < Settings.MaxChildCareCloseStops; i++) nearestStopIDs[i] = int.MinValue;
+                var nearestDistances = new double[Settings.MaxChildCareCloseStops];
+                for (int i = 0; i < Settings.MaxChildCareCloseStops; i++) nearestDistances[i] = double.MaxValue;
                 
                 foreach (var stop in Stops)
                 {
                     double distance = childcare.GetL1DistanceInFeet(stop);
 
-                    if (distance < MaxFeetFromChildCareToBuStop)
+                    if (distance < Settings.MaxFeetFromChildCareToBuStop)
                     {
                         // store the closest stops to this childcare
                         var StopID = stop.Id;
-                        for (int i = 0; i < MaxChildCareCloseStops; i++)
+                        for (int i = 0; i < Settings.MaxChildCareCloseStops; i++)
                         {
                             if (distance < nearestDistances[i])
                             {
@@ -268,7 +274,7 @@ namespace SmartRoutes.Graph
                 // at that childcare between two specific times
                 var ChildCareNodesAdded = new List<IChildcareNode>();
 
-                // create base node which all ChildCare nodes for this ChildCare whill reference
+                // give each child care node the same base node
                 var BaseNode = new NodeBase(childcare.Name, childcare.Latitude.Value, childcare.Longitude.Value);
 
                 foreach (var stop in nearestStops)
@@ -284,7 +290,7 @@ namespace SmartRoutes.Graph
                     if (nodes.Count == 0) continue;
 
                     var distance = childcare.GetL1DistanceInFeet(nodes.First());
-                    var walkingTime = TimeSpan.FromSeconds(distance / WalkingFeetPerSecond);
+                    var walkingTime = TimeSpan.FromSeconds(distance / Settings.WalkingFeetPerSecond);
 
                     // for each metro node, create upwind / downwind ChildCare nodes and connect them
                     foreach (var node in nodes)
@@ -307,26 +313,19 @@ namespace SmartRoutes.Graph
 
                 // add new ChildCare nodes to list of Graph nodes
                 GraphNodeList.AddRange(ChildCareNodesAdded);
-                    
-                // now connect child care nodes together. Fist sort by time
-                //var ChildCareNodesArray = ChildCareNodesAdded.ToArray();
-                //Array.Sort(ChildCareNodesArray, new Comparers.ComparerForChildCares());
 
-                //for (int i = 0; i < ChildCareNodesArray.Count() - 1; i++)
-                //{
-                //    for (int j = i + 1; j < ChildCareNodesArray.Count(); j++)
-                //    {
-                //        var previousChildCareNode = ChildCareNodesArray[i];
-                //        var currentChildCareNode = ChildCareNodesArray[j];
+                // sort child care nodes by ascending time
+                var ChildCareNodesArray = ChildCareNodesAdded.ToArray();
+                Array.Sort(ChildCareNodesArray, new Comparers.ComparerForChildCares());
 
-                //        if (previousChildCareNode.BaseNode != currentChildCareNode.BaseNode)
-                //        {
-                //            previousChildCareNode.TimeForwardNeighbors.Add(currentChildCareNode);
-                //            currentChildCareNode.TimeBackwardNeighbors.Add(previousChildCareNode);
-                //            break;
-                //        }
-                //    }
-                //}
+                for (int i = 1; i < ChildCareNodesArray.Count(); i++)
+                {
+                    var current = ChildCareNodesArray[i];
+                    var previous = ChildCareNodesArray[i - 1];
+
+                    current.TimeBackwardNeighbors.Add(previous);
+                    previous.TimeForwardNeighbors.Add(current);
+                }
             }
 
             return GraphNodeList.ToArray();
