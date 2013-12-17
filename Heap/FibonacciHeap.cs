@@ -180,13 +180,13 @@ namespace SmartRoutes.Heap
             FibHeapNode<TValue, TKey> ReturnNode = Tree.Parent;
 
             // don't try to cut root
-            if (Tree.Parent == null)
+            if (Tree.Marked == true && Tree.Parent != null)
             {
-                // do nothing
-            }
-            else if (Tree.Marked == true)
-            {
-                ReturnNode.Marked = true; // parent has now lost a child
+                if (Tree.Parent.Parent != null)
+                {
+                    // parent has now lost a child, mark if not a root
+                    Tree.Parent.Marked = true; 
+                }
 
                 // Tree.Parent rank will change, remove it from RootsOfRank array
                 if (RootsOfRank[Tree.Parent.Rank] == Tree.Parent)
@@ -198,7 +198,7 @@ namespace SmartRoutes.Heap
                 
                 AddToRoot(Tree);
             }
-            else
+            else if (Tree.Parent != null) // don't mark roots
             {
                 Tree.Marked = true;
             }
