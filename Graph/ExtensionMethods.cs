@@ -103,7 +103,6 @@ namespace SmartRoutes.Graph
                             if (newTravelTime < neighborInfo.travelTime)
                             {
                                 // update search info and update queue for new key
-                                neighborInfo.node = current;
                                 neighborInfo.travelTime = newTravelTime;
                                 neighborInfo.parent = currentInfo;
                                 heap.UpdateKey(neighborInfo.handle, newTravelTime);
