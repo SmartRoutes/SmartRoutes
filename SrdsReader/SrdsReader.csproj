@@ -32,6 +32,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="NLog">
+      <HintPath>..\packages\NLog.2.1.0\lib\net45\NLog.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -41,6 +44,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Parsers\DestinationCsvStreamParser.cs" />
+    <Compile Include="Parsers\AttributeKeyCsvStreamParser.cs" />
+    <Compile Include="Parsers\IDestinationCsvStreamParser.cs" />
+    <Compile Include="Parsers\IStringParser.cs" />
+    <Compile Include="Parsers\StringParser.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -51,8 +59,13 @@
       <Project>{711cc508-53a8-4edb-bbca-b911935da4b0}</Project>
       <Name>Model</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Scraper\Scraper.csproj">
+      <Project>{4401fe23-f94a-4eda-aa76-ccd53548e10e}</Project>
+      <Name>Scraper</Name>
+    </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
-  <Import Project="$(SolutionDir)\.build\Version.targets" /> 
+  <Import Project="$(SolutionDir)\.build\Version.targets" />
 </Project>
