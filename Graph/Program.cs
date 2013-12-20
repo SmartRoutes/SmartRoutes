@@ -9,7 +9,7 @@ using Ninject.Extensions.Conventions;
 using SmartRoutes.Scraper;
 using SmartRoutes.SortaScraper.Parsers;
 using SmartRoutes.SortaScraper.Support;
-using SmartRoutes.Model.Sorta;
+using SmartRoutes.Model.Gtfs;
 using SmartRoutes.Model.Odjfs.ChildCares;
 using Ninject.Modules;
 using SmartRoutes.Graph.Node;

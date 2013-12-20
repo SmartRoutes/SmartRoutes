@@ -1,4 +1,4 @@
-﻿namespace SmartRoutes.Model.Sorta
+﻿namespace SmartRoutes.Model.Gtfs
 {
     public class ShapePoint
     {

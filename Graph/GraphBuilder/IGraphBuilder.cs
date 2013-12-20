@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using SmartRoutes.Graph.Node;
 using SmartRoutes.Model.Odjfs.ChildCares;
-using SmartRoutes.Model.Sorta;
+using SmartRoutes.Model.Gtfs;
 
 namespace SmartRoutes.Graph
 {

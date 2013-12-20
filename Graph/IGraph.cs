@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using SmartRoutes.Graph.Node;
 using SmartRoutes.Heap;
 using SmartRoutes.Model;
-using SmartRoutes.Model.Sorta;
+using SmartRoutes.Model.Gtfs;
 
 namespace SmartRoutes.Graph
 {

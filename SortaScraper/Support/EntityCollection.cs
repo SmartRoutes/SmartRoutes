@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using SmartRoutes.Model.Sorta;
+using SmartRoutes.Model.Gtfs;
 
 namespace SmartRoutes.SortaScraper.Support
 {

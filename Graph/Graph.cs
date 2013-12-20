@@ -9,7 +9,7 @@ using SmartRoutes.Database.Contexts;
 using SmartRoutes.Graph.Node;
 using SmartRoutes.SortaScraper.Support;
 using SmartRoutes.SortaScraper.Scrapers;
-using SmartRoutes.Model.Sorta;
+using SmartRoutes.Model.Gtfs;
 using SmartRoutes.Model.Odjfs.ChildCares;
 using SmartRoutes.Heap;
 using SmartRoutes.Model;

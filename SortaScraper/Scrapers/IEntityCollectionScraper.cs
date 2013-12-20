@@ -1,5 +1,5 @@
 using System.Threading.Tasks;
-using SmartRoutes.Model.Sorta;
+using SmartRoutes.Model.Gtfs;
 using SmartRoutes.SortaScraper.Support;
 
 namespace SmartRoutes.SortaScraper.Scrapers

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity;
-using SmartRoutes.Model.Sorta;
+using SmartRoutes.Model.Gtfs;
 using SmartRoutes.Model.Srds;
 
 namespace SmartRoutes.Database

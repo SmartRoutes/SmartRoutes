@@ -4,7 +4,7 @@ using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SmartRoutes.Graph.Node;
 using SmartRoutes.Model.Odjfs.ChildCares;
-using SmartRoutes.Model.Sorta;
+using SmartRoutes.Model.Gtfs;
 
 namespace SmartRoutes.Graph.Test
 {

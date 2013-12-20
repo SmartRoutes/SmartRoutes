@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using NLog;
-using SmartRoutes.Model.Sorta;
+using SmartRoutes.Model.Gtfs;
 using SmartRoutes.Scraper;
 using SmartRoutes.SortaScraper.Parsers;
 using SmartRoutes.SortaScraper.Support;

@@ -3,7 +3,7 @@ using System.IO;
 using System.Linq;
 using Ionic.Zip;
 using SmartRoutes.Model;
-using SmartRoutes.Model.Sorta;
+using SmartRoutes.Model.Gtfs;
 using NLog;
 using SmartRoutes.Scraper;
 using SmartRoutes.SortaScraper.Support;

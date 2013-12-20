@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using SmartRoutes.Model.Sorta;
+using SmartRoutes.Model.Gtfs;
 using SmartRoutes.Scraper;
 
 namespace SmartRoutes.SortaScraper.Parsers

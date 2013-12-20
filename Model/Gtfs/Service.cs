@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
-namespace SmartRoutes.Model.Sorta
+namespace SmartRoutes.Model.Gtfs
 {
     public class Service
     {

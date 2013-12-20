@@ -14,7 +14,7 @@ using SmartRoutes.SortaScraper.Parsers;
 using SmartRoutes.SortaScraper.Support;
 using Ninject;
 using Ninject.Extensions.Conventions;
-using SmartRoutes.Model.Sorta;
+using SmartRoutes.Model.Gtfs;
 using SmartRoutes.Graph;
 using SmartRoutes.Graph.Node;
 using SmartRoutes.Graph.Comparers;

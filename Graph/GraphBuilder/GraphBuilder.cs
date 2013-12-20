@@ -7,7 +7,7 @@ using SmartRoutes.Graph.Node;
 using SmartRoutes.Model;
 using SmartRoutes.Model.Odjfs.ChildCares;
 using SmartRoutes.SortaScraper.Support;
-using SmartRoutes.Model.Sorta;
+using SmartRoutes.Model.Gtfs;
 using SmartRoutes.Model.Odjfs;
 using Ninject;
 using Ninject.Extensions.Conventions;
