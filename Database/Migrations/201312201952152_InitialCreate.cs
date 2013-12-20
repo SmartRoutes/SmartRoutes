@@ -1,6 +1,6 @@
 using System.Data.Entity.Migrations;
 
-namespace SmartRoutes.Database.Migrations.Sorta
+namespace SmartRoutes.Database.Migrations
 {
     public partial class InitialCreate : DbMigration
     {
@@ -159,11 +159,10 @@ namespace SmartRoutes.Database.Migrations.Sorta
                     ParentId = c.Int(),
                     Timezone = c.String(),
                     WheelchairBoarding = c.Int(),
-                    ParentStop_Id = c.Int(),
                 })
                 .PrimaryKey(t => t.StopId)
-                .ForeignKey("dbo.Stop", t => t.ParentStop_Id)
-                .Index(t => t.ParentStop_Id);
+                .ForeignKey("dbo.Stop", t => t.ParentId)
+                .Index(t => t.ParentId);
 
             CreateTable(
                 "dbo.Archive",
@@ -175,13 +174,66 @@ namespace SmartRoutes.Database.Migrations.Sorta
                     DownloadedOn = c.DateTime(false),
                 })
                 .PrimaryKey(t => t.ArchiveId);
+
+            CreateTable(
+                "dbo.AttributeKey",
+                c => new
+                {
+                    AttributeKeyId = c.Int(false, true),
+                    Name = c.String(),
+                    TypeName = c.String(),
+                })
+                .PrimaryKey(t => t.AttributeKeyId);
+
+            CreateTable(
+                "dbo.AttributeValue",
+                c => new
+                {
+                    AttributeValueId = c.Int(false, true),
+                    AttributeKeyId = c.Int(false),
+                    DestinationId = c.Int(false),
+                    ValueBytes = c.Binary(),
+                })
+                .PrimaryKey(t => t.AttributeValueId)
+                .ForeignKey("dbo.AttributeKey", t => t.AttributeKeyId, true)
+                .ForeignKey("dbo.Destination", t => t.DestinationId, true)
+                .Index(t => t.AttributeKeyId)
+                .Index(t => t.DestinationId);
+
+            CreateTable(
+                "dbo.Destination",
+                c => new
+                {
+                    DestinationId = c.Int(false, true),
+                    Name = c.String(),
+                    Latitude = c.Double(false),
+                    Longitude = c.Double(false),
+                })
+                .PrimaryKey(t => t.DestinationId);
+
+            CreateTable(
+                "dbo.CloseStop",
+                c => new
+                {
+                    StopId = c.Int(false),
+                    CloseStopId = c.Int(false),
+                })
+                .PrimaryKey(t => new {t.StopId, t.CloseStopId})
+                .ForeignKey("dbo.Stop", t => t.StopId)
+                .ForeignKey("dbo.Stop", t => t.CloseStopId)
+                .Index(t => t.StopId)
+                .Index(t => t.CloseStopId);
         }
 
         public override void Down()
         {
+            DropForeignKey("dbo.AttributeValue", "DestinationId", "dbo.Destination");
+            DropForeignKey("dbo.AttributeValue", "AttributeKeyId", "dbo.AttributeKey");
             DropForeignKey("dbo.StopTime", "TripId", "dbo.Trip");
             DropForeignKey("dbo.StopTime", "StopId", "dbo.Stop");
-            DropForeignKey("dbo.Stop", "ParentStop_Id", "dbo.Stop");
+            DropForeignKey("dbo.Stop", "ParentId", "dbo.Stop");
+            DropForeignKey("dbo.CloseStop", "CloseStopId", "dbo.Stop");
+            DropForeignKey("dbo.CloseStop", "StopId", "dbo.Stop");
             DropForeignKey("dbo.Trip", "ShapeId", "dbo.Shape");
             DropForeignKey("dbo.ShapePoint", "ShapeId", "dbo.Shape");
             DropForeignKey("dbo.Trip", "ServiceId", "dbo.Service");
@@ -189,9 +241,13 @@ namespace SmartRoutes.Database.Migrations.Sorta
             DropForeignKey("dbo.Trip", "RouteId", "dbo.Route");
             DropForeignKey("dbo.Trip", "BlockId", "dbo.Block");
             DropForeignKey("dbo.Route", "AgencyId", "dbo.Agency");
+            DropIndex("dbo.AttributeValue", new[] {"DestinationId"});
+            DropIndex("dbo.AttributeValue", new[] {"AttributeKeyId"});
             DropIndex("dbo.StopTime", new[] {"TripId"});
             DropIndex("dbo.StopTime", new[] {"StopId"});
-            DropIndex("dbo.Stop", new[] {"ParentStop_Id"});
+            DropIndex("dbo.Stop", new[] {"ParentId"});
+            DropIndex("dbo.CloseStop", new[] {"CloseStopId"});
+            DropIndex("dbo.CloseStop", new[] {"StopId"});
             DropIndex("dbo.Trip", new[] {"ShapeId"});
             DropIndex("dbo.ShapePoint", new[] {"ShapeId"});
             DropIndex("dbo.Trip", new[] {"ServiceId"});
@@ -199,6 +255,10 @@ namespace SmartRoutes.Database.Migrations.Sorta
             DropIndex("dbo.Trip", new[] {"RouteId"});
             DropIndex("dbo.Trip", new[] {"BlockId"});
             DropIndex("dbo.Route", new[] {"AgencyId"});
+            DropTable("dbo.CloseStop");
+            DropTable("dbo.Destination");
+            DropTable("dbo.AttributeValue");
+            DropTable("dbo.AttributeKey");
             DropTable("dbo.Archive");
             DropTable("dbo.Stop");
             DropTable("dbo.StopTime");

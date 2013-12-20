@@ -3,15 +3,18 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity;
 using SmartRoutes.Model.Sorta;
+using SmartRoutes.Model.Srds;
 
-namespace SmartRoutes.Database.Contexts
+namespace SmartRoutes.Database
 {
-    public class SortaEntities : BaseContext
+    public class Entities : DbContext
     {
-        public SortaEntities() : base("Sorta")
-        {
-        }
+        // Destination entities
+        public IDbSet<AttributeKey> AttributeKeys { get; set; }
+        public IDbSet<AttributeValue> AttributeValues { get; set; }
+        public IDbSet<Destination> Destinations { get; set; }
 
+        // GTFS entities
         public IDbSet<Archive> Archives { get; set; }
         public IDbSet<Agency> Agencies { get; set; }
         public IDbSet<Service> Services { get; set; }
@@ -34,23 +37,26 @@ namespace SmartRoutes.Database.Contexts
                 .Where(p => p.Name == "Id")
                 .Configure(c => c.HasColumnName(c.ClrPropertyInfo.DeclaringType.Name + "Id"));
 
-            // most entities do not need database generated IDs
-            ISet<Type> databaseGeneratedIds = new HashSet<Type>
+            // some GTFS entities have their IDs pre-defined
+            ISet<Type> preDefinedIds = new HashSet<Type>
             {
-                typeof (Archive),
-                typeof (ShapePoint),
-                typeof (StopTime),
-                typeof (ServiceException)
+                typeof (Agency),
+                typeof (Service),
+                typeof (Route),
+                typeof (Shape),
+                typeof (Block),
+                typeof (Trip),
+                typeof (Stop)
             };
             modelBuilder
                 .Properties()
-                .Where(p => p.Name == "Id" && !databaseGeneratedIds.Contains(p.DeclaringType))
+                .Where(p => p.Name == "Id" && preDefinedIds.Contains(p.DeclaringType))
                 .Configure(c => c.HasDatabaseGeneratedOption(DatabaseGeneratedOption.None));
 
-            // put all of the tables in the same table schema ("sorta.<table name>")
+            // name the table of the singular version of the entity name
             modelBuilder
                 .Types()
-                .Configure(c => c.ToTable(GetTableName(c.ClrType)));
+                .Configure(c => c.ToTable(c.ClrType.Name));
 
             // map the one-to-many for Stop.ChildStops
             modelBuilder

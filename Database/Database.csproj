@@ -46,46 +46,15 @@
     <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Contexts\BaseContext.cs" />
+    <Compile Include="Entities.cs" />
     <Compile Include="ExtensionMethods.cs" />
     <Compile Include="FastInserter.cs" />
-    <Compile Include="Migrations\Odjfs\201311240119336_RemoveEffectiveDatesColumn.cs" />
-    <Compile Include="Migrations\Odjfs\201311240119336_RemoveEffectiveDatesColumn.Designer.cs">
-      <DependentUpon>201311240119336_RemoveEffectiveDatesColumn.cs</DependentUpon>
+    <Compile Include="Migrations\201312201952152_InitialCreate.cs" />
+    <Compile Include="Migrations\201312201952152_InitialCreate.Designer.cs">
+      <DependentUpon>201312201952152_InitialCreate.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\Odjfs\201311240034010_AddNafccColumn.cs" />
-    <Compile Include="Migrations\Odjfs\201311240034010_AddNafccColumn.Designer.cs">
-      <DependentUpon>201311240034010_AddNafccColumn.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\Odjfs\201311200515290_RenameEndDateColumns.cs" />
-    <Compile Include="Migrations\Odjfs\201311200515290_RenameEndDateColumns.Designer.cs">
-      <DependentUpon>201311200515290_RenameEndDateColumns.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\Sorta\201311181859255_AddCloseStops.cs" />
-    <Compile Include="Migrations\Sorta\201311181859255_AddCloseStops.Designer.cs">
-      <DependentUpon>201311181859255_AddCloseStops.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\Sorta\201311181851115_FixParentStop.cs" />
-    <Compile Include="Migrations\Sorta\201311181851115_FixParentStop.Designer.cs">
-      <DependentUpon>201311181851115_FixParentStop.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\Sorta\201311100713562_InitialCreate.cs" />
-    <Compile Include="Migrations\Sorta\201311100713562_InitialCreate.Designer.cs">
-      <DependentUpon>201311100713562_InitialCreate.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\Odjfs\201311100657199_InitialCreate.cs" />
-    <Compile Include="Migrations\Odjfs\201311100657199_InitialCreate.Designer.cs">
-      <DependentUpon>201311100657199_InitialCreate.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\Odjfs\201311100704505_AddLastGeocodedOn.cs" />
-    <Compile Include="Migrations\Odjfs\201311100704505_AddLastGeocodedOn.Designer.cs">
-      <DependentUpon>201311100704505_AddLastGeocodedOn.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\Sorta\SortaMigrationsConfiguration.cs" />
-    <Compile Include="Migrations\Odjfs\OdjfsMigrationsConfiguration.cs" />
+    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Contexts\OdjfsEntities.cs" />
-    <Compile Include="Contexts\SortaEntities.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -97,33 +66,8 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Mappings\Odjfs\" />
-    <Folder Include="Mappings\Sorta\" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Migrations\Odjfs\201311240119336_RemoveEffectiveDatesColumn.resx">
-      <DependentUpon>201311240119336_RemoveEffectiveDatesColumn.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\Odjfs\201311240034010_AddNafccColumn.resx">
-      <DependentUpon>201311240034010_AddNafccColumn.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\Odjfs\201311200515290_RenameEndDateColumns.resx">
-      <DependentUpon>201311200515290_RenameEndDateColumns.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\Sorta\201311181859255_AddCloseStops.resx">
-      <DependentUpon>201311181859255_AddCloseStops.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\Sorta\201311181851115_FixParentStop.resx">
-      <DependentUpon>201311181851115_FixParentStop.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\Sorta\201311100713562_InitialCreate.resx">
-      <DependentUpon>201311100713562_InitialCreate.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\Odjfs\201311100657199_InitialCreate.resx">
-      <DependentUpon>201311100657199_InitialCreate.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\Odjfs\201311100704505_AddLastGeocodedOn.resx">
-      <DependentUpon>201311100704505_AddLastGeocodedOn.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201312201952152_InitialCreate.resx">
+      <DependentUpon>201312201952152_InitialCreate.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

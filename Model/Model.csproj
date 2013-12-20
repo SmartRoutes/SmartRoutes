@@ -37,7 +37,9 @@
     <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Destination.cs" />
+    <Compile Include="Srds\AttributeKey.cs" />
+    <Compile Include="Srds\AttributeValue.cs" />
+    <Compile Include="Srds\Destination.cs" />
     <Compile Include="ExtensionMethods.cs" />
     <Compile Include="INullableLocation.cs" />
     <Compile Include="ILocation.cs" />
