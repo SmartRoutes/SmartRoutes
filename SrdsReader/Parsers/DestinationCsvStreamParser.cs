@@ -19,6 +19,7 @@ namespace SmartRoutes.SrdsReader.Parsers
         public DestinationCsvStreamParser(IStringParser stringParser)
         {
             _stringParser = stringParser;
+            AttachAttributeKeys(Enumerable.Empty<AttributeKey>());
         }
 
         public void AttachAttributeKeys(IEnumerable<AttributeKey> attributeKeys)
@@ -71,11 +72,6 @@ namespace SmartRoutes.SrdsReader.Parsers
 
         protected override Destination ConstructItem(IDictionary<string, string> values)
         {
-            if (_attributeKeyNames == null)
-            {
-                throw new InvalidOperationException("No AttributeKey instances have been attached.");
-            }
-
             var destination = new Destination
             {
                 Name = values["Name"],
@@ -89,7 +85,7 @@ namespace SmartRoutes.SrdsReader.Parsers
                 string value = values[attributeKeyName];
 
                 // create the child AttributeValue, with a parsed object value
-                destination.Attributes.Add(new AttributeValue
+                destination.AttributeValues.Add(new AttributeValue
                 {
                     AttributeKey = attributeKey,
                     Value = _stringParser.Parse(attributeKey.TypeName, value)
