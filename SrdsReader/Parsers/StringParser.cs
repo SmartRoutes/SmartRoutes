@@ -17,7 +17,7 @@ namespace SmartRoutes.SrdsReader.Parsers
         {
             // initialize the dictionary of different string parsers
             Type thisType = typeof (StringParser);
-            MethodInfo[] stringParsers = thisType.GetMethods(BindingFlags.Static)
+            MethodInfo[] stringParsers = thisType.GetMethods(BindingFlags.Static | BindingFlags.NonPublic)
                 .Where(m =>
                     m.Name.StartsWith("Parse") &&
                     m.GetParameters().Length == 1 &&
@@ -45,6 +45,11 @@ namespace SmartRoutes.SrdsReader.Parsers
             }
         }
 
+        public object Parse(string typeName, string value)
+        {
+            return GetStringParser(typeName)(value);
+        }
+
         private Func<string, object> GetStringParser(string typeName)
         {
             // get the type
@@ -69,12 +74,7 @@ namespace SmartRoutes.SrdsReader.Parsers
             return StringParsers[type];
         }
 
-        public object Parse(string typeName, string value)
-        {
-            return GetStringParser(typeName)(value);
-        }
-
-        public static string ParseString(string value)
+        private static string ParseString(string value)
         {
             return value;
         }
