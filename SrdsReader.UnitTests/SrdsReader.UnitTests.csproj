@@ -65,13 +65,13 @@
       <Project>{711cc508-53a8-4edb-bbca-b911935da4b0}</Project>
       <Name>Model</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Scraper.Test\Scraper.Test.csproj">
+    <ProjectReference Include="..\Scraper.Test\Reader.Test.csproj">
       <Project>{1a9691a6-011c-4e3e-b84f-bf8461999813}</Project>
-      <Name>Scraper.Test</Name>
+      <Name>Reader.Test</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Scraper\Scraper.csproj">
+    <ProjectReference Include="..\Scraper\Reader.csproj">
       <Project>{4401fe23-f94a-4eda-aa76-ccd53548e10e}</Project>
-      <Name>Scraper</Name>
+      <Name>Reader</Name>
     </ProjectReference>
     <ProjectReference Include="..\SrdsReader\SrdsReader.csproj">
       <Project>{8aabf9f7-1350-4e29-89ce-4e875ecef57f}</Project>

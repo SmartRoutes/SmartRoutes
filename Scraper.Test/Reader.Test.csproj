@@ -6,7 +6,7 @@
     <ProjectGuid>{1A9691A6-011C-4E3E-B84F-BF8461999813}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SmartRoutes.Scraper.Test</RootNamespace>
+    <RootNamespace>SmartRoutes.Reader.Test</RootNamespace>
     <AssemblyName>$(RootNamespace)</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -62,9 +62,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Scraper\Scraper.csproj">
+    <ProjectReference Include="..\Scraper\Reader.csproj">
       <Project>{4401fe23-f94a-4eda-aa76-ccd53548e10e}</Project>
-      <Name>Scraper</Name>
+      <Name>Reader</Name>
     </ProjectReference>
   </ItemGroup>
   <Choose>

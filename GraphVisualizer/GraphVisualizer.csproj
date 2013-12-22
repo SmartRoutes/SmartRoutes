@@ -126,13 +126,13 @@
       <Project>{711cc508-53a8-4edb-bbca-b911935da4b0}</Project>
       <Name>Model</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Scraper\Scraper.csproj">
+    <ProjectReference Include="..\Scraper\Reader.csproj">
       <Project>{4401fe23-f94a-4eda-aa76-ccd53548e10e}</Project>
-      <Name>Scraper</Name>
+      <Name>Reader</Name>
     </ProjectReference>
-    <ProjectReference Include="..\SortaScraper\SortaScraper.csproj">
+    <ProjectReference Include="..\SortaScraper\GtfsReader.csproj">
       <Project>{00d91962-12c1-4729-a893-8beeb1599c5e}</Project>
-      <Name>SortaScraper</Name>
+      <Name>GtfsReader</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
