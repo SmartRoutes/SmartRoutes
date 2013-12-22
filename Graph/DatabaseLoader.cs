@@ -11,9 +11,9 @@ namespace SmartRoutes.Graph
 {
     class DatabaseLoader
     {
-        private readonly IEntityCollectionParser _parser;
+        private readonly IGtfsCollectionParser _parser;
 
-        public DatabaseLoader(IEntityCollectionParser parser)
+        public DatabaseLoader(IGtfsCollectionParser parser)
         {
             _parser = parser;
         }
@@ -21,7 +21,7 @@ namespace SmartRoutes.Graph
         public async Task loadDatabaseFromFile(Byte[] fileBytes)
         {
             Console.WriteLine("Parsing entity collection from file");
-            EntityCollection collection = _parser.Parse(fileBytes);
+            GtfsCollection collection = _parser.Parse(fileBytes);
 
             using (var ctx = new Entities())
             {

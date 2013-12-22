@@ -2,8 +2,8 @@
 
 namespace SmartRoutes.GtfsReader.Parsers
 {
-    public interface IEntityCollectionParser
+    public interface IGtfsCollectionParser
     {
-        EntityCollection Parse(byte[] bytes);
+        GtfsCollection Parse(byte[] bytes);
     }
 }

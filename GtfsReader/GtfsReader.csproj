@@ -46,9 +46,9 @@
   <ItemGroup>
     <Compile Include="Parsers\AgencyCsvStreamParser.cs" />
     <Compile Include="Parsers\ArchiveParser.cs" />
-    <Compile Include="Parsers\EntityCollectionParser.cs" />
+    <Compile Include="Parsers\GtfsCollectionParser.cs" />
     <Compile Include="Parsers\IArchiveParser.cs" />
-    <Compile Include="Parsers\IEntityCollectionParser.cs" />
+    <Compile Include="Parsers\IGtfsCollectionParser.cs" />
     <Compile Include="Parsers\ServiceExceptionCsvStreamParser.cs" />
     <Compile Include="Parsers\StopTimeCsvStreamParser.cs" />
     <Compile Include="Parsers\ShapePointCsvStreamParser.cs" />
@@ -57,9 +57,9 @@
     <Compile Include="Parsers\StopCsvStreamParser.cs" />
     <Compile Include="Parsers\RouteCsvStreamParser.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Scrapers\IEntityCollectionScraper.cs" />
-    <Compile Include="Support\EntityCollection.cs" />
-    <Compile Include="Scrapers\EntityCollectionScraper.cs" />
+    <Compile Include="Readers\IGtfsCollectionDownloader.cs" />
+    <Compile Include="Support\GtfsCollection.cs" />
+    <Compile Include="Readers\GtfsCollectionDownloader.cs" />
     <Compile Include="Support\OfflineSortaClient.cs" />
     <Compile Include="Support\OnlineSortaClient.cs" />
     <Compile Include="Support\ISortaClient.cs" />

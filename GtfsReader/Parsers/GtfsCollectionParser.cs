@@ -10,7 +10,7 @@ using SmartRoutes.Reader;
 
 namespace SmartRoutes.GtfsReader.Parsers
 {
-    public class EntityCollectionParser : IEntityCollectionParser
+    public class GtfsCollectionParser : IGtfsCollectionParser
     {
         private const double MaxFeetBetweenTransfers = 500;
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
@@ -24,7 +24,7 @@ namespace SmartRoutes.GtfsReader.Parsers
         private readonly ICsvStreamParser<StopTime> _stopTimeParser;
         private readonly ICsvStreamParser<Trip> _tripParser;
 
-        public EntityCollectionParser(ICsvStreamParser<Agency> agencyParser, ICsvStreamParser<Route> routeParser, ICsvStreamParser<Service> serviceParser, ICsvStreamParser<ServiceException> serviceExceptionParser, ICsvStreamParser<ShapePoint> shapePointParser, ICsvStreamParser<StopTime> stopTimeParser, ICsvStreamParser<Stop> stopParser, ICsvStreamParser<Trip> tripParser)
+        public GtfsCollectionParser(ICsvStreamParser<Agency> agencyParser, ICsvStreamParser<Route> routeParser, ICsvStreamParser<Service> serviceParser, ICsvStreamParser<ServiceException> serviceExceptionParser, ICsvStreamParser<ShapePoint> shapePointParser, ICsvStreamParser<StopTime> stopTimeParser, ICsvStreamParser<Stop> stopParser, ICsvStreamParser<Trip> tripParser)
         {
             _agencyParser = agencyParser;
             _routeParser = routeParser;
@@ -36,10 +36,10 @@ namespace SmartRoutes.GtfsReader.Parsers
             _tripParser = tripParser;
         }
 
-        public EntityCollection Parse(byte[] bytes)
+        public GtfsCollection Parse(byte[] bytes)
         {
             // initialize the collection
-            var collection = new EntityCollection();
+            var collection = new GtfsCollection();
 
             // extract files from the zip
             Logger.Trace("Parsing the zip file.");
@@ -122,7 +122,7 @@ namespace SmartRoutes.GtfsReader.Parsers
             }
         }
 
-        private void Associate(EntityCollection collection)
+        private void Associate(GtfsCollection collection)
         {
             // Route.Agency
             IDictionary<string, Agency> agencies = collection.Agencies.ToDictionary(a => a.Id);

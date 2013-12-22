@@ -6,24 +6,24 @@ using SmartRoutes.GtfsReader.Support;
 using SmartRoutes.Model.Gtfs;
 using SmartRoutes.Reader;
 
-namespace SmartRoutes.GtfsReader.Scrapers
+namespace SmartRoutes.GtfsReader.Readers
 {
-    public class EntityCollectionScraper : IEntityCollectionScraper
+    public class GtfsCollectionDownloader : IGtfsCollectionDownloader
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
         private readonly IArchiveParser _archiveParser;
-        private readonly IEntityCollectionParser _entityCollectionParser;
+        private readonly IGtfsCollectionParser _gtfsCollectionParser;
         private readonly ISortaClient _sortaClient;
 
-        public EntityCollectionScraper(ISortaClient sortaClient, IArchiveParser archiveParser, IEntityCollectionParser entityCollectionParser)
+        public GtfsCollectionDownloader(ISortaClient sortaClient, IArchiveParser archiveParser, IGtfsCollectionParser gtfsCollectionParser)
         {
             _sortaClient = sortaClient;
             _archiveParser = archiveParser;
-            _entityCollectionParser = entityCollectionParser;
+            _gtfsCollectionParser = gtfsCollectionParser;
         }
 
-        public async Task<EntityCollection> Scrape(Archive currentArchive)
+        public async Task<GtfsCollection> Download(Archive currentArchive)
         {
             Archive newestArchive;
 
@@ -61,7 +61,7 @@ namespace SmartRoutes.GtfsReader.Scrapers
                 currentArchive.Hash == newestArchive.Hash)
             {
                 Logger.Trace("The newest archive has the same hash, but a different ETag from the previous.");
-                return new EntityCollection
+                return new GtfsCollection
                 {
                     Archive = newestArchive,
                     ContainsEntities = false
@@ -70,7 +70,7 @@ namespace SmartRoutes.GtfsReader.Scrapers
 
             // parse the entities
             Logger.Trace("The newest archive is different. Parsing the newest archive.");
-            EntityCollection entities = _entityCollectionParser.Parse(response.Content);
+            GtfsCollection entities = _gtfsCollectionParser.Parse(response.Content);
             entities.Archive = newestArchive;
             entities.ContainsEntities = true;
 

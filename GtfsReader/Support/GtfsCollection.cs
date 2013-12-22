@@ -3,7 +3,7 @@ using SmartRoutes.Model.Gtfs;
 
 namespace SmartRoutes.GtfsReader.Support
 {
-    public class EntityCollection
+    public class GtfsCollection
     {
         public Archive Archive { get; set; }
         public bool ContainsEntities { get; set; }

@@ -15,7 +15,7 @@ namespace SmartRoutes.Graph
     public class Graph : IGraph
     {
         private readonly IGraphBuilder Builder;
-        private EntityCollection Collection;
+        private GtfsCollection Collection;
         private Destination[] Destinations;
         public INode[] GraphNodes { get; private set; }
 
@@ -37,7 +37,7 @@ namespace SmartRoutes.Graph
 
         public void GetGtfsEntities()
         {
-            Collection = new EntityCollection();
+            Collection = new GtfsCollection();
 
             using (var ctx = new Entities())
             {

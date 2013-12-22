@@ -24,7 +24,7 @@ namespace SmartRoutes.GraphVisualizer
             IKernel kernel = new StandardKernel(new GraphModule());
 
             kernel.Bind(c => c
-                .FromAssemblyContaining(typeof(IEntityCollectionParser))
+                .FromAssemblyContaining(typeof(IGtfsCollectionParser))
                 .SelectAllClasses()
                 .BindAllInterfaces());
 

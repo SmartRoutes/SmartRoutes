@@ -5,7 +5,7 @@ using Ninject;
 using Ninject.Extensions.Conventions;
 using SmartRoutes.GtfsReader.Parsers;
 using SmartRoutes.Graph.Node;
-using SmartRoutes.GtfsReader.Scrapers;
+using SmartRoutes.GtfsReader.Readers;
 using SmartRoutes.Model;
 
 namespace SmartRoutes.Graph
@@ -25,7 +25,7 @@ namespace SmartRoutes.Graph
                 IKernel kernel = new StandardKernel(new GraphModule());
 
                 kernel.Bind(c => c
-                    .FromAssemblyContaining(typeof(IEntityCollectionParser), typeof(IEntityCollectionScraper))
+                    .FromAssemblyContaining(typeof(IGtfsCollectionParser), typeof(IGtfsCollectionDownloader))
                     .SelectAllClasses()
                     .BindAllInterfaces());
 

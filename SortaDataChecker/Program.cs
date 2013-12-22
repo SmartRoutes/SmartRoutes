@@ -4,7 +4,7 @@ using Ninject;
 using Ninject.Extensions.Conventions;
 using Ninject.Parameters;
 using NLog;
-using SmartRoutes.GtfsReader.Scrapers;
+using SmartRoutes.GtfsReader.Readers;
 using SmartRoutes.GtfsReader.Support;
 
 namespace SmartRoutes.SortaDataChecker
@@ -51,7 +51,7 @@ namespace SmartRoutes.SortaDataChecker
 
                 IKernel kernel = new StandardKernel();
                 kernel.Bind(c => c
-                    .FromAssemblyContaining(typeof (IEntityCollectionScraper))
+                    .FromAssemblyContaining(typeof (IGtfsCollectionDownloader))
                     .SelectAllClasses()
                     .BindAllInterfaces());
 
@@ -65,7 +65,7 @@ namespace SmartRoutes.SortaDataChecker
                     sortaClientParameter = new ConstructorArgument("sortaClient", new OnlineSortaClient());
                 }
 
-                var dataChecker = new DataChecker(kernel.Get<IEntityCollectionScraper>(sortaClientParameter));
+                var dataChecker = new DataChecker(kernel.Get<IGtfsCollectionDownloader>(sortaClientParameter));
                 dataChecker.UpdateDatabase(force).Wait();
 
                 Logger.Trace("SortaDataChecker has completed.");
