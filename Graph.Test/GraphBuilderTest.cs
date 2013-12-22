@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SmartRoutes.Graph.Node;
-using SmartRoutes.Model.Odjfs.ChildCares;
 using SmartRoutes.Model.Gtfs;
+using SmartRoutes.Model.Srds;
 
 namespace SmartRoutes.Graph.Test
 {
@@ -15,12 +15,12 @@ namespace SmartRoutes.Graph.Test
         public void Trips_One()
         {
             // ARRANGE
-            IMetroNode metroNodeMaker = new MetroNode();
-            IGraphBuilder graphBuilder = new GraphBuilder(metroNodeMaker);
+            IGtfsNode gtfsNodeMaker = new GtfsNode();
+            IGraphBuilder graphBuilder = new GraphBuilder(gtfsNodeMaker);
             StopTime[] trip = GetStopTimeCircuit(new DateTime(1970, 1, 1, 10, 0, 0), 1, 5);
 
             // ACT
-            INode[] nodes = graphBuilder.BuildGraph(trip, Enumerable.Empty<ChildCare>());
+            INode[] nodes = graphBuilder.BuildGraph(trip, Enumerable.Empty<Destination>());
 
             // VERIFY
             INode[][] subgraphs = GetSortedDisconnectedSubgraphs(nodes).ToArray();
@@ -31,13 +31,13 @@ namespace SmartRoutes.Graph.Test
         public void Trips_Two_NoOverlappingTimes()
         {
             // ARRANGE
-            IMetroNode metroNodeMaker = new MetroNode();
-            IGraphBuilder graphBuilder = new GraphBuilder(metroNodeMaker);
+            IGtfsNode gtfsNodeMaker = new GtfsNode();
+            IGraphBuilder graphBuilder = new GraphBuilder(gtfsNodeMaker);
             StopTime[] trip1 = GetStopTimeCircuit(new DateTime(1970, 1, 1, 10, 0, 0), 1, 5);
             StopTime[] trip2 = GetStopTimeCircuit(new DateTime(1970, 1, 1, 18, 0, 0), 2, 7);
 
             // ACT
-            INode[] nodes = graphBuilder.BuildGraph(trip1.Concat(trip2), Enumerable.Empty<ChildCare>());
+            INode[] nodes = graphBuilder.BuildGraph(trip1.Concat(trip2), Enumerable.Empty<Destination>());
 
             // ASSERT
             INode[][] subgraphs = GetSortedDisconnectedSubgraphs(nodes).ToArray();
@@ -49,13 +49,13 @@ namespace SmartRoutes.Graph.Test
         public void Trips_Two_OverlappingTimes()
         {
             // ARRANGE
-            IMetroNode metroNodeMaker = new MetroNode();
-            IGraphBuilder graphBuilder = new GraphBuilder(metroNodeMaker);
+            IGtfsNode gtfsNodeMaker = new GtfsNode();
+            IGraphBuilder graphBuilder = new GraphBuilder(gtfsNodeMaker);
             StopTime[] trip1 = GetStopTimeCircuit(new DateTime(1970, 1, 1, 10, 0, 0), 1, 5);
             StopTime[] trip2 = GetStopTimeCircuit(new DateTime(1970, 1, 1, 10, 2, 0), 2, 7);
 
             // ACT
-            INode[] nodes = graphBuilder.BuildGraph(trip1.Concat(trip2), Enumerable.Empty<ChildCare>());
+            INode[] nodes = graphBuilder.BuildGraph(trip1.Concat(trip2), Enumerable.Empty<Destination>());
 
             // ASSERT
             INode[][] subgraphs = GetSortedDisconnectedSubgraphs(nodes).ToArray();
@@ -67,8 +67,8 @@ namespace SmartRoutes.Graph.Test
         public void Transfers_SameStop()
         {
             // ARRANGE
-            IMetroNode metroNodeMaker = new MetroNode();
-            IGraphBuilder graphBuilder = new GraphBuilder(metroNodeMaker);
+            IGtfsNode gtfsNodeMaker = new GtfsNode();
+            IGraphBuilder graphBuilder = new GraphBuilder(gtfsNodeMaker);
 
             var stop = new Stop {Id = 1};
             stop.CloseStops.Add(stop);
@@ -94,7 +94,7 @@ namespace SmartRoutes.Graph.Test
             IEnumerable<StopTime> stoptimes = new[] {stopTime1, stopTime2};
 
             // ACT
-            INode[] nodes = graphBuilder.BuildGraph(stoptimes, Enumerable.Empty<ChildCare>());
+            INode[] nodes = graphBuilder.BuildGraph(stoptimes, Enumerable.Empty<Destination>());
 
             // ASSERT
             INode[][] subgraphs = GetSortedDisconnectedSubgraphs(nodes).ToArray();
@@ -107,8 +107,8 @@ namespace SmartRoutes.Graph.Test
         public void Transfers_DifferentStop()
         {
             // ARRANGE
-            IMetroNode metroNodeMaker = new MetroNode();
-            IGraphBuilder graphBuilder = new GraphBuilder(metroNodeMaker);
+            IGtfsNode gtfsNodeMaker = new GtfsNode();
+            IGraphBuilder graphBuilder = new GraphBuilder(gtfsNodeMaker);
 
             var stop1 = new Stop {Id = 1, Latitude = 0.0, Longitude = 0.00001};
             stop1.CloseStops.Add(stop1);
@@ -138,7 +138,7 @@ namespace SmartRoutes.Graph.Test
             IEnumerable<StopTime> stoptimes = new[] {stopTime1, stopTime2};
 
             // ACT
-            INode[] nodes = graphBuilder.BuildGraph(stoptimes, Enumerable.Empty<ChildCare>());
+            INode[] nodes = graphBuilder.BuildGraph(stoptimes, Enumerable.Empty<Destination>());
 
             // ASSERT
             INode[][] subgraphs = GetSortedDisconnectedSubgraphs(nodes).ToArray();
@@ -151,8 +151,8 @@ namespace SmartRoutes.Graph.Test
         public void Transfers_DifferentStop_NotEnoughTime()
         {
             // ARRANGE
-            IMetroNode metroNodeMaker = new MetroNode();
-            IGraphBuilder graphBuilder = new GraphBuilder(metroNodeMaker);
+            IGtfsNode gtfsNodeMaker = new GtfsNode();
+            IGraphBuilder graphBuilder = new GraphBuilder(gtfsNodeMaker);
 
             var stop1 = new Stop {Id = 1, Latitude = 0.0, Longitude = 0.00001};
             stop1.CloseStops.Add(stop1);
@@ -182,7 +182,7 @@ namespace SmartRoutes.Graph.Test
             IEnumerable<StopTime> stoptimes = new[] {stopTime1, stopTime2};
 
             // ACT
-            INode[] nodes = graphBuilder.BuildGraph(stoptimes, Enumerable.Empty<ChildCare>());
+            INode[] nodes = graphBuilder.BuildGraph(stoptimes, Enumerable.Empty<Destination>());
 
             // ASSERT
             INode[][] subgraphs = GetSortedDisconnectedSubgraphs(nodes).ToArray();
@@ -193,8 +193,8 @@ namespace SmartRoutes.Graph.Test
         public void ChildCares_One()
         {
             // ARRANGE
-            IMetroNode metroNodeMaker = new MetroNode();
-            IGraphBuilder graphBuilder = new GraphBuilder(metroNodeMaker);
+            IGtfsNode gtfsNodeMaker = new GtfsNode();
+            IGraphBuilder graphBuilder = new GraphBuilder(gtfsNodeMaker);
 
             var stop = new Stop {Id = 1, Latitude = 0.0, Longitude = 0.00001};
             var time = new DateTime(1970, 1, 1, 10, 0, 0);
@@ -207,7 +207,7 @@ namespace SmartRoutes.Graph.Test
                 Trip = new Trip { ShapeId = 0 }
             };
 
-            var childCare = new LicensedCenter { Id = 1, Latitude = 0.0, Longitude = 0.00002 };
+            var childCare = new Destination { Id = 1, Latitude = 0.0, Longitude = 0.00002 };
 
             // ACT
             INode[] nodes = graphBuilder.BuildGraph(new[] {stopTime}, new[] {childCare});
@@ -225,8 +225,8 @@ namespace SmartRoutes.Graph.Test
         public void ChildCares_One_NotCloseEnough()
         {
             // ARRANGE
-            IMetroNode metroNodeMaker = new MetroNode();
-            IGraphBuilder graphBuilder = new GraphBuilder(metroNodeMaker);
+            IGtfsNode gtfsNodeMaker = new GtfsNode();
+            IGraphBuilder graphBuilder = new GraphBuilder(gtfsNodeMaker);
 
             var stop = new Stop { Id = 1, Latitude = 0.0, Longitude = 0.00001 };
             var time = new DateTime(1970, 1, 1, 10, 0, 0);
@@ -239,7 +239,7 @@ namespace SmartRoutes.Graph.Test
                 Trip = new Trip { ShapeId = 0 }
             };
 
-            var childCare = new LicensedCenter { Id = 1, Latitude = 0.0, Longitude = 1.0 };
+            var childCare = new Destination { Id = 1, Latitude = 0.0, Longitude = 1.0 };
 
             // ACT
             INode[] nodes = graphBuilder.BuildGraph(new[] { stopTime }, new[] { childCare });
@@ -259,8 +259,8 @@ namespace SmartRoutes.Graph.Test
         public void ChildCares_Two()
         {
             // ARRANGE
-            IMetroNode metroNodeMaker = new MetroNode();
-            IGraphBuilder graphBuilder = new GraphBuilder(metroNodeMaker);
+            IGtfsNode gtfsNodeMaker = new GtfsNode();
+            IGraphBuilder graphBuilder = new GraphBuilder(gtfsNodeMaker);
 
             var stop1 = new Stop { Id = 1, Latitude = 0.0, Longitude = 0.00001 };
             var stop2 = new Stop { Id = 2, Latitude = 0.0, Longitude = 0.00002 };
@@ -283,7 +283,7 @@ namespace SmartRoutes.Graph.Test
                 Trip = new Trip { ShapeId = 0 }
             };
 
-            var childCare = new LicensedCenter { Id = 1, Latitude = 0.0, Longitude = 0.000015 };
+            var childCare = new Destination { Id = 1, Latitude = 0.0, Longitude = 0.000015 };
 
             // ACT
             INode[] nodes = graphBuilder.BuildGraph(new[] { stopTime1, stopTime2 }, new[] { childCare });

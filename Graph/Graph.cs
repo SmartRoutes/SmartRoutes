@@ -1,18 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Data.Entity;
 using SmartRoutes.Database;
-using SmartRoutes.Database.Contexts;
 using SmartRoutes.Graph.Node;
 using SmartRoutes.GtfsReader.Support;
-using SmartRoutes.GtfsReader.Scrapers;
 using SmartRoutes.Model.Gtfs;
-using SmartRoutes.Model.Odjfs.ChildCares;
 using SmartRoutes.Heap;
 using SmartRoutes.Model;
+using SmartRoutes.Model.Srds;
 
 namespace SmartRoutes.Graph
 {
@@ -20,30 +16,30 @@ namespace SmartRoutes.Graph
     {
         private readonly IGraphBuilder Builder;
         private EntityCollection Collection;
-        private ChildCare[] ChildCares;
+        private Destination[] Destinations;
         public INode[] GraphNodes { get; private set; }
 
         public Graph(IGraphBuilder Builder, IFibonacciHeap<INode, TimeSpan> Queue)
         {
             this.Builder = Builder;
-            GetSortaEntities();
-            GetChildCares();
-            GraphNodes = Builder.BuildGraph(Collection.StopTimes, ChildCares);
+            GetGtfsEntities();
+            GetDestinations();
+            GraphNodes = Builder.BuildGraph(Collection.StopTimes, Destinations);
         }
 
-        public void GetChildCares()
+        public void GetDestinations()
         {
-            using (var ctx = new OdjfsEntities())
+            using (var ctx = new Entities())
             {
-                ChildCares = (from c in ctx.ChildCares select c).ToArray();
+                Destinations = (from c in ctx.Destinations select c).ToArray();
             }
         }
 
-        public void GetSortaEntities()
+        public void GetGtfsEntities()
         {
             Collection = new EntityCollection();
 
-            using (var ctx = new SortaEntities())
+            using (var ctx = new Entities())
             {
                 Collection.StopTimes = (from e in ctx.StopTimes select e).ToList();
                 Collection.Stops = (from e in ctx.Stops select e).Include(s => s.CloseStops).ToList();
@@ -84,12 +80,12 @@ namespace SmartRoutes.Graph
             return closestStop;
         }
 
-        public IMetroNode closestMetroNode(ILocation location, DateTime Time, TimeDirection Direction)
+        public IGtfsNode closestMetroNode(ILocation location, DateTime Time, TimeDirection Direction)
         {
             Stop closestStop = closestMetroStop(location);
 
             // retrieve metronodes corresponding to this stop
-            List<IMetroNode> nodes = null;
+            List<IGtfsNode> nodes = null;
             if (!Builder.StopToNodes.TryGetValue(closestStop.Id, out nodes))
             {
                 throw new Exception("Failed to find metro nodes associated with closest stop.");
@@ -101,7 +97,7 @@ namespace SmartRoutes.Graph
             // sort nodes by increasing time;
             var nodesArray = nodes.ToArray();
             Array.Sort(nodesArray, new Comparers.ComparerForTransferSorting());
-            IMetroNode returnNode = null;
+            IGtfsNode returnNode = null;
 
             if (Direction == TimeDirection.Forwards)
             {
@@ -136,10 +132,10 @@ namespace SmartRoutes.Graph
             return returnNode;
         }
 
-        public List<IMetroNode> GetChildCareNeighbors(IChildcareNode childCareNode, TimeDirection Direction)
+        public List<IGtfsNode> GetChildCareNeighbors(IDestinationNode childCareNode, TimeDirection Direction)
         {
             List<NodeBase> UniqueNodeBases = new List<NodeBase>();
-            List<IMetroNode> ReturnNodes = new List<IMetroNode>();
+            List<IGtfsNode> ReturnNodes = new List<IGtfsNode>();
 
             var current = childCareNode;
             bool done = false;
@@ -149,7 +145,7 @@ namespace SmartRoutes.Graph
                     ? current.TimeBackwardNeighbors
                     : current.TimeForwardNeighbors;
 
-                foreach (var neighbor in neighbors.OfType<IMetroNode>())
+                foreach (var neighbor in neighbors.OfType<IGtfsNode>())
                 {
                     if (!UniqueNodeBases.Contains(neighbor.BaseNode))
                     {
@@ -160,7 +156,7 @@ namespace SmartRoutes.Graph
 
                 done = true;
 
-                foreach (var neighbor in neighbors.OfType<IChildcareNode>())
+                foreach (var neighbor in neighbors.OfType<IDestinationNode>())
                 {
                     if (neighbor.BaseNode == current.BaseNode)
                     {

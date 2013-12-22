@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using SmartRoutes.Database;
-using SmartRoutes.Database.Contexts;
 using SmartRoutes.GtfsReader.Support;
 using SmartRoutes.GtfsReader.Parsers;
 
@@ -24,11 +23,11 @@ namespace SmartRoutes.Graph
             Console.WriteLine("Parsing entity collection from file");
             EntityCollection collection = _parser.Parse(fileBytes);
 
-            using (var ctx = new SortaEntities())
+            using (var ctx = new Entities())
             {
                 ctx.Truncate();
 
-                using (var inserter = new FastInserter<SortaEntities>(ctx, 1000))
+                using (var inserter = new FastInserter<Entities>(ctx, 1000))
                 {
                     Console.WriteLine(String.Format("Adding {0} new Agency records.", collection.Agencies.Count()));
                     await inserter.AddRangeAsync(collection.Agencies);

@@ -14,8 +14,8 @@ namespace SmartRoutes.Graph
     {
         public override void Load()
         {
-            Bind<IMetroNode>().To<MetroNode>();
-            Bind<IChildcareNode>().To<ChildCareNode>();
+            Bind<IGtfsNode>().To<GtfsNode>();
+            Bind<IDestinationNode>().To<DestinationNode>();
             Bind<IGraphBuilder>().To<GraphBuilder>();
             Bind<IGraph>().To<Graph>();
             Bind<IFibonacciHeap<INode, TimeSpan>>()

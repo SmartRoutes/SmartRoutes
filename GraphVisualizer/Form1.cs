@@ -1,25 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using ILNumerics;
 using ILNumerics.Drawing;
 using ILNumerics.Drawing.Plotting;
 using SmartRoutes.GtfsReader.Parsers;
-using SmartRoutes.GtfsReader.Support;
 using Ninject;
 using Ninject.Extensions.Conventions;
-using SmartRoutes.Model.Gtfs;
 using SmartRoutes.Graph;
 using SmartRoutes.Graph.Node;
 using SmartRoutes.Graph.Comparers;
-using System.IO;
-using SmartRoutes.Model.Odjfs;
 
 namespace SmartRoutes.GraphVisualizer
 {

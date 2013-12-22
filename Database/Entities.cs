@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity;
+using System.Data.Entity.Infrastructure;
+using System.Linq;
+using System.Threading.Tasks;
 using SmartRoutes.Model.Gtfs;
 using SmartRoutes.Model.Srds;
 
@@ -9,6 +12,11 @@ namespace SmartRoutes.Database
 {
     public class Entities : DbContext
     {
+        public Entities()
+        {
+            ((IObjectContextAdapter)this).ObjectContext.CommandTimeout = 180;
+        }
+
         // Destination entities
         public IDbSet<AttributeKey> AttributeKeys { get; set; }
         public IDbSet<AttributeValue> AttributeValues { get; set; }
@@ -76,6 +84,58 @@ namespace SmartRoutes.Database
                     .ToTable("CloseStop")
                     .MapLeftKey("StopId")
                     .MapRightKey("CloseStopId"));
+        }
+
+        protected string GetTableName(Type type)
+        {
+            return string.Format("dbo.{0}", type.Name);
+        }
+
+        public async Task TruncateAsync()
+        {
+            foreach (string query in GetTruncateQueries())
+            {
+                await Database.ExecuteSqlCommandAsync(query);
+            }
+        }
+
+        public void Truncate()
+        {
+            foreach (string query in GetTruncateQueries())
+            {
+                Database.ExecuteSqlCommand(query);
+            }
+        }
+
+        protected virtual bool ShouldTruncate(string tableName)
+        {
+            return true;
+        }
+
+        private IEnumerable<string> GetTruncateQueries()
+        {
+            if (!Database.Exists())
+            {
+                yield break;
+            }
+
+            string[] queries =
+            {
+                "ALTER TABLE {0} NOCHECK CONSTRAINT all",
+                "DELETE FROM {0}",
+                "ALTER TABLE {0} WITH CHECK CHECK CONSTRAINT all",
+                "IF EXISTS (SELECT 1 FROM sys.objects o INNER JOIN sys.columns c ON o.object_id = c.object_id WHERE c.is_identity = 1 AND o.[object_id] = object_id('{0}')) DBCC CHECKIDENT ('{0}', RESEED, 0)"
+            };
+
+            string[] tableNames = this.GetTableNames().ToArray();
+
+            foreach (string query in queries)
+            {
+                foreach (string tableName in tableNames.Where(ShouldTruncate))
+                {
+                    yield return string.Format(query, tableName);
+                }
+            }
         }
     }
 }

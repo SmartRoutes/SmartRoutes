@@ -3,7 +3,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using NLog;
 using SmartRoutes.Database;
-using SmartRoutes.Database.Contexts;
 using SmartRoutes.Model.Gtfs;
 using SmartRoutes.GtfsReader.Scrapers;
 using SmartRoutes.GtfsReader.Support;
@@ -24,7 +23,7 @@ namespace SmartRoutes.SortaDataChecker
         public async Task UpdateDatabase(bool force)
         {
             Logger.Trace("Initializing SortaEntities.");
-            using (var ctx = new SortaEntities())
+            using (var ctx = new Entities())
             {
                 Archive currentArchive = null;
                 if (!force)
@@ -76,7 +75,7 @@ namespace SmartRoutes.SortaDataChecker
                 ctx.Configuration.AutoDetectChangesEnabled = false;
                 ctx.Configuration.ValidateOnSaveEnabled = false;
 
-                using (var inserter = new FastInserter<SortaEntities>(ctx, 1000))
+                using (var inserter = new FastInserter<Entities>(ctx, 1000))
                 {
                     //  persist all of the new entities
                     Logger.Trace("Adding {0} new Agency records.", entityCollection.Agencies.Count());
