@@ -10,14 +10,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{759C8E
 		.nuget\NuGet.targets = .nuget\NuGet.targets
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Model", "Model\Model.csproj", "{711CC508-53A8-4EDB-BBCA-B911935DA4B0}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reader", "Scraper\Reader.csproj", "{4401FE23-F94A-4EDA-AA76-CCD53548E10E}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GtfsReader", "SortaScraper\GtfsReader.csproj", "{00D91962-12C1-4729-A893-8BEEB1599C5E}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Database", "Database\Database.csproj", "{1E30E5FD-25B1-4F18-A2C2-5F8AC2B80683}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".build", ".build", "{3A86964F-7AEE-44BF-B2A5-DDD1C971FF4D}"
 	ProjectSection(SolutionItems) = preProject
 		Build.proj = Build.proj
@@ -25,6 +17,14 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".build", ".build", "{3A8696
 		.build\MSBuild.Community.Tasks.targets = .build\MSBuild.Community.Tasks.targets
 		.build\Version.targets = .build\Version.targets
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Model", "Model\Model.csproj", "{711CC508-53A8-4EDB-BBCA-B911935DA4B0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reader", "Reader\Reader.csproj", "{4401FE23-F94A-4EDA-AA76-CCD53548E10E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GtfsReader", "GtfsReader\GtfsReader.csproj", "{00D91962-12C1-4729-A893-8BEEB1599C5E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Database", "Database\Database.csproj", "{1E30E5FD-25B1-4F18-A2C2-5F8AC2B80683}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SortaDataChecker", "SortaDataChecker\SortaDataChecker.csproj", "{2DF9E208-BEF4-4BC3-AE8D-6CE3FCF729EC}"
 EndProject
@@ -34,7 +34,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GraphVisualizer", "GraphVis
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Heap", "Heap\Heap.csproj", "{B66C6D7D-6D28-41CD-9AD0-04A944ED5AF1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GtfsReader.UnitTests", "SortaScraper.Test\GtfsReader.UnitTests.csproj", "{995019AF-0B89-4104-8A91-6A35D6177C33}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GtfsReader.UnitTests", "GtfsReader.UnitTests\GtfsReader.UnitTests.csproj", "{995019AF-0B89-4104-8A91-6A35D6177C33}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{A7C97D81-BA09-405B-ABD7-23872311D68C}"
 EndProject
@@ -46,7 +46,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Heap.Test", "Heap.Test\Heap
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Graph.Test", "Graph.Test\Graph.Test.csproj", "{FD947449-37E6-462B-88B9-8326194990E6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reader.UnitTests", "Scraper.Test\Reader.UnitTests.csproj", "{1A9691A6-011C-4E3E-B84F-BF8461999813}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reader.UnitTests", "Reader.UnitTests\Reader.UnitTests.csproj", "{1A9691A6-011C-4E3E-B84F-BF8461999813}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dijkstras", "Dijkstras\Dijkstras.csproj", "{DCF5638F-CF4F-4502-B349-7F468942CA22}"
 EndProject

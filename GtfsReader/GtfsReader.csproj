@@ -69,7 +69,7 @@
       <Project>{711cc508-53a8-4edb-bbca-b911935da4b0}</Project>
       <Name>Model</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Scraper\Reader.csproj">
+    <ProjectReference Include="..\Reader\Reader.csproj">
       <Project>{4401fe23-f94a-4eda-aa76-ccd53548e10e}</Project>
       <Name>Reader</Name>
     </ProjectReference>

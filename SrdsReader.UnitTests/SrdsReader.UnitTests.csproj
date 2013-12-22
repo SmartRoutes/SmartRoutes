@@ -65,11 +65,11 @@
       <Project>{711cc508-53a8-4edb-bbca-b911935da4b0}</Project>
       <Name>Model</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Scraper.Test\Reader.UnitTests.csproj">
+    <ProjectReference Include="..\Reader.UnitTests\Reader.UnitTests.csproj">
       <Project>{1a9691a6-011c-4e3e-b84f-bf8461999813}</Project>
       <Name>Reader.UnitTests</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Scraper\Reader.csproj">
+    <ProjectReference Include="..\Reader\Reader.csproj">
       <Project>{4401fe23-f94a-4eda-aa76-ccd53548e10e}</Project>
       <Name>Reader</Name>
     </ProjectReference>

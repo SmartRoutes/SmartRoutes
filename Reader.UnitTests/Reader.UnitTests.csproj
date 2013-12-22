@@ -62,7 +62,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Scraper\Reader.csproj">
+    <ProjectReference Include="..\Reader\Reader.csproj">
       <Project>{4401fe23-f94a-4eda-aa76-ccd53548e10e}</Project>
       <Name>Reader</Name>
     </ProjectReference>
