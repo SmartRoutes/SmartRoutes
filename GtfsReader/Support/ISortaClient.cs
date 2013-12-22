@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
-using SmartRoutes.Scraper;
+using SmartRoutes.Reader;
 
-namespace SmartRoutes.SortaScraper.Support
+namespace SmartRoutes.GtfsReader.Support
 {
     public interface ISortaClient
     {

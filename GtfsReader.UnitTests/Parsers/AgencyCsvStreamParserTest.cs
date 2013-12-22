@@ -1,9 +1,9 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using SmartRoutes.GtfsReader.Parsers;
 using SmartRoutes.Model.Gtfs;
-using SmartRoutes.Scraper.Test.Support;
-using SmartRoutes.SortaScraper.Parsers;
+using SmartRoutes.Reader.UnitTests.Support;
 
-namespace SmartRoutes.SortaScraper.Test.Parsers
+namespace SmartRoutes.GtfsReader.UnitTests.Parsers
 {
     [TestClass]
     public class AgencyCsvStreamParserTest : AbstractCsvStreamParserTest<Agency>

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using SmartRoutes.Graph.Node;
 using SmartRoutes.Model;
 using SmartRoutes.Model.Odjfs.ChildCares;
-using SmartRoutes.SortaScraper.Support;
+using SmartRoutes.GtfsReader.Support;
 using SmartRoutes.Model.Gtfs;
 using SmartRoutes.Model.Odjfs;
 using Ninject;

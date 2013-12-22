@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using SmartRoutes.Model.Srds;
-using SmartRoutes.Scraper;
+using SmartRoutes.Reader;
 
 namespace SmartRoutes.SrdsReader.Parsers
 {

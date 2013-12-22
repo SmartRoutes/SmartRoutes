@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using SmartRoutes.Model.Gtfs;
 
-namespace SmartRoutes.SortaScraper.Support
+namespace SmartRoutes.GtfsReader.Support
 {
     public class EntityCollection
     {

@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Threading.Tasks;
 using NLog;
+using SmartRoutes.GtfsReader.Parsers;
+using SmartRoutes.GtfsReader.Support;
 using SmartRoutes.Model.Gtfs;
-using SmartRoutes.Scraper;
-using SmartRoutes.SortaScraper.Parsers;
-using SmartRoutes.SortaScraper.Support;
+using SmartRoutes.Reader;
 
-namespace SmartRoutes.SortaScraper.Scrapers
+namespace SmartRoutes.GtfsReader.Scrapers
 {
     public class EntityCollectionScraper : IEntityCollectionScraper
     {

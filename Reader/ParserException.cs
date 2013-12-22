@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SmartRoutes.Scraper
+namespace SmartRoutes.Reader
 {
     public class ParserException : Exception
     {

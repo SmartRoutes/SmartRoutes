@@ -1,6 +1,6 @@
-﻿using SmartRoutes.SortaScraper.Support;
+﻿using SmartRoutes.GtfsReader.Support;
 
-namespace SmartRoutes.SortaScraper.Parsers
+namespace SmartRoutes.GtfsReader.Parsers
 {
     public interface IEntityCollectionParser
     {

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace SmartRoutes.Scraper
+namespace SmartRoutes.Reader
 {
     public class ClientResponseHeaders : Dictionary<string, string[]>
     {

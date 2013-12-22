@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace SmartRoutes.Scraper.Test.Support
+namespace SmartRoutes.Reader.UnitTests.Support
 {
     public class PersonCsvStreamParser : CsvStreamParser<Person>
     {

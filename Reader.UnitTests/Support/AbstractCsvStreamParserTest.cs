@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace SmartRoutes.Scraper.Test.Support
+namespace SmartRoutes.Reader.UnitTests.Support
 {
     public abstract class AbstractCsvStreamParserTest<T>
     {

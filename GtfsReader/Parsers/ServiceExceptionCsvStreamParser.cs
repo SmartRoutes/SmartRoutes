@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Globalization;
 using SmartRoutes.Model.Gtfs;
-using SmartRoutes.Scraper;
+using SmartRoutes.Reader;
 
-namespace SmartRoutes.SortaScraper.Parsers
+namespace SmartRoutes.GtfsReader.Parsers
 {
     public class ServiceExceptionCsvStreamParser : CsvStreamParser<ServiceException>
     {

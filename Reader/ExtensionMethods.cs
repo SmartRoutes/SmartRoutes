@@ -2,7 +2,7 @@
 using System.Reflection;
 using System.Security.Cryptography;
 
-namespace SmartRoutes.Scraper
+namespace SmartRoutes.Reader
 {
     public static class ExtensionMethods
     {

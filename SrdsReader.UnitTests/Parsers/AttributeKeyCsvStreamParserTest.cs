@@ -1,7 +1,6 @@
-﻿using System.Collections.Generic;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SmartRoutes.Model.Srds;
-using SmartRoutes.Scraper.Test.Support;
+using SmartRoutes.Reader.UnitTests.Support;
 using SmartRoutes.SrdsReader.Parsers;
 
 namespace SrdsReader.UnitTests.Parsers

@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 
-namespace SmartRoutes.Scraper
+namespace SmartRoutes.Reader
 {
     public interface ICsvStreamParser<out TOut>
     {

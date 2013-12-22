@@ -1,8 +1,8 @@
 using System.Threading.Tasks;
+using SmartRoutes.GtfsReader.Support;
 using SmartRoutes.Model.Gtfs;
-using SmartRoutes.SortaScraper.Support;
 
-namespace SmartRoutes.SortaScraper.Scrapers
+namespace SmartRoutes.GtfsReader.Scrapers
 {
     public interface IEntityCollectionScraper
     {

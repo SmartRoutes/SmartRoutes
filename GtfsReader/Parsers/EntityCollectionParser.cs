@@ -2,13 +2,13 @@
 using System.IO;
 using System.Linq;
 using Ionic.Zip;
+using SmartRoutes.GtfsReader.Support;
 using SmartRoutes.Model;
 using SmartRoutes.Model.Gtfs;
 using NLog;
-using SmartRoutes.Scraper;
-using SmartRoutes.SortaScraper.Support;
+using SmartRoutes.Reader;
 
-namespace SmartRoutes.SortaScraper.Parsers
+namespace SmartRoutes.GtfsReader.Parsers
 {
     public class EntityCollectionParser : IEntityCollectionParser
     {

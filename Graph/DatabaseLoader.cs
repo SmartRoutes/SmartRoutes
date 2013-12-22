@@ -5,8 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using SmartRoutes.Database;
 using SmartRoutes.Database.Contexts;
-using SmartRoutes.SortaScraper.Support;
-using SmartRoutes.SortaScraper.Parsers;
+using SmartRoutes.GtfsReader.Support;
+using SmartRoutes.GtfsReader.Parsers;
 
 namespace SmartRoutes.Graph
 {

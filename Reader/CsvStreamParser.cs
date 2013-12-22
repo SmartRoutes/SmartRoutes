@@ -4,7 +4,7 @@ using System.Linq;
 using Microsoft.VisualBasic.FileIO;
 using NLog;
 
-namespace SmartRoutes.Scraper
+namespace SmartRoutes.Reader
 {
     public abstract class CsvStreamParser<TOut> : ICsvStreamParser<TOut>
     {

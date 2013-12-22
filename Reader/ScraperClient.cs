@@ -3,7 +3,7 @@ using System.Net.Http;
 using System.Reflection;
 using System.Threading.Tasks;
 
-namespace SmartRoutes.Scraper
+namespace SmartRoutes.Reader
 {
     public class ScraperClient : HttpClient
     {

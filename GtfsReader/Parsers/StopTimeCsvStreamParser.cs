@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using SmartRoutes.Model.Gtfs;
-using SmartRoutes.Scraper;
+using SmartRoutes.Reader;
 
-namespace SmartRoutes.SortaScraper.Parsers
+namespace SmartRoutes.GtfsReader.Parsers
 {
     public class StopTimeCsvStreamParser : CsvStreamParser<StopTime>
     {

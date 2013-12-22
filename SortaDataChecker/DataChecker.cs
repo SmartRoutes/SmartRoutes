@@ -5,8 +5,8 @@ using NLog;
 using SmartRoutes.Database;
 using SmartRoutes.Database.Contexts;
 using SmartRoutes.Model.Gtfs;
-using SmartRoutes.SortaScraper.Scrapers;
-using SmartRoutes.SortaScraper.Support;
+using SmartRoutes.GtfsReader.Scrapers;
+using SmartRoutes.GtfsReader.Support;
 
 namespace SmartRoutes.SortaDataChecker
 {

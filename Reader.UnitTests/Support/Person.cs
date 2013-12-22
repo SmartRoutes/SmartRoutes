@@ -1,4 +1,4 @@
-﻿namespace SmartRoutes.Scraper.Test.Support
+﻿namespace SmartRoutes.Reader.UnitTests.Support
 {
     public class Person
     {
