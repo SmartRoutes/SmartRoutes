@@ -3,10 +3,10 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{995019AF-0B89-4104-8A91-6A35D6177C33}</ProjectGuid>
+    <ProjectGuid>{1A9691A6-011C-4E3E-B84F-BF8461999813}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SmartRoutes.GtfsReader.Test</RootNamespace>
+    <RootNamespace>SmartRoutes.Reader.UnitTests</RootNamespace>
     <AssemblyName>$(RootNamespace)</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -52,29 +52,20 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="Parsers\AgencyCsvStreamParserTest.cs" />
+    <Compile Include="CsvStreamParserTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Support\AbstractCsvStreamParserTest.cs" />
+    <Compile Include="Support\Person.cs" />
+    <Compile Include="Support\PersonCsvStreamParser.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Model\Model.csproj">
-      <Project>{711cc508-53a8-4edb-bbca-b911935da4b0}</Project>
-      <Name>Model</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Scraper.Test\Reader.Test.csproj">
-      <Project>{1a9691a6-011c-4e3e-b84f-bf8461999813}</Project>
-      <Name>Reader.Test</Name>
-    </ProjectReference>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\Scraper\Reader.csproj">
       <Project>{4401fe23-f94a-4eda-aa76-ccd53548e10e}</Project>
       <Name>Reader</Name>
     </ProjectReference>
-    <ProjectReference Include="..\SortaScraper\GtfsReader.csproj">
-      <Project>{00d91962-12c1-4729-a893-8beeb1599c5e}</Project>
-      <Name>GtfsReader</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">

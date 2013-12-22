@@ -34,7 +34,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GraphVisualizer", "GraphVis
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Heap", "Heap\Heap.csproj", "{B66C6D7D-6D28-41CD-9AD0-04A944ED5AF1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GtfsReader.Test", "SortaScraper.Test\GtfsReader.Test.csproj", "{995019AF-0B89-4104-8A91-6A35D6177C33}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GtfsReader.UnitTests", "SortaScraper.Test\GtfsReader.UnitTests.csproj", "{995019AF-0B89-4104-8A91-6A35D6177C33}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{A7C97D81-BA09-405B-ABD7-23872311D68C}"
 EndProject
@@ -46,7 +46,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Heap.Test", "Heap.Test\Heap
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Graph.Test", "Graph.Test\Graph.Test.csproj", "{FD947449-37E6-462B-88B9-8326194990E6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reader.Test", "Scraper.Test\Reader.Test.csproj", "{1A9691A6-011C-4E3E-B84F-BF8461999813}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reader.UnitTests", "Scraper.Test\Reader.UnitTests.csproj", "{1A9691A6-011C-4E3E-B84F-BF8461999813}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dijkstras", "Dijkstras\Dijkstras.csproj", "{DCF5638F-CF4F-4502-B349-7F468942CA22}"
 EndProject
