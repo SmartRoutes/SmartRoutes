@@ -14,6 +14,22 @@ namespace SmartRoutes.Database
 {
     public class Entities : DbContext
     {
+        private const string SrdsSchema = "srds";
+        private const string GtfsSchema = "gtfs";
+        private const string GenericSchema = "gen";
+
+        private static readonly ISet<Type> SrdsTypes = new HashSet<Type>
+        {
+            typeof (SrdsArchive), typeof (AttributeKey), typeof (AttributeValue), typeof (Destination)
+        };
+
+        private static readonly ISet<Type> GtfsTypes = new HashSet<Type>
+        {
+            typeof (GtfsArchive), typeof (Agency), typeof (Service), typeof (ServiceException),
+            typeof (Route), typeof (Shape), typeof (ShapePoint), typeof (Block),
+            typeof (Trip), typeof (Stop), typeof (StopTime)
+        };
+
         public Entities()
         {
             ((IObjectContextAdapter) this).ObjectContext.CommandTimeout = 180;
@@ -68,8 +84,10 @@ namespace SmartRoutes.Database
                 .Configure(c => c.HasDatabaseGeneratedOption(DatabaseGeneratedOption.None));
 
             // name the table of the singular version of the entity name
+
             modelBuilder
                 .Types()
+                .Where(t => !typeof (Archive).IsAssignableFrom(t) || t == typeof (Archive))
                 .Configure(c => c.ToTable(GetTableName(c)));
 
             // map the one-to-many for Stop.ChildStops
@@ -87,7 +105,7 @@ namespace SmartRoutes.Database
                 .HasMany(s => s.CloseStops)
                 .WithMany()
                 .Map(c => c
-                    .ToTable("CloseStop")
+                    .ToTable("CloseStop", GtfsSchema)
                     .MapLeftKey("StopId")
                     .MapRightKey("CloseStopId"));
 
@@ -97,9 +115,28 @@ namespace SmartRoutes.Database
                 .Map<GtfsArchive>(x => x.Requires("ArchiveType").HasValue(GtfsArchive.Discriminator));
         }
 
-        protected string GetTableName(ConventionTypeConfiguration c)
+
+        private static string GetTableName(Type c)
         {
-            return string.Format("dbo.{0}", c.ClrType.Name);
+            string schema;
+            if (SrdsTypes.Contains(c))
+            {
+                schema = SrdsSchema;
+            }
+            else if (GtfsTypes.Contains(c))
+            {
+                schema = GtfsSchema;
+            }
+            else
+            {
+                schema = GenericSchema;
+            }
+            return string.Format("{0}.{1}", schema, c.Name);
+        }
+
+        private static string GetTableName(ConventionTypeConfiguration c)
+        {
+            return GetTableName(c.ClrType);
         }
 
         public async Task TruncateAsync()
@@ -116,11 +153,6 @@ namespace SmartRoutes.Database
             {
                 Database.ExecuteSqlCommand(query);
             }
-        }
-
-        protected virtual bool ShouldTruncate(string tableName)
-        {
-            return true;
         }
 
         private IEnumerable<string> GetTruncateQueries()
@@ -142,7 +174,7 @@ namespace SmartRoutes.Database
 
             foreach (string query in queries)
             {
-                foreach (string tableName in tableNames.Where(ShouldTruncate))
+                foreach (string tableName in tableNames)
                 {
                     yield return string.Format(query, tableName);
                 }
