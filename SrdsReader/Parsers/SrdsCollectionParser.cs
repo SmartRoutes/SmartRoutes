@@ -30,6 +30,8 @@ namespace SmartRoutes.SrdsReader.Parsers
             _destinationParser.AttachAttributeKeys(collection.AttributeKeys);
             collection.Destinations = _destinationParser.Parse(GetStream(streams, "Destinations.csv")).ToArray();
 
+            collection.AttributeValues = collection.Destinations.SelectMany(d => d.AttributeValues);
+
             return collection;
         }
     }
