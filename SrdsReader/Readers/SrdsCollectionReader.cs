@@ -9,7 +9,7 @@ using SmartRoutes.SrdsReader.Support;
 
 namespace SmartRoutes.SrdsReader.Readers
 {
-    public class SrdsCollectionReader : ISrdsCollectionReader
+    public class SrdsCollectionReader : IEntityCollectionReader<SrdsArchive, SrdsCollection>
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
         private readonly IEntityCollectionParser<SrdsArchive, SrdsCollection> _srdsCollectionParser;

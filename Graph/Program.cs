@@ -28,7 +28,7 @@ namespace SmartRoutes.Graph
                 IKernel kernel = new StandardKernel(new GraphModule());
 
                 kernel.Bind(c => c
-                    .FromAssemblyContaining(typeof(IEntityCollectionParser<GtfsArchive, GtfsCollection>), typeof(IGtfsCollectionReader))
+                    .FromAssemblyContaining(typeof(GtfsCollection))
                     .SelectAllClasses()
                     .BindAllInterfaces());
 

@@ -1,12 +1,13 @@
-﻿using System.Data.Entity;
+﻿using System;
+using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
 using NLog;
 using SmartRoutes.Database;
-using SmartRoutes.Model;
-using SmartRoutes.Model.Gtfs;
 using SmartRoutes.GtfsReader.Readers;
 using SmartRoutes.GtfsReader.Support;
+using SmartRoutes.Model.Gtfs;
+using SmartRoutes.Reader;
 
 namespace SmartRoutes.SortaDataChecker
 {
@@ -14,16 +15,21 @@ namespace SmartRoutes.SortaDataChecker
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
-        private readonly IGtfsCollectionReader _reader;
+        private readonly Func<GtfsArchive, Task<GtfsCollection>> _getCollection;
 
-        public DataChecker(IGtfsCollectionReader reader)
+        public DataChecker(IEntityCollectionDownloader<GtfsArchive, GtfsCollection> downloader, Uri uri)
         {
-            _reader = reader;
+            _getCollection = archive => downloader.Download(uri, archive);
+        }
+
+        public DataChecker(IEntityCollectionReader<GtfsArchive, GtfsCollection> reader, string path)
+        {
+            _getCollection = archive => reader.Read(path, archive);
         }
 
         public async Task UpdateDatabase(bool force)
         {
-            Logger.Trace("Initializing SortaEntities.");
+            Logger.Trace("Initializing Entities.");
             using (var ctx = new Entities())
             {
                 GtfsArchive currentArchive = null;
@@ -45,7 +51,7 @@ namespace SmartRoutes.SortaDataChecker
                 }
 
                 Logger.Trace("Fetching the entity collection.");
-                GtfsCollection gtfsCollection = await _reader.Download(currentArchive);
+                GtfsCollection gtfsCollection = await _getCollection(currentArchive);
                 if (gtfsCollection == null)
                 {
                     Logger.Trace("No entity collection was returned.");

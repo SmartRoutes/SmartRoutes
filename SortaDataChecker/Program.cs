@@ -2,10 +2,10 @@
 using NDesk.Options;
 using Ninject;
 using Ninject.Extensions.Conventions;
-using Ninject.Parameters;
 using NLog;
-using SmartRoutes.GtfsReader.Readers;
 using SmartRoutes.GtfsReader.Support;
+using SmartRoutes.Model.Gtfs;
+using SmartRoutes.Reader;
 
 namespace SmartRoutes.SortaDataChecker
 {
@@ -51,21 +51,22 @@ namespace SmartRoutes.SortaDataChecker
 
                 IKernel kernel = new StandardKernel();
                 kernel.Bind(c => c
-                    .FromAssemblyContaining(typeof (IGtfsCollectionReader))
+                    .FromAssemblyContaining(typeof (GtfsCollection))
                     .SelectAllClasses()
                     .BindAllInterfaces());
 
-                ConstructorArgument sortaClientParameter;
+                DataChecker dataChecker;
                 if (archivePath != null)
                 {
-                    sortaClientParameter = new ConstructorArgument("gtfsClient", new OfflineSortaClient(archivePath));
+                    var reader = kernel.Get<IEntityCollectionReader<GtfsArchive, GtfsCollection>>();
+                    dataChecker = new DataChecker(reader, archivePath);
                 }
                 else
                 {
-                    sortaClientParameter = new ConstructorArgument("gtfsClient", new OnlineSortaClient());
+                    var downloader = kernel.Get<IEntityCollectionDownloader<GtfsArchive, GtfsCollection>>();
+                    dataChecker = new DataChecker(downloader, new Uri("http://www.go-metro.com/uploads/GTFS/google_transit_info.zip"));
                 }
 
-                var dataChecker = new DataChecker(kernel.Get<IGtfsCollectionReader>(sortaClientParameter));
                 dataChecker.UpdateDatabase(force).Wait();
 
                 Logger.Trace("SortaDataChecker has completed.");

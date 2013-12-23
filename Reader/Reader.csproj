@@ -53,6 +53,8 @@
     <Compile Include="EntityCollectionParser.cs" />
     <Compile Include="ExtensionMethods.cs" />
     <Compile Include="IEntityCollectionParser.cs" />
+    <Compile Include="IEntityCollectionDownloader.cs" />
+    <Compile Include="IEntityCollectionReader.cs" />
     <Compile Include="ScraperException.cs" />
     <Compile Include="ScraperClient.cs" />
     <Compile Include="ICsvStreamParser.cs" />

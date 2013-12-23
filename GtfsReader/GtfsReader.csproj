@@ -51,12 +51,9 @@
     <Compile Include="Parsers\StopCsvStreamParser.cs" />
     <Compile Include="Parsers\RouteCsvStreamParser.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Readers\IGtfsCollectionReader.cs" />
-    <Compile Include="Support\GtfsCollection.cs" />
+    <Compile Include="Readers\GtfsCollectionDownloader.cs" />
     <Compile Include="Readers\GtfsCollectionReader.cs" />
-    <Compile Include="Support\OfflineSortaClient.cs" />
-    <Compile Include="Support\OnlineSortaClient.cs" />
-    <Compile Include="Support\IGtfsClient.cs" />
+    <Compile Include="Support\GtfsCollection.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Model\Model.csproj">
