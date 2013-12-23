@@ -46,8 +46,6 @@ namespace SmartRoutes.SortaDataChecker
 
                 Logger.Trace("Fetching the entity collection.");
                 GtfsCollection gtfsCollection = await _downloader.Download(currentArchive);
-
-                // handled matching ETag and LastModified headers
                 if (gtfsCollection == null)
                 {
                     Logger.Trace("No entity collection was returned.");
