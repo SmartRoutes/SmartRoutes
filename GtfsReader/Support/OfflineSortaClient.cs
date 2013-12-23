@@ -6,18 +6,13 @@ using SmartRoutes.Reader;
 
 namespace SmartRoutes.GtfsReader.Support
 {
-    public class OfflineSortaClient : ISortaClient
+    public class OfflineSortaClient : IGtfsClient
     {
         private readonly string _archivePath;
 
         public OfflineSortaClient(string archivePath)
         {
             _archivePath = archivePath;
-        }
-
-        public Task<ClientResponseHeaders> GetArchiveHeaders()
-        {
-            return Task.FromResult(new ClientResponseHeaders());
         }
 
         public async Task<ClientResponse> GetArchiveContent()

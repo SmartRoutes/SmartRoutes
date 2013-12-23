@@ -5,8 +5,8 @@ using SmartRoutes.Model.Gtfs;
 
 namespace SmartRoutes.GtfsReader.Readers
 {
-    public interface IGtfsCollectionDownloader
+    public interface IGtfsCollectionReader
     {
-        Task<GtfsCollection> Download(Archive currentArchive);
+        Task<GtfsCollection> Download(GtfsArchive currentArchive);
     }
 }

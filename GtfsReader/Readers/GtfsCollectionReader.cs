@@ -2,30 +2,30 @@
 using System.Threading.Tasks;
 using NLog;
 using SmartRoutes.GtfsReader.Support;
-using SmartRoutes.Model;
+using SmartRoutes.Model.Gtfs;
 using SmartRoutes.Reader;
 
 namespace SmartRoutes.GtfsReader.Readers
 {
-    public class GtfsCollectionDownloader : IGtfsCollectionDownloader
+    public class GtfsCollectionReader : IGtfsCollectionReader
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
-        private readonly IEntityCollectionParser<GtfsCollection> _gtfsCollectionParser;
-        private readonly ISortaClient _sortaClient;
+        private readonly IEntityCollectionParser<GtfsArchive, GtfsCollection> _gtfsCollectionParser;
+        private readonly IGtfsClient _gtfsClient;
 
-        public GtfsCollectionDownloader(ISortaClient sortaClient, IEntityCollectionParser<GtfsCollection> gtfsCollectionParser)
+        public GtfsCollectionReader(IGtfsClient gtfsClient, IEntityCollectionParser<GtfsArchive, GtfsCollection> gtfsCollectionParser)
         {
-            _sortaClient = sortaClient;
+            _gtfsClient = gtfsClient;
             _gtfsCollectionParser = gtfsCollectionParser;
         }
 
-        public async Task<GtfsCollection> Download(Archive currentArchive)
+        public async Task<GtfsCollection> Download(GtfsArchive currentArchive)
         {
             // does the content indicate a change?
             Logger.Trace("Fetching the newest archive bytes.");
-            ClientResponse response = await _sortaClient.GetArchiveContent();
-            var newestGtfsArchive = new Archive {LoadedOn = DateTime.Now};
+            ClientResponse response = await _gtfsClient.GetArchiveContent();
+            var newestGtfsArchive = new GtfsArchive {LoadedOn = DateTime.Now};
 
             // get the archive contents
             Logger.Trace("The newest archive has {0} bytes ({1} megabytes).", response.Content.LongLength, Math.Round(response.Content.LongLength/(1024.0*1024.0), 2));

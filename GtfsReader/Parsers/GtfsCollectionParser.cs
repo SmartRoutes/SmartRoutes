@@ -10,7 +10,7 @@ using SmartRoutes.Reader;
 
 namespace SmartRoutes.GtfsReader.Parsers
 {
-    public class GtfsCollectionParser : EntityCollectionParser<GtfsCollection>
+    public class GtfsCollectionParser : EntityCollectionParser<GtfsArchive, GtfsCollection>
     {
         private const double MaxFeetBetweenTransfers = 500;
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();

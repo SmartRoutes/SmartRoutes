@@ -10,6 +10,7 @@ using SmartRoutes.Graph;
 using SmartRoutes.Graph.Node;
 using SmartRoutes.Graph.Comparers;
 using SmartRoutes.GtfsReader.Support;
+using SmartRoutes.Model.Gtfs;
 using SmartRoutes.Reader;
 
 namespace SmartRoutes.GraphVisualizer
@@ -26,7 +27,7 @@ namespace SmartRoutes.GraphVisualizer
             IKernel kernel = new StandardKernel(new GraphModule());
 
             kernel.Bind(c => c
-                .FromAssemblyContaining(typeof(IEntityCollectionParser<GtfsCollection>))
+                .FromAssemblyContaining(typeof(IEntityCollectionParser<GtfsArchive, GtfsCollection>))
                 .SelectAllClasses()
                 .BindAllInterfaces());
 

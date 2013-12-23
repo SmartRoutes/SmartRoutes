@@ -37,6 +37,8 @@
     <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Srds\SrdsArchive.cs" />
+    <Compile Include="Gtfs\GtfsArchive.cs" />
     <Compile Include="Srds\AttributeKey.cs" />
     <Compile Include="Srds\AttributeValue.cs" />
     <Compile Include="Srds\Destination.cs" />

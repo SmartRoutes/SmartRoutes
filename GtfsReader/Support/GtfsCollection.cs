@@ -4,7 +4,7 @@ using SmartRoutes.Reader;
 
 namespace SmartRoutes.GtfsReader.Support
 {
-    public class GtfsCollection : EntityCollection
+    public class GtfsCollection : EntityCollection<GtfsArchive>
     {
         public IEnumerable<Agency> Agencies { get; set; }
         public IEnumerable<Route> Routes { get; set; }

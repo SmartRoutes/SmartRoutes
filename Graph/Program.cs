@@ -8,6 +8,7 @@ using SmartRoutes.Graph.Node;
 using SmartRoutes.GtfsReader.Readers;
 using SmartRoutes.GtfsReader.Support;
 using SmartRoutes.Model;
+using SmartRoutes.Model.Gtfs;
 using SmartRoutes.Reader;
 
 namespace SmartRoutes.Graph
@@ -27,7 +28,7 @@ namespace SmartRoutes.Graph
                 IKernel kernel = new StandardKernel(new GraphModule());
 
                 kernel.Bind(c => c
-                    .FromAssemblyContaining(typeof(IEntityCollectionParser<GtfsCollection>), typeof(IGtfsCollectionDownloader))
+                    .FromAssemblyContaining(typeof(IEntityCollectionParser<GtfsArchive, GtfsCollection>), typeof(IGtfsCollectionReader))
                     .SelectAllClasses()
                     .BindAllInterfaces());
 

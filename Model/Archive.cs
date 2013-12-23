@@ -2,10 +2,11 @@
 
 namespace SmartRoutes.Model
 {
-    public class Archive
+    public abstract class Archive
     {
         public int Id { get; set; }
         public string Hash { get; set; }
         public DateTime LoadedOn { get; set; }
+        public string ArchiveType { get; set; }
     }
 }

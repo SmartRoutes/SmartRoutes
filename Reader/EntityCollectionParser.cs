@@ -4,14 +4,17 @@ using System.IO;
 using System.Linq;
 using Ionic.Zip;
 using NLog;
+using SmartRoutes.Model;
 
 namespace SmartRoutes.Reader
 {
-    public abstract class EntityCollectionParser<T> : IEntityCollectionParser<T> where T : EntityCollection
+    public abstract class EntityCollectionParser<TArchive, TCollection> : IEntityCollectionParser<TArchive, TCollection>
+        where TArchive : Archive
+        where TCollection : EntityCollection<TArchive>
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
-        public T Parse(byte[] zipFileBytes)
+        public TCollection Parse(byte[] zipFileBytes)
         {
             // extract files from the zip
             Logger.Trace("Parsing the zip file.");
@@ -26,7 +29,7 @@ namespace SmartRoutes.Reader
             }
         }
 
-        protected abstract T Parse(IDictionary<string, Func<Stream>> streams);
+        protected abstract TCollection Parse(IDictionary<string, Func<Stream>> streams);
 
         protected static Stream GetStream(IDictionary<string, Func<Stream>> streams, string fileName)
         {

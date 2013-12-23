@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
+using System.Data.Entity.ModelConfiguration.Configuration;
 using System.Linq;
 using System.Threading.Tasks;
 using SmartRoutes.Model;
@@ -15,17 +16,20 @@ namespace SmartRoutes.Database
     {
         public Entities()
         {
-            ((IObjectContextAdapter)this).ObjectContext.CommandTimeout = 180;
+            ((IObjectContextAdapter) this).ObjectContext.CommandTimeout = 180;
         }
 
-        // Destination entities
-        public IDbSet<Archive> SrdsArchives { get; set; }
+        // generic entites
+        public IDbSet<Archive> Archives { get; set; }
+
+        // SRDS entities
+        public IDbSet<SrdsArchive> SrdsArchives { get; set; }
         public IDbSet<AttributeKey> AttributeKeys { get; set; }
         public IDbSet<AttributeValue> AttributeValues { get; set; }
         public IDbSet<Destination> Destinations { get; set; }
 
         // GTFS entities
-        public IDbSet<Archive> GtfsArchives { get; set; }
+        public IDbSet<GtfsArchive> GtfsArchives { get; set; }
         public IDbSet<Agency> Agencies { get; set; }
         public IDbSet<Service> Services { get; set; }
         public IDbSet<ServiceException> ServiceException { get; set; }
@@ -66,7 +70,7 @@ namespace SmartRoutes.Database
             // name the table of the singular version of the entity name
             modelBuilder
                 .Types()
-                .Configure(c => c.ToTable(c.ClrType.Name));
+                .Configure(c => c.ToTable(GetTableName(c)));
 
             // map the one-to-many for Stop.ChildStops
             modelBuilder
@@ -86,11 +90,16 @@ namespace SmartRoutes.Database
                     .ToTable("CloseStop")
                     .MapLeftKey("StopId")
                     .MapRightKey("CloseStopId"));
+
+            // inheritance: table-per-hiearchy
+            modelBuilder.Entity<Archive>()
+                .Map<SrdsArchive>(x => x.Requires("ArchiveType").HasValue(SrdsArchive.Discriminator))
+                .Map<GtfsArchive>(x => x.Requires("ArchiveType").HasValue(GtfsArchive.Discriminator));
         }
 
-        protected string GetTableName(Type type)
+        protected string GetTableName(ConventionTypeConfiguration c)
         {
-            return string.Format("dbo.{0}", type.Name);
+            return string.Format("dbo.{0}", c.ClrType.Name);
         }
 
         public async Task TruncateAsync()

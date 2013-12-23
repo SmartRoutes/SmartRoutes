@@ -14,11 +14,11 @@ namespace SmartRoutes.SortaDataChecker
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
-        private readonly IGtfsCollectionDownloader _downloader;
+        private readonly IGtfsCollectionReader _reader;
 
-        public DataChecker(IGtfsCollectionDownloader downloader)
+        public DataChecker(IGtfsCollectionReader reader)
         {
-            _downloader = downloader;
+            _reader = reader;
         }
 
         public async Task UpdateDatabase(bool force)
@@ -26,7 +26,7 @@ namespace SmartRoutes.SortaDataChecker
             Logger.Trace("Initializing SortaEntities.");
             using (var ctx = new Entities())
             {
-                Archive currentArchive = null;
+                GtfsArchive currentArchive = null;
                 if (!force)
                 {
                     // get the current archive from the database (if any)
@@ -45,7 +45,7 @@ namespace SmartRoutes.SortaDataChecker
                 }
 
                 Logger.Trace("Fetching the entity collection.");
-                GtfsCollection gtfsCollection = await _downloader.Download(currentArchive);
+                GtfsCollection gtfsCollection = await _reader.Download(currentArchive);
                 if (gtfsCollection == null)
                 {
                     Logger.Trace("No entity collection was returned.");

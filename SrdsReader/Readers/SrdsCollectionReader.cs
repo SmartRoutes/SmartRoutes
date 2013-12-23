@@ -3,22 +3,23 @@ using System.IO;
 using System.Threading.Tasks;
 using NLog;
 using SmartRoutes.Model;
+using SmartRoutes.Model.Srds;
 using SmartRoutes.Reader;
 using SmartRoutes.SrdsReader.Support;
 
 namespace SmartRoutes.SrdsReader.Readers
 {
-    public class SrdsCollectionReader
+    public class SrdsCollectionReader : ISrdsCollectionReader
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
-        private readonly IEntityCollectionParser<SrdsCollection> _srdsCollectionParser;
+        private readonly IEntityCollectionParser<SrdsArchive, SrdsCollection> _srdsCollectionParser;
 
-        public SrdsCollectionReader(IEntityCollectionParser<SrdsCollection> srdsCollectionParser)
+        public SrdsCollectionReader(IEntityCollectionParser<SrdsArchive, SrdsCollection> srdsCollectionParser)
         {
             _srdsCollectionParser = srdsCollectionParser;
         }
 
-        public async Task<SrdsCollection> Read(string filePath, Archive currentArchive)
+        public async Task<SrdsCollection> Read(string filePath, SrdsArchive currentArchive)
         {
             // read the whole file into memory
             Logger.Trace("Reading the archive bytes from {0}.", filePath);
@@ -33,7 +34,7 @@ namespace SmartRoutes.SrdsReader.Readers
             Logger.Trace("The newest archive has {0} bytes ({1} megabytes).", zipFileBytes.LongLength, Math.Round(zipFileBytes.LongLength/(1024.0*1024.0), 2));
 
             // see if the file archive has changed
-            var newestSrdsArchive = new Archive
+            var newestSrdsArchive = new SrdsArchive
             {
                 LoadedOn = DateTime.Now,
                 Hash = zipFileBytes.GetSha256Hash()

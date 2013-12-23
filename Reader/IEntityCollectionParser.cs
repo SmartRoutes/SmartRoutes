@@ -1,7 +1,11 @@
-﻿namespace SmartRoutes.Reader
+﻿using SmartRoutes.Model;
+
+namespace SmartRoutes.Reader
 {
-    public interface IEntityCollectionParser<T> where T : EntityCollection
+    public interface IEntityCollectionParser<TArchive, out TCollection>
+        where TArchive : Archive
+        where TCollection : EntityCollection<TArchive>
     {
-        T Parse(byte[] bytes);
+        TCollection Parse(byte[] bytes);
     }
 }

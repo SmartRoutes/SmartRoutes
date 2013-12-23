@@ -3,9 +3,8 @@ using SmartRoutes.Reader;
 
 namespace SmartRoutes.GtfsReader.Support
 {
-    public interface ISortaClient
+    public interface IGtfsClient
     {
-        Task<ClientResponseHeaders> GetArchiveHeaders();
         Task<ClientResponse> GetArchiveContent();
     }
 }

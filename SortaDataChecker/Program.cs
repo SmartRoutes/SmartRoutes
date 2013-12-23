@@ -51,21 +51,21 @@ namespace SmartRoutes.SortaDataChecker
 
                 IKernel kernel = new StandardKernel();
                 kernel.Bind(c => c
-                    .FromAssemblyContaining(typeof (IGtfsCollectionDownloader))
+                    .FromAssemblyContaining(typeof (IGtfsCollectionReader))
                     .SelectAllClasses()
                     .BindAllInterfaces());
 
                 ConstructorArgument sortaClientParameter;
                 if (archivePath != null)
                 {
-                    sortaClientParameter = new ConstructorArgument("sortaClient", new OfflineSortaClient(archivePath));
+                    sortaClientParameter = new ConstructorArgument("gtfsClient", new OfflineSortaClient(archivePath));
                 }
                 else
                 {
-                    sortaClientParameter = new ConstructorArgument("sortaClient", new OnlineSortaClient());
+                    sortaClientParameter = new ConstructorArgument("gtfsClient", new OnlineSortaClient());
                 }
 
-                var dataChecker = new DataChecker(kernel.Get<IGtfsCollectionDownloader>(sortaClientParameter));
+                var dataChecker = new DataChecker(kernel.Get<IGtfsCollectionReader>(sortaClientParameter));
                 dataChecker.UpdateDatabase(force).Wait();
 
                 Logger.Trace("SortaDataChecker has completed.");

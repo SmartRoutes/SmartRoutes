@@ -2,9 +2,9 @@
 
 namespace SmartRoutes.Reader
 {
-    public abstract class EntityCollection
+    public abstract class EntityCollection<TArchive> where TArchive : Archive
     {
-        public Archive Archive { get; set; }
+        public TArchive Archive { get; set; }
         public bool ContainsEntities { get; set; }
     }
 }

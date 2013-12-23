@@ -8,7 +8,7 @@ using SmartRoutes.SrdsReader.Support;
 
 namespace SmartRoutes.SrdsReader.Parsers
 {
-    public class SrdsCollectionParser : EntityCollectionParser<SrdsCollection>
+    public class SrdsCollectionParser : EntityCollectionParser<SrdsArchive, SrdsCollection>
     {
         private readonly ICsvStreamParser<AttributeKey> _attributeKeyParser;
         private readonly IDestinationCsvStreamParser _destinationParser;

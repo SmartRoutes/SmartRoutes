@@ -4,7 +4,7 @@ using SmartRoutes.Reader;
 
 namespace SmartRoutes.SrdsReader.Support
 {
-    public class SrdsCollection : EntityCollection
+    public class SrdsCollection : EntityCollection<SrdsArchive>
     {
         public IEnumerable<Destination> Destinations { get; set; }
         public IEnumerable<AttributeKey> AttributeKeys { get; set; }
