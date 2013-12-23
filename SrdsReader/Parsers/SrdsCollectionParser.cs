@@ -4,7 +4,7 @@ using System.IO;
 using System.Linq;
 using SmartRoutes.Model.Srds;
 using SmartRoutes.Reader;
-using SmartRoutes.SrdsReader.Readers;
+using SmartRoutes.SrdsReader.Support;
 
 namespace SmartRoutes.SrdsReader.Parsers
 {

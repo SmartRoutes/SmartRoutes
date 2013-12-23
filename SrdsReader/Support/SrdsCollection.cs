@@ -2,7 +2,7 @@
 using SmartRoutes.Model.Srds;
 using SmartRoutes.Reader;
 
-namespace SmartRoutes.SrdsReader.Readers
+namespace SmartRoutes.SrdsReader.Support
 {
     public class SrdsCollection : EntityCollection
     {
