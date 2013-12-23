@@ -6,14 +6,15 @@ using System.Threading.Tasks;
 using SmartRoutes.Database;
 using SmartRoutes.GtfsReader.Support;
 using SmartRoutes.GtfsReader.Parsers;
+using SmartRoutes.Reader;
 
 namespace SmartRoutes.Graph
 {
     class DatabaseLoader
     {
-        private readonly IGtfsCollectionParser _parser;
+        private readonly IEntityCollectionParser<GtfsCollection> _parser;
 
-        public DatabaseLoader(IGtfsCollectionParser parser)
+        public DatabaseLoader(IEntityCollectionParser<GtfsCollection> parser)
         {
             _parser = parser;
         }

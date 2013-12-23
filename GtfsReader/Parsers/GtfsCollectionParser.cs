@@ -1,16 +1,16 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Ionic.Zip;
+using NLog;
 using SmartRoutes.GtfsReader.Support;
 using SmartRoutes.Model;
 using SmartRoutes.Model.Gtfs;
-using NLog;
 using SmartRoutes.Reader;
 
 namespace SmartRoutes.GtfsReader.Parsers
 {
-    public class GtfsCollectionParser : IGtfsCollectionParser
+    public class GtfsCollectionParser : EntityCollectionParser<GtfsCollection>
     {
         private const double MaxFeetBetweenTransfers = 500;
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
@@ -36,65 +36,42 @@ namespace SmartRoutes.GtfsReader.Parsers
             _tripParser = tripParser;
         }
 
-        public GtfsCollection Parse(byte[] bytes)
+        protected override GtfsCollection Parse(IDictionary<string, Func<Stream>> streams)
         {
-            // initialize the collection
+            // initialize
             var collection = new GtfsCollection();
 
-            // extract files from the zip
-            Logger.Trace("Parsing the zip file.");
-            using (ZipFile zipFile = ZipFile.Read(new MemoryStream(bytes)))
-            {
-                foreach (ZipEntry entry in zipFile.Entries)
-                {
-                    if (entry.IsDirectory)
-                    {
-                        continue;
-                    }
+            // populate
+            collection.Agencies = _agencyParser.Parse(GetStream(streams, "agency.txt")).ToArray();
 
-                    switch (entry.FileName)
-                    {
-                        case "agency.txt":
-                            collection.Agencies = _agencyParser.Parse(entry.OpenReader()).ToArray();
-                            break;
-                        case "calendar.txt":
-                            collection.Services = _serviceParser.Parse(entry.OpenReader()).ToArray();
-                            break;
-                        case "calendar_dates.txt":
-                            collection.ServiceExceptions = _serviceExceptionParser.Parse(entry.OpenReader()).ToArray();
-                            break;
-                        case "routes.txt":
-                            collection.Routes = _routeParser.Parse(entry.OpenReader()).ToArray();
-                            break;
-                        case "shapes.txt":
-                            collection.ShapePoints = _shapePointParser.Parse(entry.OpenReader()).ToArray();
-                            collection.Shapes = collection
-                                .ShapePoints
-                                .Select(s => s.ShapeId)
-                                .Distinct()
-                                .Select(i => new Shape {Id = i})
-                                .ToArray();
-                            break;
-                        case "stop_times.txt":
-                            collection.StopTimes = _stopTimeParser.Parse(entry.OpenReader()).ToArray();
-                            break;
-                        case "stops.txt":
-                            collection.Stops = _stopParser.Parse(entry.OpenReader()).ToArray();
-                            break;
-                        case "trips.txt":
-                            collection.Trips = _tripParser.Parse(entry.OpenReader()).ToArray();
-                            collection.Blocks = collection
-                                .Trips
-                                .Where(t => t.BlockId.HasValue)
-                                .Select(t => t.BlockId.Value)
-                                .Distinct()
-                                .Select(i => new Block {Id = i})
-                                .ToArray();
-                            break;
-                    }
-                }
-            }
+            collection.Services = _serviceParser.Parse(GetStream(streams, "calendar.txt")).ToArray();
 
+            collection.ServiceExceptions = _serviceExceptionParser.Parse(GetStream(streams, "calendar_dates.txt")).ToArray();
+
+            collection.Routes = _routeParser.Parse(GetStream(streams, "routes.txt")).ToArray();
+
+            collection.ShapePoints = _shapePointParser.Parse(GetStream(streams, "shapes.txt")).ToArray();
+            collection.Shapes = collection
+                .ShapePoints
+                .Select(s => s.ShapeId)
+                .Distinct()
+                .Select(i => new Shape {Id = i})
+                .ToArray();
+
+            collection.StopTimes = _stopTimeParser.Parse(GetStream(streams, "stop_times.txt")).ToArray();
+
+            collection.Stops = _stopParser.Parse(GetStream(streams, "stops.txt")).ToArray();
+
+            collection.Trips = _tripParser.Parse(GetStream(streams, "trips.txt")).ToArray();
+            collection.Blocks = collection
+                .Trips
+                .Where(t => t.BlockId.HasValue)
+                .Select(t => t.BlockId.Value)
+                .Distinct()
+                .Select(i => new Block {Id = i})
+                .ToArray();
+
+            // stitch up
             Logger.Trace("Associating the resulting entities.");
             Associate(collection);
 
@@ -104,7 +81,7 @@ namespace SmartRoutes.GtfsReader.Parsers
             return collection;
         }
 
-        private void PopulateCloseStops(IEnumerable<Stop> stops)
+        private static void PopulateCloseStops(IEnumerable<Stop> stops)
         {
             // enumerate the stops
             Stop[] stopArray = stops.ToArray();
@@ -122,7 +99,7 @@ namespace SmartRoutes.GtfsReader.Parsers
             }
         }
 
-        private void Associate(GtfsCollection collection)
+        private static void Associate(GtfsCollection collection)
         {
             // Route.Agency
             IDictionary<string, Agency> agencies = collection.Agencies.ToDictionary(a => a.Id);

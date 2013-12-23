@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Threading.Tasks;
 using NLog;
-using SmartRoutes.GtfsReader.Parsers;
 using SmartRoutes.GtfsReader.Support;
 using SmartRoutes.Model;
-using SmartRoutes.Model.Gtfs;
 using SmartRoutes.Reader;
 
 namespace SmartRoutes.GtfsReader.Readers
@@ -13,10 +11,10 @@ namespace SmartRoutes.GtfsReader.Readers
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
-        private readonly IGtfsCollectionParser _gtfsCollectionParser;
+        private readonly IEntityCollectionParser<GtfsCollection> _gtfsCollectionParser;
         private readonly ISortaClient _sortaClient;
 
-        public GtfsCollectionDownloader(ISortaClient sortaClient, IGtfsCollectionParser gtfsCollectionParser)
+        public GtfsCollectionDownloader(ISortaClient sortaClient, IEntityCollectionParser<GtfsCollection> gtfsCollectionParser)
         {
             _sortaClient = sortaClient;
             _gtfsCollectionParser = gtfsCollectionParser;

@@ -85,6 +85,10 @@
       <Project>{00d91962-12c1-4729-a893-8beeb1599c5e}</Project>
       <Name>GtfsReader</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Reader\Reader.csproj">
+      <Project>{4401fe23-f94a-4eda-aa76-ccd53548e10e}</Project>
+      <Name>Reader</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />

@@ -1,13 +1,11 @@
 using System.Collections.Generic;
-using SmartRoutes.Model;
 using SmartRoutes.Model.Gtfs;
+using SmartRoutes.Reader;
 
 namespace SmartRoutes.GtfsReader.Support
 {
-    public class GtfsCollection
+    public class GtfsCollection : EntityCollection
     {
-        public Archive Archive { get; set; }
-        public bool ContainsEntities { get; set; }
         public IEnumerable<Agency> Agencies { get; set; }
         public IEnumerable<Route> Routes { get; set; }
         public IEnumerable<Service> Services { get; set; }
