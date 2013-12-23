@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using NLog;
 using SmartRoutes.Database;
+using SmartRoutes.Model;
 using SmartRoutes.Model.Gtfs;
 using SmartRoutes.GtfsReader.Readers;
 using SmartRoutes.GtfsReader.Support;
@@ -31,7 +32,7 @@ namespace SmartRoutes.SortaDataChecker
                     // get the current archive from the database (if any)
                     Logger.Trace("Getting the current Archive instance (if any).");
                     currentArchive = await ctx.Archives
-                        .OrderByDescending(a => a.DownloadedOn)
+                        .OrderByDescending(a => a.LoadedOn)
                         .FirstOrDefaultAsync();
                 }
                 if (currentArchive == null)
@@ -40,7 +41,7 @@ namespace SmartRoutes.SortaDataChecker
                 }
                 else
                 {
-                    Logger.Trace("The current archive was downloaded on {0}.", currentArchive.DownloadedOn);
+                    Logger.Trace("The current archive was downloaded on {0}.", currentArchive.LoadedOn);
                 }
 
                 Logger.Trace("Fetching the entity collection.");

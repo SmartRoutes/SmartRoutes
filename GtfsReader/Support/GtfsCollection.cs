@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using SmartRoutes.Model;
 using SmartRoutes.Model.Gtfs;
 
 namespace SmartRoutes.GtfsReader.Support

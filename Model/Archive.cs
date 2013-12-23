@@ -1,12 +1,11 @@
 ﻿using System;
 
-namespace SmartRoutes.Model.Gtfs
+namespace SmartRoutes.Model
 {
     public class Archive
     {
         public int Id { get; set; }
-        public string ETag { get; set; }
         public string Hash { get; set; }
-        public DateTime DownloadedOn { get; set; }
+        public DateTime LoadedOn { get; set; }
     }
 }

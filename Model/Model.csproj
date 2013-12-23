@@ -44,7 +44,7 @@
     <Compile Include="INullableLocation.cs" />
     <Compile Include="ILocation.cs" />
     <Compile Include="Gtfs\Agency.cs" />
-    <Compile Include="Gtfs\Archive.cs" />
+    <Compile Include="Archive.cs" />
     <Compile Include="Gtfs\Block.cs" />
     <Compile Include="Gtfs\ServiceException.cs" />
     <Compile Include="Gtfs\Shape.cs" />

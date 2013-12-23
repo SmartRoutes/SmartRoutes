@@ -48,7 +48,7 @@ namespace SmartRoutes.Graph
                 Collection.ShapePoints = (from e in ctx.ShapePoints select e).ToList();
                 Collection.Blocks = (from e in ctx.Blocks select e).ToList();
                 Collection.Agencies = (from e in ctx.Agencies select e).ToList();
-                Collection.Archive = ctx.Archives.OrderBy(e => e.DownloadedOn).FirstOrDefault();
+                Collection.Archive = ctx.Archives.OrderBy(e => e.LoadedOn).FirstOrDefault();
                 Collection.Trips = (from e in ctx.Trips select e).ToList();
                 Collection.ServiceExceptions = (from e in ctx.ServiceException select e).ToList();
                 Collection.Services = (from e in ctx.Services select e).ToList();

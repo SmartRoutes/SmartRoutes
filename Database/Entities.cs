@@ -5,6 +5,7 @@ using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Threading.Tasks;
+using SmartRoutes.Model;
 using SmartRoutes.Model.Gtfs;
 using SmartRoutes.Model.Srds;
 

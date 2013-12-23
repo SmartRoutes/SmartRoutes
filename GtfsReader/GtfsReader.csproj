@@ -45,9 +45,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Parsers\AgencyCsvStreamParser.cs" />
-    <Compile Include="Parsers\ArchiveParser.cs" />
     <Compile Include="Parsers\GtfsCollectionParser.cs" />
-    <Compile Include="Parsers\IArchiveParser.cs" />
     <Compile Include="Parsers\IGtfsCollectionParser.cs" />
     <Compile Include="Parsers\ServiceExceptionCsvStreamParser.cs" />
     <Compile Include="Parsers\StopTimeCsvStreamParser.cs" />
