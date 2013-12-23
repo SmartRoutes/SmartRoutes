@@ -41,7 +41,6 @@
     <Compile Include="Srds\AttributeValue.cs" />
     <Compile Include="Srds\Destination.cs" />
     <Compile Include="ExtensionMethods.cs" />
-    <Compile Include="INullableLocation.cs" />
     <Compile Include="ILocation.cs" />
     <Compile Include="Gtfs\Agency.cs" />
     <Compile Include="Archive.cs" />
