@@ -19,12 +19,13 @@ namespace SmartRoutes.Database
         }
 
         // Destination entities
+        public IDbSet<Archive> SrdsArchives { get; set; }
         public IDbSet<AttributeKey> AttributeKeys { get; set; }
         public IDbSet<AttributeValue> AttributeValues { get; set; }
         public IDbSet<Destination> Destinations { get; set; }
 
         // GTFS entities
-        public IDbSet<Archive> Archives { get; set; }
+        public IDbSet<Archive> GtfsArchives { get; set; }
         public IDbSet<Agency> Agencies { get; set; }
         public IDbSet<Service> Services { get; set; }
         public IDbSet<ServiceException> ServiceException { get; set; }

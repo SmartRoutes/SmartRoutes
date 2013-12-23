@@ -31,7 +31,7 @@ namespace SmartRoutes.SortaDataChecker
                 {
                     // get the current archive from the database (if any)
                     Logger.Trace("Getting the current Archive instance (if any).");
-                    currentArchive = await ctx.Archives
+                    currentArchive = await ctx.GtfsArchives
                         .OrderByDescending(a => a.LoadedOn)
                         .FirstOrDefaultAsync();
                 }
@@ -56,7 +56,7 @@ namespace SmartRoutes.SortaDataChecker
                 if (!gtfsCollection.ContainsEntities)
                 {
                     Logger.Trace("No entities were returned except for a new Archive instance.");
-                    ctx.Archives.Add(gtfsCollection.Archive);
+                    ctx.GtfsArchives.Add(gtfsCollection.Archive);
                     Logger.Trace("Saving the new Archive record.");
                     await ctx.SaveChangesAsync();
                     return;
@@ -66,7 +66,7 @@ namespace SmartRoutes.SortaDataChecker
                 Logger.Trace("Truncating all of the old entities.");
                 if (currentArchive != null)
                 {
-                    ctx.Archives.Remove(currentArchive);
+                    ctx.GtfsArchives.Remove(currentArchive);
                     await ctx.SaveChangesAsync();
                 }
                 ctx.Truncate();
