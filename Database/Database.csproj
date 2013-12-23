@@ -49,10 +49,6 @@
     <Compile Include="Entities.cs" />
     <Compile Include="ExtensionMethods.cs" />
     <Compile Include="FastInserter.cs" />
-    <Compile Include="Migrations\201312201952152_InitialCreate.cs" />
-    <Compile Include="Migrations\201312201952152_InitialCreate.Designer.cs">
-      <DependentUpon>201312201952152_InitialCreate.cs</DependentUpon>
-    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -64,11 +60,6 @@
       <Project>{711cc508-53a8-4edb-bbca-b911935da4b0}</Project>
       <Name>Model</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Migrations\201312201952152_InitialCreate.resx">
-      <DependentUpon>201312201952152_InitialCreate.cs</DependentUpon>
-    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
