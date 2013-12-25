@@ -1,4 +1,4 @@
-﻿namespace SmartRoutes.Reader.UnitTests.Support
+﻿namespace SmartRoutes.Reader.UnitTests.Parsers.TestSupport
 {
     public class Person
     {

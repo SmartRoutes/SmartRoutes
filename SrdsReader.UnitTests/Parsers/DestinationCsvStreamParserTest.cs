@@ -2,7 +2,7 @@
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SmartRoutes.Model.Srds;
-using SmartRoutes.Reader.UnitTests.Support;
+using SmartRoutes.Reader.UnitTests.Parsers.TestSupport;
 using SmartRoutes.SrdsReader.Parsers;
 
 namespace SrdsReader.UnitTests.Parsers

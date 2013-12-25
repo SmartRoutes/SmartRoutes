@@ -52,11 +52,11 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="CsvStreamParserTest.cs" />
+    <Compile Include="Parsers\CsvStreamParserTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Support\AbstractCsvStreamParserTest.cs" />
-    <Compile Include="Support\Person.cs" />
-    <Compile Include="Support\PersonCsvStreamParser.cs" />
+    <Compile Include="Parsers\TestSupport\AbstractCsvStreamParserTest.cs" />
+    <Compile Include="Parsers\TestSupport\Person.cs" />
+    <Compile Include="Parsers\TestSupport\PersonCsvStreamParser.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

@@ -1,8 +1,8 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SmartRoutes.Reader.Support;
-using SmartRoutes.Reader.UnitTests.Support;
+using SmartRoutes.Reader.UnitTests.Parsers.TestSupport;
 
-namespace SmartRoutes.Reader.UnitTests
+namespace SmartRoutes.Reader.UnitTests.Parsers
 {
     [TestClass]
     public class CsvStreamParserTest : AbstractCsvStreamParserTest<Person>

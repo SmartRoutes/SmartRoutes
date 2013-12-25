@@ -1,7 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SmartRoutes.GtfsReader.Parsers;
 using SmartRoutes.Model.Gtfs;
-using SmartRoutes.Reader.UnitTests.Support;
+using SmartRoutes.Reader.UnitTests.Parsers.TestSupport;
 
 namespace SmartRoutes.GtfsReader.UnitTests.Parsers
 {
