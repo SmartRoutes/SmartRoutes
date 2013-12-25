@@ -20,34 +20,37 @@ namespace SmartRoutes.Database.Data
         public IEnumerable<Type> Types { get; private set; }
         public IEnumerable<object> Values { get; private set; }
 
+        public static void Initialize(Type type)
+        {
+            // get the properties
+            PropertyInfo[] propertyInfos = type
+                .GetProperties()
+                .Where(p => !p.GetGetMethod().IsVirtual)
+                .ToArray();
+
+            // store some info
+            Func<object, object>[] propertyGetters = propertyInfos
+                .Select(localProperty => (Func<object, object>) (o => localProperty.GetGetMethod().Invoke(o, null)))
+                .ToArray();
+            AllPropertyGetters[type] = propertyGetters;
+            AllPropertyNames[type] = propertyInfos
+                .Select(p => p.Name)
+                .ToList()
+                .AsReadOnly();
+            AllPropertyTypes[type] = propertyInfos
+                .Select(p => p.PropertyType)
+                .ToList()
+                .AsReadOnly();
+        }
+
         public static Record Create(object obj)
         {
             // reflect on the type
             Type type = obj.GetType();
-            Func<object, object>[] propertyGetters;
-            if (!AllPropertyGetters.TryGetValue(type, out propertyGetters))
-            {
-                PropertyInfo[] propertyInfos = type
-                    .GetProperties()
-                    .Where(p => !p.GetGetMethod().IsVirtual)
-                    .ToArray();
-
-                propertyGetters = propertyInfos
-                    .Select(localProperty => (Func<object, object>) (o => localProperty.GetGetMethod().Invoke(obj, null)))
-                    .ToArray();
-                AllPropertyGetters[type] = propertyGetters;
-                AllPropertyNames[type] = propertyInfos
-                    .Select(p => p.Name)
-                    .ToList()
-                    .AsReadOnly();
-                AllPropertyTypes[type] = propertyInfos
-                    .Select(p => p.PropertyType)
-                    .ToList()
-                    .AsReadOnly();
-            }
+            Initialize(type);
 
             // get the values
-            ReadOnlyCollection<object> values = propertyGetters
+            ReadOnlyCollection<object> values = AllPropertyGetters[type]
                 .Select(f => f(obj))
                 .ToList()
                 .AsReadOnly();
