@@ -10,11 +10,30 @@ namespace SmartRoutes.Database.UnitTests.Data
     public class CsvWriter
     {
         [TestMethod]
+        public void OneRecord()
+        {
+            // ARRANGE
+            var stream = new MemoryStream();
+            using (var csvWriter = new CsvWriter<Country>(stream, true))
+            {
+                // ACT
+                csvWriter.Write(new Country {Id = 1, Name = "Netherlands"});
+            }
+
+            // ASSERT
+            string[] lines = GetLines(stream);
+            Assert.IsNotNull(lines);
+            Assert.AreEqual(2, lines.Length);
+            Assert.AreEqual("Id,Name", lines[0]);
+            Assert.AreEqual("1,Netherlands", lines[1]);
+        }
+
+        [TestMethod]
         public void TwoRecords()
         {
             // ARRANGE
             var stream = new MemoryStream();
-            using (var csvWriter = new CsvWriter<Country>(stream))
+            using (var csvWriter = new CsvWriter<Country>(stream, true))
             {
                 // ACT
                 csvWriter.Write(new Country {Id = 1, Name = "Netherlands"});
@@ -31,11 +50,11 @@ namespace SmartRoutes.Database.UnitTests.Data
         }
 
         [TestMethod]
-        public void OneRecord()
+        public void NoHeaders()
         {
             // ARRANGE
             var stream = new MemoryStream();
-            using (var csvWriter = new CsvWriter<Country>(stream))
+            using (var csvWriter = new CsvWriter<Country>(stream, false))
             {
                 // ACT
                 csvWriter.Write(new Country {Id = 1, Name = "Netherlands"});
@@ -44,9 +63,8 @@ namespace SmartRoutes.Database.UnitTests.Data
             // ASSERT
             string[] lines = GetLines(stream);
             Assert.IsNotNull(lines);
-            Assert.AreEqual(2, lines.Length);
-            Assert.AreEqual("Id,Name", lines[0]);
-            Assert.AreEqual("1,Netherlands", lines[1]);
+            Assert.AreEqual(1, lines.Length);
+            Assert.AreEqual("1,Netherlands", lines[0]);
         }
 
         [TestMethod]
@@ -54,7 +72,7 @@ namespace SmartRoutes.Database.UnitTests.Data
         {
             // ARRANGE
             var stream = new MemoryStream();
-            using (var csvWriter = new CsvWriter<Country>(stream))
+            using (var csvWriter = new CsvWriter<Country>(stream, true))
             {
                 // ACT
                 csvWriter.Write(new Country {Id = 1, Name = "Foo \"Bar\" Baz"});
@@ -73,7 +91,7 @@ namespace SmartRoutes.Database.UnitTests.Data
         {
             // ARRANGE
             var stream = new MemoryStream();
-            using (var csvWriter = new CsvWriter<Country>(stream))
+            using (var csvWriter = new CsvWriter<Country>(stream, true))
             {
                 // ACT
                 csvWriter.Write(new Country {Id = 1, Name = "\"Foo\""});
@@ -92,7 +110,7 @@ namespace SmartRoutes.Database.UnitTests.Data
         {
             // ARRANGE
             var stream = new MemoryStream();
-            using (var csvWriter = new CsvWriter<Country>(stream))
+            using (var csvWriter = new CsvWriter<Country>(stream, true))
             {
                 // ACT
                 csvWriter.Write(new Country {Id = 1, Name = "Foo, Bar"});
@@ -111,7 +129,7 @@ namespace SmartRoutes.Database.UnitTests.Data
         {
             // ARRANGE
             var stream = new MemoryStream();
-            using (var csvWriter = new CsvWriter<Country>(stream))
+            using (var csvWriter = new CsvWriter<Country>(stream, true))
             {
                 // ACT
                 csvWriter.Write(new Country {Id = 1, Name = "\"Foo, Bar\""});
@@ -130,7 +148,7 @@ namespace SmartRoutes.Database.UnitTests.Data
         {
             // ARRANGE
             var stream = new MemoryStream();
-            using (var csvWriter = new CsvWriter<Country>(stream))
+            using (var csvWriter = new CsvWriter<Country>(stream, true))
             {
                 // ACT
                 csvWriter.Write(new Country {Id = 1, Name = "Foo \"Bar, Bar\" Baz"});

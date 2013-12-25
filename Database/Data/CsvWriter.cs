@@ -7,13 +7,13 @@ namespace SmartRoutes.Database.Data
     public class CsvWriter<T> : IDisposable where T : new()
     {
         private readonly CsvWriter _writer;
-        private bool _headersWritten;
+        private bool _needsHeaders;
 
-        public CsvWriter(Stream stream)
+        public CsvWriter(Stream stream, bool needsHeaders)
         {
             Record.Initialize(typeof (T));
             _writer = new CsvWriter(new StreamWriter(stream));
-            _headersWritten = false;
+            _needsHeaders = needsHeaders;
         }
 
         public void Dispose()
@@ -25,14 +25,14 @@ namespace SmartRoutes.Database.Data
         {
             Record record = Record.Create(obj);
 
-            if (!_headersWritten)
+            if (_needsHeaders)
             {
                 foreach (string name in record.Names)
                 {
                     _writer.WriteField(name);
                 }
                 _writer.NextRecord();
-                _headersWritten = true;
+                _needsHeaders = false;
             }
 
             foreach (object value in record.Values)
