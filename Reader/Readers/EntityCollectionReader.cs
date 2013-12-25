@@ -7,13 +7,13 @@ using SmartRoutes.Reader.Support;
 
 namespace SmartRoutes.Reader.Readers
 {
-    public abstract class EntityCollectionReader<TArchive, TCollection> : BaseEntityCollectionReader<TArchive, TCollection>, IEntityCollectionReader<TArchive, TCollection>
+    public class EntityCollectionReader<TArchive, TCollection> : BaseEntityCollectionReader<TArchive, TCollection>, IEntityCollectionReader<TArchive, TCollection>
         where TArchive : Archive
         where TCollection : EntityCollection<TArchive>
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
-        protected EntityCollectionReader(IEntityCollectionParser<TArchive, TCollection> parser) : base(parser)
+        public EntityCollectionReader(IEntityCollectionParser<TArchive, TCollection> parser) : base(parser)
         {
         }
 
