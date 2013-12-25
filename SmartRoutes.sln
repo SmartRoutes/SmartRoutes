@@ -56,6 +56,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SrdsReader", "SrdsReader\Sr
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SrdsReader.UnitTests", "SrdsReader.UnitTests\SrdsReader.UnitTests.csproj", "{E1795576-584D-47E8-A3AF-F9BE156942A3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Database.UnitTests", "Database.UnitTests\Database.UnitTests.csproj", "{09C2A56C-46C8-46AC-A4AD-EA6EC0FDAEB5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -126,6 +128,10 @@ Global
 		{E1795576-584D-47E8-A3AF-F9BE156942A3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E1795576-584D-47E8-A3AF-F9BE156942A3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E1795576-584D-47E8-A3AF-F9BE156942A3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{09C2A56C-46C8-46AC-A4AD-EA6EC0FDAEB5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{09C2A56C-46C8-46AC-A4AD-EA6EC0FDAEB5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{09C2A56C-46C8-46AC-A4AD-EA6EC0FDAEB5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{09C2A56C-46C8-46AC-A4AD-EA6EC0FDAEB5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -143,5 +149,6 @@ Global
 		{FD947449-37E6-462B-88B9-8326194990E6} = {F3D569E6-113E-4CEA-AA23-E0B9CA8DA77A}
 		{DCF5638F-CF4F-4502-B349-7F468942CA22} = {F3D569E6-113E-4CEA-AA23-E0B9CA8DA77A}
 		{5A366168-777E-4CCB-92DC-13243870FF30} = {F3D569E6-113E-4CEA-AA23-E0B9CA8DA77A}
+		{09C2A56C-46C8-46AC-A4AD-EA6EC0FDAEB5} = {F3D569E6-113E-4CEA-AA23-E0B9CA8DA77A}
 	EndGlobalSection
 EndGlobal
