@@ -2,7 +2,7 @@
 using System.Reflection;
 using System.Security.Cryptography;
 
-namespace SmartRoutes.Reader
+namespace SmartRoutes.Reader.Support
 {
     public static class ExtensionMethods
     {

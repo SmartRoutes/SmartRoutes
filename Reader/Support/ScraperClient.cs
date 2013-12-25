@@ -1,9 +1,8 @@
 ﻿using System.Net;
 using System.Net.Http;
 using System.Reflection;
-using System.Threading.Tasks;
 
-namespace SmartRoutes.Reader
+namespace SmartRoutes.Reader.Support
 {
     public class ScraperClient : HttpClient
     {

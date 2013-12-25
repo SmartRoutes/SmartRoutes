@@ -1,6 +1,6 @@
 ﻿using SmartRoutes.Model;
 
-namespace SmartRoutes.Reader
+namespace SmartRoutes.Reader.Support
 {
     public abstract class EntityCollection<TArchive> where TArchive : Archive
     {

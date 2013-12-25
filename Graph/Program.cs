@@ -3,13 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using Ninject;
 using Ninject.Extensions.Conventions;
-using SmartRoutes.GtfsReader.Parsers;
 using SmartRoutes.Graph.Node;
-using SmartRoutes.GtfsReader.Readers;
 using SmartRoutes.GtfsReader.Support;
 using SmartRoutes.Model;
-using SmartRoutes.Model.Gtfs;
-using SmartRoutes.Reader;
 
 namespace SmartRoutes.Graph
 {

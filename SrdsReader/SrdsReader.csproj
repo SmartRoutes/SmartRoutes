@@ -51,7 +51,6 @@
     <Compile Include="Parsers\SrdsCollectionParser.cs" />
     <Compile Include="Parsers\StringParser.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Readers\SrdsCollectionReader.cs" />
     <Compile Include="Support\SrdsCollection.cs" />
   </ItemGroup>
   <ItemGroup>

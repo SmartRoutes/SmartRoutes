@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using NLog;
 using SmartRoutes.Model.Srds;
-using SmartRoutes.Reader;
+using SmartRoutes.Reader.Parsers;
 
 namespace SmartRoutes.SrdsReader.Parsers
 {

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using SmartRoutes.Model.Gtfs;
-using SmartRoutes.Reader;
+using SmartRoutes.Reader.Parsers;
 
 namespace SmartRoutes.GtfsReader.Parsers
 {

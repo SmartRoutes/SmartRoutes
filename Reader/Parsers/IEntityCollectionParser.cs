@@ -1,6 +1,7 @@
 ﻿using SmartRoutes.Model;
+using SmartRoutes.Reader.Support;
 
-namespace SmartRoutes.Reader
+namespace SmartRoutes.Reader.Parsers
 {
     public interface IEntityCollectionParser<TArchive, out TCollection>
         where TArchive : Archive

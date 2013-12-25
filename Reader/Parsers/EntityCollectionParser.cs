@@ -5,8 +5,9 @@ using System.Linq;
 using Ionic.Zip;
 using NLog;
 using SmartRoutes.Model;
+using SmartRoutes.Reader.Support;
 
-namespace SmartRoutes.Reader
+namespace SmartRoutes.Reader.Parsers
 {
     public abstract class EntityCollectionParser<TArchive, TCollection> : IEntityCollectionParser<TArchive, TCollection>
         where TArchive : Archive

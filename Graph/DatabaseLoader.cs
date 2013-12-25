@@ -8,6 +8,7 @@ using SmartRoutes.GtfsReader.Support;
 using SmartRoutes.GtfsReader.Parsers;
 using SmartRoutes.Model.Gtfs;
 using SmartRoutes.Reader;
+using SmartRoutes.Reader.Parsers;
 
 namespace SmartRoutes.Graph
 {

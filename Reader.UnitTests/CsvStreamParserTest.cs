@@ -1,4 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using SmartRoutes.Reader.Support;
 using SmartRoutes.Reader.UnitTests.Support;
 
 namespace SmartRoutes.Reader.UnitTests
@@ -208,7 +209,7 @@ namespace SmartRoutes.Reader.UnitTests
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ParserException))]
+        [ExpectedException(typeof (ParserException))]
         public void ThrowsIfDuplicateHeading()
         {
             // ARRANGE

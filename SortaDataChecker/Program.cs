@@ -5,7 +5,7 @@ using Ninject.Extensions.Conventions;
 using NLog;
 using SmartRoutes.GtfsReader.Support;
 using SmartRoutes.Model.Gtfs;
-using SmartRoutes.Reader;
+using SmartRoutes.Reader.Readers;
 
 namespace SmartRoutes.SortaDataChecker
 {

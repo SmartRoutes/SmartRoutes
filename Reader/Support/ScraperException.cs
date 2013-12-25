@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SmartRoutes.Reader
+namespace SmartRoutes.Reader.Support
 {
     public class ScraperException : Exception
     {

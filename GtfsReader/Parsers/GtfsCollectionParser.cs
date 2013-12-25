@@ -6,7 +6,7 @@ using NLog;
 using SmartRoutes.GtfsReader.Support;
 using SmartRoutes.Model;
 using SmartRoutes.Model.Gtfs;
-using SmartRoutes.Reader;
+using SmartRoutes.Reader.Parsers;
 
 namespace SmartRoutes.GtfsReader.Parsers
 {
