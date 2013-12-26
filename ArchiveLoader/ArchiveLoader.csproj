@@ -64,10 +64,6 @@
       <Project>{1e30e5fd-25b1-4f18-a2c2-5f8ac2b80683}</Project>
       <Name>Database</Name>
     </ProjectReference>
-    <ProjectReference Include="..\GtfsReader\GtfsReader.csproj">
-      <Project>{00d91962-12c1-4729-a893-8beeb1599c5e}</Project>
-      <Name>GtfsReader</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Model\Model.csproj">
       <Project>{711cc508-53a8-4edb-bbca-b911935da4b0}</Project>
       <Name>Model</Name>
@@ -75,10 +71,6 @@
     <ProjectReference Include="..\Reader\Reader.csproj">
       <Project>{4401fe23-f94a-4eda-aa76-ccd53548e10e}</Project>
       <Name>Reader</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\SrdsReader\SrdsReader.csproj">
-      <Project>{8aabf9f7-1350-4e29-89ce-4e875ecef57f}</Project>
-      <Name>SrdsReader</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

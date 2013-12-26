@@ -46,6 +46,21 @@
     <Reference Include="System.Net.Http.WebRequest" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Parsers\Gtfs\AgencyCsvStreamParser.cs" />
+    <Compile Include="Parsers\Gtfs\GtfsCollectionParser.cs" />
+    <Compile Include="Parsers\Gtfs\RouteCsvStreamParser.cs" />
+    <Compile Include="Parsers\Gtfs\ServiceCsvStreamParser.cs" />
+    <Compile Include="Parsers\Gtfs\ServiceExceptionCsvStreamParser.cs" />
+    <Compile Include="Parsers\Gtfs\ShapePointCsvStreamParser.cs" />
+    <Compile Include="Parsers\Gtfs\StopCsvStreamParser.cs" />
+    <Compile Include="Parsers\Gtfs\StopTimeCsvStreamParser.cs" />
+    <Compile Include="Parsers\Gtfs\TripCsvStreamParser.cs" />
+    <Compile Include="Parsers\Srds\AttributeKeyCsvStreamParser.cs" />
+    <Compile Include="Parsers\Srds\DestinationCsvStreamParser.cs" />
+    <Compile Include="Parsers\Srds\IDestinationCsvStreamParser.cs" />
+    <Compile Include="Parsers\Srds\IStringParser.cs" />
+    <Compile Include="Parsers\Srds\SrdsCollectionParser.cs" />
+    <Compile Include="Parsers\Srds\StringParser.cs" />
     <Compile Include="Readers\EntityCollectionDownloader.cs" />
     <Compile Include="Readers\EntityCollectionReader.cs" />
     <Compile Include="Support\ClientResponseHeaders.cs" />

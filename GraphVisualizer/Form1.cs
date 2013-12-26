@@ -3,7 +3,7 @@ using System.Windows.Forms;
 using ILNumerics;
 using ILNumerics.Drawing;
 using ILNumerics.Drawing.Plotting;
-using SmartRoutes.GtfsReader.Parsers;
+using SmartRoutes.Reader.Parsers.Gtfs;
 using Ninject;
 using Ninject.Extensions.Conventions;
 using SmartRoutes.Graph;
