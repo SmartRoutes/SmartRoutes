@@ -160,7 +160,10 @@ namespace SmartRoutes.Database
                 "IF EXISTS (SELECT 1 FROM sys.objects o INNER JOIN sys.columns c ON o.object_id = c.object_id WHERE c.is_identity = 1 AND o.[object_id] = object_id('{0}')) DBCC CHECKIDENT ('{0}', RESEED, 0)"
             };
 
-            string[] tableNames = this.GetTableNames().ToArray();
+            string[] tableNames = this
+                .GetTableNames()
+                .Where(n => n != GetTableName(typeof (Archive)))
+                .ToArray();
 
             foreach (string query in queries)
             {
