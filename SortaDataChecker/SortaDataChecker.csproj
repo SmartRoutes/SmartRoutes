@@ -81,10 +81,6 @@
       <Project>{711cc508-53a8-4edb-bbca-b911935da4b0}</Project>
       <Name>Model</Name>
     </ProjectReference>
-    <ProjectReference Include="..\GtfsReader\GtfsReader.csproj">
-      <Project>{00d91962-12c1-4729-a893-8beeb1599c5e}</Project>
-      <Name>GtfsReader</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Reader\Reader.csproj">
       <Project>{4401fe23-f94a-4eda-aa76-ccd53548e10e}</Project>
       <Name>Reader</Name>

@@ -31,10 +31,11 @@ namespace SmartRoutes.Reader.Readers
             newestArchive.Hash = bytes.GetSha256Hash();
             Logger.Trace("The newest archive has the following hash: {0}", newestArchive.Hash);
 
+            TCollection collection;
             if (currentArchive != null && currentArchive.Hash == newestArchive.Hash)
             {
                 Logger.Trace("The newest archive has the same hash as the one provided.");
-                var collection = Activator.CreateInstance<TCollection>();
+                collection = Activator.CreateInstance<TCollection>();
                 collection.Archive = newestArchive;
                 collection.ContainsEntities = false;
                 return collection;
@@ -42,11 +43,11 @@ namespace SmartRoutes.Reader.Readers
 
             // parse the entities
             Logger.Trace("The newest archive is different. Parsing the newest archive.");
-            TCollection entities = _parser.Parse(bytes);
-            entities.Archive = newestArchive;
-            entities.ContainsEntities = true;
+            collection = _parser.Parse(bytes);
+            collection.Archive = newestArchive;
+            collection.ContainsEntities = true;
 
-            return entities;
+            return collection;
         }
     }
 }

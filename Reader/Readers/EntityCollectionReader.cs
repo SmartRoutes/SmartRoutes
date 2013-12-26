@@ -3,7 +3,6 @@ using System.Threading.Tasks;
 using NLog;
 using SmartRoutes.Model;
 using SmartRoutes.Reader.Parsers;
-using SmartRoutes.Reader.Support;
 
 namespace SmartRoutes.Reader.Readers
 {

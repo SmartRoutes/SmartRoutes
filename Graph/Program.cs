@@ -4,8 +4,8 @@ using System.Linq;
 using Ninject;
 using Ninject.Extensions.Conventions;
 using SmartRoutes.Graph.Node;
-using SmartRoutes.GtfsReader.Support;
 using SmartRoutes.Model;
+using SmartRoutes.Model.Gtfs;
 
 namespace SmartRoutes.Graph
 {

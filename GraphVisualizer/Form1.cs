@@ -3,13 +3,12 @@ using System.Windows.Forms;
 using ILNumerics;
 using ILNumerics.Drawing;
 using ILNumerics.Drawing.Plotting;
-using SmartRoutes.GtfsReader.Parsers;
+using SmartRoutes.Reader.Parsers.Gtfs;
 using Ninject;
 using Ninject.Extensions.Conventions;
 using SmartRoutes.Graph;
 using SmartRoutes.Graph.Node;
 using SmartRoutes.Graph.Comparers;
-using SmartRoutes.GtfsReader.Support;
 using SmartRoutes.Model.Gtfs;
 using SmartRoutes.Reader;
 

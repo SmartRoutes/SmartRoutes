@@ -48,7 +48,7 @@ namespace SmartRoutes.Database
         public IDbSet<GtfsArchive> GtfsArchives { get; set; }
         public IDbSet<Agency> Agencies { get; set; }
         public IDbSet<Service> Services { get; set; }
-        public IDbSet<ServiceException> ServiceException { get; set; }
+        public IDbSet<ServiceException> ServiceExceptions { get; set; }
         public IDbSet<Route> Routes { get; set; }
         public IDbSet<Shape> Shapes { get; set; }
         public IDbSet<ShapePoint> ShapePoints { get; set; }
@@ -111,6 +111,7 @@ namespace SmartRoutes.Database
 
             // inheritance: table-per-hiearchy
             modelBuilder.Entity<Archive>()
+                .Ignore(a => a.ArchiveType)
                 .Map<SrdsArchive>(x => x.Requires("ArchiveType").HasValue(SrdsArchive.Discriminator))
                 .Map<GtfsArchive>(x => x.Requires("ArchiveType").HasValue(GtfsArchive.Discriminator));
         }
