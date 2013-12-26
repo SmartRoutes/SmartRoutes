@@ -50,6 +50,7 @@ namespace SmartRoutes.ArchiveLoader
 
         private async Task Load(Func<TArchive, Task<TCollection>> collectionGetter, bool force)
         {
+            Logger.Trace("ArchiveLoader<{0}, {1}> is now starting.", typeof (TArchive).Name, typeof (TCollection).Name);
             _ctx = new Entities();
 
             // speed up adding
@@ -62,19 +63,35 @@ namespace SmartRoutes.ArchiveLoader
             if (!force)
             {
                 // fetch the newest
+                Logger.Trace("Fetching the latest {0} record.", typeof (TArchive).Name);
                 currentArchive = await dbSet
                     .OrderByDescending(a => a.LoadedOn)
                     .FirstOrDefaultAsync();
+                if (currentArchive == null)
+                {
+                    Logger.Trace("No {0} record was found.", typeof (TArchive).Name);
+                }
+                else
+                {
+                    Logger.Trace("A {0} record was found, which was loaded on {1}.", typeof (TArchive).Name, currentArchive.LoadedOn);
+                }
+            }
+            else
+            {
+                Logger.Trace("The current {0} record is being ignored, due to the force parameter.", typeof (TArchive).Name);
             }
 
             // get the collection, by some means
+            Logger.Trace("Fetching the {0}.", typeof (TCollection).Name);
             TCollection collection = await collectionGetter(currentArchive);
 
             if (!collection.ContainsEntities)
             {
+                Logger.Trace("The current {0} that is loaded in the database is current.", typeof (TCollection).Name);
                 return;
             }
 
+            Logger.Trace("The {0} has changed. The tables for this collection will be truncated and re-populated.", typeof (TCollection).Name);
             if (currentArchive != null)
             {
                 dbSet.Remove(currentArchive);
@@ -83,9 +100,11 @@ namespace SmartRoutes.ArchiveLoader
             }
 
             // clear out the tables
+            Logger.Trace("Truncating the tables.");
             await _ctx.TruncateAsync();
 
             // persist the new collection
+            Logger.Trace("Adding the {0} data.", typeof (TCollection).Name);
             await AddCollection(collection);
 
             // persist the Archive
@@ -93,15 +112,26 @@ namespace SmartRoutes.ArchiveLoader
             await _ctx.SaveChangesAsync();
 
             _ctx.Dispose();
+
+            Logger.Trace("ArchiveLoader<{0}, {1}> is now complete.", typeof (TArchive).Name, typeof (TCollection).Name);
         }
 
         protected async Task Persist<T>(Func<Entities, IDbSet<T>> getDbSet, IEnumerable<T> entities, bool intermediateSaves) where T : class
         {
+            // enumerate the entities
+            T[] entityArray = entities.ToArray();
+
+            Logger.Trace("Persisting {0} {1} entities from a {2}{3}.",
+                entityArray.Length,
+                typeof (T).Name,
+                typeof (TCollection).Name,
+                intermediateSaves ? " (with intermediate saves)" : string.Empty);
+
             // get the DbSet
             IDbSet<T> dbSet = getDbSet(_ctx);
 
             int i = 1;
-            foreach (T entity in entities)
+            foreach (T entity in entityArray)
             {
                 dbSet.Add(entity);
                 if (i%AddsPerRefresh == 0 && intermediateSaves)

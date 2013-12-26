@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Data.Entity;
 using System.Threading.Tasks;
+using NLog;
 using SmartRoutes.Database;
 using SmartRoutes.Model.Gtfs;
 using SmartRoutes.Reader.Readers;
@@ -9,6 +10,8 @@ namespace SmartRoutes.ArchiveLoader
 {
     public class GtfsArchiveLoader : ArchiveLoader<GtfsArchive, GtfsCollection>
     {
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+
         public GtfsArchiveLoader(IEntityCollectionReader<GtfsArchive, GtfsCollection> reader, IEntityCollectionDownloader<GtfsArchive, GtfsCollection> downloader) : base(reader, downloader)
         {
         }
