@@ -171,7 +171,7 @@ namespace SmartRoutes.Database.Migrations
                     ArchiveId = c.Int(false, true),
                     Hash = c.String(),
                     LoadedOn = c.DateTime(false),
-                    ArchiveType = c.String(maxLength: 4000),
+                    ArchiveType = c.String(false, 128),
                 })
                 .PrimaryKey(t => t.ArchiveId);
 

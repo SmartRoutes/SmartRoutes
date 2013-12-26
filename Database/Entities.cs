@@ -111,6 +111,7 @@ namespace SmartRoutes.Database
 
             // inheritance: table-per-hiearchy
             modelBuilder.Entity<Archive>()
+                .Ignore(a => a.ArchiveType)
                 .Map<SrdsArchive>(x => x.Requires("ArchiveType").HasValue(SrdsArchive.Discriminator))
                 .Map<GtfsArchive>(x => x.Requires("ArchiveType").HasValue(GtfsArchive.Discriminator));
         }

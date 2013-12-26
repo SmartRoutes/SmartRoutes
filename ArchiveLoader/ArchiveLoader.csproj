@@ -52,6 +52,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ArchiveLoader.cs" />
+    <Compile Include="IArchiveLoader.cs" />
     <Compile Include="SrdsArchiveLoader.cs" />
     <Compile Include="GtfsArchiveLoader.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
