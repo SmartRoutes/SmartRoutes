@@ -16,6 +16,7 @@ namespace SmartRoutes.Database.Data
         {
         }
 
+        public Type UnderlyingType { get; private set; }
         public IEnumerable<string> Names { get; private set; }
         public IEnumerable<Type> Types { get; private set; }
         public IEnumerable<object> Values { get; private set; }
@@ -46,11 +47,11 @@ namespace SmartRoutes.Database.Data
         public static Record Create(object obj)
         {
             // reflect on the type
-            Type type = obj.GetType();
-            Initialize(type);
+            Type underlyingType = obj.GetType();
+            Initialize(underlyingType);
 
             // get the values
-            ReadOnlyCollection<object> values = AllPropertyGetters[type]
+            ReadOnlyCollection<object> values = AllPropertyGetters[underlyingType]
                 .Select(f => f(obj))
                 .ToList()
                 .AsReadOnly();
@@ -58,8 +59,9 @@ namespace SmartRoutes.Database.Data
             // create the Record
             var propertyList = new Record
             {
-                Names = AllPropertyNames[type],
-                Types = AllPropertyTypes[type],
+                UnderlyingType = underlyingType,
+                Names = AllPropertyNames[underlyingType],
+                Types = AllPropertyTypes[underlyingType],
                 Values = values
             };
 
