@@ -67,24 +67,13 @@ namespace SmartRoutes.Database
                 .Where(p => p.Name == "Id")
                 .Configure(c => c.HasColumnName(c.ClrPropertyInfo.DeclaringType.Name + "Id"));
 
-            // some GTFS entities have their IDs pre-defined
-            ISet<Type> preDefinedIds = new HashSet<Type>
-            {
-                typeof (Agency),
-                typeof (Service),
-                typeof (Route),
-                typeof (Shape),
-                typeof (Block),
-                typeof (Trip),
-                typeof (Stop)
-            };
+            // all entities have client-defined IDs, except Archive
             modelBuilder
                 .Properties()
-                .Where(p => p.Name == "Id" && preDefinedIds.Contains(p.DeclaringType))
+                .Where(p => p.Name == "Id" && !typeof (Archive).IsAssignableFrom(p.DeclaringType))
                 .Configure(c => c.HasDatabaseGeneratedOption(DatabaseGeneratedOption.None));
 
             // name the table of the singular version of the entity name
-
             modelBuilder
                 .Types()
                 .Where(t => !typeof (Archive).IsAssignableFrom(t) || t == typeof (Archive))
