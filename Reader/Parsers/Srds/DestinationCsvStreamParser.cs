@@ -88,6 +88,7 @@ namespace SmartRoutes.Reader.Parsers.Srds
                 destination.AttributeValues.Add(new AttributeValue
                 {
                     AttributeKey = attributeKey,
+                    Destination = destination,
                     Value = _stringParser.Parse(attributeKey.TypeName, value)
                 });
             }
