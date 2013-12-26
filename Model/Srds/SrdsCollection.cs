@@ -4,8 +4,8 @@ namespace SmartRoutes.Model.Srds
 {
     public class SrdsCollection : EntityCollection<SrdsArchive>
     {
-        public IEnumerable<Destination> Destinations { get; set; }
-        public IEnumerable<AttributeKey> AttributeKeys { get; set; }
-        public IEnumerable<AttributeValue> AttributeValues { get; set; }
+        public Destination[] Destinations { get; set; }
+        public AttributeKey[] AttributeKeys { get; set; }
+        public AttributeValue[] AttributeValues { get; set; }
     }
 }

@@ -29,7 +29,7 @@ namespace SmartRoutes.Reader.Parsers.Srds
             _destinationParser.AttachAttributeKeys(collection.AttributeKeys);
             collection.Destinations = _destinationParser.Parse(GetStream(streams, "Destinations.csv")).ToArray();
 
-            collection.AttributeValues = collection.Destinations.SelectMany(d => d.AttributeValues);
+            collection.AttributeValues = collection.Destinations.SelectMany(d => d.AttributeValues).ToArray();
 
             return collection;
         }

@@ -40,17 +40,17 @@ namespace SmartRoutes.Graph
 
             using (var ctx = new Entities())
             {
-                Collection.StopTimes = (from e in ctx.StopTimes select e).ToList();
-                Collection.Stops = (from e in ctx.Stops select e).Include(s => s.CloseStops).ToList();
-                Collection.Routes = (from e in ctx.Routes select e).ToList();
-                Collection.Shapes = (from e in ctx.Shapes select e).ToList();
-                Collection.ShapePoints = (from e in ctx.ShapePoints select e).ToList();
-                Collection.Blocks = (from e in ctx.Blocks select e).ToList();
-                Collection.Agencies = (from e in ctx.Agencies select e).ToList();
+                Collection.StopTimes = (from e in ctx.StopTimes select e).ToArray();
+                Collection.Stops = (from e in ctx.Stops select e).Include(s => s.CloseStops).ToArray();
+                Collection.Routes = (from e in ctx.Routes select e).ToArray();
+                Collection.Shapes = (from e in ctx.Shapes select e).ToArray();
+                Collection.ShapePoints = (from e in ctx.ShapePoints select e).ToArray();
+                Collection.Blocks = (from e in ctx.Blocks select e).ToArray();
+                Collection.Agencies = (from e in ctx.Agencies select e).ToArray();
                 Collection.Archive = ctx.GtfsArchives.OrderBy(e => e.LoadedOn).FirstOrDefault();
-                Collection.Trips = (from e in ctx.Trips select e).ToList();
-                Collection.ServiceExceptions = (from e in ctx.ServiceExceptions select e).ToList();
-                Collection.Services = (from e in ctx.Services select e).ToList();
+                Collection.Trips = (from e in ctx.Trips select e).ToArray();
+                Collection.ServiceExceptions = (from e in ctx.ServiceExceptions select e).ToArray();
+                Collection.Services = (from e in ctx.Services select e).ToArray();
                 Collection.ContainsEntities = true;
             }
         }
