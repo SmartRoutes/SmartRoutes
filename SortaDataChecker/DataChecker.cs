@@ -4,7 +4,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using NLog;
 using SmartRoutes.Database;
-using SmartRoutes.GtfsReader.Support;
 using SmartRoutes.Model.Gtfs;
 using SmartRoutes.Reader.Readers;
 

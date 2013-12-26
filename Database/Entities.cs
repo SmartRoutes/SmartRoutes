@@ -48,7 +48,7 @@ namespace SmartRoutes.Database
         public IDbSet<GtfsArchive> GtfsArchives { get; set; }
         public IDbSet<Agency> Agencies { get; set; }
         public IDbSet<Service> Services { get; set; }
-        public IDbSet<ServiceException> ServiceException { get; set; }
+        public IDbSet<ServiceException> ServiceExceptions { get; set; }
         public IDbSet<Route> Routes { get; set; }
         public IDbSet<Shape> Shapes { get; set; }
         public IDbSet<ShapePoint> ShapePoints { get; set; }

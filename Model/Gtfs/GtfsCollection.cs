@@ -1,8 +1,6 @@
 using System.Collections.Generic;
-using SmartRoutes.Model.Gtfs;
-using SmartRoutes.Reader.Support;
 
-namespace SmartRoutes.GtfsReader.Support
+namespace SmartRoutes.Model.Gtfs
 {
     public class GtfsCollection : EntityCollection<GtfsArchive>
     {

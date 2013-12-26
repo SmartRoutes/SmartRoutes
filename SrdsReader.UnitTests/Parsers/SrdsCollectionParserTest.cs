@@ -4,8 +4,8 @@ using System.IO;
 using System.Linq;
 using Ionic.Zip;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using SmartRoutes.Model.Srds;
 using SmartRoutes.SrdsReader.Parsers;
-using SmartRoutes.SrdsReader.Support;
 
 namespace SrdsReader.UnitTests.Parsers
 {

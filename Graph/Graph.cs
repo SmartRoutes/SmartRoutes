@@ -4,7 +4,6 @@ using System.Linq;
 using System.Data.Entity;
 using SmartRoutes.Database;
 using SmartRoutes.Graph.Node;
-using SmartRoutes.GtfsReader.Support;
 using SmartRoutes.Model.Gtfs;
 using SmartRoutes.Heap;
 using SmartRoutes.Model;
@@ -50,7 +49,7 @@ namespace SmartRoutes.Graph
                 Collection.Agencies = (from e in ctx.Agencies select e).ToList();
                 Collection.Archive = ctx.GtfsArchives.OrderBy(e => e.LoadedOn).FirstOrDefault();
                 Collection.Trips = (from e in ctx.Trips select e).ToList();
-                Collection.ServiceExceptions = (from e in ctx.ServiceException select e).ToList();
+                Collection.ServiceExceptions = (from e in ctx.ServiceExceptions select e).ToList();
                 Collection.Services = (from e in ctx.Services select e).ToList();
                 Collection.ContainsEntities = true;
             }

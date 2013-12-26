@@ -1,8 +1,6 @@
 ﻿using System.Collections.Generic;
-using SmartRoutes.Model.Srds;
-using SmartRoutes.Reader.Support;
 
-namespace SmartRoutes.SrdsReader.Support
+namespace SmartRoutes.Model.Srds
 {
     public class SrdsCollection : EntityCollection<SrdsArchive>
     {

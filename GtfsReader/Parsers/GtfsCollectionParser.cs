@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using NLog;
-using SmartRoutes.GtfsReader.Support;
 using SmartRoutes.Model;
 using SmartRoutes.Model.Gtfs;
 using SmartRoutes.Reader.Parsers;
