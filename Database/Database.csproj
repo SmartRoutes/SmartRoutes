@@ -49,7 +49,6 @@
     <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Data\CsvWriter.cs" />
     <Compile Include="Data\Record.cs" />
     <Compile Include="Entities.cs" />
     <Compile Include="ExtensionMethods.cs" />

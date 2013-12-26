@@ -52,7 +52,6 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="Data\CsvWriter.cs" />
     <Compile Include="Data\TestSupport\Country.cs" />
     <Compile Include="Data\RecordTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
