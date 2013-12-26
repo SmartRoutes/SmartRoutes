@@ -23,7 +23,6 @@ namespace SmartRoutes.ArchiveLoader
             await Persist(ctx => ctx.Agencies, collection.Agencies, true);
             await Persist(ctx => ctx.Services, collection.Services, true);
             await Persist(ctx => ctx.ServiceExceptions, collection.ServiceExceptions, true);
-            await Persist(ctx => ctx.Services, collection.Services, true);
             await Persist(ctx => ctx.Routes, collection.Routes, true);
             await Persist(ctx => ctx.Shapes, collection.Shapes, true);
             await Persist(ctx => ctx.ShapePoints, collection.ShapePoints, true);
