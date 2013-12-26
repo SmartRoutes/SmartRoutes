@@ -23,16 +23,16 @@ namespace SmartRoutes.ArchiveLoader
 
         protected override async Task AddCollection(GtfsCollection collection)
         {
-            await Persist(ctx => ctx.Agencies, collection.Agencies, true);
-            await Persist(ctx => ctx.Services, collection.Services, true);
-            await Persist(ctx => ctx.ServiceExceptions, collection.ServiceExceptions, true);
-            await Persist(ctx => ctx.Routes, collection.Routes, true);
-            await Persist(ctx => ctx.Shapes, collection.Shapes, true);
-            await Persist(ctx => ctx.ShapePoints, collection.ShapePoints, true);
-            await Persist(ctx => ctx.Blocks, collection.Blocks, true);
-            await Persist(ctx => ctx.Trips, collection.Trips, true);
-            await Persist(ctx => ctx.Stops, collection.Stops, false);
-            await Persist(ctx => ctx.StopTimes, collection.StopTimes, true);
+            await Persist(collection.Agencies);
+            await Persist(collection.Services);
+            await Persist(collection.ServiceExceptions);
+            await Persist(collection.Routes);
+            await Persist(collection.Shapes);
+            await Persist(collection.ShapePoints);
+            await Persist(collection.Blocks);
+            await Persist(collection.Trips);
+            await Persist(collection.Stops);
+            await Persist(collection.StopTimes);
         }
     }
 }

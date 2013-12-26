@@ -10,7 +10,7 @@ namespace SmartRoutes.Database.Migrations
                 "gtfs.Agency",
                 c => new
                 {
-                    AgencyId = c.String(false, 128),
+                    Id = c.String(false, 128),
                     Name = c.String(),
                     Url = c.String(),
                     Timezone = c.String(),
@@ -18,13 +18,13 @@ namespace SmartRoutes.Database.Migrations
                     Phone = c.String(),
                     FareUrl = c.String(),
                 })
-                .PrimaryKey(t => t.AgencyId);
+                .PrimaryKey(t => t.Id);
 
             CreateTable(
                 "gtfs.Route",
                 c => new
                 {
-                    RouteId = c.Int(false),
+                    Id = c.Int(false),
                     ShortName = c.String(),
                     Description = c.String(),
                     AgencyId = c.String(maxLength: 128),
@@ -34,7 +34,7 @@ namespace SmartRoutes.Database.Migrations
                     Color = c.String(),
                     TextColor = c.String(),
                 })
-                .PrimaryKey(t => t.RouteId)
+                .PrimaryKey(t => t.Id)
                 .ForeignKey("gtfs.Agency", t => t.AgencyId)
                 .Index(t => t.AgencyId);
 
@@ -42,7 +42,7 @@ namespace SmartRoutes.Database.Migrations
                 "gtfs.Trip",
                 c => new
                 {
-                    TripId = c.Int(false),
+                    Id = c.Int(false),
                     RouteId = c.Int(false),
                     ServiceId = c.Int(false),
                     Headsign = c.String(),
@@ -52,7 +52,7 @@ namespace SmartRoutes.Database.Migrations
                     ShapeId = c.Int(),
                     WheelchairAccessible = c.Int(),
                 })
-                .PrimaryKey(t => t.TripId)
+                .PrimaryKey(t => t.Id)
                 .ForeignKey("gtfs.Block", t => t.BlockId)
                 .ForeignKey("gtfs.Route", t => t.RouteId, true)
                 .ForeignKey("gtfs.Service", t => t.ServiceId, true)
@@ -66,15 +66,15 @@ namespace SmartRoutes.Database.Migrations
                 "gtfs.Block",
                 c => new
                 {
-                    BlockId = c.Int(false),
+                    Id = c.Int(false),
                 })
-                .PrimaryKey(t => t.BlockId);
+                .PrimaryKey(t => t.Id);
 
             CreateTable(
                 "gtfs.Service",
                 c => new
                 {
-                    ServiceId = c.Int(false),
+                    Id = c.Int(false),
                     Monday = c.Boolean(false),
                     Tuesday = c.Boolean(false),
                     Wednesday = c.Boolean(false),
@@ -85,18 +85,18 @@ namespace SmartRoutes.Database.Migrations
                     StartDate = c.DateTime(false),
                     EndDate = c.DateTime(false),
                 })
-                .PrimaryKey(t => t.ServiceId);
+                .PrimaryKey(t => t.Id);
 
             CreateTable(
                 "gtfs.ServiceException",
                 c => new
                 {
-                    ServiceExceptionId = c.Int(false, true),
+                    Id = c.Int(false),
                     ServiceId = c.Int(false),
                     Date = c.DateTime(false),
                     ServiceExemptionTypeId = c.Int(false),
                 })
-                .PrimaryKey(t => t.ServiceExceptionId)
+                .PrimaryKey(t => t.Id)
                 .ForeignKey("gtfs.Service", t => t.ServiceId, true)
                 .Index(t => t.ServiceId);
 
@@ -104,22 +104,22 @@ namespace SmartRoutes.Database.Migrations
                 "gtfs.Shape",
                 c => new
                 {
-                    ShapeId = c.Int(false),
+                    Id = c.Int(false),
                 })
-                .PrimaryKey(t => t.ShapeId);
+                .PrimaryKey(t => t.Id);
 
             CreateTable(
                 "gtfs.ShapePoint",
                 c => new
                 {
-                    ShapePointId = c.Int(false, true),
+                    Id = c.Int(false),
                     ShapeId = c.Int(false),
                     Latitude = c.Double(false),
                     Longitude = c.Double(false),
                     Sequence = c.Int(false),
                     DistanceTraveled = c.Double(),
                 })
-                .PrimaryKey(t => t.ShapePointId)
+                .PrimaryKey(t => t.Id)
                 .ForeignKey("gtfs.Shape", t => t.ShapeId, true)
                 .Index(t => t.ShapeId);
 
@@ -127,7 +127,7 @@ namespace SmartRoutes.Database.Migrations
                 "gtfs.StopTime",
                 c => new
                 {
-                    StopTimeId = c.Int(false, true),
+                    Id = c.Int(false),
                     TripId = c.Int(false),
                     ArrivalTime = c.DateTime(false),
                     DepartureTime = c.DateTime(false),
@@ -138,7 +138,7 @@ namespace SmartRoutes.Database.Migrations
                     DropOffType = c.Int(),
                     ShapeDistanceTraveled = c.Double(),
                 })
-                .PrimaryKey(t => t.StopTimeId)
+                .PrimaryKey(t => t.Id)
                 .ForeignKey("gtfs.Stop", t => t.StopId, true)
                 .ForeignKey("gtfs.Trip", t => t.TripId, true)
                 .Index(t => t.StopId)
@@ -148,7 +148,7 @@ namespace SmartRoutes.Database.Migrations
                 "gtfs.Stop",
                 c => new
                 {
-                    StopId = c.Int(false),
+                    Id = c.Int(false),
                     Code = c.String(),
                     Name = c.String(),
                     Latitude = c.Double(false),
@@ -160,7 +160,7 @@ namespace SmartRoutes.Database.Migrations
                     Timezone = c.String(),
                     WheelchairBoarding = c.Int(),
                 })
-                .PrimaryKey(t => t.StopId)
+                .PrimaryKey(t => t.Id)
                 .ForeignKey("gtfs.Stop", t => t.ParentId)
                 .Index(t => t.ParentId);
 
@@ -168,33 +168,33 @@ namespace SmartRoutes.Database.Migrations
                 "gen.Archive",
                 c => new
                 {
-                    ArchiveId = c.Int(false, true),
+                    Id = c.Int(false, true),
                     Hash = c.String(),
                     LoadedOn = c.DateTime(false),
                     ArchiveType = c.String(false, 128),
                 })
-                .PrimaryKey(t => t.ArchiveId);
+                .PrimaryKey(t => t.Id);
 
             CreateTable(
                 "srds.AttributeKey",
                 c => new
                 {
-                    AttributeKeyId = c.Int(false, true),
+                    Id = c.Int(false),
                     Name = c.String(),
                     TypeName = c.String(),
                 })
-                .PrimaryKey(t => t.AttributeKeyId);
+                .PrimaryKey(t => t.Id);
 
             CreateTable(
                 "srds.AttributeValue",
                 c => new
                 {
-                    AttributeValueId = c.Int(false, true),
+                    Id = c.Int(false),
                     AttributeKeyId = c.Int(false),
                     DestinationId = c.Int(false),
                     ValueBytes = c.Binary(),
                 })
-                .PrimaryKey(t => t.AttributeValueId)
+                .PrimaryKey(t => t.Id)
                 .ForeignKey("srds.AttributeKey", t => t.AttributeKeyId, true)
                 .ForeignKey("srds.Destination", t => t.DestinationId, true)
                 .Index(t => t.AttributeKeyId)
@@ -204,12 +204,12 @@ namespace SmartRoutes.Database.Migrations
                 "srds.Destination",
                 c => new
                 {
-                    DestinationId = c.Int(false, true),
+                    Id = c.Int(false),
                     Name = c.String(),
                     Latitude = c.Double(false),
                     Longitude = c.Double(false),
                 })
-                .PrimaryKey(t => t.DestinationId);
+                .PrimaryKey(t => t.Id);
 
             CreateTable(
                 "gtfs.CloseStop",

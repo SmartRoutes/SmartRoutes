@@ -13,7 +13,7 @@ namespace SmartRoutes.Database.Migrations
         
         string IMigrationMetadata.Id
         {
-            get { return "201312260852028_InitialCreate"; }
+            get { return "201312262125531_InitialCreate"; }
         }
         
         string IMigrationMetadata.Source

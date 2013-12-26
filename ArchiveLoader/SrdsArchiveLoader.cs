@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Data.Entity;
 using System.Threading.Tasks;
+using NLog;
 using SmartRoutes.Database;
 using SmartRoutes.Model.Srds;
 using SmartRoutes.Reader.Readers;
@@ -9,6 +10,8 @@ namespace SmartRoutes.ArchiveLoader
 {
     public class SrdsArchiveLoader : ArchiveLoader<SrdsArchive, SrdsCollection>
     {
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+
         public SrdsArchiveLoader(IEntityCollectionReader<SrdsArchive, SrdsCollection> reader, IEntityCollectionDownloader<SrdsArchive, SrdsCollection> downloader)
             : base(reader, downloader)
         {
@@ -21,9 +24,9 @@ namespace SmartRoutes.ArchiveLoader
 
         protected override async Task AddCollection(SrdsCollection collection)
         {
-            await Persist(ctx => ctx.AttributeKeys, collection.AttributeKeys, true);
-            await Persist(ctx => ctx.Destinations, collection.Destinations, true);
-            await Persist(ctx => ctx.AttributeValues, collection.AttributeValues, true);
+            await Persist(collection.AttributeKeys);
+            await Persist(collection.Destinations);
+            await Persist(collection.AttributeValues);
         }
     }
 }

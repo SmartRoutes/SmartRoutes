@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reflection;
+using SmartRoutes.Model.Gtfs;
 
 namespace SmartRoutes.Database.Data
 {
@@ -21,19 +22,30 @@ namespace SmartRoutes.Database.Data
         public IEnumerable<Type> Types { get; private set; }
         public IEnumerable<object> Values { get; private set; }
 
+        public static IEnumerable<string> GetPropertyNames(Type type)
+        {
+            Initialize(type);
+            return AllPropertyNames[type];
+        }
+
+        public static IEnumerable<Type> GetPropertyTypes(Type type)
+        {
+            Initialize(type);
+            return AllPropertyTypes[type];
+        }
+
         public static void Initialize(Type type)
         {
             // get the properties
             PropertyInfo[] propertyInfos = type
                 .GetProperties()
-                .Where(p => !p.GetGetMethod().IsVirtual)
+                .Where(p => !p.GetGetMethod().IsVirtual || p.GetGetMethod().IsFinal)
                 .ToArray();
 
             // store some info
-            Func<object, object>[] propertyGetters = propertyInfos
-                .Select(localProperty => (Func<object, object>) (o => localProperty.GetGetMethod().Invoke(o, null)))
+            AllPropertyGetters[type] = propertyInfos
+                .Select(p => (Func<object, object>)(p.GetValue))
                 .ToArray();
-            AllPropertyGetters[type] = propertyGetters;
             AllPropertyNames[type] = propertyInfos
                 .Select(p => p.Name)
                 .ToList()

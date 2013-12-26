@@ -54,6 +54,8 @@
   <ItemGroup>
     <Compile Include="Data\TestSupport\Country.cs" />
     <Compile Include="Data\RecordTest.cs" />
+    <Compile Include="Data\TestSupport\Foo.cs" />
+    <Compile Include="Data\TestSupport\IFoo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

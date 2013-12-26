@@ -47,15 +47,18 @@
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.XML" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Data\RecordDataReader.cs" />
     <Compile Include="Data\Record.cs" />
     <Compile Include="Entities.cs" />
     <Compile Include="ExtensionMethods.cs" />
     <Compile Include="FastInserter.cs" />
-    <Compile Include="Migrations\201312260852028_InitialCreate.cs" />
-    <Compile Include="Migrations\201312260852028_InitialCreate.Designer.cs">
-      <DependentUpon>201312260852028_InitialCreate.cs</DependentUpon>
+    <Compile Include="Migrations\201312262125531_InitialCreate.cs" />
+    <Compile Include="Migrations\201312262125531_InitialCreate.Designer.cs">
+      <DependentUpon>201312262125531_InitialCreate.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -70,11 +73,10 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201312260852028_InitialCreate.resx">
-      <DependentUpon>201312260852028_InitialCreate.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201312262125531_InitialCreate.resx">
+      <DependentUpon>201312262125531_InitialCreate.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <Import Project="$(SolutionDir)\.build\Version.targets" />

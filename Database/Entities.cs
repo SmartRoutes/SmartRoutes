@@ -20,14 +20,19 @@ namespace SmartRoutes.Database
 
         private static readonly ISet<Type> SrdsTypes = new HashSet<Type>
         {
-            typeof (SrdsArchive), typeof (AttributeKey), typeof (AttributeValue), typeof (Destination)
+            typeof (AttributeKey), typeof (AttributeValue), typeof (Destination)
         };
 
         private static readonly ISet<Type> GtfsTypes = new HashSet<Type>
         {
-            typeof (GtfsArchive), typeof (Agency), typeof (Service), typeof (ServiceException),
+            typeof (Agency), typeof (Service), typeof (ServiceException),
             typeof (Route), typeof (Shape), typeof (ShapePoint), typeof (Block),
             typeof (Trip), typeof (Stop), typeof (StopTime)
+        };
+
+        private static readonly ISet<Type> GenericTypes = new HashSet<Type>
+        {
+            typeof (Archive)
         };
 
         public Entities()
@@ -60,12 +65,6 @@ namespace SmartRoutes.Database
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-
-            // give all Id columns "<Type Name>Id"
-            modelBuilder
-                .Properties()
-                .Where(p => p.Name == "Id")
-                .Configure(c => c.HasColumnName(c.ClrPropertyInfo.DeclaringType.Name + "Id"));
 
             // all entities have client-defined IDs, except Archive
             modelBuilder
@@ -106,7 +105,7 @@ namespace SmartRoutes.Database
         }
 
 
-        private static string GetTableName(Type c)
+        public static string GetTableName(Type c)
         {
             string schema;
             if (SrdsTypes.Contains(c))
@@ -117,9 +116,13 @@ namespace SmartRoutes.Database
             {
                 schema = GtfsSchema;
             }
-            else
+            else if (GenericTypes.Contains(c))
             {
                 schema = GenericSchema;
+            }
+            else
+            {
+                throw new ArgumentException("The provided type is not part of this DbContext or does not have a table.");
             }
             return string.Format("{0}.{1}", schema, c.Name);
         }

@@ -16,7 +16,7 @@ namespace SmartRoutes.ArchiveTool
                 .BindAllInterfaces());
 
             var loader = kernel.Get<IArchiveLoader<GtfsArchive, GtfsCollection>>();
-            loader.Read(@"D:\Dropbox\School\Spring 2013-2014\Senior Design II\SORTA\sorta_subset_1.zip", true).Wait();
+            loader.Read(@"D:\Dropbox\School\Spring 2013-2014\Senior Design II\SORTA\google_transit_info.zip", true).Wait();
         }
     }
 }
