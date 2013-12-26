@@ -10,7 +10,7 @@ using SmartRoutes.Reader.Readers;
 
 namespace SmartRoutes.ArchiveLoader
 {
-    public abstract class ArchiveLoader<TArchive, TCollection>
+    public abstract class ArchiveLoader<TArchive, TCollection> : IDisposable, IArchiveLoader<TArchive, TCollection>
         where TArchive : Archive
         where TCollection : EntityCollection<TArchive>
     {
@@ -27,9 +27,6 @@ namespace SmartRoutes.ArchiveLoader
             _downloader = downloader;
         }
 
-        protected abstract Func<Entities, IDbSet<TArchive>> GetArchiveDbSetGetter();
-        protected abstract Task AddCollection(TCollection collection);
-
         public async Task Download(Uri uri, bool force)
         {
             await Load(archive => _downloader.Download(uri, archive), force);
@@ -39,6 +36,17 @@ namespace SmartRoutes.ArchiveLoader
         {
             await Load(archive => _reader.Read(filePath, archive), force);
         }
+
+        public void Dispose()
+        {
+            if (_ctx != null)
+            {
+                _ctx.Dispose();
+            }
+        }
+
+        protected abstract Func<Entities, IDbSet<TArchive>> GetArchiveDbSetGetter();
+        protected abstract Task AddCollection(TCollection collection);
 
         private async Task Load(Func<TArchive, Task<TCollection>> collectionGetter, bool force)
         {
@@ -72,8 +80,10 @@ namespace SmartRoutes.ArchiveLoader
                 dbSet.Remove(currentArchive);
                 currentArchive = null;
                 await _ctx.SaveChangesAsync();
-                await _ctx.TruncateAsync();
             }
+
+            // clear out the tables
+            await _ctx.TruncateAsync();
 
             // persist the new collection
             await AddCollection(collection);
@@ -81,6 +91,8 @@ namespace SmartRoutes.ArchiveLoader
             // persist the Archive
             dbSet.Add(collection.Archive);
             await _ctx.SaveChangesAsync();
+
+            _ctx.Dispose();
         }
 
         protected async Task Persist<T>(Func<Entities, IDbSet<T>> getDbSet, IEnumerable<T> entities, bool intermediateSaves) where T : class
