@@ -14,7 +14,7 @@ namespace SmartRoutes.Reader.UnitTests.Parsers.Srds
             "System.String"
         };
 
-        private static readonly ISet<string> SupporedStructs = new HashSet<string>
+        private static readonly ISet<string> SupportedStructs = new HashSet<string>
         {
             "System.Boolean", "System.DateTime", "System.Int32", "System.Double", "System.Single"
         };
@@ -95,7 +95,7 @@ namespace SmartRoutes.Reader.UnitTests.Parsers.Srds
             var parser = new StringParser();
 
             // ACT, ASSERT
-            foreach (string type in SupporedStructs)
+            foreach (string type in SupportedStructs)
             {
                 object output = parser.Parse(type + "?", string.Empty);
                 Assert.IsNull(output);
@@ -109,7 +109,7 @@ namespace SmartRoutes.Reader.UnitTests.Parsers.Srds
             var parser = new StringParser();
 
             // ACT, ASSERT
-            foreach (string type in SupporedStructs.Concat(SupportedClasses))
+            foreach (string type in SupportedStructs.Concat(SupportedClasses))
             {
                 Assert.IsTrue(parser.SupportsParsing(type), string.Format("Unsupported type: {0}", type));
             }
@@ -122,9 +122,22 @@ namespace SmartRoutes.Reader.UnitTests.Parsers.Srds
             var parser = new StringParser();
 
             // ACT, ASSERT
-            foreach (string type in SupporedStructs)
+            foreach (string type in SupportedStructs)
             {
                 Assert.IsTrue(parser.SupportsParsing(type + "?"), string.Format("Unsupported type: {0}?", type));
+            }
+        }
+
+        [TestMethod]
+        public void SupportsParsing_False_Nullable()
+        {
+            // ARRANGE
+            var parser = new StringParser();
+
+            // ACT, ASSERT
+            foreach (string type in SupportedClasses)
+            {
+                Assert.IsFalse(parser.SupportsParsing(type + "?"), string.Format("Incorrectly supported type: {0}?", type));
             }
         }
 
