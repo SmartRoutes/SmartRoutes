@@ -79,7 +79,7 @@ namespace SmartRoutes.ArchiveLoader
                     return;
                 }
 
-                Logger.Trace("The {0} has changed. The tables for this collection will be truncated and re-populated.", typeof (TCollection).Name);
+                Logger.Trace("The tables for this collection will be truncated and re-populated.", typeof (TCollection).Name);
                 if (currentArchive != null)
                 {
                     dbSet.Remove(currentArchive);

@@ -1,22 +1,33 @@
-﻿using Ninject;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using ManyConsole;
+using Ninject;
 using Ninject.Extensions.Conventions;
-using SmartRoutes.ArchiveLoader;
-using SmartRoutes.Model.Gtfs;
+using SmartRoutes.ArchiveTool.Commands;
 
 namespace SmartRoutes.ArchiveTool
 {
     internal class Program
     {
-        private static void Main(string[] args)
+        private static int Main(string[] args)
+        {
+            // locate any commands in the assembly (or use an IoC container, or whatever source)
+            IEnumerable<ConsoleCommand> commands = GetCommands();
+
+            // then run them.
+            return ConsoleCommandDispatcher.DispatchCommand(commands, args, Console.Out);
+        }
+
+        private static IEnumerable<ConsoleCommand> GetCommands()
         {
             IKernel kernel = new StandardKernel();
             kernel.Bind(c => c
-                .From("SmartRoutes.Reader.dll", "SmartRoutes.ArchiveLoader.dll")
+                .From("SmartRoutes.ArchiveTool.exe", "SmartRoutes.ArchiveLoader.dll", "SmartRoutes.Reader.dll")
                 .SelectAllClasses()
                 .BindAllInterfaces());
 
-            var loader = kernel.Get<IArchiveLoader<GtfsArchive, GtfsCollection>>();
-            loader.Read(@"D:\Dropbox\School\Spring 2013-2014\Senior Design II\SORTA\google_transit_info.zip", true).Wait();
+            return kernel.GetAll<IArchiveCommand>().OfType<ConsoleCommand>();
         }
     }
 }
