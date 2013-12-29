@@ -42,10 +42,5 @@ namespace SmartRoutes.Database
                 .Distinct()
                 .ToArray();
         }
-
-        public static IDataReader GetDataReader<T>(this IEnumerable<T> entities) where T : class
-        {
-            return new RecordDataReader<T>(entities);
-        }
     }
 }

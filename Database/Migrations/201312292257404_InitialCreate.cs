@@ -192,7 +192,7 @@ namespace SmartRoutes.Database.Migrations
                     Id = c.Int(false),
                     AttributeKeyId = c.Int(false),
                     DestinationId = c.Int(false),
-                    ValueBytes = c.Binary(),
+                    ValueString = c.String(),
                 })
                 .PrimaryKey(t => t.Id)
                 .ForeignKey("srds.AttributeKey", t => t.AttributeKeyId, true)

@@ -3,6 +3,7 @@ using System.Data.Entity;
 using System.Threading.Tasks;
 using NLog;
 using SmartRoutes.Database;
+using SmartRoutes.Database.Data;
 using SmartRoutes.Model.Srds;
 using SmartRoutes.Reader.Readers;
 
@@ -20,6 +21,15 @@ namespace SmartRoutes.ArchiveLoader
         protected override Func<Entities, IDbSet<SrdsArchive>> GetArchiveDbSetGetter()
         {
             return ctx => ctx.SrdsArchives;
+        }
+
+        protected override void Configure<TEntity>(RecordDataReaderConfiguration<TEntity> c)
+        {
+            var avc = c as RecordDataReaderConfiguration<AttributeValue>;
+            if (avc != null)
+            {
+                avc.Ignore(e => e.Value);
+            }
         }
 
         protected override async Task AddCollection(SrdsCollection collection)

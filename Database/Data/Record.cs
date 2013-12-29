@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reflection;
-using SmartRoutes.Model.Gtfs;
 
 namespace SmartRoutes.Database.Data
 {
@@ -44,7 +43,7 @@ namespace SmartRoutes.Database.Data
 
             // store some info
             AllPropertyGetters[type] = propertyInfos
-                .Select(p => (Func<object, object>)(p.GetValue))
+                .Select(p => (Func<object, object>) (p.GetValue))
                 .ToArray();
             AllPropertyNames[type] = propertyInfos
                 .Select(p => p.Name)

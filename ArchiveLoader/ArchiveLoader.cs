@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using NLog;
 using SmartRoutes.Database;
+using SmartRoutes.Database.Data;
 using SmartRoutes.Model;
 using SmartRoutes.Reader.Readers;
 
@@ -37,6 +38,10 @@ namespace SmartRoutes.ArchiveLoader
 
         protected abstract Func<Entities, IDbSet<TArchive>> GetArchiveDbSetGetter();
         protected abstract Task AddCollection(TCollection collection);
+
+        protected virtual void Configure<TEntity>(RecordDataReaderConfiguration<TEntity> configuration) where TEntity : class
+        {
+        }
 
         private async Task Load(Func<TArchive, Task<TCollection>> collectionGetter, bool force)
         {
@@ -128,7 +133,13 @@ namespace SmartRoutes.ArchiveLoader
                 using (var sbc = new SqlBulkCopy(connection, SqlBulkCopyOptions.Default | SqlBulkCopyOptions.KeepIdentity, null))
                 {
                     sbc.DestinationTableName = Entities.GetTableName(typeof (T));
-                    await sbc.WriteToServerAsync(entities.GetDataReader());
+
+                    // configure
+                    var reader = new RecordDataReader<T>(entities);
+                    Configure(reader.Configuration);
+
+                    // execute
+                    await sbc.WriteToServerAsync(reader);
                 }
             }
         }

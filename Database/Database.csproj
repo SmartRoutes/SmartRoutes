@@ -53,12 +53,13 @@
   <ItemGroup>
     <Compile Include="Data\RecordDataReader.cs" />
     <Compile Include="Data\Record.cs" />
+    <Compile Include="Data\RecordDataReaderConfiguration.cs" />
     <Compile Include="Entities.cs" />
     <Compile Include="ExtensionMethods.cs" />
     <Compile Include="FastInserter.cs" />
-    <Compile Include="Migrations\201312262125531_InitialCreate.cs" />
-    <Compile Include="Migrations\201312262125531_InitialCreate.Designer.cs">
-      <DependentUpon>201312262125531_InitialCreate.cs</DependentUpon>
+    <Compile Include="Migrations\201312292257404_InitialCreate.cs" />
+    <Compile Include="Migrations\201312292257404_InitialCreate.Designer.cs">
+      <DependentUpon>201312292257404_InitialCreate.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -73,8 +74,8 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201312262125531_InitialCreate.resx">
-      <DependentUpon>201312262125531_InitialCreate.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201312292257404_InitialCreate.resx">
+      <DependentUpon>201312292257404_InitialCreate.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

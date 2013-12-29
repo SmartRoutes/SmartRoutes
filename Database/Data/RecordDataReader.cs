@@ -6,28 +6,30 @@ using SmartRoutes.Model.Gtfs;
 
 namespace SmartRoutes.Database.Data
 {
-    public class RecordDataReader<T> : IDataReader where T : class
+    public class RecordDataReader<TEntity> : IDataReader where TEntity : class
     {
-        private readonly IEnumerator<T> _enumerator;
-        private readonly Type _underlyingType;
-        private readonly IDictionary<string, int> _nameToOridinal;
-        private readonly string[] _ordinalToName;
-        private readonly Type[] _propertyTypes;
+        private readonly RecordDataReaderConfiguration<TEntity> _configuration;
+        private readonly IEnumerator<TEntity> _enumerator;
         private Record _currentRecord;
+        private IDictionary<string, int> _nameToReaderOridinal;
+        private Type[] _propertyTypes;
+        private string[] _readerOrdinalToName;
+        private int[] _readerOrdinalToRecordOrdinal;
 
-        public RecordDataReader(IEnumerable<T> entities)
+        public RecordDataReader(IEnumerable<TEntity> entities)
         {
-            _underlyingType = typeof (T);
-
-            // cache some meta information
-            _ordinalToName = Record.GetPropertyNames(_underlyingType).ToArray();
-            _nameToOridinal = _ordinalToName
-                .Select((n, o) => new {Name = n, Ordinal = o})
-                .ToDictionary(t => t.Name, t => t.Ordinal);
-            _propertyTypes = Record.GetPropertyTypes(_underlyingType).ToArray();
-
-            // the entity enumerator
+            // a pointer to the current entity
             _enumerator = entities.GetEnumerator();
+
+            // initialize the configuration object
+            _configuration = new RecordDataReaderConfiguration<TEntity>(this);
+        }
+
+        internal bool Configured { get; set; }
+
+        public RecordDataReaderConfiguration<TEntity> Configuration
+        {
+            get { return _configuration; }
         }
 
         public void Dispose()
@@ -36,32 +38,63 @@ namespace SmartRoutes.Database.Data
 
         public string GetName(int i)
         {
-            return _ordinalToName[i];
+            Configure();
+            return _readerOrdinalToName[i];
         }
+
+        public Type GetFieldType(int i)
+        {
+            Configure();
+            return _propertyTypes[i];
+        }
+
+        public object GetValue(int i)
+        {
+            Configure();
+            return _currentRecord.Values.ElementAt(_readerOrdinalToRecordOrdinal[i]);
+        }
+
+        public int GetOrdinal(string name)
+        {
+            Configure();
+            return _nameToReaderOridinal[name];
+        }
+
+        public bool Read()
+        {
+            Configure();
+            if (_enumerator.MoveNext())
+            {
+                _currentRecord = Record.Create(_enumerator.Current);
+                if (_currentRecord.UnderlyingType == typeof (Stop))
+                {
+                }
+                return true;
+            }
+
+            return false;
+        }
+
+
+        public int FieldCount
+        {
+            get
+            {
+                Configure();
+                return _propertyTypes.Length;
+            }
+        }
+
+        #region Unimplemented Methods
 
         public string GetDataTypeName(int i)
         {
             throw new NotImplementedException();
         }
 
-        public Type GetFieldType(int i)
-        {
-            return _propertyTypes[i];
-        }
-
-        public object GetValue(int i)
-        {
-            return _currentRecord.Values.ElementAt(i);
-        }
-
         public int GetValues(object[] values)
         {
             throw new NotImplementedException();
-        }
-
-        public int GetOrdinal(string name)
-        {
-            return _nameToOridinal[name];
         }
 
         public bool GetBoolean(int i)
@@ -159,21 +192,6 @@ namespace SmartRoutes.Database.Data
             throw new NotImplementedException();
         }
 
-        public bool Read()
-        {
-            if (_enumerator.MoveNext())
-            {
-                _currentRecord = Record.Create(_enumerator.Current);
-                if (_currentRecord.UnderlyingType == typeof (Stop))
-                {
-                    
-                }
-                return true;
-            }
-
-            return false;
-        }
-
         public int Depth
         {
             get { throw new NotImplementedException(); }
@@ -189,11 +207,6 @@ namespace SmartRoutes.Database.Data
             get { throw new NotImplementedException(); }
         }
 
-        public int FieldCount
-        {
-            get { return _propertyTypes.Length; }
-        }
-
         object IDataRecord.this[int i]
         {
             get { throw new NotImplementedException(); }
@@ -202,6 +215,48 @@ namespace SmartRoutes.Database.Data
         object IDataRecord.this[string name]
         {
             get { throw new NotImplementedException(); }
+        }
+
+        #endregion
+
+        private void Configure()
+        {
+            // only run when needed
+            if (Configured)
+            {
+                return;
+            }
+            Configured = true;
+
+            Type underlyingType = typeof (TEntity);
+
+            ISet<string> ignoredPropertyNames = Configuration.IgnoredPropertyNames;
+
+            string[] propertyNames = Record.GetPropertyNames(underlyingType).ToArray();
+            Type[] propertyTypes = Record.GetPropertyTypes(underlyingType).ToArray();
+
+            // since record properties can be excluded, keep track of the excluded indices
+            IList<int> readerOrdinalToRecordOrdinal = new List<int>();
+            for (int i = 0; i < propertyNames.Length; i++)
+            {
+                if (!ignoredPropertyNames.Contains(propertyNames[i]))
+                {
+                    readerOrdinalToRecordOrdinal.Add(i);
+                }
+            }
+            _readerOrdinalToRecordOrdinal = readerOrdinalToRecordOrdinal.ToArray();
+
+            // cache some meta information
+            _readerOrdinalToName = _readerOrdinalToRecordOrdinal
+                .Select(i => propertyNames[i])
+                .ToArray();
+            _propertyTypes = _readerOrdinalToRecordOrdinal
+                .Select(i => propertyTypes[i])
+                .ToArray();
+
+            _nameToReaderOridinal = _readerOrdinalToName
+                .Select((n, o) => new {Name = n, Ordinal = o})
+                .ToDictionary(t => t.Name, t => t.Ordinal);
         }
     }
 }

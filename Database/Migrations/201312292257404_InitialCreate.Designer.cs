@@ -6,14 +6,14 @@ namespace SmartRoutes.Database.Migrations
     using System.Data.Entity.Migrations.Infrastructure;
     using System.Resources;
     
-    [GeneratedCode("EntityFramework.Migrations", "6.0.1-21010")]
+    [GeneratedCode("EntityFramework.Migrations", "6.0.2-21211")]
     public sealed partial class InitialCreate : IMigrationMetadata
     {
         private readonly ResourceManager Resources = new ResourceManager(typeof(InitialCreate));
         
         string IMigrationMetadata.Id
         {
-            get { return "201312262125531_InitialCreate"; }
+            get { return "201312292257404_InitialCreate"; }
         }
         
         string IMigrationMetadata.Source
