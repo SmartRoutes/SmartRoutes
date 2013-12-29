@@ -63,7 +63,8 @@ namespace SmartRoutes.Reader.UnitTests.Parsers.Srds
                         new AttributeValue
                         {
                             AttributeKey = new AttributeKey {Name = "Description"},
-                            Value = "Bar"
+                            Value = "Bar",
+                            ValueString = "Bar"
                         }
                     }
                 }
@@ -84,12 +85,12 @@ namespace SmartRoutes.Reader.UnitTests.Parsers.Srds
             parser.AttachAttributeKeys(new[]
             {
                 new AttributeKey {Name = "Description", TypeName = "System.String"},
-                new AttributeKey {Name = "Review", TypeName = "System.String"}
+                new AttributeKey {Name = "IsCool", TypeName = "System.Boolean"}
             });
             var lines = new[]
             {
-                "Name,Latitude,Longitude,Description,Review",
-                "Foo,0.0,0.0,Bar,Baz"
+                "Name,Latitude,Longitude,Description,IsCool",
+                "Foo,0.0,0.0,Bar,True"
             };
             var expected = new[]
             {
@@ -103,12 +104,14 @@ namespace SmartRoutes.Reader.UnitTests.Parsers.Srds
                         new AttributeValue
                         {
                             AttributeKey = new AttributeKey {Name = "Description"},
-                            Value = "Bar"
+                            Value = "Bar",
+                            ValueString = "Bar"
                         },
                         new AttributeValue
                         {
-                            AttributeKey = new AttributeKey {Name = "Review"},
-                            Value = "Baz"
+                            AttributeKey = new AttributeKey {Name = "IsCool"},
+                            Value = true,
+                            ValueString = "True"
                         }
                     }
                 }
@@ -220,6 +223,7 @@ namespace SmartRoutes.Reader.UnitTests.Parsers.Srds
             Assert.IsNotNull(actual.AttributeKey);
             Assert.AreEqual(expected.AttributeKey.Name, actual.AttributeKey.Name);
             Assert.AreEqual(expected.Value, actual.Value);
+            Assert.AreEqual(expected.ValueString, actual.ValueString);
         }
 
         private AttributeValue[] GetSortedAttributeValues(Destination destination)
