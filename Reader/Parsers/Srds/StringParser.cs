@@ -78,7 +78,7 @@ namespace SmartRoutes.Reader.Parsers.Srds
 
         private static object ParseNullable(Func<string, object> stringParser, string value)
         {
-            if (value == string.Empty)
+            if (string.IsNullOrEmpty(value))
             {
                 return null;
             }

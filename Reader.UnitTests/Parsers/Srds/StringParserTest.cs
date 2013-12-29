@@ -89,7 +89,7 @@ namespace SmartRoutes.Reader.UnitTests.Parsers.Srds
         }
 
         [TestMethod]
-        public void Parse_Nullable_WithoutValue_All()
+        public void Parse_Nullable_WithNull_All()
         {
             // ARRANGE
             var parser = new StringParser();
@@ -97,7 +97,7 @@ namespace SmartRoutes.Reader.UnitTests.Parsers.Srds
             // ACT, ASSERT
             foreach (string type in SupportedStructs)
             {
-                object output = parser.Parse(type + "?", string.Empty);
+                object output = parser.Parse(type + "?", null);
                 Assert.IsNull(output);
             }
         }
