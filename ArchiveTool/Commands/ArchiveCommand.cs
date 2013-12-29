@@ -43,7 +43,7 @@ namespace SmartRoutes.ArchiveTool.Commands
                 throw new ConsoleHelpAsException("Either the -p/--path or -u/--url argument must be specified.");
             }
 
-            if (!File.Exists(FilePath))
+            if (FilePath != null && !File.Exists(FilePath))
             {
                 throw new ConsoleHelpAsException("The provided -p/--path does not exist.");
             }
