@@ -10,7 +10,7 @@ namespace SmartRoutes.Reader.Support
         {
             var sha = new SHA256Managed();
             byte[] hashBytes = sha.ComputeHash(bytes);
-            return BitConverter.ToString(hashBytes).Replace("-", "");
+            return BitConverter.ToString(hashBytes).Replace("-", String.Empty);
         }
 
         public static string GetInformationalVersion(this Assembly assembly)
