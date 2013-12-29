@@ -132,7 +132,7 @@ namespace SmartRoutes.Reader.UnitTests.Parsers.Srds
                 // ACT
                 parser.AttachAttributeKeys(new[]
                 {
-                    new AttributeKey {Name = "IsCool", TypeName = "System.Boolean"}
+                    new AttributeKey {Name = "IsCool", TypeName = "Foo.Bar"}
                 });
 
                 // ASSERT
