@@ -18,6 +18,7 @@ namespace SmartRoutes.Database
         private const string GtfsSchema = "gtfs";
         private const string GenericSchema = "gen";
 
+
         private static readonly ISet<Type> SrdsTypes = new HashSet<Type>
         {
             typeof (AttributeKey), typeof (AttributeValue), typeof (Destination)
@@ -35,7 +36,7 @@ namespace SmartRoutes.Database
             typeof (Archive)
         };
 
-        public Entities()
+        public Entities() : base("SmartRoutes")
         {
             ((IObjectContextAdapter) this).ObjectContext.CommandTimeout = 180;
         }
