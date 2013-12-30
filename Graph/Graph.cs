@@ -14,8 +14,8 @@ namespace SmartRoutes.Graph
     public class Graph : IGraph
     {
         private readonly IGraphBuilder Builder;
-        private GtfsCollection Collection;
-        private Destination[] Destinations;
+        private GtfsCollection GtfsCollection;
+        private SrdsCollection SrdsCollection;
         public INode[] GraphNodes { get; private set; }
 
         public Graph(IGraphBuilder Builder, IFibonacciHeap<INode, TimeSpan> Queue)
@@ -23,35 +23,39 @@ namespace SmartRoutes.Graph
             this.Builder = Builder;
             GetGtfsEntities();
             GetDestinations();
-            GraphNodes = Builder.BuildGraph(Collection.StopTimes, Destinations);
+            GraphNodes = Builder.BuildGraph(GtfsCollection.StopTimes, SrdsCollection.Destinations);
         }
 
         public void GetDestinations()
         {
+            SrdsCollection = new SrdsCollection();
+
             using (var ctx = new Entities())
             {
-                Destinations = (from c in ctx.Destinations select c).ToArray();
+                SrdsCollection.AttributeValues = (from e in ctx.AttributeValues select e).ToArray();
+                SrdsCollection.Destinations = (from e in ctx.Destinations select e).ToArray();
+                SrdsCollection.AttributeKeys = (from e in ctx.AttributeKeys select e).ToArray();
             }
         }
 
         public void GetGtfsEntities()
         {
-            Collection = new GtfsCollection();
+            GtfsCollection = new GtfsCollection();
 
             using (var ctx = new Entities())
             {
-                Collection.StopTimes = (from e in ctx.StopTimes select e).ToArray();
-                Collection.Stops = (from e in ctx.Stops select e).Include(s => s.CloseStops).ToArray();
-                Collection.Routes = (from e in ctx.Routes select e).ToArray();
-                Collection.Shapes = (from e in ctx.Shapes select e).ToArray();
-                Collection.ShapePoints = (from e in ctx.ShapePoints select e).ToArray();
-                Collection.Blocks = (from e in ctx.Blocks select e).ToArray();
-                Collection.Agencies = (from e in ctx.Agencies select e).ToArray();
-                Collection.Archive = ctx.GtfsArchives.OrderBy(e => e.LoadedOn).FirstOrDefault();
-                Collection.Trips = (from e in ctx.Trips select e).ToArray();
-                Collection.ServiceExceptions = (from e in ctx.ServiceExceptions select e).ToArray();
-                Collection.Services = (from e in ctx.Services select e).ToArray();
-                Collection.ContainsEntities = true;
+                GtfsCollection.StopTimes = (from e in ctx.StopTimes select e).ToArray();
+                GtfsCollection.Stops = (from e in ctx.Stops select e).Include(s => s.CloseStops).ToArray();
+                GtfsCollection.Routes = (from e in ctx.Routes select e).ToArray();
+                GtfsCollection.Shapes = (from e in ctx.Shapes select e).ToArray();
+                GtfsCollection.ShapePoints = (from e in ctx.ShapePoints select e).ToArray();
+                GtfsCollection.Blocks = (from e in ctx.Blocks select e).ToArray();
+                GtfsCollection.Agencies = (from e in ctx.Agencies select e).ToArray();
+                GtfsCollection.Archive = ctx.GtfsArchives.OrderBy(e => e.LoadedOn).FirstOrDefault();
+                GtfsCollection.Trips = (from e in ctx.Trips select e).ToArray();
+                GtfsCollection.ServiceExceptions = (from e in ctx.ServiceExceptions select e).ToArray();
+                GtfsCollection.Services = (from e in ctx.Services select e).ToArray();
+                GtfsCollection.ContainsEntities = true;
             }
         }
 
@@ -60,7 +64,7 @@ namespace SmartRoutes.Graph
             double minDistance = double.MaxValue;
             Stop closestStop = null;
 
-            foreach (var stop in Collection.Stops)
+            foreach (var stop in GtfsCollection.Stops)
             {
                 double Distance = location.GetL1DistanceInFeet(stop);
 
