@@ -38,6 +38,7 @@ namespace SmartRoutes.ArchiveLoader
 
         protected abstract Func<Entities, IDbSet<TArchive>> GetArchiveDbSetGetter();
         protected abstract Task AddCollection(TCollection collection);
+        protected abstract Task TruncateAsync(Entities ctx);
 
         protected virtual void Configure<TEntity>(RecordDataReaderConfiguration<TEntity> configuration) where TEntity : class
         {
@@ -85,15 +86,18 @@ namespace SmartRoutes.ArchiveLoader
                 }
 
                 Logger.Trace("The tables for this collection will be truncated and re-populated.", typeof (TCollection).Name);
-                if (currentArchive != null)
+                
+                // delete ALL previous archives of this type (there should only ever be one of each type)
+                TArchive[] archives = await dbSet.ToArrayAsync();
+                foreach (var archive in archives)
                 {
-                    dbSet.Remove(currentArchive);
-                    await ctx.SaveChangesAsync();
+                    dbSet.Remove(archive);
                 }
+                await ctx.SaveChangesAsync();
 
                 // clear out the tables
                 Logger.Trace("Truncating the tables.");
-                await ctx.TruncateAsync();
+                await TruncateAsync(ctx);
             }
 
             // persist the new collection
@@ -103,6 +107,7 @@ namespace SmartRoutes.ArchiveLoader
             // persist the Archive
             using (var ctx = new Entities())
             {
+                Logger.Trace("Persisting the new {0}.", typeof(TArchive).Name);
                 IDbSet<TArchive> dbSet = GetArchiveDbSetGetter()(ctx);
                 dbSet.Add(collection.Archive);
                 await ctx.SaveChangesAsync();

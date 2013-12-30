@@ -23,6 +23,11 @@ namespace SmartRoutes.ArchiveLoader
             return ctx => ctx.SrdsArchives;
         }
 
+        protected override Task TruncateAsync(Entities ctx)
+        {
+            return ctx.TruncateSrdsAsync();
+        }
+
         protected override void Configure<TEntity>(RecordDataReaderConfiguration<TEntity> c)
         {
             var avc = c as RecordDataReaderConfiguration<AttributeValue>;

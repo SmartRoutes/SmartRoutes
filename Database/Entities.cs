@@ -132,23 +132,43 @@ namespace SmartRoutes.Database
             return GetTableName(c.ClrType);
         }
 
-        public async Task TruncateAsync()
+        public async Task TruncateGtfsAsync()
         {
-            foreach (string query in GetTruncateQueries())
+            await TruncateAsync(GtfsSchema);
+        }
+
+        public async Task TruncateSrdsAsync()
+        {
+            await TruncateAsync(SrdsSchema);
+        }
+
+        public void TruncateGtfs()
+        {
+            Truncate(GtfsSchema);
+        }
+
+        public void TruncateSrds()
+        {
+            Truncate(SrdsSchema);
+        }
+
+        private async Task TruncateAsync(string schema)
+        {
+            foreach (string query in GetTruncateQueries(schema))
             {
                 await Database.ExecuteSqlCommandAsync(query);
             }
         }
 
-        public void Truncate()
+        private void Truncate(string schema)
         {
-            foreach (string query in GetTruncateQueries())
+            foreach (string query in GetTruncateQueries(schema))
             {
                 Database.ExecuteSqlCommand(query);
             }
         }
 
-        private IEnumerable<string> GetTruncateQueries()
+        private IEnumerable<string> GetTruncateQueries(string schema)
         {
             if (!Database.Exists())
             {
@@ -166,6 +186,7 @@ namespace SmartRoutes.Database
             string[] tableNames = this
                 .GetTableNames()
                 .Where(n => n != GetTableName(typeof (Archive)))
+                .Where(t => t.StartsWith(schema + "."))
                 .ToArray();
 
             foreach (string query in queries)

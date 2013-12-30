@@ -73,7 +73,7 @@ namespace SmartRoutes.SortaDataChecker
                     ctx.GtfsArchives.Remove(currentArchive);
                     await ctx.SaveChangesAsync();
                 }
-                ctx.Truncate();
+                ctx.TruncateGtfs();
 
                 ctx.Configuration.AutoDetectChangesEnabled = false;
                 ctx.Configuration.ValidateOnSaveEnabled = false;

@@ -34,5 +34,10 @@ namespace SmartRoutes.ArchiveLoader
             await Persist(collection.Stops);
             await Persist(collection.StopTimes);
         }
+
+        protected override Task TruncateAsync(Entities ctx)
+        {
+            return ctx.TruncateGtfsAsync();
+        }
     }
 }

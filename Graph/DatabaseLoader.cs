@@ -27,7 +27,7 @@ namespace SmartRoutes.Graph
 
             using (var ctx = new Entities())
             {
-                ctx.Truncate();
+                ctx.TruncateGtfs();
 
                 using (var inserter = new FastInserter<Entities>(ctx, 1000))
                 {
