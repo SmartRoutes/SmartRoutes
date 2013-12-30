@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using SmartRoutes.Graph.Node;
-using SmartRoutes.Model.Odjfs.ChildCares;
-using SmartRoutes.Model.Sorta;
+using SmartRoutes.Model.Gtfs;
+using SmartRoutes.Model.Srds;
 
 namespace SmartRoutes.Graph
 {
@@ -9,8 +9,8 @@ namespace SmartRoutes.Graph
     {
         GraphBuilderSettings Settings { get; }
         Dictionary<int, List<int>> StopToNearest { get; }
-        Dictionary<int, List<IMetroNode>> StopToNodes { get; }
-        Dictionary<int, List<int>> ChildCareToStops { get; }
-        INode[] BuildGraph(IEnumerable<StopTime> StopTimes, IEnumerable<ChildCare> ChildCares);
+        Dictionary<int, List<IGtfsNode>> StopToNodes { get; }
+        Dictionary<int, List<int>> DestinationToStops { get; }
+        INode[] BuildGraph(IEnumerable<StopTime> StopTimes, IEnumerable<Destination> Destinations);
     }
 }

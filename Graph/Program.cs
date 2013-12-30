@@ -1,24 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using NLog;
 using Ninject;
 using Ninject.Extensions.Conventions;
-using SmartRoutes.Scraper;
-using SmartRoutes.SortaScraper.Parsers;
-using SmartRoutes.SortaScraper.Support;
-using SmartRoutes.Model.Sorta;
-using SmartRoutes.Model.Odjfs.ChildCares;
-using Ninject.Modules;
 using SmartRoutes.Graph.Node;
-using System.IO;
-using Ionic.Zip;
-using SmartRoutes.SortaScraper.Scrapers;
-using SmartRoutes.Heap;
-using SmartRoutes.Database.Contexts;
 using SmartRoutes.Model;
+using SmartRoutes.Model.Gtfs;
 
 namespace SmartRoutes.Graph
 {
@@ -37,7 +24,7 @@ namespace SmartRoutes.Graph
                 IKernel kernel = new StandardKernel(new GraphModule());
 
                 kernel.Bind(c => c
-                    .FromAssemblyContaining(typeof(IEntityCollectionParser), typeof(IEntityCollectionScraper))
+                    .FromAssemblyContaining(typeof(GtfsCollection))
                     .SelectAllClasses()
                     .BindAllInterfaces());
 
@@ -75,7 +62,7 @@ namespace SmartRoutes.Graph
                 // this returns two results (apparently there are two child cares with this name)
                 Func<INode, bool> GoalCheck = node =>
                 {
-                    var nodeAsChildCare = node as ChildCareNode;
+                    var nodeAsChildCare = node as DestinationNode;
                     if (nodeAsChildCare != null)
                     {
                         return nodeAsChildCare.Name == ChildCareName;
@@ -93,7 +80,7 @@ namespace SmartRoutes.Graph
 
                 Func<INode, bool> GoalCheck2 = node =>
                 {
-                    var nodeAsMetroNode = node as IMetroNode;
+                    var nodeAsMetroNode = node as IGtfsNode;
                     if (nodeAsMetroNode != null)
                     {
                         return nodeAsMetroNode.StopID == CloseToHomeStop.Id;
@@ -109,7 +96,7 @@ namespace SmartRoutes.Graph
 
                 foreach (var result in WorkToChildCareResults)
                 {
-                    var StartNodes = graph.GetChildCareNeighbors((IChildcareNode)result.node, TimeDirection.Backwards);
+                    var StartNodes = graph.GetChildCareNeighbors((IDestinationNode)result.node, TimeDirection.Backwards);
                     var resultList = ExtensionMethods.Dijkstras(
                         StartNodes, 
                         GoalCheck2, 
@@ -150,7 +137,7 @@ namespace SmartRoutes.Graph
 
                 //Func<INode, bool> GoalCheck = node =>
                 //{
-                //    var check = node as ChildCareNode;
+                //    var check = node as DestinationNode;
                 //    return check != null;
                 //};
 
@@ -167,7 +154,7 @@ namespace SmartRoutes.Graph
 
                 //foreach (var node in graph.GraphNodes)
                 //{
-                //    var cnode = node as ChildCareNode;
+                //    var cnode = node as DestinationNode;
                 //    if (cnode == null) continue;
                 //    if (!UniqueChildCareBases.Contains(cnode.BaseNode))
                 //    {

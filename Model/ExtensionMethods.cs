@@ -16,20 +16,5 @@ namespace SmartRoutes.Model
         {
             return GetL1DistanceInFeet(a.Latitude, a.Longitude, b.Latitude, b.Longitude);
         }
-
-        public static double GetL1DistanceInFeet(this ILocation a, INullableLocation b)
-        {
-            return GetL1DistanceInFeet(a.Latitude, a.Longitude, b.Latitude.Value, b.Longitude.Value);
-        }
-
-        public static double GetL1DistanceInFeet(this INullableLocation a, ILocation b)
-        {
-            return GetL1DistanceInFeet(a.Latitude.Value, a.Longitude.Value, b.Latitude, b.Longitude);
-        }
-
-        public static double GetL1DistanceInFeet(this INullableLocation a, INullableLocation b)
-        {
-            return GetL1DistanceInFeet(a.Latitude.Value, a.Longitude.Value, b.Latitude.Value, b.Longitude.Value);
-        }
     }
 }

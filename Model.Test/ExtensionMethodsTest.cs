@@ -1,5 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using SmartRoutes.Model.Sorta;
+using SmartRoutes.Model.Gtfs;
 
 namespace SmartRoutes.Model.Test
 {

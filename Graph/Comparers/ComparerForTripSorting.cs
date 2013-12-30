@@ -7,11 +7,11 @@ using SmartRoutes.Graph.Node;
 
 namespace SmartRoutes.Graph.Comparers
 {
-    public class ComparerForTripSorting : IComparer<IMetroNode>
+    public class ComparerForTripSorting : IComparer<IGtfsNode>
     {
         // sorts nodes first by TripID, second by Sequence
         // allows for trip connections to be made by iteration
-        public int Compare(IMetroNode node1, IMetroNode node2)
+        public int Compare(IGtfsNode node1, IGtfsNode node2)
         {
             if (node1.TripID == node2.TripID)
             {

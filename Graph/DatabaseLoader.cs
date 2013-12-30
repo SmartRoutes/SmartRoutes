@@ -4,17 +4,18 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using SmartRoutes.Database;
-using SmartRoutes.Database.Contexts;
-using SmartRoutes.SortaScraper.Support;
-using SmartRoutes.SortaScraper.Parsers;
+using SmartRoutes.Reader.Parsers.Gtfs;
+using SmartRoutes.Model.Gtfs;
+using SmartRoutes.Reader;
+using SmartRoutes.Reader.Parsers;
 
 namespace SmartRoutes.Graph
 {
     class DatabaseLoader
     {
-        private readonly IEntityCollectionParser _parser;
+        private readonly IEntityCollectionParser<GtfsArchive, GtfsCollection> _parser;
 
-        public DatabaseLoader(IEntityCollectionParser parser)
+        public DatabaseLoader(IEntityCollectionParser<GtfsArchive, GtfsCollection> parser)
         {
             _parser = parser;
         }
@@ -22,13 +23,13 @@ namespace SmartRoutes.Graph
         public async Task loadDatabaseFromFile(Byte[] fileBytes)
         {
             Console.WriteLine("Parsing entity collection from file");
-            EntityCollection collection = _parser.Parse(fileBytes);
+            GtfsCollection collection = _parser.Parse(fileBytes);
 
-            using (var ctx = new SortaEntities())
+            using (var ctx = new Entities())
             {
-                ctx.Truncate();
+                ctx.TruncateGtfs();
 
-                using (var inserter = new FastInserter<SortaEntities>(ctx, 1000))
+                using (var inserter = new FastInserter<Entities>(ctx, 1000))
                 {
                     Console.WriteLine(String.Format("Adding {0} new Agency records.", collection.Agencies.Count()));
                     await inserter.AddRangeAsync(collection.Agencies);

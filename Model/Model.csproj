@@ -37,33 +37,28 @@
     <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="EntityCollection.cs" />
+    <Compile Include="Srds\SrdsCollection.cs" />
+    <Compile Include="Gtfs\GtfsCollection.cs" />
+    <Compile Include="Srds\SrdsArchive.cs" />
+    <Compile Include="Gtfs\GtfsArchive.cs" />
+    <Compile Include="Srds\AttributeKey.cs" />
+    <Compile Include="Srds\AttributeValue.cs" />
+    <Compile Include="Srds\Destination.cs" />
     <Compile Include="ExtensionMethods.cs" />
-    <Compile Include="INullableLocation.cs" />
     <Compile Include="ILocation.cs" />
-    <Compile Include="Odjfs\ChildCareStubs\TypeBHomeStub.cs" />
-    <Compile Include="Odjfs\ChildCareStubs\TypeAHomeStub.cs" />
-    <Compile Include="Odjfs\ChildCareStubs\LicensedCenterStub.cs" />
-    <Compile Include="Odjfs\ChildCareStubs\DayCampStub.cs" />
-    <Compile Include="Odjfs\ChildCareStubs\ChildCareStub.cs" />
-    <Compile Include="Odjfs\ChildCares\ChildCare.cs" />
-    <Compile Include="Odjfs\ChildCares\LicensedCenter.cs" />
-    <Compile Include="Odjfs\ChildCares\TypeAHome.cs" />
-    <Compile Include="Odjfs\ChildCares\DayCamp.cs" />
-    <Compile Include="Odjfs\ChildCares\DetailedChildCare.cs" />
-    <Compile Include="Odjfs\ChildCares\TypeBHome.cs" />
-    <Compile Include="Odjfs\County.cs" />
-    <Compile Include="Sorta\Agency.cs" />
-    <Compile Include="Sorta\Archive.cs" />
-    <Compile Include="Sorta\Block.cs" />
-    <Compile Include="Sorta\ServiceException.cs" />
-    <Compile Include="Sorta\Shape.cs" />
-    <Compile Include="Sorta\StopTime.cs" />
-    <Compile Include="Sorta\ShapePoint.cs" />
-    <Compile Include="Sorta\Trip.cs" />
-    <Compile Include="Sorta\Service.cs" />
-    <Compile Include="Sorta\Stop.cs" />
+    <Compile Include="Gtfs\Agency.cs" />
+    <Compile Include="Archive.cs" />
+    <Compile Include="Gtfs\Block.cs" />
+    <Compile Include="Gtfs\ServiceException.cs" />
+    <Compile Include="Gtfs\Shape.cs" />
+    <Compile Include="Gtfs\StopTime.cs" />
+    <Compile Include="Gtfs\ShapePoint.cs" />
+    <Compile Include="Gtfs\Trip.cs" />
+    <Compile Include="Gtfs\Service.cs" />
+    <Compile Include="Gtfs\Stop.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Sorta\Route.cs" />
+    <Compile Include="Gtfs\Route.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
