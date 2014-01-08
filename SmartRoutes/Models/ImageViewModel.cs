@@ -8,11 +8,12 @@ namespace SmartRoutes.Models
 {
     public class ImageViewModel
     {
-        public ImageViewModel(string imageSource, string altText, string titleText)
+        public ImageViewModel(string imageSource, string altText, string titleText, string id)
         {
             this.ImageSource = imageSource;
             this.AltText = altText;
             this.TitleText = titleText;
+            this.ID = id;
         }
 
         public string ImageSource
@@ -28,6 +29,12 @@ namespace SmartRoutes.Models
         }
 
         public string TitleText
+        {
+            get;
+            set;
+        }
+
+        public string ID
         {
             get;
             set;

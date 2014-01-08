@@ -8,10 +8,11 @@ namespace SmartRoutes.Models
 {
     public class SummaryViewModel
     {
-        public SummaryViewModel(string title, string text)
+        public SummaryViewModel(string title, string text, string id)
         {
             this.Title = title;
             this.Text = text;
+            this.ID = id;
         }
 
         public SummaryViewModel()
@@ -25,6 +26,12 @@ namespace SmartRoutes.Models
         }
 
         public string Text
+        {
+            get;
+            set;
+        }
+
+        public string ID
         {
             get;
             set;

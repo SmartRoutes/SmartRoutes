@@ -14,18 +14,21 @@ namespace SmartRoutes.Controllers
             return View("ContentView");
         }
 
-        public JsonResult DescriptionViewData()
+        public ActionResult DescriptionView()
         {
-            SummaryViewModel summaryModel = new SummaryViewModel();// new SummaryViewModel(Resources.descriptionTitleText, Resources.descriptionText);
-            // There's a security thing here about sensitive data and json get requests.
-            // This data isn't sensitive.
-            return Json(summaryModel, JsonRequestBehavior.AllowGet);
+            SummaryViewModel summaryModel = new SummaryViewModel(Resources.descriptionTitleText,
+                                                                 Resources.descriptionText,
+                                                                 "sr-description-view");
+            return PartialView("_SummaryView", summaryModel);
         }
 
         public ActionResult SampleMapView()
         {
-            ImageViewModel sampleMapModel = new ImageViewModel("Content/Images/sample_map.png", "Sample map", "Sample Map");
-            return PartialView("_imageView", sampleMapModel);
+            ImageViewModel sampleMapModel = new ImageViewModel("Content/Images/sample_map.png",
+                                                               "Sample map",
+                                                               "Sample Map",
+                                                               "sr-sample-map");
+            return PartialView("_ImageView", sampleMapModel);
         }
     }
 }
