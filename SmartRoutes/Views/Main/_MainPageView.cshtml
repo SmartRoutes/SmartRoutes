@@ -1,0 +1,23 @@
+﻿
+@using System.Web.Script.Serialization
+@using SmartRoutes.Models
+@using SmartRoutes
+
+@model SmartRoutes.Models.MainPageModel
+
+
+<div class="sr-page-view" id="sr-main-page-view">
+    <div id="sr-portal-view"></div>
+
+    <!--Description-->
+    @{
+        //var descriptionModelString = Html.Action("DescriptionViewData");
+        //var serializer = new JavaScriptSerializer();
+        //var descriptionModel = serializer.Deserialize<SummaryViewModel>(descriptionModelString.ToHtmlString());
+        //Html.RenderPartial("_SummaryView", descriptionModel);
+    }
+
+    <!--Map-->
+    @Html.Action("SampleMapView")
+
+</div>
