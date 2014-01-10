@@ -5,14 +5,19 @@
 <div class="sr-page-view" id="sr-main-page-view">
     <div id="sr-portal-view"></div>
 
-    <!--Description-->
-    @{
-        Html.RenderAction("DescriptionView");
-    }
+    <div class="sr-float-container">
+        <!--Description-->
+        @{
+            Html.RenderAction("DescriptionView");
+        }
 
-    <!--Map-->
-    @{
-        Html.RenderAction("SampleMapView");
-    }
+        <!--Map-->
+        @{
+            Html.RenderAction("SampleMapView");
+        }
+
+        <!--Clear both sides here because this is a float container.-->
+        <div style="clear:both;"></div>
+    </div>
 
 </div>

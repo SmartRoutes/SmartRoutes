@@ -1,1 +1,12 @@
 ﻿
+
+sr-side-by-side-container {
+}
+
+#sr-description-view {
+    float: left;
+}
+
+#sr-sample-map {
+    float: left;
+}
