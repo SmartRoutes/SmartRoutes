@@ -1,12 +1,11 @@
-﻿using System.Data.Entity;
+﻿using System;
+using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
-using SmartRoutes.Database;
-using SmartRoutes.Database.Contexts;
-using SmartRoutes.Model.Sorta;
 using NLog;
-using SmartRoutes.SortaScraper.Scrapers;
-using SmartRoutes.SortaScraper.Support;
+using SmartRoutes.Database;
+using SmartRoutes.Model.Gtfs;
+using SmartRoutes.Reader.Readers;
 
 namespace SmartRoutes.SortaDataChecker
 {
@@ -14,47 +13,54 @@ namespace SmartRoutes.SortaDataChecker
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
-        private readonly IEntityCollectionScraper _scraper;
+        private readonly Func<GtfsArchive, Task<GtfsCollection>> _getCollection;
 
-        public DataChecker(IEntityCollectionScraper scraper)
+        public DataChecker(IEntityCollectionDownloader<GtfsArchive, GtfsCollection> downloader, Uri uri)
         {
-            _scraper = scraper;
+            _getCollection = archive => downloader.Download(uri, archive);
         }
 
-        public async Task UpdateDatabase()
+        public DataChecker(IEntityCollectionReader<GtfsArchive, GtfsCollection> reader, string path)
         {
-            Logger.Trace("Initializing SortaEntities.");
-            using (var ctx = new SortaEntities())
+            _getCollection = archive => reader.Read(path, archive);
+        }
+
+        public async Task UpdateDatabase(bool force)
+        {
+            Logger.Trace("Initializing Entities.");
+            using (var ctx = new Entities())
             {
-                // get the current archive from the database (if any)
-                Logger.Trace("Getting the current Archive instance (if any).");
-                Archive currentArchive = await ctx.Archives
-                    .OrderByDescending(a => a.DownloadedOn)
-                    .FirstOrDefaultAsync();
+                GtfsArchive currentArchive = null;
+                if (!force)
+                {
+                    // get the current archive from the database (if any)
+                    Logger.Trace("Getting the current Archive instance (if any).");
+                    currentArchive = await ctx.GtfsArchives
+                        .OrderByDescending(a => a.LoadedOn)
+                        .FirstOrDefaultAsync();
+                }
                 if (currentArchive == null)
                 {
-                    Logger.Trace("No current archive is recorded.");
+                    Logger.Trace(force ? "Any existing archive record has been ignored." : "No current archive is recorded.");
                 }
                 else
                 {
-                    Logger.Trace("The current archive was downloaded on {0}.", currentArchive.DownloadedOn);
+                    Logger.Trace("The current archive was downloaded on {0}.", currentArchive.LoadedOn);
                 }
 
                 Logger.Trace("Fetching the entity collection.");
-                EntityCollection entityCollection = await _scraper.Scrape(currentArchive);
-
-                // handled matching ETag and LastModified headers
-                if (entityCollection == null)
+                GtfsCollection gtfsCollection = await _getCollection(currentArchive);
+                if (gtfsCollection == null)
                 {
                     Logger.Trace("No entity collection was returned.");
                     return;
                 }
 
                 // handle hash match
-                if (!entityCollection.ContainsEntities)
+                if (!gtfsCollection.ContainsEntities)
                 {
                     Logger.Trace("No entities were returned except for a new Archive instance.");
-                    ctx.Archives.Add(entityCollection.Archive);
+                    ctx.GtfsArchives.Add(gtfsCollection.Archive);
                     Logger.Trace("Saving the new Archive record.");
                     await ctx.SaveChangesAsync();
                     return;
@@ -62,51 +68,56 @@ namespace SmartRoutes.SortaDataChecker
 
                 // truncate the old data
                 Logger.Trace("Truncating all of the old entities.");
-                ctx.Truncate();
+                if (currentArchive != null)
+                {
+                    ctx.GtfsArchives.Remove(currentArchive);
+                    await ctx.SaveChangesAsync();
+                }
+                ctx.TruncateGtfs();
 
                 ctx.Configuration.AutoDetectChangesEnabled = false;
                 ctx.Configuration.ValidateOnSaveEnabled = false;
 
-                using (var inserter = new FastInserter<SortaEntities>(ctx, 1000))
+                using (var inserter = new FastInserter<Entities>(ctx, 1000))
                 {
                     //  persist all of the new entities
-                    Logger.Trace("Adding {0} new Agency records.", entityCollection.Agencies.Count());
-                    await inserter.AddRangeAsync(entityCollection.Agencies);
+                    Logger.Trace("Adding {0} new Agency records.", gtfsCollection.Agencies.Count());
+                    await inserter.AddRangeAsync(gtfsCollection.Agencies);
 
-                    Logger.Trace("Adding {0} new Service records.", entityCollection.Services.Count());
-                    await inserter.AddRangeAsync(entityCollection.Services);
+                    Logger.Trace("Adding {0} new Service records.", gtfsCollection.Services.Count());
+                    await inserter.AddRangeAsync(gtfsCollection.Services);
 
-                    Logger.Trace("Adding {0} new ServiceException records.", entityCollection.ServiceExceptions.Count());
-                    await inserter.AddRangeAsync(entityCollection.ServiceExceptions);
+                    Logger.Trace("Adding {0} new ServiceException records.", gtfsCollection.ServiceExceptions.Count());
+                    await inserter.AddRangeAsync(gtfsCollection.ServiceExceptions);
 
-                    Logger.Trace("Adding {0} new Route records.", entityCollection.Routes.Count());
-                    await inserter.AddRangeAsync(entityCollection.Routes);
+                    Logger.Trace("Adding {0} new Route records.", gtfsCollection.Routes.Count());
+                    await inserter.AddRangeAsync(gtfsCollection.Routes);
 
-                    Logger.Trace("Adding {0} new Shape records.", entityCollection.Shapes.Count());
-                    await inserter.AddRangeAsync(entityCollection.Shapes);
+                    Logger.Trace("Adding {0} new Shape records.", gtfsCollection.Shapes.Count());
+                    await inserter.AddRangeAsync(gtfsCollection.Shapes);
 
-                    Logger.Trace("Adding {0} new ShapePoint records.", entityCollection.ShapePoints.Count());
-                    await inserter.AddRangeAsync(entityCollection.ShapePoints);
+                    Logger.Trace("Adding {0} new ShapePoint records.", gtfsCollection.ShapePoints.Count());
+                    await inserter.AddRangeAsync(gtfsCollection.ShapePoints);
 
-                    Logger.Trace("Adding {0} new Block records.", entityCollection.Blocks.Count());
-                    await inserter.AddRangeAsync(entityCollection.Blocks);
+                    Logger.Trace("Adding {0} new Block records.", gtfsCollection.Blocks.Count());
+                    await inserter.AddRangeAsync(gtfsCollection.Blocks);
 
-                    Logger.Trace("Adding {0} new Trip records.", entityCollection.Trips.Count());
-                    await inserter.AddRangeAsync(entityCollection.Trips);
+                    Logger.Trace("Adding {0} new Trip records.", gtfsCollection.Trips.Count());
+                    await inserter.AddRangeAsync(gtfsCollection.Trips);
 
                     // the stops must be inserted in a single transaction, because the table is self-referential
-                    Logger.Trace("Adding {0} new Stop records.", entityCollection.Stops.Count());
-                    foreach (Stop stop in entityCollection.Stops)
+                    Logger.Trace("Adding {0} new Stop records.", gtfsCollection.Stops.Count());
+                    foreach (Stop stop in gtfsCollection.Stops)
                     {
                         ctx.Stops.Add(stop);
                     }
                     ctx.SaveChanges();
 
-                    Logger.Trace("Adding {0} new StopTime records.", entityCollection.StopTimes.Count());
-                    await inserter.AddRangeAsync(entityCollection.StopTimes);
+                    Logger.Trace("Adding {0} new StopTime records.", gtfsCollection.StopTimes.Count());
+                    await inserter.AddRangeAsync(gtfsCollection.StopTimes);
 
                     Logger.Trace("Adding the new Archive record.");
-                    await inserter.AddAsync(entityCollection.Archive);
+                    await inserter.AddAsync(gtfsCollection.Archive);
                 }
             }
         }

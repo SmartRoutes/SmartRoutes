@@ -9,7 +9,7 @@ namespace SmartRoutes.Graph
     public struct GraphBuilderSettings
     {
         public double MaxFeetFromChildCareToBuStop;
-        public int MaxChildCareCloseStops;
+        public int MaxDestinationCloseStops;
         public double WalkingFeetPerSecond;
 
         public static GraphBuilderSettings Default
@@ -19,7 +19,7 @@ namespace SmartRoutes.Graph
                 return new GraphBuilderSettings
                 {
                     MaxFeetFromChildCareToBuStop = 5000,
-                    MaxChildCareCloseStops = 5,
+                    MaxDestinationCloseStops = 5,
                     WalkingFeetPerSecond = 2.2
                 };
             }

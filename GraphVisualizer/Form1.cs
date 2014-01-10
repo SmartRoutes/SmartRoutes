@@ -1,25 +1,16 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using ILNumerics;
 using ILNumerics.Drawing;
 using ILNumerics.Drawing.Plotting;
-using SmartRoutes.SortaScraper.Parsers;
-using SmartRoutes.SortaScraper.Support;
+using SmartRoutes.Reader.Parsers.Gtfs;
 using Ninject;
 using Ninject.Extensions.Conventions;
-using SmartRoutes.Model.Sorta;
 using SmartRoutes.Graph;
 using SmartRoutes.Graph.Node;
 using SmartRoutes.Graph.Comparers;
-using System.IO;
-using SmartRoutes.Model.Odjfs;
+using SmartRoutes.Model.Gtfs;
+using SmartRoutes.Reader;
 
 namespace SmartRoutes.GraphVisualizer
 {
@@ -35,7 +26,7 @@ namespace SmartRoutes.GraphVisualizer
             IKernel kernel = new StandardKernel(new GraphModule());
 
             kernel.Bind(c => c
-                .FromAssemblyContaining(typeof(IEntityCollectionParser))
+                .FromAssemblyContaining(typeof(GtfsCollection))
                 .SelectAllClasses()
                 .BindAllInterfaces());
 

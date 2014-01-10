@@ -1,37 +1,30 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using SmartRoutes.Graph.Node;
 using SmartRoutes.Model;
-using SmartRoutes.Model.Odjfs.ChildCares;
-using SmartRoutes.SortaScraper.Support;
-using SmartRoutes.Model.Sorta;
-using SmartRoutes.Model.Odjfs;
-using Ninject;
-using Ninject.Extensions.Conventions;
-using Ninject.Modules;
+using SmartRoutes.Model.Gtfs;
 using NLog;
+using SmartRoutes.Model.Srds;
 
 namespace SmartRoutes.Graph
 {
     public class GraphBuilder : IGraphBuilder
     {
-        private readonly IMetroNode _metroNodeMaker;
+        private readonly IGtfsNode _gtfsNodeMaker;
         private Logger Logger = LogManager.GetCurrentClassLogger();
         public GraphBuilderSettings Settings { get; private set; }
         public Dictionary<int, List<int>> StopToNearest { get; private set; } // from StopID to list of StopID's of nearest Stops
-        public Dictionary<int, List<IMetroNode>> StopToNodes { get; private set; } // from StopID to set of Nodes with given StopID
-        public Dictionary<int, List<int>> ChildCareToStops { get; private set; } // from ChildCare ID to closest metro stops
+        public Dictionary<int, List<IGtfsNode>> StopToNodes { get; private set; } // from StopID to set of Nodes with given StopID
+        public Dictionary<int, List<int>> DestinationToStops { get; private set; } // from ChildCare ID to closest metro stops
 
-        public GraphBuilder(IMetroNode metroNodeMaker) 
+        public GraphBuilder(IGtfsNode gtfsNodeMaker) 
         {
-            _metroNodeMaker = metroNodeMaker;
+            _gtfsNodeMaker = gtfsNodeMaker;
             Logger.Trace("GraphBuilder object created.");
         }
 
-        public INode[] BuildGraph(IEnumerable<StopTime> StopTimes, IEnumerable<ChildCare> ChildCares)
+        public INode[] BuildGraph(IEnumerable<StopTime> StopTimes, IEnumerable<Destination> Destinations)
         {
             Logger.Trace("Creating new graph.");
 
@@ -43,29 +36,29 @@ namespace SmartRoutes.Graph
                 .Select(g => g.First().Stop)
                 .ToArray();
 
-            var MetroNodes = CreateMetroNodes(Stops, StopTimes);
+            var MetroNodes = CreateGtfsNodes(Stops, StopTimes);
             ConnectTrips(MetroNodes);
             ConnectTransfers(MetroNodes, Stops);
-            var GraphNodes = InsertChildCareNodes(Stops, ChildCares, MetroNodes);
+            var GraphNodes = InsertDestinationNodes(Stops, Destinations, MetroNodes);
             Logger.Trace("Graph created successfully.");
             return GraphNodes;
         }
 
-        public INode[] BuildGraph(IEnumerable<StopTime> StopTimes, IEnumerable<ChildCare> ChildCares, GraphBuilderSettings Settings)
+        public INode[] BuildGraph(IEnumerable<StopTime> StopTimes, IEnumerable<Destination> Destinations, GraphBuilderSettings Settings)
         {
             this.Settings = Settings;
-            return BuildGraph(StopTimes, ChildCares);
+            return BuildGraph(StopTimes, Destinations);
         }
 
-        private IMetroNode[] CreateMetroNodes(IEnumerable<Stop> Stops, IEnumerable<StopTime> StopTimes)
+        private IGtfsNode[] CreateGtfsNodes(IEnumerable<Stop> Stops, IEnumerable<StopTime> StopTimes)
         {
-            Logger.Trace("Creating Metro Nodes.");
+            Logger.Trace("Creating GTFS Nodes.");
 
             // sort StopTimes by TripID first, StopID second
             var StopTimesArray = StopTimes.ToArray();
             Array.Sort(StopTimesArray, new Comparers.ComparerForStopTimeSorting());
 
-            var MetroNodeList = new List<IMetroNode>();
+            var MetroNodeList = new List<IGtfsNode>();
             int counter = 0;
 
             // nodes with same StopID and same TripID reference the same NodeBase
@@ -84,25 +77,25 @@ namespace SmartRoutes.Graph
                     && StopTimesArray[counter].StopId == CurrentStopID
                     && StopTimesArray[counter].Trip.ShapeId.Value == CurrentShapeID)
                 {
-                    MetroNodeList.Add(new MetroNode(StopTimesArray[counter], BaseNode));
+                    MetroNodeList.Add(new GtfsNode(StopTimesArray[counter], BaseNode));
                     counter++;
                 }
             }
 
-            Logger.Trace("Metro Nodes created successfully.");
+            Logger.Trace("GTFS Nodes created successfully.");
             return MetroNodeList.ToArray();
         }
 
-        private void ConnectTrips(IMetroNode[] MetroNodes)
+        private void ConnectTrips(IGtfsNode[] gtfsNodes)
         {
-            Logger.Trace("Connecting Metro Trips.");
+            Logger.Trace("Connecting GTFS Trips.");
 
-            Array.Sort(MetroNodes, new Comparers.ComparerForTripSorting());
+            Array.Sort(gtfsNodes, new Comparers.ComparerForTripSorting());
 
-            for (int i = 1; i < MetroNodes.Count(); i++)
+            for (int i = 1; i < gtfsNodes.Count(); i++)
             {
-                IMetroNode node = MetroNodes[i];
-                IMetroNode previousNode = MetroNodes[i-1];
+                IGtfsNode node = gtfsNodes[i];
+                IGtfsNode previousNode = gtfsNodes[i-1];
 
                 if (node.TripID == previousNode.TripID)
                 {
@@ -113,49 +106,49 @@ namespace SmartRoutes.Graph
             Logger.Trace("Metro Trips connected successfully.");
         }
 
-        private void ConnectTransfers(IMetroNode[] MetroNodes, Stop[] Stops)
+        private void ConnectTransfers(IGtfsNode[] gtfsNodes, Stop[] Stops)
         {
-            Logger.Trace("Connecting Metro Transfers.");
+            Logger.Trace("Connecting GTFS Transfers.");
 
             // sorts Nodes first by ascending stopID, second by ascending Time
-            Array.Sort(MetroNodes, new Comparers.ComparerForTransferSorting());
+            Array.Sort(gtfsNodes, new Comparers.ComparerForTransferSorting());
 
             // sort stops by ascending StopID
             Array.Sort(Stops, new Comparers.ComparerForStopSorting());
 
-            // exploit similar ordering between MetroNodes and Stops to associate Stops with MetroNodes in one pass
+            // exploit similar ordering between gtfsNodes and Stops to associate Stops with gtfsNodes in one pass
             int MetroNodeCounter = 0;
 
             StopToNearest = new Dictionary<int, List<int>>();
-            StopToNodes = new Dictionary<int, List<IMetroNode>>();
+            StopToNodes = new Dictionary<int, List<IGtfsNode>>();
 
             foreach (var stop in Stops)
             {
                 // associate Id's of closest stops with this stop
                 StopToNearest.Add(stop.Id, stop.CloseStops.Select(s => s.Id).ToList());
 
-                // associate MetroNodes which contain this stop with this stop
-                List<IMetroNode> stopNodeList = new List<IMetroNode>();
+                // associate gtfsNodes which contain this stop with this stop
+                List<IGtfsNode> stopNodeList = new List<IGtfsNode>();
 
                 // in case some metronodes need to be skipped
-                while (MetroNodeCounter < MetroNodes.Count()
-                       && MetroNodes[MetroNodeCounter].StopID < stop.Id)
+                while (MetroNodeCounter < gtfsNodes.Count()
+                       && gtfsNodes[MetroNodeCounter].StopID < stop.Id)
                 {
                     MetroNodeCounter++;
                 }
 
-                while (MetroNodeCounter < MetroNodes.Count()
-                       && MetroNodes[MetroNodeCounter].StopID == stop.Id)
+                while (MetroNodeCounter < gtfsNodes.Count()
+                       && gtfsNodes[MetroNodeCounter].StopID == stop.Id)
                 {
-                    stopNodeList.Add(MetroNodes[MetroNodeCounter]);
+                    stopNodeList.Add(gtfsNodes[MetroNodeCounter]);
                     MetroNodeCounter++;
                 }
 
                 StopToNodes.Add(stop.Id, stopNodeList);
             }
 
-            // loop through MetroNodes and connect transfers
-            foreach (var node1 in MetroNodes)
+            // loop through gtfsNodes and connect transfers
+            foreach (var node1 in gtfsNodes)
             {
                 // obtain stopID's of nodes in transfer distance
                 List<int> NearestIDs = null;
@@ -166,7 +159,7 @@ namespace SmartRoutes.Graph
 
                 foreach (var ID in NearestIDs)
                 {
-                    List<IMetroNode> Nodes = null;
+                    List<IGtfsNode> Nodes = null;
                     if (!StopToNodes.TryGetValue(ID, out Nodes))
                     {
                         continue;
@@ -197,9 +190,9 @@ namespace SmartRoutes.Graph
             Logger.Trace("Metro Transfers connected successfully.");
         }
 
-        private INode[] InsertChildCareNodes(IEnumerable<Stop> Stops, IEnumerable<ChildCare> ChildCares, INode[] GraphNodes)
+        private INode[] InsertDestinationNodes(IEnumerable<Stop> Stops, IEnumerable<Destination> Destinations, INode[] GraphNodes)
         {
-            if (Stops == null || ChildCares == null || GraphNodes == null)
+            if (Stops == null || Destinations == null || GraphNodes == null)
             {
                 throw new ArgumentNullException();
             }
@@ -207,30 +200,24 @@ namespace SmartRoutes.Graph
             var GraphNodeList = GraphNodes.ToList();
 
             // associate ChildCares with StopID's of closest stops
-            ChildCareToStops = new Dictionary<int, List<int>>();
+            DestinationToStops = new Dictionary<int, List<int>>();
 
-            foreach(var childcare in ChildCares)
+            foreach (var destination in Destinations)
             {
-                // make sure lat/long are not null
-                if (!childcare.Latitude.HasValue || !childcare.Longitude.HasValue)
-                {
-                    continue;
-                }
-
-                var nearestStopIDs = new int[Settings.MaxChildCareCloseStops];
-                for (int i = 0; i < Settings.MaxChildCareCloseStops; i++) nearestStopIDs[i] = int.MinValue;
-                var nearestDistances = new double[Settings.MaxChildCareCloseStops];
-                for (int i = 0; i < Settings.MaxChildCareCloseStops; i++) nearestDistances[i] = double.MaxValue;
+                var nearestStopIDs = new int[Settings.MaxDestinationCloseStops];
+                for (int i = 0; i < Settings.MaxDestinationCloseStops; i++) nearestStopIDs[i] = int.MinValue;
+                var nearestDistances = new double[Settings.MaxDestinationCloseStops];
+                for (int i = 0; i < Settings.MaxDestinationCloseStops; i++) nearestDistances[i] = double.MaxValue;
                 
                 foreach (var stop in Stops)
                 {
-                    double distance = childcare.GetL1DistanceInFeet(stop);
+                    double distance = destination.GetL1DistanceInFeet(stop);
 
                     if (distance < Settings.MaxFeetFromChildCareToBuStop)
                     {
                         // store the closest stops to this childcare
                         var StopID = stop.Id;
-                        for (int i = 0; i < Settings.MaxChildCareCloseStops; i++)
+                        for (int i = 0; i < Settings.MaxDestinationCloseStops; i++)
                         {
                             if (distance < nearestDistances[i])
                             {
@@ -249,22 +236,17 @@ namespace SmartRoutes.Graph
                 
                 if (nearestStopList.Count() > 0)
                 {
-                    ChildCareToStops.Add(childcare.Id, nearestStopList);
+                    DestinationToStops.Add(destination.Id, nearestStopList);
                 }
             }
 
             // now for each ChildCare we insert many nodes into the graph
 
-            foreach (var childcare in ChildCares)
+            foreach (var destination in Destinations)
             {
                 List<int> nearestStops = null;
 
-                if (!ChildCareToStops.TryGetValue(childcare.Id, out nearestStops))
-                {
-                    continue;
-                }
-
-                if (!childcare.Latitude.HasValue || !childcare.Longitude.HasValue)
+                if (!DestinationToStops.TryGetValue(destination.Id, out nearestStops))
                 {
                     continue;
                 }
@@ -272,15 +254,15 @@ namespace SmartRoutes.Graph
                 // maintain list of childcare nodes added, these nodes will be
                 // connected to each other, and this connection will correspond to waiting
                 // at that childcare between two specific times
-                var ChildCareNodesAdded = new List<IChildcareNode>();
+                var ChildCareNodesAdded = new List<IDestinationNode>();
 
                 // give each child care node the same base node
-                var BaseNode = new NodeBase(childcare.Name, childcare.Latitude.Value, childcare.Longitude.Value);
+                var BaseNode = new NodeBase(destination.Name, destination.Latitude, destination.Longitude);
 
                 foreach (var stop in nearestStops)
                 {
                     // retrieve nodes that have to be connected to
-                    List<IMetroNode> nodes = null;
+                    List<IGtfsNode> nodes = null;
                     if (!StopToNodes.TryGetValue(stop, out nodes))
                     {
                         continue;
@@ -289,7 +271,7 @@ namespace SmartRoutes.Graph
                     // make sure we have some nodes to work with
                     if (nodes.Count == 0) continue;
 
-                    var distance = childcare.GetL1DistanceInFeet(nodes.First());
+                    var distance = destination.GetL1DistanceInFeet(nodes.First());
                     var walkingTime = TimeSpan.FromSeconds(distance / Settings.WalkingFeetPerSecond);
 
                     // for each metro node, create upwind / downwind ChildCare nodes and connect them
@@ -298,8 +280,8 @@ namespace SmartRoutes.Graph
                         var forwardTime = node.Time + walkingTime;
                         var backwardTime = node.Time - walkingTime;
 
-                        var ForwardChildCareNode = new ChildCareNode(childcare, forwardTime, BaseNode);
-                        var BackwardChildCareNode = new ChildCareNode(childcare, backwardTime, BaseNode);
+                        var ForwardChildCareNode = new DestinationNode(destination, forwardTime, BaseNode);
+                        var BackwardChildCareNode = new DestinationNode(destination, backwardTime, BaseNode);
 
                         node.TimeBackwardNeighbors.Add(BackwardChildCareNode);
                         node.TimeForwardNeighbors.Add(ForwardChildCareNode);
@@ -316,7 +298,7 @@ namespace SmartRoutes.Graph
 
                 // sort child care nodes by ascending time
                 var ChildCareNodesArray = ChildCareNodesAdded.ToArray();
-                Array.Sort(ChildCareNodesArray, new Comparers.ComparerForChildCares());
+                Array.Sort(ChildCareNodesArray, new Comparers.ComparerForDestinations());
 
                 for (int i = 1; i < ChildCareNodesArray.Count(); i++)
                 {
