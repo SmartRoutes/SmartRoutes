@@ -81,7 +81,7 @@ namespace SmartRoutes.ArchiveLoader
 
                 if (!collection.ContainsEntities)
                 {
-                    Logger.Trace("The current {0} that is loaded in the database is current.", typeof (TCollection).Name);
+                    Logger.Trace("The current {0} that is loaded in the database is up-to-date.", typeof (TCollection).Name);
                     return;
                 }
 
