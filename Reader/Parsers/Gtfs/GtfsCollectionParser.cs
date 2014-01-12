@@ -10,7 +10,6 @@ namespace SmartRoutes.Reader.Parsers.Gtfs
 {
     public class GtfsCollectionParser : EntityCollectionParser<GtfsArchive, GtfsCollection>
     {
-        private const double MaxFeetBetweenTransfers = 500;
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
         private readonly ICsvStreamParser<Agency> _agencyParser;
@@ -74,28 +73,7 @@ namespace SmartRoutes.Reader.Parsers.Gtfs
             Logger.Trace("Associating GtfsCollection entities.");
             Associate(collection);
 
-            Logger.Trace("Calculating close stops.");
-            PopulateCloseStops(collection.Stops);
-
             return collection;
-        }
-
-        private static void PopulateCloseStops(IEnumerable<Stop> stops)
-        {
-            // enumerate the stops
-            Stop[] stopArray = stops.ToArray();
-
-            // compare every stop against every other stop
-            foreach (Stop stopA in stopArray)
-            {
-                foreach (Stop stopB in stopArray)
-                {
-                    if (stopA.GetL1DistanceInFeet(stopB) < MaxFeetBetweenTransfers)
-                    {
-                        stopA.CloseStops.Add(stopB);
-                    }
-                }
-            }
         }
 
         private static void Associate(GtfsCollection collection)

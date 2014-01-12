@@ -61,6 +61,10 @@
     <Compile Include="Migrations\201312292257404_InitialCreate.Designer.cs">
       <DependentUpon>201312292257404_InitialCreate.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201401122035265_RemoveClosestStops.cs" />
+    <Compile Include="Migrations\201401122035265_RemoveClosestStops.Designer.cs">
+      <DependentUpon>201401122035265_RemoveClosestStops.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -76,6 +80,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201312292257404_InitialCreate.resx">
       <DependentUpon>201312292257404_InitialCreate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201401122035265_RemoveClosestStops.resx">
+      <DependentUpon>201401122035265_RemoveClosestStops.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

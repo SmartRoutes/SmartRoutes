@@ -2,7 +2,7 @@ using System.Data.Entity.Migrations;
 
 namespace SmartRoutes.Database.Migrations
 {
-    internal sealed class Configuration : DbMigrationsConfiguration<Entities>
+    public sealed class Configuration : DbMigrationsConfiguration<Entities>
     {
         public Configuration()
         {

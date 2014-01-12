@@ -12,5 +12,6 @@ namespace SmartRoutes.Graph
         Dictionary<int, List<IGtfsNode>> StopToNodes { get; }
         Dictionary<int, List<int>> DestinationToStops { get; }
         INode[] BuildGraph(IEnumerable<StopTime> StopTimes, IEnumerable<Destination> Destinations);
+        INode[] BuildGraph(IEnumerable<StopTime> StopTimes, IEnumerable<Destination> Destinations, GraphBuilderSettings Settings);
     }
 }

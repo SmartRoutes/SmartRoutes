@@ -4,7 +4,9 @@ using System.Linq;
 using ManyConsole;
 using Ninject;
 using Ninject.Extensions.Conventions;
+using SmartRoutes.ArchiveLoader;
 using SmartRoutes.ArchiveTool.Commands;
+using SmartRoutes.Reader.Parsers;
 
 namespace SmartRoutes.ArchiveTool
 {
@@ -23,11 +25,11 @@ namespace SmartRoutes.ArchiveTool
         {
             IKernel kernel = new StandardKernel();
             kernel.Bind(c => c
-                .From("SmartRoutes.ArchiveTool.exe", "SmartRoutes.ArchiveLoader.dll", "SmartRoutes.Reader.dll")
+                .FromAssemblyContaining(typeof(Program), typeof(IArchiveLoader<,>), typeof(IEntityCollectionParser<,>))
                 .SelectAllClasses()
                 .BindAllInterfaces());
 
-            return kernel.GetAll<IArchiveCommand>().OfType<ConsoleCommand>();
+            return kernel.GetAll<ICommand>().OfType<ConsoleCommand>();
         }
     }
 }

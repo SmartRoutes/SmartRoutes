@@ -11,6 +11,7 @@ namespace SmartRoutes.Graph
         public double MaxFeetFromChildCareToBuStop;
         public int MaxDestinationCloseStops;
         public double WalkingFeetPerSecond;
+        public double MaxFeetBetweenTransfers;
 
         public static GraphBuilderSettings Default
         {
@@ -20,7 +21,8 @@ namespace SmartRoutes.Graph
                 {
                     MaxFeetFromChildCareToBuStop = 5000,
                     MaxDestinationCloseStops = 5,
-                    WalkingFeetPerSecond = 2.2
+                    WalkingFeetPerSecond = 2.2,
+                    MaxFeetBetweenTransfers = 500
                 };
             }
         }

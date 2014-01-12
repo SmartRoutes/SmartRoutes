@@ -3,7 +3,7 @@ using SmartRoutes.Model;
 
 namespace SmartRoutes.ArchiveTool.Commands
 {
-    public interface IArchiveCommand
+    public interface IArchiveCommand : ICommand
     {
         string FilePath { get; set; }
         Uri Url { get; set; }

@@ -36,7 +36,7 @@ namespace SmartRoutes.Database
             typeof (Archive)
         };
 
-        public Entities() : base("SmartRoutes")
+        public Entities()
         {
             ((IObjectContextAdapter) this).ObjectContext.CommandTimeout = 180;
         }
@@ -86,17 +86,6 @@ namespace SmartRoutes.Database
                 .HasOptional(s => s.ParentStop)
                 .WithMany(s => s.ChildStops)
                 .HasForeignKey(s => s.ParentId);
-
-            // map the unidirectional many-to-many for Stop.CloseStops
-            modelBuilder
-                .Entity<Stop>()
-                .HasKey(s => s.Id)
-                .HasMany(s => s.CloseStops)
-                .WithMany()
-                .Map(c => c
-                    .ToTable("CloseStop", GtfsSchema)
-                    .MapLeftKey("StopId")
-                    .MapRightKey("CloseStopId"));
 
             // inheritance: table-per-hiearchy
             modelBuilder.Entity<Archive>()
