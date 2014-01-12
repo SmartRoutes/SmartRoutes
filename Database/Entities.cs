@@ -36,7 +36,7 @@ namespace SmartRoutes.Database
             typeof (Archive)
         };
 
-        public Entities() : base("SmartRoutes")
+        public Entities()
         {
             ((IObjectContextAdapter) this).ObjectContext.CommandTimeout = 180;
         }
