@@ -66,8 +66,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Commands\ArchiveCommand.cs" />
+    <Compile Include="Commands\DatabaseCommand.cs" />
+    <Compile Include="Commands\RestoreCommand.cs" />
+    <Compile Include="Commands\BackupCommand.cs" />
     <Compile Include="Commands\IArchiveCommand.cs" />
     <Compile Include="Commands\GtfsCommand.cs" />
+    <Compile Include="Commands\ICommand.cs" />
     <Compile Include="Commands\SrdsCommand.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

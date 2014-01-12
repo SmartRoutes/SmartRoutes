@@ -6,7 +6,7 @@ using SmartRoutes.Model;
 
 namespace SmartRoutes.ArchiveTool.Commands
 {
-    public abstract class ArchiveCommand<TArchive, TCollection> : ConsoleCommand, IArchiveCommand
+    public abstract class ArchiveCommand<TArchive, TCollection> : DatabaseCommand, IArchiveCommand
         where TArchive : Archive
         where TCollection : EntityCollection<TArchive>
     {
