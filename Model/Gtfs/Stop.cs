@@ -6,14 +6,12 @@ namespace SmartRoutes.Model.Gtfs
     public class Stop : ILocation
     {
         private ICollection<Stop> _childStops;
-        private ICollection<Stop> _closeStops;
         private ICollection<StopTime> _stopTimes;
 
         public Stop()
         {
             _childStops = new Collection<Stop>();
             _stopTimes = new Collection<StopTime>();
-            _closeStops = new Collection<Stop>();
         }
 
         #region Navigation Properties
@@ -30,12 +28,6 @@ namespace SmartRoutes.Model.Gtfs
         {
             get { return _stopTimes; }
             set { _stopTimes = value; }
-        }
-
-        public virtual ICollection<Stop> CloseStops
-        {
-            get { return _closeStops; }
-            set { _closeStops = value; }
         }
 
         #endregion

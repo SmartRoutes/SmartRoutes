@@ -45,7 +45,7 @@ namespace SmartRoutes.Graph
             using (var ctx = new Entities())
             {
                 GtfsCollection.StopTimes = (from e in ctx.StopTimes select e).ToArray();
-                GtfsCollection.Stops = (from e in ctx.Stops select e).Include(s => s.CloseStops).ToArray();
+                GtfsCollection.Stops = (from e in ctx.Stops select e).ToArray();
                 GtfsCollection.Routes = (from e in ctx.Routes select e).ToArray();
                 GtfsCollection.Shapes = (from e in ctx.Shapes select e).ToArray();
                 GtfsCollection.ShapePoints = (from e in ctx.ShapePoints select e).ToArray();

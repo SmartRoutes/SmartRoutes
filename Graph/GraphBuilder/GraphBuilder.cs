@@ -26,9 +26,14 @@ namespace SmartRoutes.Graph
 
         public INode[] BuildGraph(IEnumerable<StopTime> StopTimes, IEnumerable<Destination> Destinations)
         {
-            Logger.Trace("Creating new graph.");
+            return BuildGraph(StopTimes, Destinations, GraphBuilderSettings.Default);
+        }
 
-            Settings = GraphBuilderSettings.Default;
+        public INode[] BuildGraph(IEnumerable<StopTime> StopTimes, IEnumerable<Destination> Destinations, GraphBuilderSettings Settings)
+        {
+            this.Settings = Settings;
+
+            Logger.Trace("Creating new graph.");
 
             // collect all the stops
             Stop[] Stops = StopTimes
@@ -42,12 +47,6 @@ namespace SmartRoutes.Graph
             var GraphNodes = InsertDestinationNodes(Stops, Destinations, MetroNodes);
             Logger.Trace("Graph created successfully.");
             return GraphNodes;
-        }
-
-        public INode[] BuildGraph(IEnumerable<StopTime> StopTimes, IEnumerable<Destination> Destinations, GraphBuilderSettings Settings)
-        {
-            this.Settings = Settings;
-            return BuildGraph(StopTimes, Destinations);
         }
 
         private IGtfsNode[] CreateGtfsNodes(IEnumerable<Stop> Stops, IEnumerable<StopTime> StopTimes)
@@ -119,14 +118,21 @@ namespace SmartRoutes.Graph
             // exploit similar ordering between gtfsNodes and Stops to associate Stops with gtfsNodes in one pass
             int MetroNodeCounter = 0;
 
-            StopToNearest = new Dictionary<int, List<int>>();
+            // calculate the close stops
+            StopToNearest = Stops
+                .Select(stopA => new
+                {
+                    StopId = stopA.Id,
+                    ClosestStopIds = Stops
+                        .Where(stopB => stopA.GetL1DistanceInFeet(stopB) < Settings.MaxFeetBetweenTransfers)
+                        .Select(stopB => stopB.Id).ToList()
+                })
+                .ToDictionary(t => t.StopId, t => t.ClosestStopIds);
+
             StopToNodes = new Dictionary<int, List<IGtfsNode>>();
 
             foreach (var stop in Stops)
             {
-                // associate Id's of closest stops with this stop
-                StopToNearest.Add(stop.Id, stop.CloseStops.Select(s => s.Id).ToList());
-
                 // associate gtfsNodes which contain this stop with this stop
                 List<IGtfsNode> stopNodeList = new List<IGtfsNode>();
 
