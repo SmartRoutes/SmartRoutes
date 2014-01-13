@@ -127,6 +127,8 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Models\PortalButtonModel.cs" />
+    <Compile Include="Models\PortalViewModel.cs" />
     <Compile Include="Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -152,6 +154,7 @@
     <Content Include="Content\Images\sample_map.png" />
     <Content Include="Content\Views\GuidedSearchView.css" />
     <Content Include="Content\Views\MainPageView.css" />
+    <Content Include="Content\Views\PortalView.css" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />

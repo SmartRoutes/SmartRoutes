@@ -123,4 +123,10 @@
   <data name="descriptionTitleText" xml:space="preserve">
     <value>Description</value>
   </data>
+  <data name="portalTextFeedback" xml:space="preserve">
+    <value>Feedback</value>
+  </data>
+  <data name="portalTextPlan" xml:space="preserve">
+    <value>Plan</value>
+  </data>
 </root>

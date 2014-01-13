@@ -77,5 +77,23 @@ namespace SmartRoutes {
                 return ResourceManager.GetString("descriptionTitleText", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Feedback.
+        /// </summary>
+        internal static string portalTextFeedback {
+            get {
+                return ResourceManager.GetString("portalTextFeedback", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Plan.
+        /// </summary>
+        internal static string portalTextPlan {
+            get {
+                return ResourceManager.GetString("portalTextPlan", resourceCulture);
+            }
+        }
     }
 }

@@ -3,6 +3,10 @@
 sr-side-by-side-container {
 }
 
+#sr-portal-view-main-page {
+    float: left;
+}
+
 #sr-description-view {
     float: left;
 }

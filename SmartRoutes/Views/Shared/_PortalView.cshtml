@@ -1,9 +1,14 @@
 ﻿
+@using SmartRoutes.Models
 
-<div class="sr-portal-view-container">
-    <div class="btn-group-vertical">
-        <button type="button" class="btn btn-default sr-portal-button" id="sr-plan-button">Plan</button>
-        <button type="button" class="btn btn-default sr-portal-button" id="sr-back-to-search-button">Back to Search</button>
-        <button type="button" class="btn btn-default sr-portal-button" id="sr-feedback-button">Feedback</button>
-    </div>
+@model SmartRoutes.Models.PortalViewModel
+
+<div class="sr-portal-view-container" id="@Model.ID">
+    @foreach (var buttonModel in Model.ButtonModels)
+    {
+        <button type="button" class="btn btn-default sr-portal-button" id="@buttonModel.ID">
+            <span class="sr-portal-button-text">@buttonModel.Text</span>
+        </button>
+        <br />
+    }
 </div>

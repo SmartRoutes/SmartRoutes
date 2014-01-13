@@ -28,7 +28,8 @@ namespace SmartRoutes
                         "~/Content/site.css",
                         "~/Content/bootstrap-theme.css",
                         "~/Content/boostrap.css",
-                        "~/Content/Views/MainPageView.css"));
+                        "~/Content/Views/MainPageView.css",
+                        "~/Content/Views/PortalView.css"));
 
             //bundles.Add(new ScriptBundle("~/bundles/jqueryui").Include(
             //            "~/Scripts/jquery-ui-{version}.js"));

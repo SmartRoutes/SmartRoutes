@@ -3,9 +3,12 @@
 
 
 <div class="sr-page-view" id="sr-main-page-view">
-    <div id="sr-portal-view"></div>
-
     <div class="sr-float-container">
+        <!--Portal links-->
+        @{
+            Html.RenderAction("PortalView");
+        }
+
         <!--Description-->
         @{
             Html.RenderAction("DescriptionView");
