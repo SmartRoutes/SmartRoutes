@@ -1,0 +1,15 @@
+﻿
+.sr-portal-button {
+    height: 50px;
+    width: 150px;
+    background: #6a92d4;
+    margin-bottom: 10px;
+}
+
+.sr-portal-button-text {
+    font-size: 24px;
+    color: white;
+    /*TODO: Find a good font for this text.
+        Rounded fonts seem to look better with the way
+        this is setup.*/
+}
