@@ -1,0 +1,26 @@
+﻿
+@model SmartRoutes.Models.MainPageModel
+
+
+<div class="sr-page-view" id="sr-main-page-view">
+    <div class="sr-float-container">
+        <!--Portal links-->
+        @{
+            Html.RenderAction("PortalView");
+        }
+
+        <!--Description-->
+        @{
+            Html.RenderAction("DescriptionView");
+        }
+
+        <!--Map-->
+        @{
+            Html.RenderAction("SampleMapView");
+        }
+
+        <!--Clear both sides here because this is a float container.-->
+        <div style="clear:both;"></div>
+    </div>
+
+</div>

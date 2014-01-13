@@ -67,6 +67,7 @@
   <ItemGroup>
     <Compile Include="Commands\ArchiveCommand.cs" />
     <Compile Include="Commands\DatabaseCommand.cs" />
+    <Compile Include="Commands\InitializeCommand.cs" />
     <Compile Include="Commands\RestoreCommand.cs" />
     <Compile Include="Commands\BackupCommand.cs" />
     <Compile Include="Commands\IArchiveCommand.cs" />

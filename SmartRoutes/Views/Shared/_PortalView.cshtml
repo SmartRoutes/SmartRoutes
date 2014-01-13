@@ -1,0 +1,14 @@
+﻿
+@using SmartRoutes.Models
+
+@model SmartRoutes.Models.PortalViewModel
+
+<div class="sr-portal-view-container" id="@Model.ID">
+    @foreach (var buttonModel in Model.ButtonModels)
+    {
+        <button type="button" class="btn btn-default sr-portal-button" id="@buttonModel.ID">
+            <span class="sr-portal-button-text">@buttonModel.Text</span>
+        </button>
+        <br />
+    }
+</div>

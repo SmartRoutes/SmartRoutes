@@ -31,8 +31,6 @@ namespace SmartRoutes.ArchiveTool.Commands
 
         public override int? OverrideAfterHandlingArgumentsBeforeRun(string[] remainingArguments)
         {
-            base.OverrideAfterHandlingArgumentsBeforeRun(remainingArguments);
-
             if (Url != null && FilePath != null)
             {
                 throw new ConsoleHelpAsException("The -p/--path and -u/--url are mutually exclusive.");
@@ -47,6 +45,8 @@ namespace SmartRoutes.ArchiveTool.Commands
             {
                 throw new ConsoleHelpAsException("The provided -p/--path does not exist.");
             }
+
+            base.OverrideAfterHandlingArgumentsBeforeRun(remainingArguments);
 
             return null;
         }
