@@ -12,8 +12,6 @@ namespace SmartRoutes.Graph
 {
     public interface IGraph
     {
-        void GetGtfsEntities();
-        void GetDestinations();
         INode[] GraphNodes { get; }
         Stop closestMetroStop(ILocation location);
         IGtfsNode closestMetroNode(ILocation location, DateTime Time, TimeDirection Direction);

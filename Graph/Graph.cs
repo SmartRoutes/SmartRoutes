@@ -26,7 +26,7 @@ namespace SmartRoutes.Graph
             GraphNodes = Builder.BuildGraph(GtfsCollection.StopTimes, SrdsCollection.Destinations);
         }
 
-        public void GetDestinations()
+        private void GetDestinations()
         {
             SrdsCollection = new SrdsCollection();
 
@@ -38,7 +38,7 @@ namespace SmartRoutes.Graph
             }
         }
 
-        public void GetGtfsEntities()
+        private void GetGtfsEntities()
         {
             GtfsCollection = new GtfsCollection();
 
