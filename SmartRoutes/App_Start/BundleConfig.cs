@@ -17,12 +17,13 @@ namespace SmartRoutes
             bundles.Add(new ScriptBundle("~/bundles/bootstrap").Include(
                         "~/Scripts/bootstrap.js"));
 
-            ScriptBundle smartRoutesBundle = new ScriptBundle("~/bundles/smartroutes");
-            smartRoutesBundle.Include("~/Scripts/View/SmartRoutes.js",
-                                    "~/Scripts/View/PageController.js",
-                                    "~/Scripts/View/PortalViewController.js");
-            //smartRoutesBundle.Orderer = new NonOrderingBundleOrderer();
-            bundles.Add(smartRoutesBundle);
+            bundles.Add(new ScriptBundle("~/bundles/routing").Include(
+                        "~/Scripts/sammy-{version}.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/smartroutes").Include(
+                        "~/Scripts/View/SmartRoutes.js",
+                        "~/Scripts/View/PageController.js",
+                        "~/Scripts/View/PortalViewController.js"));
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
                         "~/Content/site.css",

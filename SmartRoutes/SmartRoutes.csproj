@@ -168,6 +168,8 @@
     <Content Include="Scripts\jquery-2.0.3.min.js" />
     <Content Include="Scripts\knockout-3.0.0.debug.js" />
     <Content Include="Scripts\knockout-3.0.0.js" />
+    <Content Include="Scripts\sammy-0.7.4.js" />
+    <Content Include="Scripts\sammy-0.7.4.min.js" />
     <Content Include="Scripts\View\PageController.js" />
     <Content Include="Scripts\View\PortalViewController.js" />
     <Content Include="Scripts\View\SmartRoutes.js" />
