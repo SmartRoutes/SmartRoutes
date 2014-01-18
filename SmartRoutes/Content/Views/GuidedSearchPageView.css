@@ -1,0 +1,39 @@
+﻿
+
+/* Breadcrumb styling. */
+#sr-breadcrumb-content {
+    width: 200px;
+    background-color: #1049a9;
+}
+
+.sr-list-spacer {
+    width: 200px;
+    height: 20px;
+    background-color: #1049a9;
+}
+
+#sr-breadcrumb-list {
+    margin: 0;
+}
+
+.sr-breadcrumb-list-element {
+    margin-bottom: 20px;
+    color: white;
+}
+
+.sr-breadcrumb-list-element:last-of-type {
+    margin-bottom: 0;
+}
+
+.sr-breadcrumb-link {
+    color: white;
+}
+
+/* Search view styling. */
+
+
+/* Page view styling. */
+
+#sr-guided-search-page-view {
+    display: none;
+}

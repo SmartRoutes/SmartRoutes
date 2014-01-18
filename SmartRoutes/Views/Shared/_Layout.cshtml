@@ -9,14 +9,20 @@
 </head>
 <body>
     <div id="sr-background">
-        @Html.Partial("_TopBannerView")
+        <div class="container">
+            <div class="row">
+                @Html.Partial("_TopBannerView")
+            </div>
 
-        @RenderBody()
+            @RenderBody()
 
-        @Html.Partial("_BottomBannerView")
+            <div class="row">
+                @Html.Partial("_BottomBannerView")
+            </div>
+        </div>
     </div>
 
-    @Scripts.Render("~/bundles/jquery")
+  @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/routing")
     @Scripts.Render("~/bundles/smartroutes")
 </body>

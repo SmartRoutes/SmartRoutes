@@ -23,14 +23,16 @@ namespace SmartRoutes
             bundles.Add(new ScriptBundle("~/bundles/smartroutes").Include(
                         "~/Scripts/View/SmartRoutes.js",
                         "~/Scripts/View/PageController.js",
-                        "~/Scripts/View/PortalViewController.js"));
+                        "~/Scripts/View/PortalViewController.js",
+                        "~/Scripts/View/GuidedSearchViewController.js"));
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
                         "~/Content/site.css",
                         "~/Content/bootstrap-theme.css",
-                        "~/Content/boostrap.css",
+                        "~/Content/bootstrap.css",
                         "~/Content/Views/MainPageView.css",
-                        "~/Content/Views/PortalView.css"));
+                        "~/Content/Views/PortalView.css",
+                        "~/Content/Views/GuidedSearchPageView.css"));
 
             //bundles.Add(new ScriptBundle("~/bundles/jqueryui").Include(
             //            "~/Scripts/jquery-ui-{version}.js"));

@@ -1,6 +1,6 @@
 ﻿/* requires(SmartRoutes.js, sammy-0.7.4.js) */
 
-SmartRoutes.PageController = (function () {
+SmartRoutes.pageController = (function () {
 
     // Private
     var that = this;
@@ -15,24 +15,24 @@ SmartRoutes.PageController = (function () {
 
         // Main page route.
         this.get("#/", function() {
-            SmartRoutes.PageController.HideAllPages();
-            $(".sr-main-page-view").show();
+            SmartRoutes.pageController.HideAllPages();
+            $("#sr-main-page-view").show();
         });
 
         // Search page route.
         this.get("#/search", function() {
-            SmartRoutes.PageController.HideAllPages();
-            $(".sr-search-page-view").show();
+            SmartRoutes.pageController.HideAllPages();
+            $("#sr-guided-search-page-view").show();
         });
 
         this.get("#/results", function() {
-            SmartRoutes.PageController.HideAllPages();
-            $(".sr-results-page-view").show();
+            SmartRoutes.pageController.HideAllPages();
+            $("#sr-results-page-view").show();
         });
 
         this.get("#/plan", function() {
-            SmartRoutes.PageController.HideAllPages();
-            $(".sr-plan-page-view").show();
+            SmartRoutes.pageController.HideAllPages();
+            $("#sr-plan-page-view").show();
         });
 
         this.get("#/feedback", function() {
@@ -42,7 +42,7 @@ SmartRoutes.PageController = (function () {
     });
 
     $(document).ready(function() {
-        SmartRoutes.PageController.HideAllPages();
+        SmartRoutes.pageController.HideAllPages();
         $("#sr-main-page-view").show();
 
         // The sammy app should only be run after the document is ready.
