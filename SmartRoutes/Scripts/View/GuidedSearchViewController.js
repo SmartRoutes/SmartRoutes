@@ -8,5 +8,6 @@ SmartRoutes.guidedSearchViewController = (function() {
 
     return {
         // Public:
+
     };
 })();

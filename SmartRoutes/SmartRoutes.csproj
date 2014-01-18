@@ -128,6 +128,7 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\GuidedSearchPageController.cs" />
+    <Compile Include="Models\ChildInformationViewModel.cs" />
     <Compile Include="Models\PortalButtonModel.cs" />
     <Compile Include="Models\PortalViewModel.cs" />
     <Compile Include="Resources.Designer.cs">
@@ -195,9 +196,11 @@
     <Content Include="Views\Shared\_ImageView.cshtml" />
     <Content Include="Views\Shared\_PortalView.cshtml" />
     <Content Include="Views\Shared\ContentView.cshtml" />
-    <Content Include="Views\Search\_GuidedSearchView.cshtml" />
     <Content Include="Views\Search\_GuidedSearchPageView.cshtml" />
     <Content Include="Views\Search\_GuidedSearchBreadcrumbView.cshtml" />
+    <Content Include="Views\Search\_ChildInformationView.cshtml" />
+    <Content Include="Views\Search\_GuidedSearchFormView.cshtml" />
+    <Content Include="Views\Search\_ChildInformationFormPageView.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

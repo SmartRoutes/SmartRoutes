@@ -1,0 +1,13 @@
+﻿
+
+
+<div class="sr-form-page" id="sr-child-info-form-page-view">
+    @{
+        // 3 is an arbitrary limit, but should be sufficient for a demo.
+        int maxChildren = 3;
+        for (int childIndex = 0; childIndex < maxChildren; ++childIndex)
+        {
+            Html.RenderPartial("~/Views/Search/_ChildInformationView.cshtml");
+        }
+    }
+</div>

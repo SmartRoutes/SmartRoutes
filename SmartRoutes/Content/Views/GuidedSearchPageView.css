@@ -2,18 +2,16 @@
 
 /* Breadcrumb styling. */
 #sr-breadcrumb-content {
-    width: 200px;
     background-color: #1049a9;
 }
 
 .sr-list-spacer {
-    width: 200px;
     height: 20px;
     background-color: #1049a9;
 }
 
 #sr-breadcrumb-list {
-    margin: 0;
+
 }
 
 .sr-breadcrumb-list-element {
@@ -29,7 +27,28 @@
     color: white;
 }
 
-/* Search view styling. */
+/* Search form styling. */
+#sr-guided-search-form-view {
+
+}
+
+
+/* Child info form page styling. */
+.sr-child-info-view {
+    display: none;
+}
+
+.sr-child-info-view:first-of-type {
+    display: block;
+}
+
+.sr-child-info-view:last-of-type > .sr-child-info-section-separator {
+    display: none;
+}
+
+.sr-child-info-separator {
+    color: black;
+}
 
 
 /* Page view styling. */
