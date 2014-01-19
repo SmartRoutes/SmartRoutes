@@ -29,7 +29,10 @@
 
 /* Search form styling. */
 #sr-guided-search-form-view {
+    background-color: white;
+}
 
+.sr-form-page {
 }
 
 
@@ -57,4 +60,8 @@
 
 #sr-guided-search-page-view {
     display: none;
+}
+
+.sr-search-page-title {
+
 }
