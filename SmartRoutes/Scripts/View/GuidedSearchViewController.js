@@ -3,10 +3,9 @@
 SmartRoutes.guidedSearchViewController = (function() {
 
     // Private:
+    var maxChildren = 3;
     var childCount = 1;
-
-    var that = this;
-
+    var childInfoViewModels = new Array();
 
     (function Init() {
 
@@ -27,11 +26,8 @@ SmartRoutes.guidedSearchViewController = (function() {
                 $(".sr-expansion-button", nextChildInfoElement).show();
 
                 nextChildInfoElement.show();
-                ++that.childCount;
+                ++childCount;
             }
-
-
-
         });
 
         // Setup the collapse button click handler.
@@ -41,7 +37,7 @@ SmartRoutes.guidedSearchViewController = (function() {
 
             var nextChildInfoElement = $(this).closest(".sr-child-info-view").next();
             nextChildInfoElement.hide();
-            --that.childCount;
+            --childCount;
 
             // Hide the buttons.
             $(".sr-expansion-button").hide();
@@ -57,11 +53,21 @@ SmartRoutes.guidedSearchViewController = (function() {
                 $(".sr-collapse-button", previousChildInfoElement).show();
             }
         });
+
+        // Setup the knockout viewmodel bindings.
+        var childInfoViews = $(".sr-child-info-view");
+        for (var childInfoIndex = 0; childInfoIndex < childInfoViews.length; ++childInfoIndex) {
+            childInfoViewModels[childInfoIndex] = new ChildInfoViewModel();
+            ko.applyBindings(childInfoViewModels[childInfoIndex], childInfoViews[childInfoIndex]);
+        }
     })();
 
 
     return {
         // Public:
 
+        GetChildInfoViewModels: function() {
+            return childInfoViewModels;
+        }
     };
 })();

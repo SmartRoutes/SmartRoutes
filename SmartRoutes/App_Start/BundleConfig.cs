@@ -20,6 +20,9 @@ namespace SmartRoutes
             bundles.Add(new ScriptBundle("~/bundles/routing").Include(
                         "~/Scripts/sammy-{version}.js"));
 
+            bundles.Add(new ScriptBundle("~/bundles/viewmodels").Include(
+                        "~/Scripts/Models/ChildInfoViewModel.js"));
+
             bundles.Add(new ScriptBundle("~/bundles/smartroutes").Include(
                         "~/Scripts/View/SmartRoutes.js",
                         "~/Scripts/View/PageController.js",
