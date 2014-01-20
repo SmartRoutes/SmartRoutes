@@ -9,6 +9,6 @@ namespace SmartRoutes.Graph
     {
         GraphBuilderSettings Settings { get; }
         Dictionary<int, List<IGtfsNode>> StopToNodes { get; }
-        INode[] BuildGraph(IEnumerable<StopTime> StopTimes, IEnumerable<Destination> Destinations, GraphBuilderSettings Settings);
+        IGraph BuildGraph(IEnumerable<StopTime> StopTimes, IEnumerable<Destination> Destinations, GraphBuilderSettings Settings);
     }
 }

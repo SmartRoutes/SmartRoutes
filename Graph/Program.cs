@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using Ninject;
 using Ninject.Extensions.Conventions;
+using SmartRoutes.Database;
 using SmartRoutes.Graph.Node;
 using SmartRoutes.Model;
 using SmartRoutes.Model.Gtfs;
+using SmartRoutes.Model.Srds;
 
 namespace SmartRoutes.Graph
 {
@@ -28,10 +30,49 @@ namespace SmartRoutes.Graph
                     .SelectAllClasses()
                     .BindAllInterfaces());
 
-                Console.WriteLine("Creating Graph.");
+                /********************************************************************************************
+                ******************* Fetch the data from the database and build the graph ********************
+                ********************************************************************************************/
+
+                Console.WriteLine("Fetching the GTFS data from the database.");
                 DateTime tic = DateTime.Now;
-                var graph = kernel.Get<IGraph>();
+                var gtfsCollection = new GtfsCollection();
+                using (var ctx = new Entities())
+                {
+                    gtfsCollection.StopTimes = (from e in ctx.StopTimes select e).ToArray();
+                    gtfsCollection.Stops = (from e in ctx.Stops select e).ToArray();
+                    gtfsCollection.Routes = (from e in ctx.Routes select e).ToArray();
+                    gtfsCollection.Shapes = (from e in ctx.Shapes select e).ToArray();
+                    gtfsCollection.ShapePoints = (from e in ctx.ShapePoints select e).ToArray();
+                    gtfsCollection.Blocks = (from e in ctx.Blocks select e).ToArray();
+                    gtfsCollection.Agencies = (from e in ctx.Agencies select e).ToArray();
+                    gtfsCollection.Archive = ctx.GtfsArchives.OrderBy(e => e.LoadedOn).FirstOrDefault();
+                    gtfsCollection.Trips = (from e in ctx.Trips select e).ToArray();
+                    gtfsCollection.ServiceExceptions = (from e in ctx.ServiceExceptions select e).ToArray();
+                    gtfsCollection.Services = (from e in ctx.Services select e).ToArray();
+                    gtfsCollection.ContainsEntities = true;
+                }
                 DateTime toc = DateTime.Now;
+                Console.WriteLine("GTFS data fetched in {0} milliseconds.", (toc - tic).TotalMilliseconds);
+                
+                Console.WriteLine("Fetching the destination data from the database.");
+                tic = DateTime.Now;
+                var srdsCollection = new SrdsCollection();
+
+                using (var ctx = new Entities())
+                {
+                    srdsCollection.AttributeValues = (from e in ctx.AttributeValues select e).ToArray();
+                    srdsCollection.Destinations = (from e in ctx.Destinations select e).ToArray();
+                    srdsCollection.AttributeKeys = (from e in ctx.AttributeKeys select e).ToArray();
+                }
+                toc = DateTime.Now;
+                Console.WriteLine("Destination data fetched in {0} milliseconds.", (toc - tic).TotalMilliseconds);
+
+                Console.WriteLine("Creating Graph.");
+                tic = DateTime.Now;
+                var graphBuilder = kernel.Get<IGraphBuilder>();
+                var graph = graphBuilder.BuildGraph(gtfsCollection.StopTimes, srdsCollection.Destinations, GraphBuilderSettings.Default);
+                toc = DateTime.Now;
                 Console.WriteLine("Graph created in {0} milliseconds.", (toc - tic).TotalMilliseconds);
                 Console.WriteLine("Finding route...");
                 tic = DateTime.Now;

@@ -22,7 +22,7 @@ namespace SmartRoutes.Graph
             Logger.Trace("GraphBuilder object created.");
         }
 
-        public INode[] BuildGraph(IEnumerable<StopTime> StopTimes, IEnumerable<Destination> Destinations, GraphBuilderSettings Settings)
+        public IGraph BuildGraph(IEnumerable<StopTime> StopTimes, IEnumerable<Destination> Destinations, GraphBuilderSettings Settings)
         {
             this.Settings = Settings;
 
@@ -38,8 +38,12 @@ namespace SmartRoutes.Graph
             ConnectTrips(MetroNodes);
             ConnectTransfers(MetroNodes, Stops);
             var GraphNodes = InsertDestinationNodes(Stops, Destinations, MetroNodes);
+
+            var graph = new Graph(Stops, StopToNodes, GraphNodes, Settings);
+
             Logger.Trace("Graph created successfully.");
-            return GraphNodes;
+
+            return graph;
         }
 
         private IGtfsNode[] CreateGtfsNodes(IEnumerable<Stop> Stops, IEnumerable<StopTime> StopTimes)
