@@ -8,6 +8,8 @@ SmartRoutes.pageController = (function () {
     var guidedSearchID = "sr-guided-search-view";
     var sammyApp = null;
 
+    var guidedSearchViewController = new SmartRoutes.GuidedSearchViewController();
+
     // Sammy wants the element to operate on and a function
     // that defines the routes.
     this.sammyApp = $.sammy(function() {
@@ -23,7 +25,7 @@ SmartRoutes.pageController = (function () {
         this.get("#/search", function() {
             SmartRoutes.pageController.HideAllPages();
             $("#sr-guided-search-page-view").show();
-            SmartRoutes.guidedSearchViewController.RunPageSubroutes();
+            guidedSearchViewController.RunPage();
         });
 
         this.get("#/results", function() {
