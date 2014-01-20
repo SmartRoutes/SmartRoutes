@@ -12,11 +12,9 @@ namespace SmartRoutes.Graph
     public class GraphBuilder : IGraphBuilder
     {
         private readonly IGtfsNode _gtfsNodeMaker;
-        private Logger Logger = LogManager.GetCurrentClassLogger();
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
         public GraphBuilderSettings Settings { get; private set; }
-        public Dictionary<int, List<int>> StopToNearest { get; private set; } // from StopID to list of StopID's of nearest Stops
         public Dictionary<int, List<IGtfsNode>> StopToNodes { get; private set; } // from StopID to set of Nodes with given StopID
-        public Dictionary<int, List<int>> DestinationToStops { get; private set; } // from ChildCare ID to closest metro stops
 
         public GraphBuilder(IGtfsNode gtfsNodeMaker) 
         {
@@ -106,7 +104,7 @@ namespace SmartRoutes.Graph
             int MetroNodeCounter = 0;
 
             // calculate the close stops
-            StopToNearest = Stops
+            var stopToNearest = Stops
                 .Select(stopA => new
                 {
                     StopId = stopA.Id,
@@ -145,7 +143,7 @@ namespace SmartRoutes.Graph
             {
                 // obtain stopID's of nodes in transfer distance
                 List<int> NearestIDs = null;
-                if (!StopToNearest.TryGetValue(node1.StopID, out NearestIDs))
+                if (!stopToNearest.TryGetValue(node1.StopID, out NearestIDs))
                 {
                     continue;
                 }
@@ -193,7 +191,7 @@ namespace SmartRoutes.Graph
             var GraphNodeList = GraphNodes.ToList();
 
             // associate ChildCares with StopID's of closest stops
-            DestinationToStops = new Dictionary<int, List<int>>();
+            var destinationToStops = new Dictionary<int, List<int>>();
 
             foreach (var destination in Destinations)
             {
@@ -229,7 +227,7 @@ namespace SmartRoutes.Graph
                 
                 if (nearestStopList.Count() > 0)
                 {
-                    DestinationToStops.Add(destination.Id, nearestStopList);
+                    destinationToStops.Add(destination.Id, nearestStopList);
                 }
             }
 
@@ -239,7 +237,7 @@ namespace SmartRoutes.Graph
             {
                 List<int> nearestStops = null;
 
-                if (!DestinationToStops.TryGetValue(destination.Id, out nearestStops))
+                if (!destinationToStops.TryGetValue(destination.Id, out nearestStops))
                 {
                     continue;
                 }
