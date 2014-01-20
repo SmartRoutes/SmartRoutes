@@ -172,7 +172,11 @@
     <Content Include="Scripts\knockout-3.0.0.debug.js" />
     <Content Include="Scripts\knockout-3.0.0.js" />
     <Content Include="Scripts\Models\AddressViewModel.js" />
+    <Content Include="Scripts\Models\DropOffDepartureViewModel.js" />
+    <Content Include="Scripts\Models\DropOffDestinationViewModel.js" />
     <Content Include="Scripts\Models\LocationAndTimeViewModel.js" />
+    <Content Include="Scripts\Models\PickUpDepartureViewModel.js" />
+    <Content Include="Scripts\Models\PickUpDestinationViewModel.js" />
     <Content Include="Scripts\Models\ScheduleTypeViewModel.js" />
     <Content Include="Scripts\sammy-0.7.4.js" />
     <Content Include="Scripts\sammy-0.7.4.min.js" />

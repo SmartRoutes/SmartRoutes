@@ -8,12 +8,23 @@ SmartRoutes.LocationAndTimeFormPageController = function(formPageRouteMap) {
     (function Init() {
         locationAndTimeViewModel = new SmartRoutes.LocationAndTimeViewModel();
 
-        ko.applyBindings(locationAndTimeViewModel, $("#sr-location-time-form-page-view"));
+        ko.applyBindings(locationAndTimeViewModel.dropOffDepartureViewModel.dropOffDepartureAddressViewModel,
+                        $("#sr-drop-off-departure-address-container")[0]);
 
-        ko.applyBindings(locationAndTimeViewModel.pickUpDepartAddress, $("#sr-section-drop-off-depart"));
-        ko.applyBindings(locationAndTimeViewModel.pickupDestinationAddress, $("#sr-section-drop-off-final-destination"));
-        ko.applyBindings(locationAndTimeViewModel.dropOffDepartAddress, $("#sr-section-pick-up-depart"));
-        ko.applyBindings(locationAndTimeViewModel.dropOffDestinationAddress, $("#sr-section-pick-up-final-destination"));
+        ko.applyBindings(locationAndTimeViewModel.dropOffDestinationViewModel.dropOffDestinationAddressViewModel,
+                         $("#sr-drop-off-destination-address-container")[0]);
+        ko.applyBindings(locationAndTimeViewModel.dropOffDestinationViewModel,
+                        $("#sr-drop-off-final-destination-supplemental-input")[0]);
+
+        ko.applyBindings(locationAndTimeViewModel.pickUpDepartureViewModel,
+                         $("#sr-pick-up-departure-supplemental-input")[0]);
+        ko.applyBindings(locationAndTimeViewModel.pickUpDepartureViewModel.pickUpDepartureAddressViewModel,
+                         $("#sr-pick-up-departure-address-container")[0]);
+
+        ko.applyBindings(locationAndTimeViewModel.pickUpDestinationViewModel,
+                         $("#sr-pick-up-destination-supplemental-input")[0]);
+        ko.applyBindings(locationAndTimeViewModel.pickUpDestinationViewModel.pickUpDestinationAddressViewModel,
+                         $("#sr-pick-up-destination-address-container")[0]);
     })();
 
     return {

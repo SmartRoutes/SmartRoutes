@@ -2,24 +2,23 @@
 SmartRoutes.LocationAndTimeViewModel = function() {
     // Private: 
 
+    //var GetCurrentTimeString = function() {
+    //    var currentTime = new Date();
+    //    var timeString = currentTime.getHours() + ":" + currentTime.getMinutes()
+    //                     + ":" + currentTime.getSeconds();
+    //    return timeString;
+    //};
+
     return {
         // Public:
 
         // Pick up schedule departure information.
-        pickUpDepartAddress: new SmartRoutes.AddressViewModel(),
-        
+        dropOffDepartureViewModel: new SmartRoutes.DropOffDepartureViewModel(),
 
-        // Pick up schedule destination information.
-        pickupDestinationAddress: new SmartRoutes.AddressViewModel(),
-        dropOffLatestArrivalTime: ko.observable(""),
+        dropOffDestinationViewModel: new SmartRoutes.DropOffDestinationViewModel(),
 
-        // Drop off schedule departure information.
-        pickUpDepartureTime: ko.observable(""),
-        pickUpDepartureSameAsDestination: ko.observable(true),
-        dropOffDepartAddress: new SmartRoutes.AddressViewModel(),
+        pickUpDepartureViewModel: new SmartRoutes.PickUpDepartureViewModel(),
 
-        // Drop off schedule destination information.
-        dropOffDestinationAddress: new SmartRoutes.AddressViewModel(),
-        dropOffDestinationSameAsDeparture: ko.observable(true)
+        pickUpDestinationViewModel: new SmartRoutes.PickUpDestinationViewModel()
     };
 };
