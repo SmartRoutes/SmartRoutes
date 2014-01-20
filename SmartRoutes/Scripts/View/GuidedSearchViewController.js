@@ -9,7 +9,8 @@ SmartRoutes.GuidedSearchViewController = (function() {
     
     var pageIDRouteMap = {
         "sr-child-information-form-page-view": "#/search/childinformation",
-        "sr-schedule-type-form-page-view": "#/search/scheduletype"
+        "sr-schedule-type-form-page-view": "#/search/scheduletype",
+        "sr-location-time-form-page-view": "#/search/locationsandtimes"
     }
     var childInformationFormPageController = null;
     var scheduleTypeFormPageController = null;
@@ -29,6 +30,11 @@ SmartRoutes.GuidedSearchViewController = (function() {
             this.get(pageIDRouteMap["sr-schedule-type-form-page-view"], function() {
                 $(".sr-form-page").hide();
                 $("#sr-schedule-type-form-page-view").show();
+            });
+
+            this.get(pageIDRouteMap["sr-location-time-form-page-view"], function() {
+                $(".sr-form-page").hide();
+                $("#sr-location-time-form-page-view").show();
             });
         });
     };

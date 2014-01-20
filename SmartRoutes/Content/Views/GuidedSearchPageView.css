@@ -64,6 +64,12 @@
     display: none;
 }
 
+/* Locations and times form page styling. */
+
+#sr-location-time-form-page-view {
+    display: none;
+}
+
 
 /* Page view styling. */
 
