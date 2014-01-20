@@ -6,9 +6,33 @@ SmartRoutes.guidedSearchViewController = (function() {
     var maxChildren = 3;
     var childCount = 1;
     var childInfoViewModels = new Array();
+    var formPageSammyApp = null;
+    var activePageElement = null;
+    
+    var pageIDRouteMap = {
+        "sr-child-information-form-page-view": "#/search/childinformation",
+        "sr-schedule-type-form-page-view": "#/search/scheduletype"
+    }
 
-    (function Init() {
+    var InitPageSubroutes = function() {
+        formPageSammyApp = $.sammy(function() {
+            // This section should just handle page manipulations.
+            // Validation of whether the navigation should be allowed 
+            // should be handled elsewhere.
 
+            this.get(pageIDRouteMap["sr-child-information-form-page-view"], function() {
+                $(".sr-form-page").hide();
+                $("#sr-child-information-form-page-view").show();
+            });
+
+            this.get(pageIDRouteMap["sr-schedule-type-form-page-view"], function() {
+                $(".sr-form-page").hide();
+                $("#sr-schedule-type-form-page-view").show();
+            });
+        });
+    };
+
+    var InitChildInfoPage = function() {
         // Setup the expansion button click handler.
         $(".sr-expansion-button").click(function() {
             // So, this callback is hit for every expansion button.
@@ -60,7 +84,44 @@ SmartRoutes.guidedSearchViewController = (function() {
             childInfoViewModels[childInfoIndex] = new ChildInfoViewModel();
             ko.applyBindings(childInfoViewModels[childInfoIndex], childInfoViews[childInfoIndex]);
         }
+    };
+
+    var InitScheduleTypePage = function() {
+
+    };
+
+    (function Init() {
+        InitPageSubroutes();
+        InitChildInfoPage();
+        InitScheduleTypePage();
     })();
+
+    // Event handlers
+
+    $("#sr-guided-search-button-previous").click(function() {
+        var previousPage = $(activePageElement).prev().find(".sr-form-page");
+
+        if (previousPage.length > 0) {
+            // Change the route, this will also change the page.
+            var previousPageID = previousPage.attr("id");
+            formPageSammyApp.setLocation(pageIDRouteMap[previousPageID]);
+
+            activePageElement = previousPage;
+        }
+    });
+
+    $("#sr-guided-search-button-next").click(function() {
+        var nextPage = $(activePageElement).next(".sr-form-page");
+
+        if (nextPage.length > 0) {
+            var nextPageID = nextPage.attr("id");
+            formPageSammyApp.setLocation(pageIDRouteMap[nextPageID]);
+
+            // TODO: should do page validation here since the user
+            // has indicated that they want to move to the next page.
+            activePageElement = nextPage;
+        }
+    });
 
 
     return {
@@ -68,6 +129,13 @@ SmartRoutes.guidedSearchViewController = (function() {
 
         GetChildInfoViewModels: function() {
             return childInfoViewModels;
+        },
+
+        RunPageSubroutes: function() {
+            // Anywhere else just needs to navigate to #/search.
+            // This controller will navigate to the correct sub-route.
+            formPageSammyApp.setLocation(pageIDRouteMap["sr-child-information-form-page-view"]);
+            activePageElement = $("#sr-child-information-form-page-view");
         }
     };
 })();

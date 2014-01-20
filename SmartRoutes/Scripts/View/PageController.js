@@ -23,6 +23,7 @@ SmartRoutes.pageController = (function () {
         this.get("#/search", function() {
             SmartRoutes.pageController.HideAllPages();
             $("#sr-guided-search-page-view").show();
+            SmartRoutes.guidedSearchViewController.RunPageSubroutes();
         });
 
         this.get("#/results", function() {
@@ -46,7 +47,7 @@ SmartRoutes.pageController = (function () {
         $("#sr-main-page-view").show();
 
         // The sammy app should only be run after the document is ready.
-        that.sammyApp.run();
+        that.sammyApp.run("/#");
     });
 
     return {

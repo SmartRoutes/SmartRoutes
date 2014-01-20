@@ -59,6 +59,11 @@
     display: none;
 }
 
+/* Schedule type form page styling. */
+#sr-schedule-type-form-page-view {
+    display: none;
+}
+
 
 /* Page view styling. */
 

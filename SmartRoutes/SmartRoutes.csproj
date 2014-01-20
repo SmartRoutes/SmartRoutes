@@ -202,6 +202,7 @@
     <Content Include="Views\Search\_ChildInformationView.cshtml" />
     <Content Include="Views\Search\_GuidedSearchFormView.cshtml" />
     <Content Include="Views\Search\_ChildInformationFormPageView.cshtml" />
+    <Content Include="Views\Search\_ScheduleTypeFormPageView.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
