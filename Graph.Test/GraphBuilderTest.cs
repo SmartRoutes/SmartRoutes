@@ -20,7 +20,7 @@ namespace SmartRoutes.Graph.Test
             StopTime[] trip = GetStopTimeCircuit(new DateTime(1970, 1, 1, 10, 0, 0), 1, 5);
 
             // ACT
-            INode[] nodes = graphBuilder.BuildGraph(trip, Enumerable.Empty<Destination>());
+            INode[] nodes = graphBuilder.BuildGraph(trip, Enumerable.Empty<Destination>(), GraphBuilderSettings.Default);
 
             // VERIFY
             INode[][] subgraphs = GetSortedDisconnectedSubgraphs(nodes).ToArray();
@@ -100,7 +100,7 @@ namespace SmartRoutes.Graph.Test
             IEnumerable<StopTime> stoptimes = new[] {stopTime1, stopTime2};
 
             // ACT
-            INode[] nodes = graphBuilder.BuildGraph(stoptimes, Enumerable.Empty<Destination>());
+            INode[] nodes = graphBuilder.BuildGraph(stoptimes, Enumerable.Empty<Destination>(), GraphBuilderSettings.Default);
 
             // ASSERT
             INode[][] subgraphs = GetSortedDisconnectedSubgraphs(nodes).ToArray();
@@ -140,7 +140,7 @@ namespace SmartRoutes.Graph.Test
             IEnumerable<StopTime> stoptimes = new[] {stopTime1, stopTime2};
 
             // ACT
-            INode[] nodes = graphBuilder.BuildGraph(stoptimes, Enumerable.Empty<Destination>());
+            INode[] nodes = graphBuilder.BuildGraph(stoptimes, Enumerable.Empty<Destination>(), GraphBuilderSettings.Default);
 
             // ASSERT
             INode[][] subgraphs = GetSortedDisconnectedSubgraphs(nodes).ToArray();
@@ -180,7 +180,7 @@ namespace SmartRoutes.Graph.Test
             IEnumerable<StopTime> stoptimes = new[] {stopTime1, stopTime2};
 
             // ACT
-            INode[] nodes = graphBuilder.BuildGraph(stoptimes, Enumerable.Empty<Destination>());
+            INode[] nodes = graphBuilder.BuildGraph(stoptimes, Enumerable.Empty<Destination>(), GraphBuilderSettings.Default);
 
             // ASSERT
             INode[][] subgraphs = GetSortedDisconnectedSubgraphs(nodes).ToArray();
@@ -208,7 +208,7 @@ namespace SmartRoutes.Graph.Test
             var childCare = new Destination { Id = 1, Latitude = 0.0, Longitude = 0.00002 };
 
             // ACT
-            INode[] nodes = graphBuilder.BuildGraph(new[] {stopTime}, new[] {childCare});
+            INode[] nodes = graphBuilder.BuildGraph(new[] { stopTime }, new[] { childCare }, GraphBuilderSettings.Default);
 
             // ASSERT
             INode[][] subgraphs = GetSortedDisconnectedSubgraphs(nodes).ToArray();
@@ -240,7 +240,7 @@ namespace SmartRoutes.Graph.Test
             var childCare = new Destination { Id = 1, Latitude = 0.0, Longitude = 1.0 };
 
             // ACT
-            INode[] nodes = graphBuilder.BuildGraph(new[] { stopTime }, new[] { childCare });
+            INode[] nodes = graphBuilder.BuildGraph(new[] { stopTime }, new[] { childCare }, GraphBuilderSettings.Default);
 
             // ASSERT
             INode[][] subgraphs = GetSortedDisconnectedSubgraphs(nodes).ToArray();
@@ -285,7 +285,7 @@ namespace SmartRoutes.Graph.Test
             var childCareB = new Destination { Id = 2, Latitude = 0.0, Longitude = 2.00001 };
 
             // ACT
-            INode[] nodes = graphBuilder.BuildGraph(new[] { stopTime1, stopTime2 }, new[] { childCareA, childCareB });
+            INode[] nodes = graphBuilder.BuildGraph(new[] { stopTime1, stopTime2 }, new[] { childCareA, childCareB }, GraphBuilderSettings.Default);
 
             // ASSERT
             INode[][] subgraphs = GetSortedDisconnectedSubgraphs(nodes)

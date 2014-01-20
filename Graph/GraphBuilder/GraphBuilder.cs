@@ -22,11 +22,6 @@ namespace SmartRoutes.Graph
             Logger.Trace("GraphBuilder object created.");
         }
 
-        public INode[] BuildGraph(IEnumerable<StopTime> StopTimes, IEnumerable<Destination> Destinations)
-        {
-            return BuildGraph(StopTimes, Destinations, GraphBuilderSettings.Default);
-        }
-
         public INode[] BuildGraph(IEnumerable<StopTime> StopTimes, IEnumerable<Destination> Destinations, GraphBuilderSettings Settings)
         {
             this.Settings = Settings;

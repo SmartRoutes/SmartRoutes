@@ -23,7 +23,7 @@ namespace SmartRoutes.Graph
             this.Builder = Builder;
             GetGtfsEntities();
             GetDestinations();
-            GraphNodes = Builder.BuildGraph(GtfsCollection.StopTimes, SrdsCollection.Destinations);
+            GraphNodes = Builder.BuildGraph(GtfsCollection.StopTimes, SrdsCollection.Destinations, GraphBuilderSettings.Default);
         }
 
         private void GetDestinations()
