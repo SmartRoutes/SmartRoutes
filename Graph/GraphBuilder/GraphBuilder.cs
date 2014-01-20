@@ -53,36 +53,23 @@ namespace SmartRoutes.Graph
         {
             Logger.Trace("Creating GTFS Nodes.");
 
-            // sort StopTimes by TripID first, StopID second
-            var StopTimesArray = StopTimes.ToArray();
-            Array.Sort(StopTimesArray, new Comparers.ComparerForStopTimeSorting());
-
-            var MetroNodeList = new List<IGtfsNode>();
-            int counter = 0;
-
-            // nodes with same StopID and same TripID reference the same NodeBase
-            while (counter < StopTimesArray.Count())
-            {
-                var stoptime = StopTimesArray[counter];
-                int CurrentStopID = stoptime.StopId;
-                int CurrentShapeID = stoptime.Trip.ShapeId.Value;
-                
-                var BaseNode = new NodeBase(
-                    String.Concat(new string[] { stoptime.Stop.Name, String.Format(" <ShapeID {0}>", stoptime.Trip.ShapeId.Value) }), 
-                    stoptime.Stop.Latitude, 
-                    stoptime.Stop.Longitude);
-
-                while (counter < StopTimesArray.Count()
-                    && StopTimesArray[counter].StopId == CurrentStopID
-                    && StopTimesArray[counter].Trip.ShapeId.Value == CurrentShapeID)
+            IGtfsNode[] gtfsNodes = StopTimes
+                .GroupBy(s => new Tuple<int, int, int?, int>(s.StopId, s.Trip.RouteId, s.Trip.ShapeId, s.Sequence))
+                .SelectMany(g =>
                 {
-                    MetroNodeList.Add(new GtfsNode(StopTimesArray[counter], BaseNode));
-                    counter++;
-                }
-            }
+                    StopTime first = g.First();
+                    var nodeBase = new NodeBase(
+                        first.Stop.Name,
+                        first.Stop.Latitude,
+                        first.Stop.Longitude);
+
+                    return g.Select(s => (IGtfsNode) new GtfsNode(s, nodeBase));
+                })
+                .ToArray();
 
             Logger.Trace("GTFS Nodes created successfully.");
-            return MetroNodeList.ToArray();
+
+            return gtfsNodes;
         }
 
         private void ConnectTrips(IGtfsNode[] gtfsNodes)
