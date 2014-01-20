@@ -1,5 +1,5 @@
 ﻿
-(SmartRoutes.ScheduleTypeFormPageController = function(formPageRouteMap) {
+SmartRoutes.ScheduleTypeFormPageController = (function(formPageRouteMap) {
 
     // Private: 
     var pageIDRouteMap = formPageRouteMap;

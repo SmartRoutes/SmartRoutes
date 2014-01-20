@@ -1,5 +1,5 @@
 ﻿
-(SmartRoutes.ScheduleTypeViewModel = function() {
+SmartRoutes.ScheduleTypeViewModel = (function() {
     // Private:
 
     return {
