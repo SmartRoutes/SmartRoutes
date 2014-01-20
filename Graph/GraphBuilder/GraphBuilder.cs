@@ -13,8 +13,8 @@ namespace SmartRoutes.Graph
     {
         private readonly IGtfsNode _gtfsNodeMaker;
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
-        public GraphBuilderSettings Settings { get; private set; }
-        public Dictionary<int, List<IGtfsNode>> StopToNodes { get; private set; } // from StopID to set of Nodes with given StopID
+        private GraphBuilderSettings _settings;
+        private Dictionary<int, List<IGtfsNode>> _stopToNodes;
 
         public GraphBuilder(IGtfsNode gtfsNodeMaker) 
         {
@@ -24,7 +24,7 @@ namespace SmartRoutes.Graph
 
         public IGraph BuildGraph(IEnumerable<StopTime> StopTimes, IEnumerable<Destination> Destinations, GraphBuilderSettings Settings)
         {
-            this.Settings = Settings;
+            _settings = Settings;
 
             Logger.Trace("Creating new graph.");
 
@@ -39,7 +39,7 @@ namespace SmartRoutes.Graph
             ConnectTransfers(MetroNodes, Stops);
             var GraphNodes = InsertDestinationNodes(Stops, Destinations, MetroNodes);
 
-            var graph = new Graph(Stops, StopToNodes, GraphNodes, Settings);
+            var graph = new Graph(Stops, _stopToNodes, GraphNodes, _settings);
 
             Logger.Trace("Graph created successfully.");
 
@@ -108,12 +108,12 @@ namespace SmartRoutes.Graph
                 {
                     StopId = stopA.Id,
                     ClosestStopIds = Stops
-                        .Where(stopB => stopA.GetL1DistanceInFeet(stopB) < Settings.MaxFeetBetweenTransfers)
+                        .Where(stopB => stopA.GetL1DistanceInFeet(stopB) < _settings.MaxFeetBetweenTransfers)
                         .Select(stopB => stopB.Id).ToList()
                 })
                 .ToDictionary(t => t.StopId, t => t.ClosestStopIds);
 
-            StopToNodes = new Dictionary<int, List<IGtfsNode>>();
+            _stopToNodes = new Dictionary<int, List<IGtfsNode>>();
 
             foreach (var stop in Stops)
             {
@@ -134,7 +134,7 @@ namespace SmartRoutes.Graph
                     MetroNodeCounter++;
                 }
 
-                StopToNodes.Add(stop.Id, stopNodeList);
+                _stopToNodes.Add(stop.Id, stopNodeList);
             }
 
             // loop through gtfsNodes and connect transfers
@@ -150,7 +150,7 @@ namespace SmartRoutes.Graph
                 foreach (var ID in NearestIDs)
                 {
                     List<IGtfsNode> Nodes = null;
-                    if (!StopToNodes.TryGetValue(ID, out Nodes))
+                    if (!_stopToNodes.TryGetValue(ID, out Nodes))
                     {
                         continue;
                     }
@@ -158,7 +158,7 @@ namespace SmartRoutes.Graph
                     if (Nodes.Count == 0) continue; // not sure if this is possible
 
                     // calculate walking time, will be same for all nodes in list, so use first
-                    double WalkingTime = node1.GetL1DistanceInFeet(Nodes.First()) / Settings.WalkingFeetPerSecond;
+                    double WalkingTime = node1.GetL1DistanceInFeet(Nodes.First()) / _settings.WalkingFeetPerSecond;
                     DateTime MinTime = node1.Time + new TimeSpan(0, 0, (int)Math.Ceiling(WalkingTime));
 
                     // thanks to sorting, these nodes are iterated in ascending time
@@ -194,20 +194,20 @@ namespace SmartRoutes.Graph
 
             foreach (var destination in Destinations)
             {
-                var nearestStopIDs = new int[Settings.MaxDestinationCloseStops];
-                for (int i = 0; i < Settings.MaxDestinationCloseStops; i++) nearestStopIDs[i] = int.MinValue;
-                var nearestDistances = new double[Settings.MaxDestinationCloseStops];
-                for (int i = 0; i < Settings.MaxDestinationCloseStops; i++) nearestDistances[i] = double.MaxValue;
+                var nearestStopIDs = new int[_settings.MaxDestinationCloseStops];
+                for (int i = 0; i < _settings.MaxDestinationCloseStops; i++) nearestStopIDs[i] = int.MinValue;
+                var nearestDistances = new double[_settings.MaxDestinationCloseStops];
+                for (int i = 0; i < _settings.MaxDestinationCloseStops; i++) nearestDistances[i] = double.MaxValue;
                 
                 foreach (var stop in Stops)
                 {
                     double distance = destination.GetL1DistanceInFeet(stop);
 
-                    if (distance < Settings.MaxFeetFromChildCareToBuStop)
+                    if (distance < _settings.MaxFeetFromChildCareToBuStop)
                     {
                         // store the closest stops to this childcare
                         var StopID = stop.Id;
-                        for (int i = 0; i < Settings.MaxDestinationCloseStops; i++)
+                        for (int i = 0; i < _settings.MaxDestinationCloseStops; i++)
                         {
                             if (distance < nearestDistances[i])
                             {
@@ -253,7 +253,7 @@ namespace SmartRoutes.Graph
                 {
                     // retrieve nodes that have to be connected to
                     List<IGtfsNode> nodes = null;
-                    if (!StopToNodes.TryGetValue(stop, out nodes))
+                    if (!_stopToNodes.TryGetValue(stop, out nodes))
                     {
                         continue;
                     }
@@ -262,7 +262,7 @@ namespace SmartRoutes.Graph
                     if (nodes.Count == 0) continue;
 
                     var distance = destination.GetL1DistanceInFeet(nodes.First());
-                    var walkingTime = TimeSpan.FromSeconds(distance / Settings.WalkingFeetPerSecond);
+                    var walkingTime = TimeSpan.FromSeconds(distance / _settings.WalkingFeetPerSecond);
 
                     // for each metro node, create upwind / downwind ChildCare nodes and connect them
                     foreach (var node in nodes)
