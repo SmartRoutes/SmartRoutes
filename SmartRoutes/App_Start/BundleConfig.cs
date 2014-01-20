@@ -20,20 +20,24 @@ namespace SmartRoutes
             bundles.Add(new ScriptBundle("~/bundles/routing").Include(
                         "~/Scripts/sammy-{version}.js"));
 
-            bundles.Add(new ScriptBundle("~/bundles/viewmodels").Include(
-                        "~/Scripts/Models/ChildInfoViewModel.js"));
-
             // Initialization order matters here.  Dependencies must
             // be bundled before the script that needs them.
             bundles.Add(new ScriptBundle("~/bundles/smartroutes").Include(
+                        // This should always be first.
                         "~/Scripts/View/SmartRoutes.js",
+                        
+                        // View Models.
+                        "~/Scripts/Models/ChildInfoViewModel.js",
+                        "~/Scripts/Models/ScheduleTypeViewModel.js",
+
+                        // Common controllers.
                         "~/Scripts/View/PortalViewController.js",
 
                         // Search form pages.
                         "~/Scripts/View/ChildInformationFormPageController.js",
                         "~/Scripts/View/ScheduleTypeFormPageController.js",
 
-                        // The master search form controller
+                        // The master search form controller.
                         "~/Scripts/View/GuidedSearchViewController.js",
 
                         // This controller essentially runs the site.
