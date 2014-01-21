@@ -1,0 +1,29 @@
+﻿
+
+<div class="sr-child-info-view">
+    @* The actual form. *@
+    <div class="sr-child-info">
+        <div class="">
+            <input type="text" class="form-control sr-editbox" placeholder="Name" data-bind="value: name" />
+            <div class="input-group">
+                <input class="form-control sr-number-edit" type="number" min="1" max="17" placeholder="Age" data-bind="value: age">
+                <span class="input-group-addon">Years</span>
+            </div>
+            <select class="form-control sr-combobox" data-bind="value: gender">
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+            </select>
+        </div>
+    </div>
+
+    @* The separator and expansion button. *@
+    <div class="sr-child-info-section-separator">
+        <hr class="sr-child-info-separator" />
+        <button class="btn btn-default sr-expansion-button" >
+            <span class="glyphicon glyphicon-expand"></span>
+        </button>
+        <button class="btn btn-default sr-collapse-button">
+            <span class="glyphicon glyphicon-collapse-down"></span>
+        </button>
+    </div>
+</div>

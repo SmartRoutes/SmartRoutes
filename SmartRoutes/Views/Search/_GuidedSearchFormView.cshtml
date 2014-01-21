@@ -1,0 +1,22 @@
+﻿
+<div id="sr-guided-search-form-view">
+    
+    <div class="row">
+        <div class="col-lg-10 col-lg-offset-1">
+            @Html.Partial("~/Views/Search/_ChildInformationFormPageView.cshtml")
+
+            @Html.Partial("~/Views/Search/_ScheduleTypeFormPageView.cshtml")
+
+            @Html.Partial("~/Views/Search/_LocationAndTimeFormPageView.cshtml")
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-10 col-lg-offset-2 btn-group">
+            @* TODO: These buttons should be blue. *@
+            <button class="btn btn-default" id="sr-guided-search-button-previous">&lt; Previous</button>
+            <button class="btn btn-default" id="sr-guided-search-button-return-results">Return to Restuls</button>
+            <button class="btn btn-default" id="sr-guided-search-button-next">Next &gt;</button>
+        </div>
+    </div>
+</div>

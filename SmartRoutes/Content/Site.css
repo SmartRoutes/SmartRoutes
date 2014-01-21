@@ -1,8 +1,13 @@
-﻿body {
+﻿html {
+    min-height: 100%;
+    height: 100%;
+}
+
+body {
     font-size: .85em;
     font-family: "Segoe UI", Verdana, Helvetica, Sans-Serif;
-    color: #232323;
-    background-color: #d7d7d7;
+    min-height: 100%;
+    height: 100%;
 }
 
 header, footer, nav, section {
@@ -60,6 +65,12 @@ textarea {
     display: none;
 }
 
+/* Common page styling. */
+#sr-background {
+    background-color: #d7d7d7;
+}
+
+
 /* Styles for common banners.
 -------------------------------------------------------------*/
 #sr-top-banner-view {
@@ -70,9 +81,8 @@ textarea {
     background-color: #052c6e;
 }
 
-.banner-view {
+.sr-banner-view {
     height: 75px;
-    width: 100%;
 }
 
 /* Common styling for text areas

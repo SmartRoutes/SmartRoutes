@@ -17,19 +17,46 @@ namespace SmartRoutes
             bundles.Add(new ScriptBundle("~/bundles/bootstrap").Include(
                         "~/Scripts/bootstrap.js"));
 
-            ScriptBundle smartRoutesBundle = new ScriptBundle("~/bundles/smartroutes");
-            smartRoutesBundle.Include("~/Scripts/View/SmartRoutes.js",
-                                    "~/Scripts/View/PageController.js",
-                                    "~/Scripts/View/PortalViewController.js");
-            //smartRoutesBundle.Orderer = new NonOrderingBundleOrderer();
-            bundles.Add(smartRoutesBundle);
+            bundles.Add(new ScriptBundle("~/bundles/routing").Include(
+                        "~/Scripts/sammy-{version}.js"));
+
+            // Initialization order matters here.  Dependencies must
+            // be bundled before the script that needs them.
+            bundles.Add(new ScriptBundle("~/bundles/smartroutes").Include(
+                        // This should always be first.
+                        "~/Scripts/View/SmartRoutes.js",
+                        
+                        // View Models.
+                        "~/Scripts/Models/ChildInfoViewModel.js",
+                        "~/Scripts/Models/ScheduleTypeViewModel.js",
+                        "~/Scripts/Models/AddressViewModel.js",
+                        "~/Scripts/Models/DropOffDepartureViewModel.js",
+                        "~/Scripts/Models/DropOffDestinationViewModel.js",
+                        "~/Scripts/Models/PickUpDepartureViewModel.js",
+                        "~/Scripts/Models/PickUpDestinationViewModel.js",
+                        "~/Scripts/Models/LocationAndTimeViewModel.js",
+
+                        // Common controllers.
+                        "~/Scripts/View/PortalViewController.js",
+
+                        // Search form page controllers.
+                        "~/Scripts/View/ChildInformationFormPageController.js",
+                        "~/Scripts/View/ScheduleTypeFormPageController.js",
+                        "~/Scripts/View/LocationAndTimeFormPageController.js",
+
+                        // The master search form controller.
+                        "~/Scripts/View/GuidedSearchViewController.js",
+
+                        // This controller essentially runs the site.
+                        "~/Scripts/View/PageController.js"));
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
                         "~/Content/site.css",
                         "~/Content/bootstrap-theme.css",
-                        "~/Content/boostrap.css",
+                        "~/Content/bootstrap.css",
                         "~/Content/Views/MainPageView.css",
-                        "~/Content/Views/PortalView.css"));
+                        "~/Content/Views/PortalView.css",
+                        "~/Content/Views/GuidedSearchPageView.css"));
 
             //bundles.Add(new ScriptBundle("~/bundles/jqueryui").Include(
             //            "~/Scripts/jquery-ui-{version}.js"));
