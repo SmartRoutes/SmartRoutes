@@ -16,7 +16,7 @@ namespace SmartRoutes.Graph.Node
         public double Latitude { get { return BaseNode.Latitude; } }
         public double Longitude { get { return BaseNode.Longitude; } }
 
-        public DestinationNode(Destination destination, DateTime Time, NodeBase BaseNode)
+        public DestinationNode(IDestination destination, DateTime Time, NodeBase BaseNode)
         {
             this.BaseNode = BaseNode;
             this.Time = Time;

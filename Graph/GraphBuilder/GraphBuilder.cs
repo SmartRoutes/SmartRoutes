@@ -22,7 +22,7 @@ namespace SmartRoutes.Graph
             Logger.Trace("GraphBuilder object created.");
         }
 
-        public IGraph BuildGraph(IEnumerable<StopTime> StopTimes, IEnumerable<Destination> Destinations, GraphBuilderSettings Settings)
+        public IGraph BuildGraph(IEnumerable<StopTime> StopTimes, IEnumerable<IDestination> Destinations, GraphBuilderSettings Settings)
         {
             _settings = Settings;
 
@@ -180,7 +180,7 @@ namespace SmartRoutes.Graph
             Logger.Trace("Metro Transfers connected successfully.");
         }
 
-        private INode[] InsertDestinationNodes(IEnumerable<Stop> Stops, IEnumerable<Destination> Destinations, INode[] GraphNodes)
+        private INode[] InsertDestinationNodes(IEnumerable<Stop> Stops, IEnumerable<IDestination> Destinations, INode[] GraphNodes)
         {
             if (Stops == null || Destinations == null || GraphNodes == null)
             {
@@ -189,8 +189,8 @@ namespace SmartRoutes.Graph
 
             var GraphNodeList = GraphNodes.ToList();
 
-            // associate ChildCares with StopID's of closest stops
-            var destinationToStops = new Dictionary<int, List<int>>();
+            // associate destinations with StopID's of closest stops
+            var destinationToStops = new Dictionary<IDestination, List<int>>();
 
             foreach (var destination in Destinations)
             {
@@ -226,7 +226,7 @@ namespace SmartRoutes.Graph
                 
                 if (nearestStopList.Count() > 0)
                 {
-                    destinationToStops.Add(destination.Id, nearestStopList);
+                    destinationToStops.Add(destination, nearestStopList);
                 }
             }
 
@@ -236,7 +236,7 @@ namespace SmartRoutes.Graph
             {
                 List<int> nearestStops = null;
 
-                if (!destinationToStops.TryGetValue(destination.Id, out nearestStops))
+                if (!destinationToStops.TryGetValue(destination, out nearestStops))
                 {
                     continue;
                 }
