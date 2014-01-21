@@ -7,6 +7,6 @@ namespace SmartRoutes.Graph
 {
     public interface IGraphBuilder
     {
-        IGraph BuildGraph(IEnumerable<StopTime> StopTimes, IEnumerable<IDestination> Destinations, GraphBuilderSettings Settings);
+        IGraph BuildGraph(IEnumerable<StopTime> stopTimes, IEnumerable<IDestination> destinations, GraphBuilderSettings settings);
     }
 }

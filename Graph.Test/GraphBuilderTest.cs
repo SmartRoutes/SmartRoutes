@@ -172,7 +172,7 @@ namespace SmartRoutes.Graph.Test
         }
 
         [TestMethod]
-        public void ChildCares_One()
+        public void Destinations_One()
         {
             // ARRANGE
             var stop = new Stop {Id = 1, Latitude = 0.0, Longitude = 0.00001};
@@ -186,10 +186,10 @@ namespace SmartRoutes.Graph.Test
                 Trip = new Trip { ShapeId = 0 }
             };
 
-            var childCare = new Destination { Latitude = 0.0, Longitude = 0.00002 };
+            var destination = new Destination { Latitude = 0.0, Longitude = 0.00002 };
 
             // ACT
-            INode[] nodes = BuildGraph(new[] {stopTime}, new[] {childCare});
+            INode[] nodes = BuildGraph(new[] {stopTime}, new[] {destination});
 
             // ASSERT
             INode[][] subgraphs = GetSortedDisconnectedSubgraphs(nodes).ToArray();
@@ -197,11 +197,11 @@ namespace SmartRoutes.Graph.Test
             Assert.AreEqual(1, subgraphs.Length);
             INode[] subgraph = subgraphs[0];
 
-            VerifyChildCare(subgraph, time);
+            VerifyDestination(subgraph, time);
         }
 
         [TestMethod]
-        public void ChildCares_One_NotCloseEnough()
+        public void Destinations_One_NotCloseEnough()
         {
             // ARRANGE
             var stop = new Stop { Id = 1, Latitude = 0.0, Longitude = 0.00001 };
@@ -215,10 +215,10 @@ namespace SmartRoutes.Graph.Test
                 Trip = new Trip { ShapeId = 0 }
             };
 
-            var childCare = new Destination { Latitude = 0.0, Longitude = 1.0 };
+            var destination = new Destination { Latitude = 0.0, Longitude = 1.0 };
 
             // ACT
-            INode[] nodes = BuildGraph(new[] {stopTime}, new[] {childCare});
+            INode[] nodes = BuildGraph(new[] {stopTime}, new[] {destination});
 
             // ASSERT
             INode[][] subgraphs = GetSortedDisconnectedSubgraphs(nodes).ToArray();
@@ -232,7 +232,7 @@ namespace SmartRoutes.Graph.Test
         }
 
         [TestMethod]
-        public void ChildCares_Two()
+        public void Destinations_Two()
         {
             // ARRANGE
             var stop1 = new Stop { Id = 1, Latitude = 0.0, Longitude = 1.00000 };
@@ -256,11 +256,11 @@ namespace SmartRoutes.Graph.Test
                 Trip = new Trip()
             };
 
-            var childCareA = new Destination { Latitude = 0.0, Longitude = 1.00001 };
-            var childCareB = new Destination { Latitude = 0.0, Longitude = 2.00001 };
+            var destinationA = new Destination { Latitude = 0.0, Longitude = 1.00001 };
+            var destinationB = new Destination { Latitude = 0.0, Longitude = 2.00001 };
 
             // ACT
-            INode[] nodes = BuildGraph(new[] { stopTime1, stopTime2 }, new[] { childCareA, childCareB });
+            INode[] nodes = BuildGraph(new[] { stopTime1, stopTime2 }, new[] { destinationA, destinationB });
 
             // ASSERT
             INode[][] subgraphs = GetSortedDisconnectedSubgraphs(nodes)
@@ -271,14 +271,13 @@ namespace SmartRoutes.Graph.Test
             INode[] subgraph1 = subgraphs[0];
             INode[] subgraph2 = subgraphs[1];
 
-            VerifyChildCare(subgraph1, time1);
-            VerifyChildCare(subgraph2, time2);
+            VerifyDestination(subgraph1, time1);
+            VerifyDestination(subgraph2, time2);
         }
 
         private static INode[] BuildGraph(IEnumerable<StopTime> stopTimes, IEnumerable<IDestination> destinations, GraphBuilderSettings graphBuilderSettings)
         {
-            IGtfsNode gtfsNodeMaker = new GtfsNode();
-            IGraphBuilder graphBuilder = new GraphBuilder(gtfsNodeMaker);
+            IGraphBuilder graphBuilder = new GraphBuilder();
             IGraph graph = graphBuilder.BuildGraph(stopTimes, destinations, graphBuilderSettings);
             return graph.GraphNodes;
         }
@@ -288,12 +287,12 @@ namespace SmartRoutes.Graph.Test
             return BuildGraph(stopTimes, destinations, GraphBuilderSettings.Default);
         }
 
-        private static void VerifyChildCare(INode[] nodes, DateTime time)
+        private static void VerifyDestination(INode[] nodes, DateTime time)
         {
             Assert.AreEqual(3, nodes.Length);
-            INode node1 = nodes[0]; // coming from the child care
+            INode node1 = nodes[0]; // coming from the destination
             INode node2 = nodes[1]; // the bus stop
-            INode node3 = nodes[2]; // going to the child care
+            INode node3 = nodes[2]; // going to the destination
 
             Assert.IsTrue(node1.Time < time);
             Assert.AreEqual(node2.Time, time);

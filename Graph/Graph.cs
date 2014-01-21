@@ -1,13 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Data.Entity;
-using SmartRoutes.Database;
 using SmartRoutes.Graph.Node;
 using SmartRoutes.Model.Gtfs;
-using SmartRoutes.Heap;
 using SmartRoutes.Model;
-using SmartRoutes.Model.Srds;
 
 namespace SmartRoutes.Graph
 {
@@ -26,18 +22,18 @@ namespace SmartRoutes.Graph
             _settings = settings;
         }
 
-        public Stop closestMetroStop(ILocation location)
+        public Stop GetClosestGtfsStop(ILocation location)
         {
             double minDistance = double.MaxValue;
             Stop closestStop = null;
 
             foreach (var stop in _stops)
             {
-                double Distance = location.GetL1DistanceInFeet(stop);
+                double distance = location.GetL1DistanceInFeet(stop);
 
-                if (Distance < minDistance)
+                if (distance < minDistance)
                 {
-                    minDistance = Distance;
+                    minDistance = distance;
                     closestStop = stop;
                 }
             }
@@ -50,15 +46,15 @@ namespace SmartRoutes.Graph
             return closestStop;
         }
 
-        public IGtfsNode closestMetroNode(ILocation location, DateTime Time, TimeDirection Direction)
+        public IGtfsNode GetClosestGtfsNode(ILocation location, DateTime time, TimeDirection direction)
         {
-            Stop closestStop = closestMetroStop(location);
+            Stop closestStop = GetClosestGtfsStop(location);
 
-            // retrieve metronodes corresponding to this stop
-            List<IGtfsNode> nodes = null;
+            // retrieve GTFS nodes corresponding to this stop
+            List<IGtfsNode> nodes;
             if (!_stopToNodes.TryGetValue(closestStop.Id, out nodes))
             {
-                throw new Exception("Failed to find metro nodes associated with closest stop.");
+                throw new Exception("Failed to find GTFS nodes associated with closest stop.");
             }
 
             double distance = closestStop.GetL1DistanceInFeet(location);
@@ -69,12 +65,12 @@ namespace SmartRoutes.Graph
             Array.Sort(nodesArray, new Comparers.ComparerForTransferSorting());
             IGtfsNode returnNode = null;
 
-            if (Direction == TimeDirection.Forwards)
+            if (direction == TimeDirection.Forwards)
             {
-                DateTime TimeThreshhold = Time + TimeSpan.FromSeconds(walkingTime);
+                DateTime timeThreshhold = time + TimeSpan.FromSeconds(walkingTime);
                 foreach (var node in nodesArray)
                 {
-                    if (node.Time >= TimeThreshhold)
+                    if (node.Time >= timeThreshhold)
                     {
                         returnNode = node;
                         break;
@@ -83,10 +79,10 @@ namespace SmartRoutes.Graph
             }
             else
             {
-                DateTime TimeThreshhold = Time - TimeSpan.FromSeconds(walkingTime);
+                DateTime timeThreshhold = time - TimeSpan.FromSeconds(walkingTime);
                 for (int i = nodesArray.Count() - 1; i >= 0; i--)
                 {
-                    if (nodesArray[i].Time <= TimeThreshhold)
+                    if (nodesArray[i].Time <= timeThreshhold)
                     {
                         returnNode = nodesArray[i];
                         break;
@@ -96,31 +92,31 @@ namespace SmartRoutes.Graph
 
             if (returnNode == null)
             {
-                throw new Exception("Failed to find nearby metro node.");
+                throw new Exception("Failed to find nearby GTFS node.");
             }
 
             return returnNode;
         }
 
-        public List<IGtfsNode> GetChildCareNeighbors(IDestinationNode childCareNode, TimeDirection Direction)
+        public IEnumerable<IGtfsNode> GetDestinationNeighbors(IDestinationNode destinationNode, TimeDirection direction)
         {
-            List<NodeBase> UniqueNodeBases = new List<NodeBase>();
-            List<IGtfsNode> ReturnNodes = new List<IGtfsNode>();
+            var uniqueNodeBases = new List<NodeBase>();
+            var returnNodes = new List<IGtfsNode>();
 
-            var current = childCareNode;
+            var current = destinationNode;
             bool done = false;
             while (!done)
             {
-                var neighbors = (Direction == TimeDirection.Backwards)
+                var neighbors = (direction == TimeDirection.Backwards)
                     ? current.TimeBackwardNeighbors
                     : current.TimeForwardNeighbors;
 
                 foreach (var neighbor in neighbors.OfType<IGtfsNode>())
                 {
-                    if (!UniqueNodeBases.Contains(neighbor.BaseNode))
+                    if (!uniqueNodeBases.Contains(neighbor.BaseNode))
                     {
-                        UniqueNodeBases.Add(neighbor.BaseNode);
-                        ReturnNodes.Add(neighbor);
+                        uniqueNodeBases.Add(neighbor.BaseNode);
+                        returnNodes.Add(neighbor);
                     }
                 }
 
@@ -137,7 +133,7 @@ namespace SmartRoutes.Graph
                 }
             }
 
-            return ReturnNodes;
+            return returnNodes;
         }
     }
 }
