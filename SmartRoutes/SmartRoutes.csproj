@@ -128,6 +128,7 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\GuidedSearchPageController.cs" />
+    <Compile Include="Models\AccreditationModel.cs" />
     <Compile Include="Models\ChildInformationViewModel.cs" />
     <Compile Include="Models\PortalButtonModel.cs" />
     <Compile Include="Models\PortalViewModel.cs" />
@@ -154,6 +155,7 @@
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\Images\sample_map.png" />
+    <Content Include="Scripts\Models\AccreditationViewModel.js" />
     <Content Include="Scripts\Models\ChildInfoViewModel.js" />
     <Content Include="Content\Views\GuidedSearchPageView.css" />
     <Content Include="Content\Views\MainPageView.css" />
@@ -180,6 +182,7 @@
     <Content Include="Scripts\Models\ScheduleTypeViewModel.js" />
     <Content Include="Scripts\sammy-0.7.4.js" />
     <Content Include="Scripts\sammy-0.7.4.min.js" />
+    <Content Include="Scripts\View\AccreditationFormPageController.js" />
     <Content Include="Scripts\View\ChildInformationFormPageController.js" />
     <Content Include="Scripts\View\GuidedSearchViewController.js" />
     <Content Include="Scripts\View\LocationAndTimeFormPageController.js" />
@@ -215,6 +218,7 @@
     <Content Include="Views\Search\_ScheduleTypeFormPageView.cshtml" />
     <Content Include="Views\Search\_LocationAndTimeFormPageView.cshtml" />
     <Content Include="Views\Search\_AddressView.cshtml" />
+    <Content Include="Views\Search\_AccreditationFormPageView.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

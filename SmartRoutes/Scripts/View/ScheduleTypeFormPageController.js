@@ -7,7 +7,7 @@ SmartRoutes.ScheduleTypeFormPageController = (function(formPageRouteMap) {
 
     (function Init() {
         scheduleTypeViewModel = new SmartRoutes.ScheduleTypeViewModel();
-        ko.applyBindings(scheduleTypeViewModel, $("#sr-schedule-type-form-page-view")[0]);
+        ko.applyBindings(scheduleTypeViewModel, $("#sr-schedule-type-input")[0]);
     })();
 
     return {
