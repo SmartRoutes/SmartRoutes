@@ -16,6 +16,7 @@ SmartRoutes.GuidedSearchViewController = (function() {
     var childInformationFormPageController = null;
     var scheduleTypeFormPageController = null;
     var locationAndTimeFormPageController = null;
+    var accreditationFormPageController = null;
 
     var InitPageSubroutes = function() {
         formPageSammyApp = $.sammy(function() {
@@ -58,11 +59,16 @@ SmartRoutes.GuidedSearchViewController = (function() {
         locationAndTimeFormPageController = new SmartRoutes.LocationAndTimeFormPageController(pageIDRouteMap);
     };
 
+    var InitAccreditationPage = function() {
+        accreditationFormPageController = new SmartRoutes.AccreditationFormPageController();
+    };
+
     (function Init() {
         InitPageSubroutes();
         InitChildInfoPage();
         InitScheduleTypePage();
         InitLocationAndTimePage();
+        InitAccreditationPage();
     })();
 
     // Event handlers

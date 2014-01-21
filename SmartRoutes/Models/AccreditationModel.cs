@@ -17,6 +17,7 @@ namespace SmartRoutes.Models
             this.Name = name;
             this.Description = description;
             this.URL = url;
+            this.Checked = false;
         }
 
         /// <summary>
@@ -41,6 +42,12 @@ namespace SmartRoutes.Models
         /// A url that takes the user to a website that provides additional information.
         /// </summary>
         public Uri URL
+        {
+            get;
+            set;
+        }
+
+        public bool Checked
         {
             get;
             set;

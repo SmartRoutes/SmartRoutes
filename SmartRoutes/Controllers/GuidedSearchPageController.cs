@@ -12,7 +12,7 @@ namespace SmartRoutes.Controllers
         //
         // GET: /GuidedSearchPage/
 
-        public ActionResult AccreditationFormPageView()
+        public JsonResult Accreditations()
         {
             // This stuff should probably go in a database eventually,
             // but as there is still debate about database issues, this
@@ -28,7 +28,12 @@ namespace SmartRoutes.Controllers
                 new AccreditationModel("CCFP", "CCFP Description", new Uri("http://www.4c.org/provider/participate/food/overview.html"))
             };
 
-            return PartialView("~/Views/Search/_AccreditationFormPageView.cshtml", accreditations);
+            return Json(accreditations, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult AccreditationView()
+        {
+            return PartialView("~/Views/Search/_AccreditationView.cshtml");
         }
     }
 }

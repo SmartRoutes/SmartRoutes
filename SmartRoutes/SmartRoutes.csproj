@@ -219,6 +219,7 @@
     <Content Include="Views\Search\_LocationAndTimeFormPageView.cshtml" />
     <Content Include="Views\Search\_AddressView.cshtml" />
     <Content Include="Views\Search\_AccreditationFormPageView.cshtml" />
+    <Content Include="Views\Search\_AccreditationView.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
