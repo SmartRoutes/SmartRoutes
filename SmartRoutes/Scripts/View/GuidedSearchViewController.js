@@ -11,12 +11,14 @@ SmartRoutes.GuidedSearchViewController = (function() {
         "sr-child-information-form-page-view": "#/search/childinformation",
         "sr-schedule-type-form-page-view": "#/search/scheduletype",
         "sr-location-time-form-page-view": "#/search/locationsandtimes",
-        "sr-accreditation-form-page-view": "#/search/accreditation"
+        "sr-accreditation-form-page-view": "#/search/accreditation",
+        "sr-service-type-form-page-view": "#/sereach/servicetype"
     }
     var childInformationFormPageController = null;
     var scheduleTypeFormPageController = null;
     var locationAndTimeFormPageController = null;
     var accreditationFormPageController = null;
+    var serviceTypeFormPageController = null;
 
     var InitPageSubroutes = function() {
         formPageSammyApp = $.sammy(function() {
@@ -44,6 +46,11 @@ SmartRoutes.GuidedSearchViewController = (function() {
                 $(".sr-form-page").hide();
                 $("#sr-accreditation-form-page-view").show();
             });
+
+            this.get(pageIDRouteMap["sr-service-type-form-page-view"], function() {
+                $(".sr-form-page").hide();
+                $("#sr-service-type-form-page-view").show();
+            });
         });
     };
 
@@ -63,12 +70,17 @@ SmartRoutes.GuidedSearchViewController = (function() {
         accreditationFormPageController = new SmartRoutes.AccreditationFormPageController();
     };
 
+    var InitServiceTypeFormPage = function() {
+        serviceTypeFormPageController = new SmartRoutes.ServiceTypeFormPageController();
+    };
+
     (function Init() {
         InitPageSubroutes();
         InitChildInfoPage();
         InitScheduleTypePage();
         InitLocationAndTimePage();
         InitAccreditationPage();
+        InitServiceTypeFormPage();
     })();
 
     // Event handlers

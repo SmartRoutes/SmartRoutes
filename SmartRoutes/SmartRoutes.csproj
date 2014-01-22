@@ -130,8 +130,10 @@
     <Compile Include="Controllers\GuidedSearchPageController.cs" />
     <Compile Include="Models\AccreditationModel.cs" />
     <Compile Include="Models\ChildInformationViewModel.cs" />
+    <Compile Include="Models\DetailedCheckboxModel.cs" />
     <Compile Include="Models\PortalButtonModel.cs" />
     <Compile Include="Models\PortalViewModel.cs" />
+    <Compile Include="Models\ServiceTypeModel.cs" />
     <Compile Include="Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -174,12 +176,14 @@
     <Content Include="Scripts\knockout-3.0.0.debug.js" />
     <Content Include="Scripts\knockout-3.0.0.js" />
     <Content Include="Scripts\Models\AddressViewModel.js" />
+    <Content Include="Scripts\Models\ComboBoxViewModel.js" />
     <Content Include="Scripts\Models\DropOffDepartureViewModel.js" />
     <Content Include="Scripts\Models\DropOffDestinationViewModel.js" />
     <Content Include="Scripts\Models\LocationAndTimeViewModel.js" />
     <Content Include="Scripts\Models\PickUpDepartureViewModel.js" />
     <Content Include="Scripts\Models\PickUpDestinationViewModel.js" />
     <Content Include="Scripts\Models\ScheduleTypeViewModel.js" />
+    <Content Include="Scripts\Models\ServiceTypeViewModel.js" />
     <Content Include="Scripts\sammy-0.7.4.js" />
     <Content Include="Scripts\sammy-0.7.4.min.js" />
     <Content Include="Scripts\View\AccreditationFormPageController.js" />
@@ -189,6 +193,7 @@
     <Content Include="Scripts\View\PageController.js" />
     <Content Include="Scripts\View\PortalViewController.js" />
     <Content Include="Scripts\View\ScheduleTypeFormPageController.js" />
+    <Content Include="Scripts\View\ServiceTypeFormPageController.js" />
     <Content Include="Scripts\View\SmartRoutes.js" />
     <Content Include="Scripts\_references.js" />
     <Content Include="Web.config" />
@@ -220,6 +225,9 @@
     <Content Include="Views\Search\_AddressView.cshtml" />
     <Content Include="Views\Search\_AccreditationFormPageView.cshtml" />
     <Content Include="Views\Search\_AccreditationView.cshtml" />
+    <Content Include="Views\Search\_ServiceTypeFormPageView.cshtml" />
+    <Content Include="Views\Search\_DetailedCheckboxView.cshtml" />
+    <Content Include="Views\Search\_ServiceTypeView.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

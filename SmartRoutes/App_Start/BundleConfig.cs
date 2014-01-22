@@ -36,6 +36,7 @@ namespace SmartRoutes
                         "~/Scripts/Models/PickUpDestinationViewModel.js",
                         "~/Scripts/Models/LocationAndTimeViewModel.js",
                         "~/Scripts/Models/AccreditationViewModel.js",
+                        "~/Scripts/Models/ServiceTypeViewModel.js",
 
                         // Common controllers.
                         "~/Scripts/View/PortalViewController.js",
@@ -45,6 +46,7 @@ namespace SmartRoutes
                         "~/Scripts/View/ScheduleTypeFormPageController.js",
                         "~/Scripts/View/LocationAndTimeFormPageController.js",
                         "~/Scripts/View/AccreditationFormPageController.js",
+                        "~/Scripts/View/ServiceTypeFormPageController.js",
 
                         // The master search form controller.
                         "~/Scripts/View/GuidedSearchViewController.js",

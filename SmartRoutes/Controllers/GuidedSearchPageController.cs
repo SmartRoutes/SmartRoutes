@@ -31,9 +31,25 @@ namespace SmartRoutes.Controllers
             return Json(accreditations, JsonRequestBehavior.AllowGet);
         }
 
+        public JsonResult ServiceTypes()
+        {
+            List<ServiceTypeModel> serviceTypes = new List<ServiceTypeModel>
+            {
+                // Placeholder.
+                new ServiceTypeModel("Service Type A", "Description for service type A")
+            };
+
+            return Json(serviceTypes, JsonRequestBehavior.AllowGet);
+        }
+
         public ActionResult AccreditationView()
         {
             return PartialView("~/Views/Search/_AccreditationView.cshtml");
+        }
+
+        public ActionResult ServiceTypeView()
+        {
+            return PartialView("~/Views/Search/_ServiceTypeView.cshtml");
         }
     }
 }
