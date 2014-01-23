@@ -1,0 +1,8 @@
+﻿
+SmartRoutes.GuidedSearchCommunicationController = function() {
+
+
+    return {
+
+    };
+};

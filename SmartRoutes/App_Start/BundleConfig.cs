@@ -9,22 +9,22 @@ namespace SmartRoutes
         public static void RegisterBundles(BundleCollection bundles)
         {
             bundles.Add(new ScriptBundle("~/bundles/jquery").Include(
-                        "~/Scripts/jquery-{version}.js"));
+                        "~/Scripts/library/jquery-{version}.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/knockout").Include(
-                        "~/Scripts/knockout-{version}.js"));
+                        "~/Scripts/library/knockout-{version}.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/bootstrap").Include(
-                        "~/Scripts/bootstrap.js"));
+                        "~/Scripts/library/bootstrap.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/routing").Include(
-                        "~/Scripts/sammy-{version}.js"));
+                        "~/Scripts/library/sammy-{version}.js"));
 
             // Initialization order matters here.  Dependencies must
             // be bundled before the script that needs them.
             bundles.Add(new ScriptBundle("~/bundles/smartroutes").Include(
                         // This should always be first.
-                        "~/Scripts/View/SmartRoutes.js",
+                        "~/Scripts/SmartRoutes.js",
                         
                         // View Models.
                         "~/Scripts/ViewModels/ChildInfoViewModel.js",
