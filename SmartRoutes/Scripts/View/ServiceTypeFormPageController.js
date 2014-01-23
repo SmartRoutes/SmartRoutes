@@ -16,15 +16,17 @@ SmartRoutes.ServiceTypeFormPageController = function() {
     };
 
     (function Init() {
-        $.get("/GuidedSearchPage/ServiceTypeView", function(data) {
-            serviceTypeViewRaw = data;
-            CreateAndBindServiceTypeViews();
-        }, "html");
+        var guidedSearchCommunicationController = new SmartRoutes.Communication.GuidedSearchCommunicationController();
 
-        $.getJSON("/GuidedSearchPage/ServiceTypes", function(data) {
-            $.each(data, function(key, value) {
+        guidedSearchCommunicationController.FetchServiceTypes(function(serviceTypeData) {
+            $.each(serviceTypeData, function(key, value) {
                 serviceTypes.push(new SmartRoutes.ServiceTypeViewModel(value.Name, value.Description, value.Checked));
             });
+            CreateAndBindServiceTypeViews();
+        });
+
+        guidedSearchCommunicationController.FetchServiceTypeView(function(serviceTypeView) {
+            serviceTypeViewRaw = serviceTypeView;
             CreateAndBindServiceTypeViews();
         });
     })();

@@ -25,6 +25,16 @@ namespace SmartRoutes
             bundles.Add(new ScriptBundle("~/bundles/smartroutes").Include(
                         // This should always be first.
                         "~/Scripts/SmartRoutes.js",
+
+                        // Communication objects.
+                        "~/Scripts/Communication/Payloads/Requirement.js",
+                        "~/Scripts/Communication/Payloads/RangeRequirement.js",
+                        "~/Scripts/Communication/Payloads/Objective.js",
+                        "~/Scripts/Communication/Payloads/Query.js",
+
+                        // Communication controllers.
+                        "~/Scripts/Communication/Controllers/GuidedSearchCommunicationController.js",
+
                         
                         // View Models.
                         "~/Scripts/ViewModels/ChildInfoViewModel.js",

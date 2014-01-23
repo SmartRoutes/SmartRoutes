@@ -21,12 +21,14 @@ SmartRoutes.AccreditationFormPageController = function() {
         var guidedSeachCommunicationController = new SmartRoutes.Communication.GuidedSearchCommunicationController();
 
         guidedSeachCommunicationController.FetchAccreditationView(function(accreditationView) {
-            accreditationViewRaw = data;
+            accreditationViewRaw = accreditationView;
             CreateAndBindAccreditationViews();
         });
 
         guidedSeachCommunicationController.FetchAccreditations(function(accreditationModels) {
-            accreditations.push(new SmartRoutes.AccreditationViewModel(value.Name, value.Description, value.URL, value.Checked));
+            $.each(accreditationModels, function(key, value) {
+                accreditations.push(new SmartRoutes.AccreditationViewModel(value.Name, value.Description, value.URL, value.Checked));
+            });
             CreateAndBindAccreditationViews();
         });
     })();

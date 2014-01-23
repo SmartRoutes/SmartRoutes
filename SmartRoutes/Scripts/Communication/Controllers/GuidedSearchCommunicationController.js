@@ -1,5 +1,6 @@
 ﻿
 SmartRoutes.Communication.GuidedSearchCommunicationController = function() {
+    // Private:
 
     var guidedSearchControllerPath = "/GuidedSearchPage/";
 
@@ -11,17 +12,30 @@ SmartRoutes.Communication.GuidedSearchCommunicationController = function() {
     };
 
     return {
+        // Public:
 
         // Fetches the accreditation data from the server and 
         // calls callback with an array of accreditation model objects.
         FetchAccreditations: function(callback) {
-            $.getJSON(requestmap.accreditations, function(data) {
+            $.getJSON(requestMap.accreditations, function(data) {
                 callback(data);
             });
         },
 
         FetchAccreditationView: function(callback) {
-            $.get("/GuidedSearchPage/AccreditationView", function(data) {
+            $.get(requestMap.accreditationView, function(data) {
+                callback(data);
+            }, "html");
+        },
+
+        FetchServiceTypes: function(callback) {
+            $.getJSON(requestMap.serviceTypes, function(data) {
+                callback(data);
+            });
+        },
+
+        FetchServiceTypeView: function(callback) {
+            $.get(requestMap.serviceTypeView, function(data) {
                 callback(data);
             }, "html");
         }
