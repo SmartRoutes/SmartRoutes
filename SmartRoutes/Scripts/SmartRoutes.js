@@ -1,2 +1,4 @@
 ﻿
-var SmartRoutes = {};
+var SmartRoutes = {
+    Communication: {}
+};
