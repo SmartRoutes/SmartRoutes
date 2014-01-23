@@ -5,9 +5,15 @@ SmartRoutes.ScheduleTypeFormPageController = (function(pageID) {
     var scheduleTypePageID = pageID;
     var scheduleTypeViewModel = null;
 
+    ko.extenders.scheduleTypeRequired = function(target, message) {
+
+
+        return target;
+    };
+
     (function Init() {
         scheduleTypeViewModel = new SmartRoutes.ScheduleTypeViewModel();
-        ko.applyBindings(scheduleTypeViewModel, $("#sr-schedule-type-input")[0]);
+        ko.applyBindings(scheduleTypeViewModel, $("#sr-schedule-type-form-page-view")[0]);
     })();
 
     return {
@@ -19,7 +25,12 @@ SmartRoutes.ScheduleTypeFormPageController = (function(pageID) {
         },
 
         GetScheduleTypeViewModel: function() {
-            return scheduleTypeViewModel;
+            var scheduleType = {
+                dropOffChecked: scheduleTypeViewModel.dropOffChecked(),
+                pickUpChecked: scheduleTypeViewModel.pickUpChecked()
+            }
+
+            return scheduleType;
         }
     };
 

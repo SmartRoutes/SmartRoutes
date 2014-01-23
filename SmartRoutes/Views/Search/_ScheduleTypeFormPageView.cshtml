@@ -16,7 +16,13 @@
                 <input type="checkbox" name="scheduleTypePickUp" data-bind="checked: pickUpChecked" class="sr-checkbox" id="sr-schedule-type-pick-up" />
                 <span class="sr-checkbox-text">Pick Up</span>
             </div>
+
+
         </div>
+    </div>
+
+    <div id="sr-schedule-type-error" data-bind="visible: noScheduleTypeSelected">
+        <span>You must select at least one schedule type.</span>
     </div>
 
 </div>
