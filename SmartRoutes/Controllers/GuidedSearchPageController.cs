@@ -19,13 +19,13 @@ namespace SmartRoutes.Controllers
             // is just done inline for now.
             List<AccreditationModel> accreditations = new List<AccreditationModel>
             {
-                new AccreditationModel("NAEYC", "NAEYC Description", new Uri("http://www.naeyc.org/")),
-                new AccreditationModel("NECPA", "NECPA Description", new Uri("http://www.necpa.net/")),
-                new AccreditationModel("NACCP", "NACCP Description", new Uri("http://www.earlylearningleaders.org/")),
-                new AccreditationModel("NAFCC", "NAFCC Description", new Uri("http://nafcc.org/")),
-                new AccreditationModel("COA", "COA Description", new Uri("http://www.childrenofamerica.com/")),
-                new AccreditationModel("ACSI", "ACSI Description", new Uri("http://www.acsiglobal.org/")),
-                new AccreditationModel("CCFP", "CCFP Description", new Uri("http://www.4c.org/provider/participate/food/overview.html"))
+                new AccreditationModel(Resources.NAEYCName, Resources.NAEYCDescription, new Uri(Resources.NAEYCURL)),
+                new AccreditationModel(Resources.NECPAName, Resources.NECPADescription, new Uri(Resources.NECPAURL)),
+                new AccreditationModel(Resources.NACCPName, Resources.NACCPDescription, new Uri(Resources.NACCPURL)),
+                new AccreditationModel(Resources.NAFCCName, Resources.NAFCCDescription, new Uri(Resources.NAFCCURL)),
+                new AccreditationModel(Resources.COAName, Resources.COADescription, new Uri(Resources.COAURL)),
+                new AccreditationModel(Resources.ACSIName, Resources.ACSIDescription, new Uri(Resources.ACSIURL)),
+                new AccreditationModel(Resources.CCFPName, Resources.CCFPDescription, new Uri(Resources.CCFPURL))
             };
 
             return Json(accreditations, JsonRequestBehavior.AllowGet);

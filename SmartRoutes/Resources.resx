@@ -117,11 +117,74 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="ACSIDescription" xml:space="preserve">
+    <value>ACSI Description</value>
+  </data>
+  <data name="ACSIName" xml:space="preserve">
+    <value>ACSI</value>
+  </data>
+  <data name="ACSIURL" xml:space="preserve">
+    <value>http://www.acsiglobal.org/</value>
+  </data>
+  <data name="CCFPDescription" xml:space="preserve">
+    <value>CCFP Description</value>
+  </data>
+  <data name="CCFPName" xml:space="preserve">
+    <value>CCFP</value>
+  </data>
+  <data name="CCFPURL" xml:space="preserve">
+    <value>http://www.4c.org/provider/participate/food/overview.html</value>
+  </data>
+  <data name="COADescription" xml:space="preserve">
+    <value>COA Description</value>
+  </data>
+  <data name="COAName" xml:space="preserve">
+    <value>COA</value>
+  </data>
+  <data name="COAURL" xml:space="preserve">
+    <value>http://www.childrenofamerica.com/</value>
+  </data>
   <data name="descriptionText" xml:space="preserve">
     <value>Outline features of the website here.  This will outline the search process that we will take the user through and ask that they provide feedback on his or her experience with our service.</value>
   </data>
   <data name="descriptionTitleText" xml:space="preserve">
     <value>Description</value>
+  </data>
+  <data name="NACCPDescription" xml:space="preserve">
+    <value>NACCP Description</value>
+  </data>
+  <data name="NACCPName" xml:space="preserve">
+    <value>NACCP</value>
+  </data>
+  <data name="NACCPURL" xml:space="preserve">
+    <value>http://www.earlylearningleaders.org/</value>
+  </data>
+  <data name="NAEYCDescription" xml:space="preserve">
+    <value>NAEYC Description</value>
+  </data>
+  <data name="NAEYCName" xml:space="preserve">
+    <value>NAEYC</value>
+  </data>
+  <data name="NAEYCURL" xml:space="preserve">
+    <value>http://www.naeyc.org/</value>
+  </data>
+  <data name="NAFCCDescription" xml:space="preserve">
+    <value>NAFCC Description</value>
+  </data>
+  <data name="NAFCCName" xml:space="preserve">
+    <value>NAFCC</value>
+  </data>
+  <data name="NAFCCURL" xml:space="preserve">
+    <value>http://nafcc.org/</value>
+  </data>
+  <data name="NECPADescription" xml:space="preserve">
+    <value>NECPA Description</value>
+  </data>
+  <data name="NECPAName" xml:space="preserve">
+    <value>NECPA</value>
+  </data>
+  <data name="NECPAURL" xml:space="preserve">
+    <value>http://www.necpa.net/</value>
   </data>
   <data name="portalTextFeedback" xml:space="preserve">
     <value>Feedback</value>
