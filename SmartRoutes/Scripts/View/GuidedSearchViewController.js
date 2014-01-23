@@ -6,6 +6,14 @@ SmartRoutes.GuidedSearchViewController = (function() {
     
     var formPageSammyApp = null;
     var activePageElement = null;
+
+    var pageIDs = {
+        childInformationPageID: "sr-child-information-form-page-view",
+        scheduleTypePageID: "sr-schedule-type-form-page-view",
+        locationAndTimePageID: "sr-location-time-form-page-view",
+        accreditationPageID: "sr-accreditation-form-page-view",
+        serviceTypePageID: "sr-service-type-form-page-view"
+    };
     
     var pageIDRouteMap = {
         "sr-child-information-form-page-view": "#/search/childinformation",
@@ -27,29 +35,29 @@ SmartRoutes.GuidedSearchViewController = (function() {
             // If the navigation wasn't done with the Next button, it might make sense
             // to simply dump the user back on the first search form page?
 
-            this.get(pageIDRouteMap["sr-child-information-form-page-view"], function() {
+            this.get(pageIDRouteMap[pageIDs.childInformationPageID], function() {
                 $(".sr-form-page").hide();
-                $("#sr-child-information-form-page-view").show();
+                $("#" + pageIDs.childInformationPageID).show();
             });
 
-            this.get(pageIDRouteMap["sr-schedule-type-form-page-view"], function() {
+            this.get(pageIDRouteMap[pageIDs.scheduleTypePageID], function() {
                 $(".sr-form-page").hide();
-                $("#sr-schedule-type-form-page-view").show();
+                $("#" + pageIDs.scheduleTypePageID).show();
             });
 
-            this.get(pageIDRouteMap["sr-location-time-form-page-view"], function() {
+            this.get(pageIDRouteMap[pageIDs.locationAndTimePageID], function() {
                 $(".sr-form-page").hide();
-                $("#sr-location-time-form-page-view").show();
+                $("#" + pageIDs.locationAndTimePageID).show();
             });
 
-            this.get(pageIDRouteMap["sr-accreditation-form-page-view"], function() {
+            this.get(pageIDRouteMap[pageIDs.accreditationPageID], function() {
                 $(".sr-form-page").hide();
-                $("#sr-accreditation-form-page-view").show();
+                $("#" + pageIDs.accreditationPageID).show();
             });
 
-            this.get(pageIDRouteMap["sr-service-type-form-page-view"], function() {
+            this.get(pageIDRouteMap[pageIDs.serviceTypePageID], function() {
                 $(".sr-form-page").hide();
-                $("#sr-service-type-form-page-view").show();
+                $("#" + pageIDs.serviceTypePageID).show();
             });
         });
     };
@@ -117,8 +125,8 @@ SmartRoutes.GuidedSearchViewController = (function() {
         RunPage: function() {
             // Anywhere else just needs to navigate to #/search.
             // This controller will navigate to the correct sub-route.
-            formPageSammyApp.setLocation(pageIDRouteMap["sr-child-information-form-page-view"]);
-            activePageElement = $("#sr-child-information-form-page-view");
+            formPageSammyApp.setLocation(pageIDRouteMap[pageIDs.childInformationPageID]);
+            activePageElement = $("#" + pageIDs.childInformationPageID);
         }
     };
 });
