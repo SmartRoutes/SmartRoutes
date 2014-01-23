@@ -1,8 +1,8 @@
 ﻿
-SmartRoutes.ScheduleTypeFormPageController = (function(formPageRouteMap) {
+SmartRoutes.ScheduleTypeFormPageController = (function(pageID) {
 
     // Private: 
-    var pageIDRouteMap = formPageRouteMap;
+    var scheduleTypePageID = pageID;
     var scheduleTypeViewModel = null;
 
     (function Init() {
@@ -12,6 +12,11 @@ SmartRoutes.ScheduleTypeFormPageController = (function(formPageRouteMap) {
 
     return {
         // Public:
+
+        RunPage: function() {
+
+            $("#" + scheduleTypePageID).fadeIn(SmartRoutes.Constants.formPageFadeInTime);
+        },
 
         GetScheduleTypeViewModel: function() {
             return scheduleTypeViewModel;

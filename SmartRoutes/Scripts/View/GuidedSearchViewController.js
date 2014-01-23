@@ -37,12 +37,12 @@ SmartRoutes.GuidedSearchViewController = (function() {
 
             this.get(pageIDRouteMap[pageIDs.childInformationPageID], function() {
                 $(".sr-form-page").hide();
-                $("#" + pageIDs.childInformationPageID).show();
+                childInformationFormPageController.RunPage();
             });
 
             this.get(pageIDRouteMap[pageIDs.scheduleTypePageID], function() {
                 $(".sr-form-page").hide();
-                $("#" + pageIDs.scheduleTypePageID).show();
+                scheduleTypeFormPageController.RunPage();
             });
 
             this.get(pageIDRouteMap[pageIDs.locationAndTimePageID], function() {
@@ -63,11 +63,11 @@ SmartRoutes.GuidedSearchViewController = (function() {
     };
 
     var InitChildInfoPage = function() {
-        childInformationFormPageController = new SmartRoutes.ChildInformationFormPageController(pageIDRouteMap);
+        childInformationFormPageController = new SmartRoutes.ChildInformationFormPageController(pageIDs.childInformationPageID);
     };
 
     var InitScheduleTypePage = function() {
-        scheduleTypeFormPageController = new SmartRoutes.ScheduleTypeFormPageController(pageIDRouteMap);
+        scheduleTypeFormPageController = new SmartRoutes.ScheduleTypeFormPageController(pageIDs.scheduleTypePageID);
     };
 
     var InitLocationAndTimePage = function() {

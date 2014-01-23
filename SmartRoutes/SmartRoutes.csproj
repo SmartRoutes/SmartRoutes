@@ -162,6 +162,7 @@
     <Content Include="Scripts\Communication\Payloads\Query.js" />
     <Content Include="Scripts\Communication\Payloads\RangeRequirement.js" />
     <Content Include="Scripts\Communication\Payloads\Requirement.js" />
+    <Content Include="Scripts\Constants.js" />
     <Content Include="Scripts\ViewModels\AccreditationViewModel.js" />
     <Content Include="Scripts\ViewModels\ChildInfoViewModel.js" />
     <Content Include="Content\Views\GuidedSearchPageView.css" />

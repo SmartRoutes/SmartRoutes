@@ -1,3 +1,4 @@
+/// <reference path="\Constants.js" />
 /// <reference path="\SmartRoutes.js" />
 /// <reference path="\Communication\Controllers\GuidedSearchCommunicationController.js" />
 /// <reference path="\Communication\Payloads\Objective.js" />

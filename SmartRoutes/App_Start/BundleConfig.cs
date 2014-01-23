@@ -26,6 +26,8 @@ namespace SmartRoutes
                         // This should always be first.
                         "~/Scripts/SmartRoutes.js",
 
+                        "~/Scripts/Constants.js",
+
                         // Communication objects.
                         "~/Scripts/Communication/Payloads/Requirement.js",
                         "~/Scripts/Communication/Payloads/RangeRequirement.js",

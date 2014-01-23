@@ -5,7 +5,7 @@ SmartRoutes.LocationAndTimeFormPageController = function(formPageRouteMap) {
     var pageIDRouteMap = formPageRouteMap;
     var locationAndTimeViewModel = null;
 
-    (function Init() {
+    function InitBindings() {
         locationAndTimeViewModel = new SmartRoutes.LocationAndTimeViewModel();
 
         ko.applyBindings(locationAndTimeViewModel.dropOffDepartureViewModel.dropOffDepartureAddressViewModel,
@@ -25,6 +25,16 @@ SmartRoutes.LocationAndTimeFormPageController = function(formPageRouteMap) {
                          $("#sr-pick-up-destination-supplemental-input")[0]);
         ko.applyBindings(locationAndTimeViewModel.pickUpDestinationViewModel.pickUpDestinationAddressViewModel,
                          $("#sr-pick-up-destination-address-container")[0]);
+    };
+
+    // This function shows the various sections determined by the
+    // schedule type page.
+    function InitViewSectionVisibility() {
+
+    };
+
+    (function Init() {
+        InitBindings();
     })();
 
     return {
