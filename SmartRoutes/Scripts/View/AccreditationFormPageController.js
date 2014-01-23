@@ -18,16 +18,15 @@ SmartRoutes.AccreditationFormPageController = function() {
     };
 
     (function Init() {
+        var guidedSeachCommunicationController = new SmartRoutes.Communication.GuidedSearchCommunicationController();
 
-        $.get("/GuidedSearchPage/AccreditationView", function(data) {
+        guidedSeachCommunicationController.FetchAccreditationView(function(accreditationView) {
             accreditationViewRaw = data;
             CreateAndBindAccreditationViews();
-        }, "html");
+        });
 
-        $.getJSON("/GuidedSearchPage/Accreditations", function(data) {
-            $.each(data, function(key, value) {
-                accreditations.push(new SmartRoutes.AccreditationViewModel(value.Name, value.Description, value.URL, value.Checked));
-            });
+        guidedSeachCommunicationController.FetchAccreditations(function(accreditationModels) {
+            accreditations.push(new SmartRoutes.AccreditationViewModel(value.Name, value.Description, value.URL, value.Checked));
             CreateAndBindAccreditationViews();
         });
     })();
