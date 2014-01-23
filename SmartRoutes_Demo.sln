@@ -4,11 +4,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 12.0.21005.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartRoutes", "SmartRoutes\SmartRoutes.csproj", "{C25ECAB5-F6D3-470A-BEC4-9DAD4FFF6C12}"
+	ProjectSection(ProjectDependencies) = postProject
+		{D9F5EDFD-2744-453C-896D-22308DD7E69A} = {D9F5EDFD-2744-453C-896D-22308DD7E69A}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartRoutesReferenceBuilder", "SmartRoutesReferenceBuilder\SmartRoutesReferenceBuilder.csproj", "{D9F5EDFD-2744-453C-896D-22308DD7E69A}"
-	ProjectSection(ProjectDependencies) = postProject
-		{C25ECAB5-F6D3-470A-BEC4-9DAD4FFF6C12} = {C25ECAB5-F6D3-470A-BEC4-9DAD4FFF6C12}
-	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
