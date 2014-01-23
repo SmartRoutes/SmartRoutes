@@ -6,6 +6,13 @@ SmartRoutes.GuidedSearchViewController = (function() {
     
     var formPageSammyApp = null;
     var activePageElement = null;
+    var activePageController = null;
+
+    var buttonIDs = {
+        nextButton: "sr-guided-search-button-next",
+        previousButton: "sr-guided-search-button-previous",
+        resultsButton: "sr-guided-search-button-return-results"
+    };
 
     var pageIDs = {
         childInformationPageID: "sr-child-information-form-page-view",
@@ -28,6 +35,26 @@ SmartRoutes.GuidedSearchViewController = (function() {
     var accreditationFormPageController = null;
     var serviceTypeFormPageController = null;
 
+    function PageValidationCallbackHandler(pageValid) {
+        if (pageValid) {
+            $("#" + buttonIDs.nextButton).removeAttr("disabled");
+        }
+        else {
+            $("#" + buttonIDs.nextButton).attr("disabled", "disabled");
+        }
+    };
+
+    function RedirectToFirstPageIfFirstTimeVisiting() {
+        if (!activePageController || !activePageElement) {
+            activePageElement = $("#" + pageIDs.childInformationPageID);
+            activePageController = childInformationFormPageController;
+
+            // Anywhere else just needs to navigate to #/search.
+            // This controller will navigate to the correct sub-route.
+            formPageSammyApp.setLocation(pageIDRouteMap[pageIDs.childInformationPageID]);
+        }
+    };
+
     var InitPageSubroutes = function() {
         formPageSammyApp = $.sammy(function() {
             // TODO: Validation should be handled when the Next button is clicked.
@@ -36,26 +63,40 @@ SmartRoutes.GuidedSearchViewController = (function() {
             // to simply dump the user back on the first search form page?
 
             this.get(pageIDRouteMap[pageIDs.childInformationPageID], function() {
+                RedirectToFirstPageIfFirstTimeVisiting();
+
+                activePageController.StopPage();
                 $(".sr-form-page").hide();
-                childInformationFormPageController.RunPage();
+                activePageController = childInformationFormPageController;
+                activePageController.RunPage();
             });
 
             this.get(pageIDRouteMap[pageIDs.scheduleTypePageID], function() {
+                RedirectToFirstPageIfFirstTimeVisiting();
+
+                activePageController.StopPage();
                 $(".sr-form-page").hide();
-                scheduleTypeFormPageController.RunPage();
+                activePageController = scheduleTypeFormPageController;
+                activePageController.RunPage(PageValidationCallbackHandler);
             });
 
             this.get(pageIDRouteMap[pageIDs.locationAndTimePageID], function() {
+                RedirectToFirstPageIfFirstTimeVisiting();
+
                 $(".sr-form-page").hide();
                 $("#" + pageIDs.locationAndTimePageID).show();
             });
 
             this.get(pageIDRouteMap[pageIDs.accreditationPageID], function() {
+                RedirectToFirstPageIfFirstTimeVisiting();
+
                 $(".sr-form-page").hide();
                 $("#" + pageIDs.accreditationPageID).show();
             });
 
             this.get(pageIDRouteMap[pageIDs.serviceTypePageID], function() {
+                RedirectToFirstPageIfFirstTimeVisiting();
+
                 $(".sr-form-page").hide();
                 $("#" + pageIDs.serviceTypePageID).show();
             });
@@ -93,7 +134,7 @@ SmartRoutes.GuidedSearchViewController = (function() {
 
     // Event handlers
 
-    $("#sr-guided-search-button-previous").click(function() {
+    $("#" + buttonIDs.previousButton).click(function() {
         var previousPage = $(activePageElement).prev(".sr-form-page");
 
         if (previousPage.length > 0) {
@@ -105,7 +146,7 @@ SmartRoutes.GuidedSearchViewController = (function() {
         }
     });
 
-    $("#sr-guided-search-button-next").click(function() {
+    $("#" + buttonIDs.nextButton).click(function() {
         var nextPage = $(activePageElement).next(".sr-form-page");
 
         if (nextPage.length > 0) {
@@ -123,10 +164,7 @@ SmartRoutes.GuidedSearchViewController = (function() {
         // Public:
 
         RunPage: function() {
-            // Anywhere else just needs to navigate to #/search.
-            // This controller will navigate to the correct sub-route.
-            formPageSammyApp.setLocation(pageIDRouteMap[pageIDs.childInformationPageID]);
-            activePageElement = $("#" + pageIDs.childInformationPageID);
+            RedirectToFirstPageIfFirstTimeVisiting();
         }
     };
 });

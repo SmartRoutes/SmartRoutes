@@ -17,6 +17,8 @@ SmartRoutes.ChildInformationFormPageController = (function(pageID) {
         }
     })();
 
+    // Event handlers.
+
     // Setup the expansion button click handler.
     $(".sr-expansion-button").click(function() {
         // So, this callback is hit for every expansion button.
@@ -70,8 +72,27 @@ SmartRoutes.ChildInformationFormPageController = (function(pageID) {
             $("#" + childInformationPageID).fadeIn(SmartRoutes.Constants.formPageFadeInTime);
         },
 
-        GetChildInfoViewModels: function() {
-            return childInfoViewModels;
+        StopPage: function() {
+            // Do nothing for now.
+        },
+
+        // Indicates if the filled in fields are valid or not.
+        IsPageDataValid: function() {
+            // This is a tautology.  The name isn't required
+            // and can be arbitrary.
+            return true;
+        },
+
+        // Returns an array of objects containing the name, age, and gender
+        // entered for the children.
+        GetChildInformation: function() {
+            var childInformation = new Array();
+
+            for (var childIndex = 0; childIndex < childCount; ++childIndex) {
+                childInformation.push({ name: value.name(), age: value.age(), gender: value.gender() });
+            }
+
+            return childInformation;
         },
     };
 });
