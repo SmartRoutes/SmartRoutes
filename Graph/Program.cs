@@ -56,7 +56,7 @@ namespace SmartRoutes.Graph
                 string ChildCareName = "ANOINTED HANDS LEARNING CENTER";
 
                 // search starts at work, going backwards
-                var StartNode = graph.closestMetroNodes(WorkLocation, AtWorkBy, TimeDirection.Backwards, 5);
+                var StartNode = graph.closestMetroNode(WorkLocation, AtWorkBy, TimeDirection.Backwards);
 
                 // since we don't have properties on our location nodes yet, let's just filter by name.
                 // this returns two results (apparently there are two child cares with this name)
@@ -73,26 +73,17 @@ namespace SmartRoutes.Graph
                     }
                 };
 
-                var WorkToChildCareResults = ExtensionMethods.Dijkstras(StartNode, GoalCheck, TimeDirection.Backwards);
+                var WorkToChildCareResults = ExtensionMethods.Dijkstras(new INode[] { StartNode }, GoalCheck, TimeDirection.Backwards);
 
                 // First step, find which bus stop is closest to my house, and set that as destination
-                var CloseToHomeStops = graph.closestMetroStops(HomeLocation, 5);
+                var CloseToHomeStop = graph.closestMetroStop(HomeLocation);
 
                 Func<INode, bool> GoalCheck2 = node =>
                 {
                     var nodeAsMetroNode = node as IGtfsNode;
                     if (nodeAsMetroNode != null)
                     {
-                        bool match = false;
-                        foreach (var stop in CloseToHomeStops)
-                        {
-                            if (nodeAsMetroNode.StopID == stop.Id)
-                            {
-                                match = true;
-                                break;
-                            }
-                        }
-                        return match;
+                        return nodeAsMetroNode.StopID == CloseToHomeStop.Id;
                     }
                     else
                     {
@@ -133,8 +124,6 @@ namespace SmartRoutes.Graph
                     Console.WriteLine("{0} -- {1}", Current.node.Name, Current.node.Time);
                     Current = Current.parent;
                 }
-
-                Console.WriteLine("fin");
 
 
 
