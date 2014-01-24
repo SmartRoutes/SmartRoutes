@@ -21,7 +21,7 @@ namespace SmartRoutes.Graph
     public class NodeInfo
     {
         internal FibHeapHandle<NodeBase, TimeSpan> handle;
-        internal TimeSpan travelTime;
+        internal TimeSpan pathCost;
         internal NodeState state;
         public INode node;
         public NodeInfo parent;
@@ -58,10 +58,10 @@ namespace SmartRoutes.Graph
                 var nodeInfo = new NodeInfo();
                 nodeInfo.node = node;
                 nodeInfo.state = NodeState.Closed;
-                nodeInfo.travelTime = (direction == TimeDirection.Backwards)
+                nodeInfo.pathCost = (direction == TimeDirection.Backwards)
                     ? BaseTime - node.Time
                     : node.Time - BaseTime;
-                nodeInfo.handle = heap.Insert(node.BaseNode, nodeInfo.travelTime);
+                nodeInfo.handle = heap.Insert(node.BaseNode, nodeInfo.pathCost);
                 SearchInfo.Add(node.BaseNode, nodeInfo);
             }
 
@@ -104,10 +104,8 @@ namespace SmartRoutes.Graph
                         neighborInfo.node = neighbor;
                         neighborInfo.parent = currentInfo;
                         neighborInfo.state = NodeState.Open;
-                        neighborInfo.travelTime = (direction == TimeDirection.Forwards)
-                            ? currentInfo.travelTime + (neighbor.Time - current.Time)
-                            : currentInfo.travelTime + (current.Time - neighbor.Time);
-                        neighborInfo.handle = heap.Insert(neighbor.BaseNode, neighborInfo.travelTime);
+                        neighborInfo.pathCost = nextPathCost(currentInfo, neighbor, direction);
+                        neighborInfo.handle = heap.Insert(neighbor.BaseNode, neighborInfo.pathCost);
                         SearchInfo.Add(neighbor.BaseNode, neighborInfo);
                     }
                     else
@@ -116,16 +114,14 @@ namespace SmartRoutes.Graph
                         if (neighborInfo.state == NodeState.Open)
                         {
                             // update neighborInfo if this route is better
-                            TimeSpan newTravelTime = (direction == TimeDirection.Forwards)
-                                ? currentInfo.travelTime + (neighbor.Time - current.Time)
-                                : currentInfo.travelTime + (current.Time - neighbor.Time);
-                            if (newTravelTime < neighborInfo.travelTime)
+                            TimeSpan newPathCost = nextPathCost(currentInfo, neighbor, direction);
+                            if (newPathCost < neighborInfo.pathCost)
                             {
                                 // update search info and update queue for new key
                                 //neighborInfo.node = current;
-                                neighborInfo.travelTime = newTravelTime;
+                                neighborInfo.pathCost = newPathCost;
                                 neighborInfo.parent = currentInfo;
-                                heap.UpdateKey(neighborInfo.handle, newTravelTime);
+                                heap.UpdateKey(neighborInfo.handle, newPathCost);
                             }
                         }
                     }
@@ -136,6 +132,25 @@ namespace SmartRoutes.Graph
             }
 
             return Results;
+        }
+
+        private static TimeSpan nextPathCost(NodeInfo currentInfo, INode neighbor, TimeDirection direction)
+        {
+            TimeSpan travelTimeBetween = neighbor.Time - currentInfo.node.Time;
+            TimeSpan pathCost = (direction == TimeDirection.Forwards)
+                ? currentInfo.pathCost + travelTimeBetween
+                : currentInfo.pathCost - travelTimeBetween;
+
+            // penalize transfers
+            if (currentInfo.node as IGtfsNode != null && neighbor as IGtfsNode != null)
+            {
+                if (((IGtfsNode)neighbor).TripID != ((IGtfsNode)currentInfo.node).TripID)
+                {
+                    pathCost += TimeSpan.FromMinutes(120);
+                }
+            }
+
+            return pathCost;
         }
     }
 }

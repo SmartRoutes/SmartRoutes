@@ -219,7 +219,7 @@ namespace SmartRoutes.Graph
                 {
                     double distance = destination.GetL1DistanceInFeet(stop);
 
-                    if (distance < Settings.MaxFeetFromChildCareToBuStop)
+                    if (distance < Settings.MaxFeetFromChildCareToBusStop)
                     {
                         // store the closest stops to this childcare
                         var StopID = stop.Id;

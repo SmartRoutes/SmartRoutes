@@ -73,6 +73,7 @@ namespace SmartRoutes.Graph
             foreach (var stop in GtfsCollection.Stops)
             {
                 double distance = location.GetL1DistanceInFeet(stop);
+                if (distance > Builder.Settings.MaxFeetFromChildCareToBusStop) continue;
                 var currentStop = stop;
 
                 for (int i = 0; i < numStops; i++)
@@ -86,7 +87,6 @@ namespace SmartRoutes.Graph
                         distance = tempDistance;
                         currentStop = tempStop;
                     }
-                    else break;
                 }
             }
 

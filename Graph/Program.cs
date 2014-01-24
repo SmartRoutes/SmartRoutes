@@ -50,13 +50,11 @@ namespace SmartRoutes.Graph
                 // have to be at work by 10:30 am
                 DateTime AtWorkBy = new DateTime(1970, 1, 1, 10, 30, 0);
 
-                
-
                 // child care selected by name, since properties are not implemented yet
                 string ChildCareName = "ANOINTED HANDS LEARNING CENTER";
 
                 // search starts at work, going backwards
-                var StartNode = graph.closestMetroNodes(WorkLocation, AtWorkBy, TimeDirection.Backwards, 5);
+                var WorkNodes = graph.closestMetroNodes(WorkLocation, AtWorkBy, TimeDirection.Backwards, 100);
 
                 // since we don't have properties on our location nodes yet, let's just filter by name.
                 // this returns two results (apparently there are two child cares with this name)
@@ -73,20 +71,20 @@ namespace SmartRoutes.Graph
                     }
                 };
 
-                var WorkToChildCareResults = ExtensionMethods.Dijkstras(StartNode, GoalCheck, TimeDirection.Backwards);
+                var WorkToChildCareResults = ExtensionMethods.Dijkstras(WorkNodes, GoalCheck, TimeDirection.Backwards);
 
                 // First step, find which bus stop is closest to my house, and set that as destination
-                var CloseToHomeStops = graph.closestMetroStops(HomeLocation, 5);
+                var CloseToHomeStops = graph.closestMetroStops(HomeLocation, 100);
 
                 Func<INode, bool> GoalCheck2 = node =>
                 {
-                    var nodeAsMetroNode = node as IGtfsNode;
-                    if (nodeAsMetroNode != null)
+                    var nodeAsGtfsNode = node as IGtfsNode;
+                    if (nodeAsGtfsNode != null)
                     {
                         bool match = false;
                         foreach (var stop in CloseToHomeStops)
                         {
-                            if (nodeAsMetroNode.StopID == stop.Id)
+                            if (nodeAsGtfsNode.StopID == stop.Id)
                             {
                                 match = true;
                                 break;
@@ -103,23 +101,21 @@ namespace SmartRoutes.Graph
                 // now for each child care result, we find our way home.
                 List<NodeInfo> FinalResults = new List<NodeInfo>();
 
-                foreach (var result in WorkToChildCareResults)
-                {
-                    var StartNodes = graph.GetChildCareNeighbors((IDestinationNode)result.node, TimeDirection.Backwards);
-                    var resultList = ExtensionMethods.Dijkstras(
-                        StartNodes, 
-                        GoalCheck2, 
-                        TimeDirection.Backwards);
+                var result = WorkToChildCareResults.First();
+                var StartNodes = graph.GetChildCareNeighbors((IDestinationNode)result.node, TimeDirection.Backwards);
+                var resultList = ExtensionMethods.Dijkstras(
+                    StartNodes, 
+                    GoalCheck2, 
+                    TimeDirection.Backwards);
 
-                    var result2 = resultList.First();
+                var result2 = resultList.First();
 
-                    // we want to stich together the two routes to make one resulting route
-                    var current = result2;
-                    while (current.parent != null) current = current.parent;
-                    current.parent = result;
+                // we want to stich together the two routes to make one resulting route
+                var current = result2;
+                while (current.parent != null) current = current.parent;
+                current.parent = result;
 
-                    FinalResults.Add(result2);
-                }
+                FinalResults.Add(result2);
 
                 toc = DateTime.Now;
                 Console.WriteLine("Route found in in {0} milliseconds.",
