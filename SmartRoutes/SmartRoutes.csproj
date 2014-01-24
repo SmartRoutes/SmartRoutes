@@ -128,9 +128,12 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\GuidedSearchPageController.cs" />
+    <Compile Include="Models\AccreditationModel.cs" />
     <Compile Include="Models\ChildInformationViewModel.cs" />
+    <Compile Include="Models\DetailedCheckboxModel.cs" />
     <Compile Include="Models\PortalButtonModel.cs" />
     <Compile Include="Models\PortalViewModel.cs" />
+    <Compile Include="Models\ServiceTypeModel.cs" />
     <Compile Include="Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -154,7 +157,14 @@
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\Images\sample_map.png" />
-    <Content Include="Scripts\Models\ChildInfoViewModel.js" />
+    <Content Include="Scripts\Communication\Controllers\GuidedSearchCommunicationController.js" />
+    <Content Include="Scripts\Communication\Payloads\Objective.js" />
+    <Content Include="Scripts\Communication\Payloads\Query.js" />
+    <Content Include="Scripts\Communication\Payloads\RangeRequirement.js" />
+    <Content Include="Scripts\Communication\Payloads\Requirement.js" />
+    <Content Include="Scripts\Constants.js" />
+    <Content Include="Scripts\ViewModels\AccreditationViewModel.js" />
+    <Content Include="Scripts\ViewModels\ChildInfoViewModel.js" />
     <Content Include="Content\Views\GuidedSearchPageView.css" />
     <Content Include="Content\Views\MainPageView.css" />
     <Content Include="Content\Views\PortalView.css" />
@@ -164,29 +174,33 @@
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
     <Content Include="fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="fonts\glyphicons-halflings-regular.eot" />
-    <None Include="Scripts\jquery-2.0.3-vsdoc.js" />
-    <Content Include="Scripts\bootstrap.js" />
-    <Content Include="Scripts\bootstrap.min.js" />
-    <Content Include="Scripts\jquery-2.0.3.js" />
-    <Content Include="Scripts\jquery-2.0.3.min.js" />
-    <Content Include="Scripts\knockout-3.0.0.debug.js" />
-    <Content Include="Scripts\knockout-3.0.0.js" />
-    <Content Include="Scripts\Models\AddressViewModel.js" />
-    <Content Include="Scripts\Models\DropOffDepartureViewModel.js" />
-    <Content Include="Scripts\Models\DropOffDestinationViewModel.js" />
-    <Content Include="Scripts\Models\LocationAndTimeViewModel.js" />
-    <Content Include="Scripts\Models\PickUpDepartureViewModel.js" />
-    <Content Include="Scripts\Models\PickUpDestinationViewModel.js" />
-    <Content Include="Scripts\Models\ScheduleTypeViewModel.js" />
-    <Content Include="Scripts\sammy-0.7.4.js" />
-    <Content Include="Scripts\sammy-0.7.4.min.js" />
+    <None Include="Scripts\Library\jquery-2.0.3-vsdoc.js" />
+    <Content Include="Scripts\Library\bootstrap.js" />
+    <Content Include="Scripts\Library\bootstrap.min.js" />
+    <Content Include="Scripts\Library\jquery-2.0.3.js" />
+    <Content Include="Scripts\Library\jquery-2.0.3.min.js" />
+    <Content Include="Scripts\Library\knockout-3.0.0.debug.js" />
+    <Content Include="Scripts\Library\knockout-3.0.0.js" />
+    <Content Include="Scripts\ViewModels\AddressViewModel.js" />
+    <Content Include="Scripts\ViewModels\ComboBoxViewModel.js" />
+    <Content Include="Scripts\ViewModels\DropOffDepartureViewModel.js" />
+    <Content Include="Scripts\ViewModels\DropOffDestinationViewModel.js" />
+    <Content Include="Scripts\ViewModels\LocationAndTimeViewModel.js" />
+    <Content Include="Scripts\ViewModels\PickUpDepartureViewModel.js" />
+    <Content Include="Scripts\ViewModels\PickUpDestinationViewModel.js" />
+    <Content Include="Scripts\ViewModels\ScheduleTypeViewModel.js" />
+    <Content Include="Scripts\ViewModels\ServiceTypeViewModel.js" />
+    <Content Include="Scripts\Library\sammy-0.7.4.js" />
+    <Content Include="Scripts\Library\sammy-0.7.4.min.js" />
+    <Content Include="Scripts\View\AccreditationFormPageController.js" />
     <Content Include="Scripts\View\ChildInformationFormPageController.js" />
     <Content Include="Scripts\View\GuidedSearchViewController.js" />
     <Content Include="Scripts\View\LocationAndTimeFormPageController.js" />
     <Content Include="Scripts\View\PageController.js" />
     <Content Include="Scripts\View\PortalViewController.js" />
     <Content Include="Scripts\View\ScheduleTypeFormPageController.js" />
-    <Content Include="Scripts\View\SmartRoutes.js" />
+    <Content Include="Scripts\View\ServiceTypeFormPageController.js" />
+    <Content Include="Scripts\SmartRoutes.js" />
     <Content Include="Scripts\_references.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
@@ -201,7 +215,7 @@
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Shared\_TopBannerView.cshtml" />
     <Content Include="Views\Shared\_BottomBannerView.cshtml" />
-    <Content Include="Scripts\jquery-2.0.3.min.map" />
+    <Content Include="Scripts\Library\jquery-2.0.3.min.map" />
     <Content Include="Views\Shared\_SummaryView.cshtml" />
     <Content Include="Views\Main\_MainPageView.cshtml" />
     <Content Include="Views\Shared\_ImageView.cshtml" />
@@ -215,6 +229,11 @@
     <Content Include="Views\Search\_ScheduleTypeFormPageView.cshtml" />
     <Content Include="Views\Search\_LocationAndTimeFormPageView.cshtml" />
     <Content Include="Views\Search\_AddressView.cshtml" />
+    <Content Include="Views\Search\_AccreditationFormPageView.cshtml" />
+    <Content Include="Views\Search\_AccreditationView.cshtml" />
+    <Content Include="Views\Search\_ServiceTypeFormPageView.cshtml" />
+    <Content Include="Views\Search\_DetailedCheckboxView.cshtml" />
+    <Content Include="Views\Search\_ServiceTypeView.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -235,6 +254,9 @@
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <PropertyGroup>
+    <RunPostBuildEvent>Always</RunPostBuildEvent>
   </PropertyGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
@@ -262,4 +284,7 @@
   </ProjectExtensions>
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <Import Project="$(SolutionDir)\.build\Version.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>"$(SolutionDir)SmartRoutesReferenceBuilder\Bin\Debug\SmartRoutesReferenceBuilder.exe" "$(ProjectDir)Scripts"</PostBuildEvent>
+  </PropertyGroup>
 </Project>

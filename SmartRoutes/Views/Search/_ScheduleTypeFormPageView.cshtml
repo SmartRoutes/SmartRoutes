@@ -9,11 +9,23 @@
 
     <div class="row">
         <div class="col-lg-4 col-lg-offset-2">
-            <input type="checkbox" name="scheduleTypeDropOff" data-bind="checked: dropOffChecked" class="sr-checkbox" id="sr-schedule-type-drop-off" />
-            <span class="sr-checkbox-text">Drop Off</span>
-            <br />
-            <input type="checkbox" name="scheduleTypePickUp" data-bind="checked: pickUpChecked" class="sr-checkbox" id="sr-schedule-type-pick-up" />
-            <span class="sr-checkbox-text">Pick Up</span>
+            <div id="sr-schedule-type-input">
+                <input type="checkbox" name="scheduleTypeDropOff" data-bind="checked: dropOffChecked" class="sr-checkbox" id="sr-schedule-type-drop-off" />
+                <span class="sr-checkbox-text">Drop Off</span>
+                <br />
+                <input type="checkbox" name="scheduleTypePickUp" data-bind="checked: pickUpChecked" class="sr-checkbox" id="sr-schedule-type-pick-up" />
+                <span class="sr-checkbox-text">Pick Up</span>
+            </div>
+
+
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-10 col-lg-offset-2">
+            <div id="sr-schedule-type-error" data-bind="visible: noScheduleTypeSelected">
+                <span>You must select at least one schedule type.</span>
+            </div>
         </div>
     </div>
 
