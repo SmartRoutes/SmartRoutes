@@ -21,8 +21,8 @@ namespace SmartRoutes.Graph
                 {
                     MaxFeetFromDestinationToStop = 5000,
                     MaxDestinationCloseStops = 5,
-                    WalkingFeetPerSecond = 2.2,
-                    MaxFeetBetweenTransfers = 500
+                    WalkingFeetPerSecond = 4.4,
+                    MaxFeetBetweenTransfers = 1500
                 };
             }
         }

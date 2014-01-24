@@ -90,13 +90,11 @@ namespace SmartRoutes.Graph
                 // have to be at work by 10:30 am
                 var atWorkBy = new DateTime(1970, 1, 1, 10, 30, 0);
 
-                
-
                 // child care selected by name, since properties are not implemented yet
                 const string childCareName = "ANOINTED HANDS LEARNING CENTER";
 
                 // search starts at work, going backwards
-                var startNode = graph.GetClosestGtfsNode(workLocation, atWorkBy, TimeDirection.Backwards);
+                var workNodes = graph.GetClosestGtfsNodes(workLocation, atWorkBy, TimeDirection.Backwards, 100);
 
                 // since we don't have properties on our location nodes yet, let's just filter by name.
                 // this returns two results (apparently there are two child cares with this name)
@@ -110,45 +108,47 @@ namespace SmartRoutes.Graph
                     return false;
                 };
 
-                var workToChildCareResults = ExtensionMethods.Dijkstras(new INode[] { startNode }, goalCheck, TimeDirection.Backwards);
+                var workToChildCareResults = ExtensionMethods.Dijkstras(workNodes, goalCheck, TimeDirection.Backwards);
 
                 // First step, find which bus stop is closest to my house, and set that as destination
-                var closeToHomeStop = graph.GetClosestGtfsStop(homeLocation);
+                var closeToHomeStops = graph.GetClosestGtfsStops(homeLocation, 100);
 
                 Func<INode, bool> goalCheck2 = node =>
                 {
                     var nodeAsGtfsNode = node as IGtfsNode;
                     if (nodeAsGtfsNode != null)
                     {
-                        return nodeAsGtfsNode.StopId == closeToHomeStop.Id;
+                        bool match = false;
+                        foreach (var stop in closeToHomeStops)
+                        {
+                            if (nodeAsGtfsNode.StopId == stop.Id)
+                            {
+                                match = true;
+                                break;
+                            }
+                        }
+                        return match;
                     }
                     return false;
                 };
 
                 // now for each child care result, we find our way home.
                 var finalResults = new List<NodeInfo>();
+                var result = workToChildCareResults.First();
+                var startNodes = graph.GetDestinationNeighbors((IDestinationNode)result.node, TimeDirection.Backwards);
+                var resultList = ExtensionMethods.Dijkstras(
+                    startNodes, 
+                    goalCheck2, 
+                    TimeDirection.Backwards);
 
-                NodeInfo current;
-                foreach (var result in workToChildCareResults)
-                {
-                    var startNodes = graph.GetDestinationNeighbors((IDestinationNode)result.node, TimeDirection.Backwards);
-                    var resultList = ExtensionMethods.Dijkstras(
-                        startNodes, 
-                        goalCheck2, 
-                        TimeDirection.Backwards);
+                var result2 = resultList.First();
 
-                    var result2 = resultList.First();
+                // we want to stich together the two routes to make one resulting route
+                var current = result2;
+                while (current.parent != null) current = current.parent;
+                current.parent = result;
 
-                    // we want to stich together the two routes to make one resulting route
-                    current = result2;
-                    while (current.parent != null)
-                    {
-                        current = current.parent;
-                    }
-                    current.parent = result;
-
-                    finalResults.Add(result2);
-                }
+                finalResults.Add(result2);
 
                 toc = DateTime.Now;
                 Console.WriteLine("Route found in in {0} milliseconds.",
@@ -161,6 +161,8 @@ namespace SmartRoutes.Graph
                     Console.WriteLine("{0} -- {1}", current.node.Name, current.node.Time);
                     current = current.parent;
                 }
+
+                Console.WriteLine("fin");
 
 
 

@@ -13,8 +13,8 @@ namespace SmartRoutes.Graph
     public interface IGraph
     {
         INode[] GraphNodes { get; }
-        Stop GetClosestGtfsStop(ILocation location);
-        IGtfsNode GetClosestGtfsNode(ILocation location, DateTime time, TimeDirection direction);
+        IEnumerable<Stop> GetClosestGtfsStops(ILocation location, int numStops);
+        IEnumerable<IGtfsNode> GetClosestGtfsNodes(ILocation location, DateTime time, TimeDirection direction, int numNodes);
         IEnumerable<IGtfsNode> GetDestinationNeighbors(IDestinationNode destinationNode, TimeDirection direction);
     }
 }
