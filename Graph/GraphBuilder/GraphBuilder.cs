@@ -65,16 +65,16 @@ namespace SmartRoutes.Graph
             {
                 var stoptime = StopTimesArray[counter];
                 int CurrentStopID = stoptime.StopId;
-                int CurrentShapeID = stoptime.Trip.ShapeId.Value;
+                int CurrentTripID = stoptime.TripId;
                 
                 var BaseNode = new NodeBase(
-                    String.Concat(new string[] { stoptime.Stop.Name, String.Format(" <ShapeID {0}>", stoptime.Trip.ShapeId.Value) }), 
+                    String.Concat(new string[] { stoptime.Stop.Name, String.Format(" <TripID {0}, Route {1}>", stoptime.TripId, stoptime.Trip.Route.ShortName) }), 
                     stoptime.Stop.Latitude, 
                     stoptime.Stop.Longitude);
 
                 while (counter < StopTimesArray.Count()
                     && StopTimesArray[counter].StopId == CurrentStopID
-                    && StopTimesArray[counter].Trip.ShapeId.Value == CurrentShapeID)
+                    && StopTimesArray[counter].TripId == CurrentTripID)
                 {
                     MetroNodeList.Add(new GtfsNode(StopTimesArray[counter], BaseNode));
                     counter++;
