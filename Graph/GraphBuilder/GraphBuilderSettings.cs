@@ -21,7 +21,7 @@ namespace SmartRoutes.Graph
                 {
                     MaxFeetFromChildCareToBuStop = 5000,
                     MaxDestinationCloseStops = 5,
-                    WalkingFeetPerSecond = 2.2,
+                    WalkingFeetPerSecond = 4.4,
                     MaxFeetBetweenTransfers = 500
                 };
             }
