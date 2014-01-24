@@ -59,80 +59,94 @@ namespace SmartRoutes.Graph
             }
         }
 
-        public Stop closestMetroStop(ILocation location)
+        // returns numStops closest metro stops to given location having unique BaseNode properties
+        public IEnumerable<Stop> closestMetroStops(ILocation location, int numStops)
         {
-            double minDistance = double.MaxValue;
-            Stop closestStop = null;
+            double [] minDistances = new double [numStops];
+            Stop [] closestStops = new Stop [numStops];
+            for (int i = 0; i < numStops; i++)
+            {
+                minDistances[i] = double.MaxValue;
+                closestStops[i] = null;
+            }
 
             foreach (var stop in GtfsCollection.Stops)
             {
-                double Distance = location.GetL1DistanceInFeet(stop);
+                double distance = location.GetL1DistanceInFeet(stop);
+                var currentStop = stop;
 
-                if (Distance < minDistance)
+                for (int i = 0; i < numStops; i++)
                 {
-                    minDistance = Distance;
-                    closestStop = stop;
+                    if (distance < minDistances[i])
+                    {
+                        var tempDistance = minDistances[i];
+                        var tempStop = closestStops[i];
+                        minDistances[i] = distance;
+                        closestStops[i] = currentStop;
+                        distance = tempDistance;
+                        currentStop = tempStop;
+                    }
+                    else break;
                 }
             }
 
-            if (closestStop == null)
-            {
-                throw new Exception("Closest stop to given location not found.");
-            }
-
-            return closestStop;
+            return closestStops.Where(s => s != null);
         }
 
-        public IGtfsNode closestMetroNode(ILocation location, DateTime Time, TimeDirection Direction)
+        public IEnumerable<IGtfsNode> closestMetroNodes(ILocation location, DateTime Time, TimeDirection Direction, int numNodes)
         {
-            Stop closestStop = closestMetroStop(location);
+            var closestStops = closestMetroStops(location, numNodes);
+            var returnNodes = new List<IGtfsNode>();
 
-            // retrieve metronodes corresponding to this stop
-            List<IGtfsNode> nodes = null;
-            if (!Builder.StopToNodes.TryGetValue(closestStop.Id, out nodes))
+            foreach (var closestStop in closestStops)
             {
-                throw new Exception("Failed to find metro nodes associated with closest stop.");
-            }
-
-            double distance = closestStop.GetL1DistanceInFeet(location);
-            double walkingTime = distance / Builder.Settings.WalkingFeetPerSecond;
-            
-            // sort nodes by increasing time;
-            var nodesArray = nodes.ToArray();
-            Array.Sort(nodesArray, new Comparers.ComparerForTransferSorting());
-            IGtfsNode returnNode = null;
-
-            if (Direction == TimeDirection.Forwards)
-            {
-                DateTime TimeThreshhold = Time + TimeSpan.FromSeconds(walkingTime);
-                foreach (var node in nodesArray)
+                // retrieve metronodes corresponding to this stop
+                List<IGtfsNode> nodes = null;
+                if (!Builder.StopToNodes.TryGetValue(closestStop.Id, out nodes))
                 {
-                    if (node.Time >= TimeThreshhold)
+                    throw new Exception("Failed to find metro nodes associated with closest stop.");
+                }
+
+                double distance = closestStop.GetL1DistanceInFeet(location);
+                double walkingTime = distance / Builder.Settings.WalkingFeetPerSecond;
+
+                // sort nodes by increasing time;
+                var nodesArray = nodes.ToArray();
+                Array.Sort(nodesArray, new Comparers.ComparerForTransferSorting());
+                IGtfsNode returnNode = null;
+
+                if (Direction == TimeDirection.Forwards)
+                {
+                    DateTime TimeThreshhold = Time + TimeSpan.FromSeconds(walkingTime);
+                    foreach (var node in nodesArray)
                     {
-                        returnNode = node;
-                        break;
+                        if (node.Time >= TimeThreshhold)
+                        {
+                            returnNode = node;
+                            break;
+                        }
                     }
                 }
-            }
-            else
-            {
-                DateTime TimeThreshhold = Time - TimeSpan.FromSeconds(walkingTime);
-                for (int i = nodesArray.Count() - 1; i >= 0; i--)
+                else
                 {
-                    if (nodesArray[i].Time <= TimeThreshhold)
+                    DateTime TimeThreshhold = Time - TimeSpan.FromSeconds(walkingTime);
+                    for (int i = nodesArray.Count() - 1; i >= 0; i--)
                     {
-                        returnNode = nodesArray[i];
-                        break;
+                        if (nodesArray[i].Time <= TimeThreshhold)
+                        {
+                            returnNode = nodesArray[i];
+                            break;
+                        }
                     }
+                }
+
+                if (returnNode != null)
+                {
+                    returnNodes.Add(returnNode);
                 }
             }
 
-            if (returnNode == null)
-            {
-                throw new Exception("Failed to find nearby metro node.");
-            }
-
-            return returnNode;
+            return returnNodes;
         }
 
         public List<IGtfsNode> GetChildCareNeighbors(IDestinationNode childCareNode, TimeDirection Direction)
