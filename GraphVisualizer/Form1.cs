@@ -3,6 +3,7 @@ using System.Windows.Forms;
 using ILNumerics;
 using ILNumerics.Drawing;
 using ILNumerics.Drawing.Plotting;
+using SmartRoutes.Model.Srds;
 using SmartRoutes.Reader.Parsers.Gtfs;
 using Ninject;
 using Ninject.Extensions.Conventions;
@@ -11,6 +12,7 @@ using SmartRoutes.Graph.Node;
 using SmartRoutes.Graph.Comparers;
 using SmartRoutes.Model.Gtfs;
 using SmartRoutes.Reader;
+using SmartRoutes.Reader.Readers;
 
 namespace SmartRoutes.GraphVisualizer
 {
@@ -26,11 +28,17 @@ namespace SmartRoutes.GraphVisualizer
             IKernel kernel = new StandardKernel(new GraphModule());
 
             kernel.Bind(c => c
-                .FromAssemblyContaining(typeof(GtfsCollection))
+                .FromAssemblyContaining(typeof(GtfsCollection), typeof(IEntityCollectionDownloader<,>))
                 .SelectAllClasses()
                 .BindAllInterfaces());
 
-            var graph = kernel.Get<IGraph>();
+            // build the graph
+            var gtfsReader = kernel.Get<IEntityCollectionReader<GtfsArchive, GtfsCollection>>();
+            var gtfsCollection = gtfsReader.Read(@"google_transit_info.zip", null).Result;
+            var srdsReader = kernel.Get<IEntityCollectionReader<SrdsArchive, SrdsCollection>>();
+            var srdsCollection = srdsReader.Read(@"\srds_odjfs.zip", null).Result;
+            var graphBuilder = kernel.Get<IGraphBuilder>();
+            var graph = graphBuilder.BuildGraph(gtfsCollection.StopTimes, srdsCollection.Destinations, GraphBuilderSettings.Default);
 
             var Nodes = graph.GraphNodes;
 

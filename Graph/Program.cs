@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using Ninject;
 using Ninject.Extensions.Conventions;
-using SmartRoutes.Database;
 using SmartRoutes.Graph.Node;
 using SmartRoutes.Model;
 using SmartRoutes.Model.Gtfs;
 using SmartRoutes.Model.Srds;
+using SmartRoutes.Reader.Readers;
 
 namespace SmartRoutes.Graph
 {
@@ -26,7 +26,7 @@ namespace SmartRoutes.Graph
                 IKernel kernel = new StandardKernel(new GraphModule());
 
                 kernel.Bind(c => c
-                    .FromAssemblyContaining(typeof(GtfsCollection))
+                    .FromAssemblyContaining(typeof(GtfsCollection), typeof(IEntityCollectionDownloader<,>))
                     .SelectAllClasses()
                     .BindAllInterfaces());
 
@@ -34,37 +34,17 @@ namespace SmartRoutes.Graph
                 ******************* Fetch the data from the database and build the graph ********************
                 ********************************************************************************************/
 
-                Console.WriteLine("Fetching the GTFS data from the database.");
+                Console.WriteLine("Fetching the GTFS data from the web.");
                 DateTime tic = DateTime.Now;
-                var gtfsCollection = new GtfsCollection();
-                using (var ctx = new Entities())
-                {
-                    gtfsCollection.StopTimes = (from e in ctx.StopTimes select e).ToArray();
-                    gtfsCollection.Stops = (from e in ctx.Stops select e).ToArray();
-                    gtfsCollection.Routes = (from e in ctx.Routes select e).ToArray();
-                    gtfsCollection.Shapes = (from e in ctx.Shapes select e).ToArray();
-                    gtfsCollection.ShapePoints = (from e in ctx.ShapePoints select e).ToArray();
-                    gtfsCollection.Blocks = (from e in ctx.Blocks select e).ToArray();
-                    gtfsCollection.Agencies = (from e in ctx.Agencies select e).ToArray();
-                    gtfsCollection.Archive = ctx.GtfsArchives.OrderBy(e => e.LoadedOn).FirstOrDefault();
-                    gtfsCollection.Trips = (from e in ctx.Trips select e).ToArray();
-                    gtfsCollection.ServiceExceptions = (from e in ctx.ServiceExceptions select e).ToArray();
-                    gtfsCollection.Services = (from e in ctx.Services select e).ToArray();
-                    gtfsCollection.ContainsEntities = true;
-                }
+                var gtfsReader = kernel.Get<IEntityCollectionReader<GtfsArchive, GtfsCollection>>();
+                var gtfsCollection = gtfsReader.Read(@"google_transit_info.zip", null).Result;
                 DateTime toc = DateTime.Now;
                 Console.WriteLine("GTFS data fetched in {0} milliseconds.", (toc - tic).TotalMilliseconds);
                 
-                Console.WriteLine("Fetching the destination data from the database.");
+                Console.WriteLine("Fetching the destination data from the web.");
                 tic = DateTime.Now;
-                var srdsCollection = new SrdsCollection();
-
-                using (var ctx = new Entities())
-                {
-                    srdsCollection.AttributeValues = (from e in ctx.AttributeValues select e).ToArray();
-                    srdsCollection.Destinations = (from e in ctx.Destinations select e).ToArray();
-                    srdsCollection.AttributeKeys = (from e in ctx.AttributeKeys select e).ToArray();
-                }
+                var srdsReader = kernel.Get<IEntityCollectionReader<SrdsArchive, SrdsCollection>>();
+                var srdsCollection = srdsReader.Read(@"srds_odjfs.zip", null).Result;
                 toc = DateTime.Now;
                 Console.WriteLine("Destination data fetched in {0} milliseconds.", (toc - tic).TotalMilliseconds);
 
