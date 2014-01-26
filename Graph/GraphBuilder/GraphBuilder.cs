@@ -55,7 +55,7 @@ namespace SmartRoutes.Graph
             Logger.Trace("Creating GTFS Nodes.");
 
             IGtfsNode[] gtfsNodes = stopTimes
-                .GroupBy(s => new Tuple<int, int, int?, int>(s.StopId, s.Trip.RouteId, s.Trip.ShapeId, s.Sequence))
+                .GroupBy(s => new Tuple<int, int, int?>(s.StopId, s.Trip.RouteId, s.Trip.BlockId))
                 .SelectMany(g =>
                 {
                     StopTime first = g.First();
@@ -163,13 +163,14 @@ namespace SmartRoutes.Graph
 
                     // calculate walking time, will be same for all nodes in list, so use first
                     double walkingTime = node1.GetL1DistanceInFeet(nodes.First()) / _settings.WalkingFeetPerSecond;
-                    DateTime minTime = node1.Time + new TimeSpan(0, 0, (int)Math.Ceiling(walkingTime));
+                    DateTime minTime = node1.Time + TimeSpan.FromSeconds(walkingTime);
 
                     // thanks to sorting, these nodes are iterated in ascending time
                     foreach (var node2 in nodes)
                     {
-                        // don't connect same stop on same trip (why just sit there?)
-                        if (node1.BaseNode == node2.BaseNode) continue;
+                        // don't connect stops on same route with same block
+                        if (node1.BaseNode == node2.BaseNode
+                            && node1.BlockId == node2.BlockId) continue;
 
                         if (node2.Time > minTime)
                         {

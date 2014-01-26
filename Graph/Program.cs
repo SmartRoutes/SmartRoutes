@@ -93,8 +93,9 @@ namespace SmartRoutes.Graph
                 // child care selected by name, since properties are not implemented yet
                 const string childCareName = "ANOINTED HANDS LEARNING CENTER";
 
+                Console.WriteLine("getting workNodes.");
                 // search starts at work, going backwards
-                var workNodes = graph.GetClosestGtfsNodes(workLocation, atWorkBy, TimeDirection.Backwards, 100);
+                var workNodes = graph.GetClosestGtfsNodes(workLocation, atWorkBy, TimeDirection.Backwards);
 
                 // since we don't have properties on our location nodes yet, let's just filter by name.
                 // this returns two results (apparently there are two child cares with this name)
@@ -108,10 +109,12 @@ namespace SmartRoutes.Graph
                     return false;
                 };
 
+                Console.WriteLine("getting workToChildCareResults.");
                 var workToChildCareResults = ExtensionMethods.Dijkstras(workNodes, goalCheck, TimeDirection.Backwards);
 
+                Console.WriteLine("getting closeToHomeNodes.");
                 // First step, find which bus stop is closest to my house, and set that as destination
-                var closeToHomeStops = graph.GetClosestGtfsStops(homeLocation, 100);
+                var closeToHomeNodes = graph.GetClosestGtfsNodes(homeLocation, workToChildCareResults.First().node.Time, TimeDirection.Backwards);
 
                 Func<INode, bool> goalCheck2 = node =>
                 {
@@ -119,9 +122,9 @@ namespace SmartRoutes.Graph
                     if (nodeAsGtfsNode != null)
                     {
                         bool match = false;
-                        foreach (var stop in closeToHomeStops)
+                        foreach (var n in closeToHomeNodes)
                         {
-                            if (nodeAsGtfsNode.StopId == stop.Id)
+                            if (nodeAsGtfsNode.StopId == n.StopId)
                             {
                                 match = true;
                                 break;
@@ -135,14 +138,20 @@ namespace SmartRoutes.Graph
                 // now for each child care result, we find our way home.
                 var finalResults = new List<NodeInfo>();
                 var result = workToChildCareResults.First();
-                var startNodes = graph.GetDestinationNeighbors((IDestinationNode)result.node, TimeDirection.Backwards);
+
+                Console.WriteLine("getting startNodes.");
+                //var startNodes = graph.GetDestinationNeighbors((IDestinationNode)result.node, TimeDirection.Backwards);
+                var startNodes = graph.GetClosestGtfsNodes(result.node, result.node.Time, TimeDirection.Backwards);
+
+                Console.WriteLine("getting resultList.");
                 var resultList = ExtensionMethods.Dijkstras(
-                    startNodes, 
-                    goalCheck2, 
+                    startNodes,
+                    goalCheck2,
                     TimeDirection.Backwards);
 
                 var result2 = resultList.First();
 
+                Console.WriteLine("stitching results.");
                 // we want to stich together the two routes to make one resulting route
                 var current = result2;
                 while (current.parent != null) current = current.parent;
@@ -158,7 +167,15 @@ namespace SmartRoutes.Graph
                 current = finalResults.First();
                 while (current != null)
                 {
-                    Console.WriteLine("{0} -- {1}", current.node.Name, current.node.Time);
+                    var gtfsCurrent = current.node as IGtfsNode;
+                    if (gtfsCurrent != null)
+                    {
+                        Console.WriteLine("{0} -- {1} <Trip {2}> <Route {3}>", current.node.Name, current.node.Time, gtfsCurrent.TripId, gtfsCurrent.RouteId);
+                    }
+                    else
+                    {
+                        Console.WriteLine("{0} -- {1}", current.node.Name, current.node.Time);
+                    }
                     current = current.parent;
                 }
 
