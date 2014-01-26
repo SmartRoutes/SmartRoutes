@@ -14,6 +14,8 @@ namespace SmartRoutes.Graph.Node
         public int StopId { get; private set; }
         public int TripId { get; private set; }
         public int Sequence { get; private set; }
+        public int RouteId { get; private set; }
+        public int? BlockId { get; private set; }
         public ISet<INode> TimeBackwardNeighbors { get; private set; }
         public ISet<INode> TimeForwardNeighbors { get; private set; }
 
@@ -28,6 +30,8 @@ namespace SmartRoutes.Graph.Node
             Time = stopTime.ArrivalTime;
             StopId = stopTime.StopId;
             TripId = stopTime.TripId;
+            RouteId = stopTime.Trip.RouteId;
+            BlockId = stopTime.Trip.BlockId;
             Sequence = stopTime.Sequence;
             TimeBackwardNeighbors = new HashSet<INode>();
             TimeForwardNeighbors = new HashSet<INode>();
