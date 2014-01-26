@@ -77,7 +77,7 @@ namespace SmartRoutes.Graph.Test
                 Stop = stop,
                 StopId = stop.Id,
                 TripId = 1,
-                Trip = new Trip { ShapeId = 0 }
+                Trip = new Trip { BlockId = 0 }
             };
             var stopTime2 = new StopTime
             {
@@ -85,7 +85,7 @@ namespace SmartRoutes.Graph.Test
                 Stop = stop,
                 StopId = stop.Id,
                 TripId = 2,
-                Trip = new Trip { ShapeId = 1 }
+                Trip = new Trip { BlockId = 1 }
             };
             IEnumerable<StopTime> stoptimes = new[] {stopTime1, stopTime2};
 
