@@ -34,26 +34,24 @@ namespace SmartRoutes.Graph
             };
 
             Func<IGtfsNode, bool> nodeTimeFilter;
-            Func<IGtfsNode, TimeSpan> nodeTimeOrdering;
 
             if (direction == TimeDirection.Forwards)
             {
                 nodeTimeFilter = n => n.Time - walkingTime(n) >= time;
-                nodeTimeOrdering = n => n.Time - time;
             }
             else
             {
                 nodeTimeFilter = n => n.Time + walkingTime(n) <= time;
-                nodeTimeOrdering = n => time - n.Time;
             }
 
             var closeStops = _stops.Where(stopDistanceFilter).OrderBy(stopDistanceOrdering);
 
-            var closeNodes = closeStops.SelectMany(s => {
+            var closeNodes = closeStops.SelectMany(s =>
+            {
                 List<IGtfsNode> relatedNodes = null;
                 _stopToNodes.TryGetValue(s.Id, out relatedNodes);
                 return relatedNodes;
-            }).Where(nodeTimeFilter).OrderBy(nodeTimeOrdering);
+            }).Where(nodeTimeFilter);
 
             IEnumerable<IGtfsNode> orderedCloseNodes;
             if (direction == TimeDirection.Forwards)
@@ -65,7 +63,7 @@ namespace SmartRoutes.Graph
                 orderedCloseNodes = closeNodes.OrderByDescending(n => n.Time - walkingTime(n));
             }
 
-            // return the closest node from each trip
+            // return the closest node from each (RouteId, BlockId) group
             var returnVal = orderedCloseNodes.GroupBy(n => new Tuple<int, int?>(n.RouteId, n.BlockId)).Select(g => g.First());
             return returnVal.ToArray();
         }
@@ -107,5 +105,12 @@ namespace SmartRoutes.Graph
 
             return returnNodes;
         }
+
+        public IEnumerable<NodeInfo> Search(ILocation StartLocation, ILocation EndLocation, 
+            DateTime StartTime, TimeDirection Direction, IEnumerable<Func<INode, bool>> GoalChecks)
+        {
+            return null;
+        }
+
     }
 }
