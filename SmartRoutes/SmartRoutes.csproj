@@ -156,6 +156,7 @@
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\Views\GenericControls.css" />
     <Content Include="Content\Images\sample_map.png" />
     <Content Include="Scripts\Communication\Controllers\GuidedSearchCommunicationController.js" />
     <Content Include="Scripts\Communication\Payloads\Objective.js" />
@@ -192,14 +193,15 @@
     <Content Include="Scripts\ViewModels\ServiceTypeViewModel.js" />
     <Content Include="Scripts\Library\sammy-0.7.4.js" />
     <Content Include="Scripts\Library\sammy-0.7.4.min.js" />
-    <Content Include="Scripts\View\AccreditationFormPageController.js" />
-    <Content Include="Scripts\View\ChildInformationFormPageController.js" />
-    <Content Include="Scripts\View\GuidedSearchViewController.js" />
-    <Content Include="Scripts\View\LocationAndTimeFormPageController.js" />
+    <Content Include="Scripts\View\DetailedCheckboxViewController.js" />
+    <Content Include="Scripts\View\Search\AccreditationFormPageController.js" />
+    <Content Include="Scripts\View\Search\ChildInformationFormPageController.js" />
+    <Content Include="Scripts\View\Search\GuidedSearchViewController.js" />
+    <Content Include="Scripts\View\Search\LocationAndTimeFormPageController.js" />
     <Content Include="Scripts\View\PageController.js" />
     <Content Include="Scripts\View\PortalViewController.js" />
-    <Content Include="Scripts\View\ScheduleTypeFormPageController.js" />
-    <Content Include="Scripts\View\ServiceTypeFormPageController.js" />
+    <Content Include="Scripts\View\Search\ScheduleTypeFormPageController.js" />
+    <Content Include="Scripts\View\Search\ServiceTypeFormPageController.js" />
     <Content Include="Scripts\SmartRoutes.js" />
     <Content Include="Scripts\_references.js" />
     <Content Include="Web.config" />
@@ -232,7 +234,7 @@
     <Content Include="Views\Search\_AccreditationFormPageView.cshtml" />
     <Content Include="Views\Search\_AccreditationView.cshtml" />
     <Content Include="Views\Search\_ServiceTypeFormPageView.cshtml" />
-    <Content Include="Views\Search\_DetailedCheckboxView.cshtml" />
+    <Content Include="Views\Shared\_DetailedCheckboxView.cshtml" />
     <Content Include="Views\Search\_ServiceTypeView.cshtml" />
   </ItemGroup>
   <ItemGroup>

@@ -170,7 +170,6 @@ SmartRoutes.GuidedSearchViewController = (function() {
         }
     });
 
-
     return {
         // Public:
 

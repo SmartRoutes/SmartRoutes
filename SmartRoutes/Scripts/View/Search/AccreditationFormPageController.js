@@ -6,6 +6,7 @@ SmartRoutes.AccreditationFormPageController = function(pageID) {
     var accreditationViewRaw = null;
     var accreditationFormPageID = pageID;
     var validationCallback = null;
+    var detailedCheckboxViewControllers = new Array();
 
     function CreateAndBindAccreditationViews() {
         // This might be called multiple times since we can't 
@@ -14,6 +15,18 @@ SmartRoutes.AccreditationFormPageController = function(pageID) {
             var accreditationListContainer = $("#sr-accreditation-list-container");
             for (var accreditationIndex = 0; accreditationIndex < accreditations.length; ++accreditationIndex) {
                 accreditationListContainer.append(accreditationViewRaw);
+                var detailedCheckboxView = $(accreditationListContainer).children().last(".sr-accreditation-view").children(".sr-detailed-checkbox-view");
+
+                detailedCheckboxViewControllers.push(
+                    new SmartRoutes.DetailedCheckboxViewController(detailedCheckboxView, function(checkboxView, visible) {
+                        var accreditationLinkElement = $(checkboxView).parent(".sr-accreditation-view").children(".sr-accreditation-link");
+                        if (visible) {
+                            accreditationLinkElement.show();
+                        }
+                        else {
+                            accreditationLinkElement.hide();
+                        }
+                    }));
                 ko.applyBindings(accreditations[accreditationIndex], accreditationListContainer.children().last()[0]);
             }
         }

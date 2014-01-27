@@ -37,7 +37,9 @@ namespace SmartRoutes
                         // Communication controllers.
                         "~/Scripts/Communication/Controllers/GuidedSearchCommunicationController.js",
 
-                        
+                        // Common/Generic view controllers.
+                        "~/Scripts/View/DetailedCheckboxViewController.js",
+
                         // View Models.
                         "~/Scripts/ViewModels/ChildInfoViewModel.js",
                         "~/Scripts/ViewModels/ScheduleTypeViewModel.js",
@@ -54,14 +56,14 @@ namespace SmartRoutes
                         "~/Scripts/View/PortalViewController.js",
 
                         // Search form page controllers.
-                        "~/Scripts/View/ChildInformationFormPageController.js",
-                        "~/Scripts/View/ScheduleTypeFormPageController.js",
-                        "~/Scripts/View/LocationAndTimeFormPageController.js",
-                        "~/Scripts/View/AccreditationFormPageController.js",
-                        "~/Scripts/View/ServiceTypeFormPageController.js",
+                        "~/Scripts/View/Search/ChildInformationFormPageController.js",
+                        "~/Scripts/View/Search/ScheduleTypeFormPageController.js",
+                        "~/Scripts/View/Search/LocationAndTimeFormPageController.js",
+                        "~/Scripts/View/Search/AccreditationFormPageController.js",
+                        "~/Scripts/View/Search/ServiceTypeFormPageController.js",
 
                         // The master search form controller.
-                        "~/Scripts/View/GuidedSearchViewController.js",
+                        "~/Scripts/View/Search/GuidedSearchViewController.js",
 
                         // This controller essentially runs the site.
                         "~/Scripts/View/PageController.js"));
@@ -70,6 +72,7 @@ namespace SmartRoutes
                         "~/Content/site.css",
                         "~/Content/bootstrap-theme.css",
                         "~/Content/bootstrap.css",
+                        "~/Content/Views/GenericControls.css",
                         "~/Content/Views/MainPageView.css",
                         "~/Content/Views/PortalView.css",
                         "~/Content/Views/GuidedSearchPageView.css"));
