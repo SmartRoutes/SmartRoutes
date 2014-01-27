@@ -140,8 +140,6 @@ SmartRoutes.GuidedSearchViewController = (function() {
             // Change the route, this will also change the page.
             var previousPageID = previousPage.attr("id");
             formPageSammyApp.setLocation(pageIDRouteMap[previousPageID]);
-
-            activePageElement = previousPage;
         }
     });
 
@@ -151,10 +149,6 @@ SmartRoutes.GuidedSearchViewController = (function() {
         if (nextPage.length > 0) {
             var nextPageID = nextPage.attr("id");
             formPageSammyApp.setLocation(pageIDRouteMap[nextPageID]);
-
-            // TODO: should do page validation here since the user
-            // has indicated that they want to move to the next page.
-            activePageElement = nextPage;
         }
     });
 
