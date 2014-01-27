@@ -3,7 +3,7 @@
 SmartRoutes.ChildInformationFormPageController = (function(pageID) {
 
     // Private:
-    var childInformationPageID = pageID;
+    var childInformationFormPageID = pageID;
     var maxChildren = 3;
     var childCount = 1;
     var childInfoViewModels = new Array();
@@ -69,7 +69,6 @@ SmartRoutes.ChildInformationFormPageController = (function(pageID) {
         // Public:
 
         RunPage: function() {
-            $("#" + childInformationPageID).fadeIn(SmartRoutes.Constants.formPageFadeInTime);
         },
 
         StopPage: function() {
@@ -81,6 +80,10 @@ SmartRoutes.ChildInformationFormPageController = (function(pageID) {
             // This is a tautology.  The name isn't required
             // and can be arbitrary.
             return true;
+        },
+
+        GetFormPageID: function() {
+            return childInformationFormPageID;
         },
 
         // Returns an array of objects containing the name, age, and gender

@@ -1,12 +1,11 @@
 ﻿
-SmartRoutes.LocationAndTimeFormPageController = function(formPageRouteMap) {
+SmartRoutes.LocationAndTimeFormPageController = function(pageID) {
     // Private:
 
-    var pageIDRouteMap = formPageRouteMap;
     var locationAndTimeViewModel = null;
     var validationCallback = null;
     var scheduleType = null;
-    var locationTimeFormPageID = "sr-location-time-form-page-view";
+    var locationTimeFormPageID = pageID;
 
     var locationTimeSectionIDs = {
         dropOffDeparture: "sr-section-drop-off-departure",
@@ -83,6 +82,10 @@ SmartRoutes.LocationAndTimeFormPageController = function(formPageRouteMap) {
 
         StopPage: function() {
             validationCallback = null;
+        },
+
+        GetFormPageID: function() {
+            return locationTimeFormPageID;
         },
 
         GetLocationAndTimeViewModel: function() {

@@ -1,11 +1,9 @@
 ﻿
-// pageID - The element ID of the page
-// validationCallback - Function to be called after the form validates with a value
-// indicating if the form is valid (true) or invalid (false).
+// scheduleTypePageID - The element ID of the page
 SmartRoutes.ScheduleTypeFormPageController = (function(pageID) {
 
     // Private: 
-    var scheduleTypePageID = pageID;
+    var scheduleTypeFormPageID = pageID;
     var scheduleTypeViewModel = null;
     var pageValidationCallback = null;
 
@@ -39,6 +37,10 @@ SmartRoutes.ScheduleTypeFormPageController = (function(pageID) {
         IsPageDataValid: function() {
             // A schedule type must be selected.
             return !scheduleTypeViewModel.noScheduleTypeSelected();
+        },
+
+        GetFormPageID: function() {
+            return scheduleTypeFormPageID;
         },
 
         GetScheduleTypeInformation: function() {
