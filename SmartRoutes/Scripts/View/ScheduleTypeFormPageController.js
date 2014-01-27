@@ -27,7 +27,6 @@ SmartRoutes.ScheduleTypeFormPageController = (function(pageID) {
 
         RunPage: function(validationCallback) {
             pageValidationCallback = validationCallback;
-            $("#" + scheduleTypePageID).fadeIn(SmartRoutes.Constants.formPageFadeInTime);
         },
 
         StopPage: function() {

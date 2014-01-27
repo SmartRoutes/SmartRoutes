@@ -1,9 +1,11 @@
 ﻿
-SmartRoutes.ServiceTypeFormPageController = function() {
+SmartRoutes.ServiceTypeFormPageController = function(pageID) {
     // Private:
     
+    var serviceTypeFormPageID = pageID;
     var serviceTypes = new Array();
     var serviceTypeViewRaw = null;
+    var validationCallback = null;
 
     function CreateAndBindServiceTypeViews() {
         if (serviceTypeViewRaw && (serviceTypes.length > 0)) {
@@ -34,5 +36,16 @@ SmartRoutes.ServiceTypeFormPageController = function() {
     return {
         // Public: 
 
+        RunPage: function(pageValidationCallback) {
+            validationCallback = pageValidationCallback;
+        },
+
+        StopPage: function() {
+            validationCallback = null;
+        },
+
+        GetFormPageID: function() {
+            return serviceTypeFormPageID;
+        }
     };
 };

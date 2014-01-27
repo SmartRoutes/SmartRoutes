@@ -57,63 +57,47 @@ SmartRoutes.GuidedSearchViewController = (function() {
         }
     };
 
-    function TransitionPages(fromPageID, toPageID) {
+    // Transitions from the current page to the page controlled by the new controller.
+    // Additional arguments are passed to the new controller's RunPage function.
+    function TransitionPages(currentPageController, newPageController) {
+        RedirectToFirstPageIfFirstTimeVisiting();
+
+        activePageController.StopPage();
+
         $(".sr-form-page").hide();
-        $("#" + toPageID).fadeIn(formPageFadeInTimeMS);
+        $("#" + newPageController.GetFormPageID()).fadeIn(formPageFadeInTimeMS);
+
+        activePageController = newPageController;
+        activePageElement = $("#" + activePageController.GetFormPageID());
+
+        var args = Array.prototype.slice.call(arguments);
+        var remainingArgs = args.slice(2);
+
+        // Pass the remaining arguments into the new active page.
+        activePageController["RunPage"].apply(activePageController, remainingArgs);
     };
 
     var InitPageSubroutes = function() {
         formPageSammyApp = $.sammy(function() {
             this.get(pageIDRouteMap[pageIDs.childInformationPageID], function() {
-                // No redirection because this is the first page.
-                activePageController.StopPage();
-
-                TransitionPages(activePageController.GetFormPageID(), childInformationFormPageController.GetFormPageID());
-
-                activePageController = childInformationFormPageController;
-                activePageElement = $("#" + pageIDs.childInformationPageID);
-
-                activePageController.RunPage();
+                TransitionPages(activePageController, childInformationFormPageController);
             });
 
             this.get(pageIDRouteMap[pageIDs.scheduleTypePageID], function() {
-                RedirectToFirstPageIfFirstTimeVisiting();
-
-                activePageController.StopPage();
-
-                TransitionPages(activePageController.GetFormPageID(), scheduleTypeFormPageController.GetFormPageID());
-
-                activePageController = scheduleTypeFormPageController;
-                activePageElement = $("#" + pageIDs.scheduleTypePageID);
-
-                activePageController.RunPage(PageValidationCallbackHandler);
+                TransitionPages(activePageController, scheduleTypeFormPageController, PageValidationCallbackHandler);
             });
 
             this.get(pageIDRouteMap[pageIDs.locationAndTimePageID], function() {
-                RedirectToFirstPageIfFirstTimeVisiting();
-                activePageController.StopPage();
-
-                TransitionPages(activePageController.GetFormPageID(), locationAndTimeFormPageController.GetFormPageID());
-
-                activePageController = locationAndTimeFormPageController;
-                activePageElement = $("#" + pageIDs.locationAndTimePageID);
-
                 var scheduleTypeSelection = scheduleTypeFormPageController.GetScheduleTypeInformation();
-                activePageController.RunPage(PageValidationCallbackHandler, scheduleTypeSelection);
+                TransitionPages(activePageController, locationAndTimeFormPageController, PageValidationCallbackHandler, scheduleTypeSelection);
             });
 
             this.get(pageIDRouteMap[pageIDs.accreditationPageID], function() {
-                RedirectToFirstPageIfFirstTimeVisiting();
-
-                $(".sr-form-page").hide();
-                $("#" + pageIDs.accreditationPageID).show();
+                TransitionPages(activePageController, accreditationFormPageController, PageValidationCallbackHandler);
             });
 
             this.get(pageIDRouteMap[pageIDs.serviceTypePageID], function() {
-                RedirectToFirstPageIfFirstTimeVisiting();
-
-                $(".sr-form-page").hide();
-                $("#" + pageIDs.serviceTypePageID).show();
+                TransitionPages(activePageController, serviceTypeFormPageController, PageValidationCallbackHandler);
             });
         });
     };
@@ -131,11 +115,11 @@ SmartRoutes.GuidedSearchViewController = (function() {
     };
 
     var InitAccreditationPage = function() {
-        accreditationFormPageController = new SmartRoutes.AccreditationFormPageController();
+        accreditationFormPageController = new SmartRoutes.AccreditationFormPageController(pageIDs.accreditationPageID);
     };
 
     var InitServiceTypeFormPage = function() {
-        serviceTypeFormPageController = new SmartRoutes.ServiceTypeFormPageController();
+        serviceTypeFormPageController = new SmartRoutes.ServiceTypeFormPageController(pageIDs.serviceTypePageID);
     };
 
     (function Init() {

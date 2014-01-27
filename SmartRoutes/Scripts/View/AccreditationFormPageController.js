@@ -1,9 +1,11 @@
 ﻿
-SmartRoutes.AccreditationFormPageController = function() {
+SmartRoutes.AccreditationFormPageController = function(pageID) {
     // Private:
 
     var accreditations = new Array();
     var accreditationViewRaw = null;
+    var accreditationFormPageID = pageID;
+    var validationCallback = null;
 
     function CreateAndBindAccreditationViews() {
         // This might be called multiple times since we can't 
@@ -36,5 +38,16 @@ SmartRoutes.AccreditationFormPageController = function() {
     return {
         // Public:
 
+        RunPage: function(pageValidationCallback) {
+            validationCallback = pageValidationCallback;
+        },
+
+        StopPage: function() {
+            validationCallback = null;
+        },
+
+        GetFormPageID: function() {
+            return accreditationFormPageID;
+        }
     };
 };
