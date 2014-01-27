@@ -76,8 +76,6 @@ SmartRoutes.LocationAndTimeFormPageController = function(pageID) {
             scheduleType = scheduleTypeSelection;
 
             SetupViewsForScheduleType();
-
-            $("#" + locationTimeFormPageID).fadeIn(SmartRoutes.Constants.formPageFadeInTime);
         },
 
         StopPage: function() {
