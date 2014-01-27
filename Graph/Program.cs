@@ -36,15 +36,15 @@ namespace SmartRoutes.Graph
 
                 Console.WriteLine("Fetching the GTFS data from the web.");
                 DateTime tic = DateTime.Now;
-                var gtfsReader = kernel.Get<IEntityCollectionReader<GtfsArchive, GtfsCollection>>();
-                var gtfsCollection = gtfsReader.Read(@"google_transit_info.zip", null).Result;
+                var gtfsFetcher = kernel.Get<IEntityCollectionDownloader<GtfsArchive, GtfsCollection>>();
+                var gtfsCollection = gtfsFetcher.Download(new Uri("http://www.go-metro.com/uploads/GTFS/google_transit_info.zip"), null).Result;
                 DateTime toc = DateTime.Now;
                 Console.WriteLine("GTFS data fetched in {0} milliseconds.", (toc - tic).TotalMilliseconds);
                 
                 Console.WriteLine("Fetching the destination data from the web.");
                 tic = DateTime.Now;
-                var srdsReader = kernel.Get<IEntityCollectionReader<SrdsArchive, SrdsCollection>>();
-                var srdsCollection = srdsReader.Read(@"srds_odjfs.zip", null).Result;
+                var srdsFetcher = kernel.Get<IEntityCollectionDownloader<SrdsArchive, SrdsCollection>>();
+                var srdsCollection = srdsFetcher.Download(new Uri(SRDS_URL), null).Result;
                 toc = DateTime.Now;
                 Console.WriteLine("Destination data fetched in {0} milliseconds.", (toc - tic).TotalMilliseconds);
 
