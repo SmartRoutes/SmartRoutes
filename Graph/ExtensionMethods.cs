@@ -118,7 +118,6 @@ namespace SmartRoutes.Graph
                             if (newPathCost < neighborInfo.pathCost)
                             {
                                 // update search info and update queue for new key
-                                //neighborInfo.node = current;
                                 neighborInfo.pathCost = newPathCost;
                                 neighborInfo.parent = currentInfo;
                                 heap.UpdateKey(neighborInfo.handle, newPathCost);
@@ -142,11 +141,13 @@ namespace SmartRoutes.Graph
                 : currentInfo.pathCost - travelTimeBetween;
 
             // penalize transfers
-            if (currentInfo.node as IGtfsNode != null && neighbor as IGtfsNode != null)
+            var gtfsCurrent = currentInfo.node as IGtfsNode;
+            var gtfsNeighbor = neighbor as IGtfsNode;
+            if (gtfsCurrent != null && gtfsNeighbor != null)
             {
-                if (((IGtfsNode)neighbor).TripId != ((IGtfsNode)currentInfo.node).TripId)
+                if (gtfsCurrent.TripId != gtfsNeighbor.TripId)
                 {
-                    pathCost += TimeSpan.FromMinutes(120);
+                    pathCost += TimeSpan.FromMinutes(20);
                 }
             }
 
