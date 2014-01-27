@@ -29,6 +29,7 @@ SmartRoutes.GuidedSearchViewController = (function() {
         "sr-accreditation-form-page-view": "#/search/accreditation",
         "sr-service-type-form-page-view": "#/sereach/servicetype"
     }
+
     var childInformationFormPageController = null;
     var scheduleTypeFormPageController = null;
     var locationAndTimeFormPageController = null;
@@ -68,6 +69,7 @@ SmartRoutes.GuidedSearchViewController = (function() {
                 activePageController.StopPage();
                 $(".sr-form-page").hide();
                 activePageController = childInformationFormPageController;
+                activePageElement = $("#" + pageIDs.childInformationPageID);
                 activePageController.RunPage();
             });
 
@@ -77,14 +79,19 @@ SmartRoutes.GuidedSearchViewController = (function() {
                 activePageController.StopPage();
                 $(".sr-form-page").hide();
                 activePageController = scheduleTypeFormPageController;
+                activePageElement = $("#" + pageIDs.scheduleTypePageID);
                 activePageController.RunPage(PageValidationCallbackHandler);
             });
 
             this.get(pageIDRouteMap[pageIDs.locationAndTimePageID], function() {
                 RedirectToFirstPageIfFirstTimeVisiting();
 
+                var scheduleTypeSelection = activePageController.GetScheduleTypeInformation();
+
                 $(".sr-form-page").hide();
-                $("#" + pageIDs.locationAndTimePageID).show();
+                activePageController = locationAndTimeFormPageController;
+                activePageElement = $("#" + pageIDs.locationAndTimePageID);
+                activePageController.RunPage(PageValidationCallbackHandler, scheduleTypeSelection);
             });
 
             this.get(pageIDRouteMap[pageIDs.accreditationPageID], function() {
