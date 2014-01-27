@@ -80,7 +80,7 @@ SmartRoutes.GuidedSearchViewController = (function() {
     var InitPageSubroutes = function() {
         formPageSammyApp = $.sammy(function() {
             this.get(pageIDRouteMap[pageIDs.childInformationPageID], function() {
-                TransitionPages(activePageController, childInformationFormPageController);
+                TransitionPages(activePageController, childInformationFormPageController, PageValidationCallbackHandler);
             });
 
             this.get(pageIDRouteMap[pageIDs.scheduleTypePageID], function() {

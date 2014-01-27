@@ -7,6 +7,7 @@ SmartRoutes.ChildInformationFormPageController = (function(pageID) {
     var maxChildren = 3;
     var childCount = 1;
     var childInfoViewModels = new Array();
+    var validationCallback = null;
 
     (function Init() {
         // Setup the knockout viewmodel bindings.
@@ -68,7 +69,8 @@ SmartRoutes.ChildInformationFormPageController = (function(pageID) {
     return {
         // Public:
 
-        RunPage: function() {
+        RunPage: function(pageValidationCallback) {
+            validationCallback = pageValidationCallback;
         },
 
         StopPage: function() {
