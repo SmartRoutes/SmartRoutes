@@ -54,6 +54,9 @@ SmartRoutes.GuidedSearchViewController = (function() {
             // Anywhere else just needs to navigate to #/search.
             // This controller will navigate to the correct sub-route.
             formPageSammyApp.setLocation(pageIDRouteMap[pageIDs.childInformationPageID]);
+
+            // Show the next navigation button.
+            $("#" + buttonIDs.nextButton).show();
         }
     };
 
@@ -140,6 +143,14 @@ SmartRoutes.GuidedSearchViewController = (function() {
             // Change the route, this will also change the page.
             var previousPageID = previousPage.attr("id");
             formPageSammyApp.setLocation(pageIDRouteMap[previousPageID]);
+
+            if ($(activePageElement).prev(".sr-form-page").length === 0) {
+                $("#" + buttonIDs.previousButton).hide();
+            }
+
+            // Next button should always become visible.
+            $("#" + buttonIDs.nextButton).show();
+            $("#" + buttonIDs.nextButton).text("Next >");
         }
     });
 
@@ -149,6 +160,13 @@ SmartRoutes.GuidedSearchViewController = (function() {
         if (nextPage.length > 0) {
             var nextPageID = nextPage.attr("id");
             formPageSammyApp.setLocation(pageIDRouteMap[nextPageID]);
+
+            if ($(activePageElement).next(".sr-form-page").length === 0) {
+                $("#" + buttonIDs.nextButton).text("Search");
+            }
+
+            // Previous button should always become active.
+            $("#" + buttonIDs.previousButton).show();
         }
     });
 
