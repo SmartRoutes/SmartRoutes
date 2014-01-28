@@ -17,16 +17,11 @@ SmartRoutes.AccreditationFormPageController = function(pageID) {
                 accreditationListContainer.append(accreditationViewRaw);
                 var detailedCheckboxView = $(accreditationListContainer).children().last(".sr-accreditation-view").children(".sr-detailed-checkbox-view");
 
-                detailedCheckboxViewControllers.push(
-                    new SmartRoutes.DetailedCheckboxViewController(detailedCheckboxView, function(checkboxView, visible) {
-                        var accreditationLinkElement = $(checkboxView).parent(".sr-accreditation-view").children(".sr-accreditation-link");
-                        if (visible) {
-                            accreditationLinkElement.show();
-                        }
-                        else {
-                            accreditationLinkElement.hide();
-                        }
-                    }));
+                var checkboxController = new SmartRoutes.DetailedCheckboxViewController(detailedCheckboxView, null);
+                checkboxController.SetExtraContent("<a class=\"sr-accreditation-link\" target=\"_blank\" data-bind=\"attr: {href: url}, text: url\"></a>")
+
+                detailedCheckboxViewControllers.push(checkboxController);
+
                 ko.applyBindings(accreditations[accreditationIndex], accreditationListContainer.children().last()[0]);
             }
         }

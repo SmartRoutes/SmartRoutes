@@ -28,6 +28,11 @@ SmartRoutes.DetailedCheckboxViewController = function(detailedCheckboxView, desc
     return {
         // Public:
 
-
+        // Adds extra content to the description area that is shown/hidden
+        // with the description.
+        SetExtraContent: function(contentHtmlString) {
+            $(".sr-detailed-checkbox-extra-content-container", detailedCheckboxView).empty();
+            $(".sr-detailed-checkbox-extra-content-container", detailedCheckboxView).append(contentHtmlString);
+        }
     }
 };
