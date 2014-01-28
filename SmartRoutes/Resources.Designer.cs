@@ -142,6 +142,24 @@ namespace SmartRoutes {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Day Camp Description.
+        /// </summary>
+        internal static string DayCampDescription {
+            get {
+                return ResourceManager.GetString("DayCampDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Day Camp.
+        /// </summary>
+        internal static string DayCampName {
+            get {
+                return ResourceManager.GetString("DayCampName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Outline features of the website here.  This will outline the search process that we will take the user through and ask that they provide feedback on his or her experience with our service..
         /// </summary>
         internal static string descriptionText {
@@ -156,6 +174,24 @@ namespace SmartRoutes {
         internal static string descriptionTitleText {
             get {
                 return ResourceManager.GetString("descriptionTitleText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Licensed Center Description.
+        /// </summary>
+        internal static string LicensedCenterDescription {
+            get {
+                return ResourceManager.GetString("LicensedCenterDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Licensed Center.
+        /// </summary>
+        internal static string LicensedCenterName {
+            get {
+                return ResourceManager.GetString("LicensedCenterName", resourceCulture);
             }
         }
         
@@ -282,6 +318,42 @@ namespace SmartRoutes {
         internal static string portalTextPlan {
             get {
                 return ResourceManager.GetString("portalTextPlan", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Type A Home Description.
+        /// </summary>
+        internal static string TypeAHomeDescription {
+            get {
+                return ResourceManager.GetString("TypeAHomeDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Type A.
+        /// </summary>
+        internal static string TypeAHomeName {
+            get {
+                return ResourceManager.GetString("TypeAHomeName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Type B Home Description.
+        /// </summary>
+        internal static string TypeBHomeDescription {
+            get {
+                return ResourceManager.GetString("TypeBHomeDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Type B.
+        /// </summary>
+        internal static string TypeBHomeName {
+            get {
+                return ResourceManager.GetString("TypeBHomeName", resourceCulture);
             }
         }
     }

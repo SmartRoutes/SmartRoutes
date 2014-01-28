@@ -6,13 +6,19 @@ SmartRoutes.ServiceTypeFormPageController = function(pageID) {
     var serviceTypes = new Array();
     var serviceTypeViewRaw = null;
     var validationCallback = null;
+    var detailedCheckboxViewControllers = new Array();
 
     function CreateAndBindServiceTypeViews() {
         if (serviceTypeViewRaw && (serviceTypes.length > 0)) {
             var serviceTypeListContainer = $("#sr-service-type-list-container");
             for (var serviceTypeIndex = 0; serviceTypeIndex < serviceTypes.length; ++serviceTypeIndex) {
                 serviceTypeListContainer.append(serviceTypeViewRaw);
-                ko.applyBindings(serviceTypes[serviceTypeIndex], serviceTypeListContainer.children().last()[0]);
+
+                var detailedCheckboxView = serviceTypeListContainer.children().last().children(".sr-detailed-checkbox-view");
+                var detailedCheckboxController = new SmartRoutes.DetailedCheckboxViewController(detailedCheckboxView, null);
+                detailedCheckboxViewControllers.push(detailedCheckboxController);
+
+                ko.applyBindings(serviceTypes[serviceTypeIndex], detailedCheckboxView[0]);
             }
         }
     };

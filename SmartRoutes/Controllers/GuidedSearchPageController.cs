@@ -35,8 +35,11 @@ namespace SmartRoutes.Controllers
         {
             List<ServiceTypeModel> serviceTypes = new List<ServiceTypeModel>
             {
-                // Placeholder.
-                new ServiceTypeModel("Service Type A", "Description for service type A")
+                new ServiceTypeModel(Resources.TypeAHomeName, Resources.TypeAHomeDescription),
+                // I believe type B homes don't have addresses, so omit those for now.
+                //new ServiceTypeModel(Resources.TypeBHomeName, Resources.TypeBHomeDescription),
+                new ServiceTypeModel(Resources.LicensedCenterName, Resources.LicensedCenterDescription),
+                new ServiceTypeModel(Resources.DayCampName, Resources.DayCampDescription)
             };
 
             return Json(serviceTypes, JsonRequestBehavior.AllowGet);

@@ -192,4 +192,28 @@
   <data name="portalTextPlan" xml:space="preserve">
     <value>Plan</value>
   </data>
+  <data name="DayCampDescription" xml:space="preserve">
+    <value>Day Camp Description</value>
+  </data>
+  <data name="DayCampName" xml:space="preserve">
+    <value>Day Camp</value>
+  </data>
+  <data name="LicensedCenterDescription" xml:space="preserve">
+    <value>Licensed Center Description</value>
+  </data>
+  <data name="LicensedCenterName" xml:space="preserve">
+    <value>Licensed Center</value>
+  </data>
+  <data name="TypeAHomeDescription" xml:space="preserve">
+    <value>Type A Home Description</value>
+  </data>
+  <data name="TypeAHomeName" xml:space="preserve">
+    <value>Type A</value>
+  </data>
+  <data name="TypeBHomeDescription" xml:space="preserve">
+    <value>Type B Home Description</value>
+  </data>
+  <data name="TypeBHomeName" xml:space="preserve">
+    <value>Type B</value>
+  </data>
 </root>
