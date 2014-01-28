@@ -71,6 +71,10 @@ SmartRoutes.ChildInformationFormPageController = (function(pageID) {
 
         RunPage: function(pageValidationCallback) {
             validationCallback = pageValidationCallback;
+
+            // Just call the validation callback here since
+            // this page can't be invalid.
+            validationCallback(true);
         },
 
         StopPage: function() {
