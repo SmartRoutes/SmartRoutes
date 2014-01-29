@@ -28,7 +28,7 @@ SmartRoutes.GuidedSearchViewController = (function() {
         "sr-schedule-type-form-page-view": "#/search/scheduletype",
         "sr-location-time-form-page-view": "#/search/locationsandtimes",
         "sr-accreditation-form-page-view": "#/search/accreditation",
-        "sr-service-type-form-page-view": "#/sereach/servicetype"
+        "sr-service-type-form-page-view": "#/search/servicetype"
     }
 
     var childInformationFormPageController = null;
@@ -78,6 +78,28 @@ SmartRoutes.GuidedSearchViewController = (function() {
 
         // Pass the remaining arguments into the new active page.
         activePageController["RunPage"].apply(activePageController, remainingArgs);
+
+        // Setup the navigation buttons based on the active page.
+        var nextPages = $(activePageElement).next(".sr-form-page");
+
+        if (nextPages.length === 0) {
+            // No remaining pages, change the next button text.
+            $("#" + buttonIDs.nextButton).text("Search");
+        }
+        else {
+            // The next button should indicate moving to the next page.
+            $("#" + buttonIDs.nextButton).text("Next >");
+        }
+
+        // Setup the previous button.
+        var previousPages = $(activePageElement).prev(".sr-form-page");
+        if (previousPages.length === 0) {
+            // No previous page.
+            $("#" + buttonIDs.previousButton).hide();
+        }
+        else {
+            $("#" + buttonIDs.previousButton).show();
+        }
     };
 
     var InitPageSubroutes = function() {
@@ -143,14 +165,6 @@ SmartRoutes.GuidedSearchViewController = (function() {
             // Change the route, this will also change the page.
             var previousPageID = previousPage.attr("id");
             formPageSammyApp.setLocation(pageIDRouteMap[previousPageID]);
-
-            if ($(activePageElement).prev(".sr-form-page").length === 0) {
-                $("#" + buttonIDs.previousButton).hide();
-            }
-
-            // Next button should always become visible.
-            $("#" + buttonIDs.nextButton).show();
-            $("#" + buttonIDs.nextButton).text("Next >");
         }
     });
 
@@ -160,13 +174,6 @@ SmartRoutes.GuidedSearchViewController = (function() {
         if (nextPage.length > 0) {
             var nextPageID = nextPage.attr("id");
             formPageSammyApp.setLocation(pageIDRouteMap[nextPageID]);
-
-            if ($(activePageElement).next(".sr-form-page").length === 0) {
-                $("#" + buttonIDs.nextButton).text("Search");
-            }
-
-            // Previous button should always become active.
-            $("#" + buttonIDs.previousButton).show();
         }
     });
 
