@@ -22,7 +22,7 @@ namespace SmartRoutes {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class Resources {
+    public class Resources {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
@@ -36,7 +36,7 @@ namespace SmartRoutes {
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Resources.ResourceManager ResourceManager {
+        public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("SmartRoutes.Resources", typeof(Resources).Assembly);
@@ -51,7 +51,7 @@ namespace SmartRoutes {
         ///   resource lookups using this strongly typed resource class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Globalization.CultureInfo Culture {
+        public static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -63,7 +63,7 @@ namespace SmartRoutes {
         /// <summary>
         ///   Looks up a localized string similar to ACSI Description.
         /// </summary>
-        internal static string ACSIDescription {
+        public static string ACSIDescription {
             get {
                 return ResourceManager.GetString("ACSIDescription", resourceCulture);
             }
@@ -72,7 +72,7 @@ namespace SmartRoutes {
         /// <summary>
         ///   Looks up a localized string similar to ACSI.
         /// </summary>
-        internal static string ACSIName {
+        public static string ACSIName {
             get {
                 return ResourceManager.GetString("ACSIName", resourceCulture);
             }
@@ -81,16 +81,61 @@ namespace SmartRoutes {
         /// <summary>
         ///   Looks up a localized string similar to http://www.acsiglobal.org/.
         /// </summary>
-        internal static string ACSIURL {
+        public static string ACSIURL {
             get {
                 return ResourceManager.GetString("ACSIURL", resourceCulture);
             }
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Infant.
+        /// </summary>
+        public static string AgeGroupInfantName {
+            get {
+                return ResourceManager.GetString("AgeGroupInfantName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Older Toddler.
+        /// </summary>
+        public static string AgeGroupOlderToddlerName {
+            get {
+                return ResourceManager.GetString("AgeGroupOlderToddlerName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Preschool.
+        /// </summary>
+        public static string AgeGroupPreschoolerName {
+            get {
+                return ResourceManager.GetString("AgeGroupPreschoolerName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to School Age.
+        /// </summary>
+        public static string AgeGroupSchoolAgeName {
+            get {
+                return ResourceManager.GetString("AgeGroupSchoolAgeName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Younger Toddler.
+        /// </summary>
+        public static string AgeGroupYoungToddlerName {
+            get {
+                return ResourceManager.GetString("AgeGroupYoungToddlerName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to CCFP Description.
         /// </summary>
-        internal static string CCFPDescription {
+        public static string CCFPDescription {
             get {
                 return ResourceManager.GetString("CCFPDescription", resourceCulture);
             }
@@ -99,7 +144,7 @@ namespace SmartRoutes {
         /// <summary>
         ///   Looks up a localized string similar to CCFP.
         /// </summary>
-        internal static string CCFPName {
+        public static string CCFPName {
             get {
                 return ResourceManager.GetString("CCFPName", resourceCulture);
             }
@@ -108,7 +153,7 @@ namespace SmartRoutes {
         /// <summary>
         ///   Looks up a localized string similar to http://www.4c.org/provider/participate/food/overview.html.
         /// </summary>
-        internal static string CCFPURL {
+        public static string CCFPURL {
             get {
                 return ResourceManager.GetString("CCFPURL", resourceCulture);
             }
@@ -117,7 +162,7 @@ namespace SmartRoutes {
         /// <summary>
         ///   Looks up a localized string similar to COA Description.
         /// </summary>
-        internal static string COADescription {
+        public static string COADescription {
             get {
                 return ResourceManager.GetString("COADescription", resourceCulture);
             }
@@ -126,7 +171,7 @@ namespace SmartRoutes {
         /// <summary>
         ///   Looks up a localized string similar to COA.
         /// </summary>
-        internal static string COAName {
+        public static string COAName {
             get {
                 return ResourceManager.GetString("COAName", resourceCulture);
             }
@@ -135,7 +180,7 @@ namespace SmartRoutes {
         /// <summary>
         ///   Looks up a localized string similar to http://www.childrenofamerica.com/.
         /// </summary>
-        internal static string COAURL {
+        public static string COAURL {
             get {
                 return ResourceManager.GetString("COAURL", resourceCulture);
             }
@@ -144,7 +189,7 @@ namespace SmartRoutes {
         /// <summary>
         ///   Looks up a localized string similar to Day Camp Description.
         /// </summary>
-        internal static string DayCampDescription {
+        public static string DayCampDescription {
             get {
                 return ResourceManager.GetString("DayCampDescription", resourceCulture);
             }
@@ -153,7 +198,7 @@ namespace SmartRoutes {
         /// <summary>
         ///   Looks up a localized string similar to Day Camp.
         /// </summary>
-        internal static string DayCampName {
+        public static string DayCampName {
             get {
                 return ResourceManager.GetString("DayCampName", resourceCulture);
             }
@@ -162,7 +207,7 @@ namespace SmartRoutes {
         /// <summary>
         ///   Looks up a localized string similar to Outline features of the website here.  This will outline the search process that we will take the user through and ask that they provide feedback on his or her experience with our service..
         /// </summary>
-        internal static string descriptionText {
+        public static string descriptionText {
             get {
                 return ResourceManager.GetString("descriptionText", resourceCulture);
             }
@@ -171,7 +216,7 @@ namespace SmartRoutes {
         /// <summary>
         ///   Looks up a localized string similar to Description.
         /// </summary>
-        internal static string descriptionTitleText {
+        public static string descriptionTitleText {
             get {
                 return ResourceManager.GetString("descriptionTitleText", resourceCulture);
             }
@@ -180,7 +225,7 @@ namespace SmartRoutes {
         /// <summary>
         ///   Looks up a localized string similar to Licensed Center Description.
         /// </summary>
-        internal static string LicensedCenterDescription {
+        public static string LicensedCenterDescription {
             get {
                 return ResourceManager.GetString("LicensedCenterDescription", resourceCulture);
             }
@@ -189,7 +234,7 @@ namespace SmartRoutes {
         /// <summary>
         ///   Looks up a localized string similar to Licensed Center.
         /// </summary>
-        internal static string LicensedCenterName {
+        public static string LicensedCenterName {
             get {
                 return ResourceManager.GetString("LicensedCenterName", resourceCulture);
             }
@@ -198,7 +243,7 @@ namespace SmartRoutes {
         /// <summary>
         ///   Looks up a localized string similar to NACCP Description.
         /// </summary>
-        internal static string NACCPDescription {
+        public static string NACCPDescription {
             get {
                 return ResourceManager.GetString("NACCPDescription", resourceCulture);
             }
@@ -207,7 +252,7 @@ namespace SmartRoutes {
         /// <summary>
         ///   Looks up a localized string similar to NACCP.
         /// </summary>
-        internal static string NACCPName {
+        public static string NACCPName {
             get {
                 return ResourceManager.GetString("NACCPName", resourceCulture);
             }
@@ -216,7 +261,7 @@ namespace SmartRoutes {
         /// <summary>
         ///   Looks up a localized string similar to http://www.earlylearningleaders.org/.
         /// </summary>
-        internal static string NACCPURL {
+        public static string NACCPURL {
             get {
                 return ResourceManager.GetString("NACCPURL", resourceCulture);
             }
@@ -225,7 +270,7 @@ namespace SmartRoutes {
         /// <summary>
         ///   Looks up a localized string similar to NAEYC Description.
         /// </summary>
-        internal static string NAEYCDescription {
+        public static string NAEYCDescription {
             get {
                 return ResourceManager.GetString("NAEYCDescription", resourceCulture);
             }
@@ -234,7 +279,7 @@ namespace SmartRoutes {
         /// <summary>
         ///   Looks up a localized string similar to NAEYC.
         /// </summary>
-        internal static string NAEYCName {
+        public static string NAEYCName {
             get {
                 return ResourceManager.GetString("NAEYCName", resourceCulture);
             }
@@ -243,7 +288,7 @@ namespace SmartRoutes {
         /// <summary>
         ///   Looks up a localized string similar to http://www.naeyc.org/.
         /// </summary>
-        internal static string NAEYCURL {
+        public static string NAEYCURL {
             get {
                 return ResourceManager.GetString("NAEYCURL", resourceCulture);
             }
@@ -252,7 +297,7 @@ namespace SmartRoutes {
         /// <summary>
         ///   Looks up a localized string similar to NAFCC Description.
         /// </summary>
-        internal static string NAFCCDescription {
+        public static string NAFCCDescription {
             get {
                 return ResourceManager.GetString("NAFCCDescription", resourceCulture);
             }
@@ -261,7 +306,7 @@ namespace SmartRoutes {
         /// <summary>
         ///   Looks up a localized string similar to NAFCC.
         /// </summary>
-        internal static string NAFCCName {
+        public static string NAFCCName {
             get {
                 return ResourceManager.GetString("NAFCCName", resourceCulture);
             }
@@ -270,7 +315,7 @@ namespace SmartRoutes {
         /// <summary>
         ///   Looks up a localized string similar to http://nafcc.org/.
         /// </summary>
-        internal static string NAFCCURL {
+        public static string NAFCCURL {
             get {
                 return ResourceManager.GetString("NAFCCURL", resourceCulture);
             }
@@ -279,7 +324,7 @@ namespace SmartRoutes {
         /// <summary>
         ///   Looks up a localized string similar to NECPA Description.
         /// </summary>
-        internal static string NECPADescription {
+        public static string NECPADescription {
             get {
                 return ResourceManager.GetString("NECPADescription", resourceCulture);
             }
@@ -288,7 +333,7 @@ namespace SmartRoutes {
         /// <summary>
         ///   Looks up a localized string similar to NECPA.
         /// </summary>
-        internal static string NECPAName {
+        public static string NECPAName {
             get {
                 return ResourceManager.GetString("NECPAName", resourceCulture);
             }
@@ -297,7 +342,7 @@ namespace SmartRoutes {
         /// <summary>
         ///   Looks up a localized string similar to http://www.necpa.net/.
         /// </summary>
-        internal static string NECPAURL {
+        public static string NECPAURL {
             get {
                 return ResourceManager.GetString("NECPAURL", resourceCulture);
             }
@@ -306,7 +351,7 @@ namespace SmartRoutes {
         /// <summary>
         ///   Looks up a localized string similar to Feedback.
         /// </summary>
-        internal static string portalTextFeedback {
+        public static string portalTextFeedback {
             get {
                 return ResourceManager.GetString("portalTextFeedback", resourceCulture);
             }
@@ -315,7 +360,7 @@ namespace SmartRoutes {
         /// <summary>
         ///   Looks up a localized string similar to Plan.
         /// </summary>
-        internal static string portalTextPlan {
+        public static string portalTextPlan {
             get {
                 return ResourceManager.GetString("portalTextPlan", resourceCulture);
             }
@@ -324,7 +369,7 @@ namespace SmartRoutes {
         /// <summary>
         ///   Looks up a localized string similar to Type A Home Description.
         /// </summary>
-        internal static string TypeAHomeDescription {
+        public static string TypeAHomeDescription {
             get {
                 return ResourceManager.GetString("TypeAHomeDescription", resourceCulture);
             }
@@ -333,7 +378,7 @@ namespace SmartRoutes {
         /// <summary>
         ///   Looks up a localized string similar to Type A.
         /// </summary>
-        internal static string TypeAHomeName {
+        public static string TypeAHomeName {
             get {
                 return ResourceManager.GetString("TypeAHomeName", resourceCulture);
             }
@@ -342,7 +387,7 @@ namespace SmartRoutes {
         /// <summary>
         ///   Looks up a localized string similar to Type B Home Description.
         /// </summary>
-        internal static string TypeBHomeDescription {
+        public static string TypeBHomeDescription {
             get {
                 return ResourceManager.GetString("TypeBHomeDescription", resourceCulture);
             }
@@ -351,7 +396,7 @@ namespace SmartRoutes {
         /// <summary>
         ///   Looks up a localized string similar to Type B.
         /// </summary>
-        internal static string TypeBHomeName {
+        public static string TypeBHomeName {
             get {
                 return ResourceManager.GetString("TypeBHomeName", resourceCulture);
             }
