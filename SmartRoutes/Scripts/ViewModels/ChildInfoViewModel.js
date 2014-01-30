@@ -7,7 +7,6 @@ function ChildInfoViewModel() {
     return {
         // Public
         name: ko.observable(""),
-        age: ko.observable(1),
-        gender: ko.observable("Male")
+        ageGroup: ko.observable("")
     };
 };

@@ -94,11 +94,11 @@ SmartRoutes.ChildInformationFormPageController = (function(pageID) {
 
         // Returns an array of objects containing the name, age, and gender
         // entered for the children.
-        GetChildInformation: function() {
+        GetChildInformationPayloads: function() {
             var childInformation = new Array();
 
             for (var childIndex = 0; childIndex < childCount; ++childIndex) {
-                childInformation.push({ name: value.name(), age: value.age(), gender: value.gender() });
+                childInformation.push(new SmartRoutes.Communication.ChildInformationPayload(value.name(), value.ageGroup()));
             }
 
             return childInformation;

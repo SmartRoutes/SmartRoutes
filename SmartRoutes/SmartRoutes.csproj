@@ -159,10 +159,8 @@
     <Content Include="Content\Views\GenericControls.css" />
     <Content Include="Content\Images\sample_map.png" />
     <Content Include="Scripts\Communication\Controllers\GuidedSearchCommunicationController.js" />
-    <Content Include="Scripts\Communication\Payloads\Objective.js" />
-    <Content Include="Scripts\Communication\Payloads\Query.js" />
-    <Content Include="Scripts\Communication\Payloads\RangeRequirement.js" />
-    <Content Include="Scripts\Communication\Payloads\Requirement.js" />
+    <Content Include="Scripts\Communication\Payloads\ChildCareSearchQueryPayload.js" />
+    <Content Include="Scripts\Communication\Payloads\ChildInformationPayload.js" />
     <Content Include="Scripts\Constants.js" />
     <Content Include="Scripts\ViewModels\AccreditationViewModel.js" />
     <Content Include="Scripts\ViewModels\ChildInfoViewModel.js" />
@@ -249,7 +247,7 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
+      <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
