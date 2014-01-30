@@ -42,14 +42,10 @@ SmartRoutes.ScheduleTypeFormPageController = (function(pageID) {
             return scheduleTypeFormPageID;
         },
 
-        GetScheduleTypeInformation: function() {
-            var scheduleType = {
-                dropOffChecked: scheduleTypeViewModel.dropOffChecked(),
-                pickUpChecked: scheduleTypeViewModel.pickUpChecked()
-            }
+        GetScheduleTypeInformationPayload: function() {
+            var payload = new SmartRoutes.Communication.ScheduleTypePayload(scheduleTypeViewModel.dropOffChecked(), scheduleTypeViewModel.pickUpChecked());
 
-            return scheduleType;
+            return payload;
         }
     };
-
 });

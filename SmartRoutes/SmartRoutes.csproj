@@ -161,6 +161,7 @@
     <Content Include="Scripts\Communication\Controllers\GuidedSearchCommunicationController.js" />
     <Content Include="Scripts\Communication\Payloads\ChildCareSearchQueryPayload.js" />
     <Content Include="Scripts\Communication\Payloads\ChildInformationPayload.js" />
+    <Content Include="Scripts\Communication\Payloads\ScheduleTypePayload.js" />
     <Content Include="Scripts\Constants.js" />
     <Content Include="Scripts\ViewModels\AccreditationViewModel.js" />
     <Content Include="Scripts\ViewModels\ChildInfoViewModel.js" />

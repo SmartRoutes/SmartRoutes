@@ -1,8 +1,9 @@
 ﻿
 
-SmartRoutes.Communication.ChildCareSearchQueryPayload = function(childInformationArray) {
+SmartRoutes.Communication.ChildCareSearchQueryPayload = function(childInformationPayload, scheduleTypePayload) {
 
     return {
-        childInformation: childInformationArray
+        childInformation: childInformationPayload,
+        scheduleType: scheduleTypePayload
     };
 };
