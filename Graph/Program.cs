@@ -70,87 +70,33 @@ namespace SmartRoutes.Graph
                 // have to be at work by 10:30 am
                 var atWorkBy = new DateTime(1970, 1, 1, 10, 30, 0);
 
+                // find child cares close to home, choose names from them
+                Func<Destination, double> ordering = node => node.GetL1DistanceInFeet(homeLocation);
+                var closeChildCares = srdsCollection.Destinations.OrderBy(ordering);
+
                 // child care selected by name, since properties are not implemented yet
-                const string childCareName = "ANOINTED HANDS LEARNING CENTER";
+                const string childCareName1 = "ANOINTED HANDS LEARNING CENTER";
+                const string childCareName2 = "DIVINE DAY CARE CENTER, INC. II";
 
-                Console.WriteLine("getting workNodes.");
-                // search starts at work, going backwards
-                var workNodes = graph.GetClosestGtfsNodes(workLocation, atWorkBy, TimeDirection.Backwards);
+                Func<Destination, bool> Criteria1 = dest => dest.Name == childCareName1;
+                Func<Destination, bool> Criteria2 = dest => dest.Name == childCareName2;
 
-                // since we don't have properties on our location nodes yet, let's just filter by name.
-                // this returns two results (apparently there are two child cares with this name)
-                Func<INode, bool> goalCheck = node =>
-                {
-                    var nodeAsChildCare = node as DestinationNode;
-                    if (nodeAsChildCare != null)
-                    {
-                        return nodeAsChildCare.Name == childCareName;
-                    }
-                    return false;
-                };
+                var Criterion = new[] { Criteria1, Criteria2 };
 
-                Console.WriteLine("getting workToChildCareResults.");
-                var workToChildCareResults = ExtensionMethods.Dijkstras(workNodes, goalCheck, TimeDirection.Backwards);
-
-                Console.WriteLine("getting closeToHomeNodes.");
-                // First step, find which bus stop is closest to my house, and set that as destination
-                var closeToHomeNodes = graph.GetClosestGtfsNodes(homeLocation, workToChildCareResults.First().node.Time, TimeDirection.Backwards);
-
-                Func<INode, bool> goalCheck2 = node =>
-                {
-                    var nodeAsGtfsNode = node as IGtfsNode;
-                    if (nodeAsGtfsNode != null)
-                    {
-                        bool match = false;
-                        foreach (var n in closeToHomeNodes)
-                        {
-                            if (nodeAsGtfsNode.StopId == n.StopId)
-                            {
-                                match = true;
-                                break;
-                            }
-                        }
-                        return match;
-                    }
-                    return false;
-                };
-
-                // now for each child care result, we find our way home.
-                var finalResults = new List<NodeInfo>();
-                var result = workToChildCareResults.First();
-
-                Console.WriteLine("getting startNodes.");
-                //var startNodes = graph.GetDestinationNeighbors((IDestinationNode)result.node, TimeDirection.Backwards);
-                var startNodes = graph.GetClosestGtfsNodes(result.node, result.node.Time, TimeDirection.Backwards);
-
-                Console.WriteLine("getting resultList.");
-                var resultList = ExtensionMethods.Dijkstras(
-                    startNodes,
-                    goalCheck2,
-                    TimeDirection.Backwards);
-
-                var result2 = resultList.First();
-
-                Console.WriteLine("stitching results.");
-                // we want to stich together the two routes to make one resulting route
-                var current = result2;
-                while (current.parent != null) current = current.parent;
-                current.parent = result;
-
-                finalResults.Add(result2);
+                var results = graph.Search(workLocation, homeLocation, atWorkBy, TimeDirection.Backwards, Criterion);
 
                 toc = DateTime.Now;
                 Console.WriteLine("Route found in in {0} milliseconds.",
                     (toc - tic).TotalMilliseconds);
 
+                var current = results.First();
                 Console.WriteLine("Displaying Route.");
-                current = finalResults.First();
                 while (current != null)
                 {
                     var gtfsCurrent = current.node as IGtfsNode;
                     if (gtfsCurrent != null)
                     {
-                        Console.WriteLine("{0} -- {1} <Trip {2}> <Route {3}>", current.node.Name, current.node.Time, gtfsCurrent.TripId, gtfsCurrent.RouteId);
+                        Console.WriteLine("{0} -- {1} <Trip {2}> <Route {3}>", current.node.Name, current.node.Time, gtfsCurrent.TripId, gtfsCurrent.stopTime.Trip.Route.ShortName);
                     }
                     else
                     {

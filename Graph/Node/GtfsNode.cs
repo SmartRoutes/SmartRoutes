@@ -9,13 +9,14 @@ namespace SmartRoutes.Graph.Node
 {
     public class GtfsNode : IGtfsNode
     {
+        public StopTime stopTime { get; private set; }
         public DateTime Time { get; private set; }
         public NodeBase BaseNode { get; private set; }
-        public int StopId { get; private set; }
-        public int TripId { get; private set; }
-        public int Sequence { get; private set; }
-        public int RouteId { get; private set; }
-        public int? BlockId { get; private set; }
+        public int StopId { get { return stopTime.StopId; } }
+        public int TripId { get { return stopTime.TripId; } }
+        public int Sequence { get { return stopTime.Sequence; } }
+        public int RouteId { get { return stopTime.Trip.RouteId; } }
+        public int? BlockId { get { return stopTime.Trip.BlockId; } }
         public ISet<INode> TimeBackwardNeighbors { get; private set; }
         public ISet<INode> TimeForwardNeighbors { get; private set; }
 
@@ -26,13 +27,9 @@ namespace SmartRoutes.Graph.Node
 
         public GtfsNode(StopTime stopTime, NodeBase baseNode)
         {
+            this.stopTime = stopTime;
             this.BaseNode = baseNode;
             Time = stopTime.ArrivalTime;
-            StopId = stopTime.StopId;
-            TripId = stopTime.TripId;
-            RouteId = stopTime.Trip.RouteId;
-            BlockId = stopTime.Trip.BlockId;
-            Sequence = stopTime.Sequence;
             TimeBackwardNeighbors = new HashSet<INode>();
             TimeForwardNeighbors = new HashSet<INode>();
         }

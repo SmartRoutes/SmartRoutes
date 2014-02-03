@@ -6,14 +6,16 @@ namespace SmartRoutes.Graph.Node
 {
     public class DestinationNode : IDestinationNode
     {
-        public DestinationNode(IDestination destination, DateTime time, NodeBase baseNode)
+        public DestinationNode(Destination destination, DateTime time, NodeBase baseNode)
         {
+            this.destination = destination;
             BaseNode = baseNode;
             Time = time;
             TimeBackwardNeighbors = new HashSet<INode>();
             TimeForwardNeighbors = new HashSet<INode>();
         }
 
+        public Destination destination { get; private set; }
         public DateTime Time { get; private set; }
         public NodeBase BaseNode { get; private set; }
         public ISet<INode> TimeBackwardNeighbors { get; private set; }
@@ -22,17 +24,17 @@ namespace SmartRoutes.Graph.Node
         // legacy properties
         public string Name
         {
-            get { return BaseNode.Name; }
+            get { return destination.Name; }
         }
 
         public double Latitude
         {
-            get { return BaseNode.Latitude; }
+            get { return destination.Latitude; }
         }
 
         public double Longitude
         {
-            get { return BaseNode.Longitude; }
+            get { return destination.Longitude; }
         }
     }
 }

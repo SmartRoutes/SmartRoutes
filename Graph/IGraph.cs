@@ -7,13 +7,14 @@ using SmartRoutes.Graph.Node;
 using SmartRoutes.Heap;
 using SmartRoutes.Model;
 using SmartRoutes.Model.Gtfs;
+using SmartRoutes.Model.Srds;
 
 namespace SmartRoutes.Graph
 {
     public interface IGraph
     {
         INode[] GraphNodes { get; }
-        IEnumerable<IGtfsNode> GetClosestGtfsNodes(ILocation location, DateTime time, TimeDirection direction);
-        IEnumerable<IGtfsNode> GetDestinationNeighbors(IDestinationNode destinationNode, TimeDirection direction);
+        IEnumerable<NodeInfo> Search(ILocation StartLocation, ILocation EndLocation,
+            DateTime StartTime, TimeDirection Direction, IEnumerable<Func<Destination, bool>> Criterion);
     }
 }
