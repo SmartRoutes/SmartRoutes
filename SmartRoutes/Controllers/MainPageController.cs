@@ -34,8 +34,8 @@ namespace SmartRoutes.Controllers
         public ActionResult PortalView()
         {
             PortalViewModel portalViewModel = new PortalViewModel("sr-portal-view-main-page");
-            portalViewModel.AddButtonModel(new PortalButtonModel(Resources.portalTextPlan, "", "sr-portal-button-plan"));
-            portalViewModel.AddButtonModel(new PortalButtonModel(Resources.portalTextFeedback, "", "sr-portal-button-feedback"));
+            portalViewModel.AddButtonModel(new PortalButtonModel(Resources.portalTextPlan, "#/search", "sr-portal-button-plan"));
+            portalViewModel.AddButtonModel(new PortalButtonModel(Resources.portalTextFeedback, "#/feedback", "sr-portal-button-feedback"));
 
             return PartialView("_PortalView", portalViewModel);
         }

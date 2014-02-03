@@ -6,6 +6,8 @@ using Ninject.Extensions.Conventions;
 using SmartRoutes.Graph.Node;
 using SmartRoutes.Model;
 using SmartRoutes.Model.Gtfs;
+using SmartRoutes.Model.Srds;
+using SmartRoutes.Reader.Readers;
 
 namespace SmartRoutes.Graph
 {
@@ -24,14 +26,33 @@ namespace SmartRoutes.Graph
                 IKernel kernel = new StandardKernel(new GraphModule());
 
                 kernel.Bind(c => c
-                    .FromAssemblyContaining(typeof(GtfsCollection))
+                    .FromAssemblyContaining(typeof(GtfsCollection), typeof(IEntityCollectionDownloader<,>))
                     .SelectAllClasses()
                     .BindAllInterfaces());
 
-                Console.WriteLine("Creating Graph.");
+                /********************************************************************************************
+                ******************* Fetch the data from the database and build the graph ********************
+                ********************************************************************************************/
+
+                Console.WriteLine("Fetching the GTFS data from the web.");
                 DateTime tic = DateTime.Now;
-                var graph = kernel.Get<IGraph>();
+                var gtfsFetcher = kernel.Get<IEntityCollectionDownloader<GtfsArchive, GtfsCollection>>();
+                var gtfsCollection = gtfsFetcher.Download(new Uri("http://www.go-metro.com/uploads/GTFS/google_transit_info.zip"), null).Result;
                 DateTime toc = DateTime.Now;
+                Console.WriteLine("GTFS data fetched in {0} milliseconds.", (toc - tic).TotalMilliseconds);
+                
+                Console.WriteLine("Fetching the destination data from the web.");
+                tic = DateTime.Now;
+                var srdsFetcher = kernel.Get<IEntityCollectionDownloader<SrdsArchive, SrdsCollection>>();
+                var srdsCollection = srdsFetcher.Download(new Uri(SRDS_URL), null).Result;
+                toc = DateTime.Now;
+                Console.WriteLine("Destination data fetched in {0} milliseconds.", (toc - tic).TotalMilliseconds);
+
+                Console.WriteLine("Creating Graph.");
+                tic = DateTime.Now;
+                var graphBuilder = kernel.Get<IGraphBuilder>();
+                var graph = graphBuilder.BuildGraph(gtfsCollection.StopTimes, srdsCollection.Destinations, GraphBuilderSettings.Default);
+                toc = DateTime.Now;
                 Console.WriteLine("Graph created in {0} milliseconds.", (toc - tic).TotalMilliseconds);
                 Console.WriteLine("Finding route...");
                 tic = DateTime.Now;
@@ -41,89 +62,104 @@ namespace SmartRoutes.Graph
                 ********************************************************************************************/
                                 
                 // starting at my address
-                Location HomeLocation = new Location { Latitude = 39.122309, Longitude = -84.507639 };
+                var homeLocation = new Location { Latitude = 39.122309, Longitude = -84.507639 };
 
                 // ending at the college of engineering
-                Location WorkLocation = new Location { Latitude = 39.133292, Longitude = -84.515099 };
+                var workLocation = new Location { Latitude = 39.133292, Longitude = -84.515099 };
 
-                double wut = HomeLocation.GetL1DistanceInFeet(WorkLocation);
                 // have to be at work by 10:30 am
-                DateTime AtWorkBy = new DateTime(1970, 1, 1, 10, 30, 0);
-
-                
+                var atWorkBy = new DateTime(1970, 1, 1, 10, 30, 0);
 
                 // child care selected by name, since properties are not implemented yet
-                string ChildCareName = "ANOINTED HANDS LEARNING CENTER";
+                const string childCareName = "ANOINTED HANDS LEARNING CENTER";
 
+                Console.WriteLine("getting workNodes.");
                 // search starts at work, going backwards
-                var StartNode = graph.closestMetroNode(WorkLocation, AtWorkBy, TimeDirection.Backwards);
+                var workNodes = graph.GetClosestGtfsNodes(workLocation, atWorkBy, TimeDirection.Backwards);
 
                 // since we don't have properties on our location nodes yet, let's just filter by name.
                 // this returns two results (apparently there are two child cares with this name)
-                Func<INode, bool> GoalCheck = node =>
+                Func<INode, bool> goalCheck = node =>
                 {
                     var nodeAsChildCare = node as DestinationNode;
                     if (nodeAsChildCare != null)
                     {
-                        return nodeAsChildCare.Name == ChildCareName;
+                        return nodeAsChildCare.Name == childCareName;
                     }
-                    else
-                    {
-                        return false;
-                    }
+                    return false;
                 };
 
-                var WorkToChildCareResults = ExtensionMethods.Dijkstras(new INode[] { StartNode }, GoalCheck, TimeDirection.Backwards);
+                Console.WriteLine("getting workToChildCareResults.");
+                var workToChildCareResults = ExtensionMethods.Dijkstras(workNodes, goalCheck, TimeDirection.Backwards);
 
+                Console.WriteLine("getting closeToHomeNodes.");
                 // First step, find which bus stop is closest to my house, and set that as destination
-                var CloseToHomeStop = graph.closestMetroStop(HomeLocation);
+                var closeToHomeNodes = graph.GetClosestGtfsNodes(homeLocation, workToChildCareResults.First().node.Time, TimeDirection.Backwards);
 
-                Func<INode, bool> GoalCheck2 = node =>
+                Func<INode, bool> goalCheck2 = node =>
                 {
-                    var nodeAsMetroNode = node as IGtfsNode;
-                    if (nodeAsMetroNode != null)
+                    var nodeAsGtfsNode = node as IGtfsNode;
+                    if (nodeAsGtfsNode != null)
                     {
-                        return nodeAsMetroNode.StopID == CloseToHomeStop.Id;
+                        bool match = false;
+                        foreach (var n in closeToHomeNodes)
+                        {
+                            if (nodeAsGtfsNode.StopId == n.StopId)
+                            {
+                                match = true;
+                                break;
+                            }
+                        }
+                        return match;
                     }
-                    else
-                    {
-                        return false;
-                    }
+                    return false;
                 };
 
                 // now for each child care result, we find our way home.
-                List<NodeInfo> FinalResults = new List<NodeInfo>();
+                var finalResults = new List<NodeInfo>();
+                var result = workToChildCareResults.First();
 
-                foreach (var result in WorkToChildCareResults)
-                {
-                    var StartNodes = graph.GetChildCareNeighbors((IDestinationNode)result.node, TimeDirection.Backwards);
-                    var resultList = ExtensionMethods.Dijkstras(
-                        StartNodes, 
-                        GoalCheck2, 
-                        TimeDirection.Backwards);
+                Console.WriteLine("getting startNodes.");
+                //var startNodes = graph.GetDestinationNeighbors((IDestinationNode)result.node, TimeDirection.Backwards);
+                var startNodes = graph.GetClosestGtfsNodes(result.node, result.node.Time, TimeDirection.Backwards);
 
-                    var result2 = resultList.First();
+                Console.WriteLine("getting resultList.");
+                var resultList = ExtensionMethods.Dijkstras(
+                    startNodes,
+                    goalCheck2,
+                    TimeDirection.Backwards);
 
-                    // we want to stich together the two routes to make one resulting route
-                    var current = result2;
-                    while (current.parent != null) current = current.parent;
-                    current.parent = result;
+                var result2 = resultList.First();
 
-                    FinalResults.Add(result2);
-                }
+                Console.WriteLine("stitching results.");
+                // we want to stich together the two routes to make one resulting route
+                var current = result2;
+                while (current.parent != null) current = current.parent;
+                current.parent = result;
+
+                finalResults.Add(result2);
 
                 toc = DateTime.Now;
                 Console.WriteLine("Route found in in {0} milliseconds.",
                     (toc - tic).TotalMilliseconds);
 
                 Console.WriteLine("Displaying Route.");
-                var Current = FinalResults.First();
-                
-                while (Current != null)
+                current = finalResults.First();
+                while (current != null)
                 {
-                    Console.WriteLine("{0} -- {1}", Current.node.Name, Current.node.Time);
-                    Current = Current.parent;
+                    var gtfsCurrent = current.node as IGtfsNode;
+                    if (gtfsCurrent != null)
+                    {
+                        Console.WriteLine("{0} -- {1} <Trip {2}> <Route {3}>", current.node.Name, current.node.Time, gtfsCurrent.TripId, gtfsCurrent.RouteId);
+                    }
+                    else
+                    {
+                        Console.WriteLine("{0} -- {1}", current.node.Name, current.node.Time);
+                    }
+                    current = current.parent;
                 }
+
+                Console.WriteLine("fin");
 
 
 

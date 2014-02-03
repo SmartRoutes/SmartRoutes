@@ -1,159 +1,92 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Data.Entity;
-using SmartRoutes.Database;
 using SmartRoutes.Graph.Node;
 using SmartRoutes.Model.Gtfs;
-using SmartRoutes.Heap;
 using SmartRoutes.Model;
-using SmartRoutes.Model.Srds;
 
 namespace SmartRoutes.Graph
 {
     public class Graph : IGraph
     {
-        private readonly IGraphBuilder Builder;
-        private GtfsCollection GtfsCollection;
-        private SrdsCollection SrdsCollection;
+        private readonly Stop[] _stops;
         public INode[] GraphNodes { get; private set; }
+        private readonly GraphBuilderSettings _settings;
+        private readonly IDictionary<int, List<IGtfsNode>> _stopToNodes;
 
-        public Graph(IGraphBuilder Builder, IFibonacciHeap<INode, TimeSpan> Queue)
+        public Graph(IEnumerable<Stop> stops, IDictionary<int, List<IGtfsNode>> stopToNodes, IEnumerable<INode> nodes, GraphBuilderSettings settings)
         {
-            this.Builder = Builder;
-            GetGtfsEntities();
-            GetDestinations();
-            GraphNodes = Builder.BuildGraph(GtfsCollection.StopTimes, SrdsCollection.Destinations);
+            _stops = stops.ToArray();
+            _stopToNodes = stopToNodes;
+            GraphNodes = nodes.ToArray();
+            _settings = settings;
         }
 
-        public void GetDestinations()
+        public IEnumerable<IGtfsNode> GetClosestGtfsNodes(ILocation location, DateTime time, TimeDirection direction)
         {
-            SrdsCollection = new SrdsCollection();
+            Func<Stop, double> stopDistanceOrdering = s => s.GetL1DistanceInFeet(location);
+            Func<Stop, bool> stopDistanceFilter = s => s.GetL1DistanceInFeet(location) < _settings.MaxFeetFromDestinationToStop;
 
-            using (var ctx = new Entities())
+            Func<IGtfsNode, TimeSpan> walkingTime = n =>
             {
-                SrdsCollection.AttributeValues = (from e in ctx.AttributeValues select e).ToArray();
-                SrdsCollection.Destinations = (from e in ctx.Destinations select e).ToArray();
-                SrdsCollection.AttributeKeys = (from e in ctx.AttributeKeys select e).ToArray();
-            }
-        }
+                double distance = n.GetL1DistanceInFeet(location);
+                return TimeSpan.FromSeconds(distance / _settings.WalkingFeetPerSecond);
+            };
 
-        public void GetGtfsEntities()
-        {
-            GtfsCollection = new GtfsCollection();
+            Func<IGtfsNode, bool> nodeTimeFilter;
 
-            using (var ctx = new Entities())
+            if (direction == TimeDirection.Forwards)
             {
-                GtfsCollection.StopTimes = (from e in ctx.StopTimes select e).ToArray();
-                GtfsCollection.Stops = (from e in ctx.Stops select e).ToArray();
-                GtfsCollection.Routes = (from e in ctx.Routes select e).ToArray();
-                GtfsCollection.Shapes = (from e in ctx.Shapes select e).ToArray();
-                GtfsCollection.ShapePoints = (from e in ctx.ShapePoints select e).ToArray();
-                GtfsCollection.Blocks = (from e in ctx.Blocks select e).ToArray();
-                GtfsCollection.Agencies = (from e in ctx.Agencies select e).ToArray();
-                GtfsCollection.Archive = ctx.GtfsArchives.OrderBy(e => e.LoadedOn).FirstOrDefault();
-                GtfsCollection.Trips = (from e in ctx.Trips select e).ToArray();
-                GtfsCollection.ServiceExceptions = (from e in ctx.ServiceExceptions select e).ToArray();
-                GtfsCollection.Services = (from e in ctx.Services select e).ToArray();
-                GtfsCollection.ContainsEntities = true;
-            }
-        }
-
-        public Stop closestMetroStop(ILocation location)
-        {
-            double minDistance = double.MaxValue;
-            Stop closestStop = null;
-
-            foreach (var stop in GtfsCollection.Stops)
-            {
-                double Distance = location.GetL1DistanceInFeet(stop);
-
-                if (Distance < minDistance)
-                {
-                    minDistance = Distance;
-                    closestStop = stop;
-                }
-            }
-
-            if (closestStop == null)
-            {
-                throw new Exception("Closest stop to given location not found.");
-            }
-
-            return closestStop;
-        }
-
-        public IGtfsNode closestMetroNode(ILocation location, DateTime Time, TimeDirection Direction)
-        {
-            Stop closestStop = closestMetroStop(location);
-
-            // retrieve metronodes corresponding to this stop
-            List<IGtfsNode> nodes = null;
-            if (!Builder.StopToNodes.TryGetValue(closestStop.Id, out nodes))
-            {
-                throw new Exception("Failed to find metro nodes associated with closest stop.");
-            }
-
-            double distance = closestStop.GetL1DistanceInFeet(location);
-            double walkingTime = distance / Builder.Settings.WalkingFeetPerSecond;
-            
-            // sort nodes by increasing time;
-            var nodesArray = nodes.ToArray();
-            Array.Sort(nodesArray, new Comparers.ComparerForTransferSorting());
-            IGtfsNode returnNode = null;
-
-            if (Direction == TimeDirection.Forwards)
-            {
-                DateTime TimeThreshhold = Time + TimeSpan.FromSeconds(walkingTime);
-                foreach (var node in nodesArray)
-                {
-                    if (node.Time >= TimeThreshhold)
-                    {
-                        returnNode = node;
-                        break;
-                    }
-                }
+                nodeTimeFilter = n => n.Time - walkingTime(n) >= time;
             }
             else
             {
-                DateTime TimeThreshhold = Time - TimeSpan.FromSeconds(walkingTime);
-                for (int i = nodesArray.Count() - 1; i >= 0; i--)
-                {
-                    if (nodesArray[i].Time <= TimeThreshhold)
-                    {
-                        returnNode = nodesArray[i];
-                        break;
-                    }
-                }
+                nodeTimeFilter = n => n.Time + walkingTime(n) <= time;
             }
 
-            if (returnNode == null)
+            var closeStops = _stops.Where(stopDistanceFilter).OrderBy(stopDistanceOrdering);
+
+            var closeNodes = closeStops.SelectMany(s =>
             {
-                throw new Exception("Failed to find nearby metro node.");
+                List<IGtfsNode> relatedNodes = null;
+                _stopToNodes.TryGetValue(s.Id, out relatedNodes);
+                return relatedNodes;
+            }).Where(nodeTimeFilter);
+
+            IEnumerable<IGtfsNode> orderedCloseNodes;
+            if (direction == TimeDirection.Forwards)
+            {
+                orderedCloseNodes = closeNodes.OrderBy(n => n.Time + walkingTime(n));
+            }
+            else
+            {
+                orderedCloseNodes = closeNodes.OrderByDescending(n => n.Time - walkingTime(n));
             }
 
-            return returnNode;
+            // return the closest node from each (RouteId, BlockId) group
+            var returnVal = orderedCloseNodes.GroupBy(n => new Tuple<int, int?>(n.RouteId, n.BlockId)).Select(g => g.First());
+            return returnVal.ToArray();
         }
 
-        public List<IGtfsNode> GetChildCareNeighbors(IDestinationNode childCareNode, TimeDirection Direction)
+        public IEnumerable<IGtfsNode> GetDestinationNeighbors(IDestinationNode destinationNode, TimeDirection direction)
         {
-            List<NodeBase> UniqueNodeBases = new List<NodeBase>();
-            List<IGtfsNode> ReturnNodes = new List<IGtfsNode>();
+            var uniqueNodeBases = new List<NodeBase>();
+            var returnNodes = new List<IGtfsNode>();
 
-            var current = childCareNode;
+            var current = destinationNode;
             bool done = false;
             while (!done)
             {
-                var neighbors = (Direction == TimeDirection.Backwards)
+                var neighbors = (direction == TimeDirection.Backwards)
                     ? current.TimeBackwardNeighbors
                     : current.TimeForwardNeighbors;
 
                 foreach (var neighbor in neighbors.OfType<IGtfsNode>())
                 {
-                    if (!UniqueNodeBases.Contains(neighbor.BaseNode))
+                    if (!uniqueNodeBases.Contains(neighbor.BaseNode))
                     {
-                        UniqueNodeBases.Add(neighbor.BaseNode);
-                        ReturnNodes.Add(neighbor);
+                        uniqueNodeBases.Add(neighbor.BaseNode);
+                        returnNodes.Add(neighbor);
                     }
                 }
 
@@ -170,7 +103,14 @@ namespace SmartRoutes.Graph
                 }
             }
 
-            return ReturnNodes;
+            return returnNodes;
         }
+
+        public IEnumerable<NodeInfo> Search(ILocation StartLocation, ILocation EndLocation, 
+            DateTime StartTime, TimeDirection Direction, IEnumerable<Func<INode, bool>> GoalChecks)
+        {
+            return null;
+        }
+
     }
 }

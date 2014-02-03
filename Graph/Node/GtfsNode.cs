@@ -11,9 +11,11 @@ namespace SmartRoutes.Graph.Node
     {
         public DateTime Time { get; private set; }
         public NodeBase BaseNode { get; private set; }
-        public int StopID { get; private set; }
-        public int TripID { get; private set; }
+        public int StopId { get; private set; }
+        public int TripId { get; private set; }
         public int Sequence { get; private set; }
+        public int RouteId { get; private set; }
+        public int? BlockId { get; private set; }
         public ISet<INode> TimeBackwardNeighbors { get; private set; }
         public ISet<INode> TimeForwardNeighbors { get; private set; }
 
@@ -22,12 +24,14 @@ namespace SmartRoutes.Graph.Node
         public double Latitude { get { return BaseNode.Latitude; } }
         public double Longitude { get { return BaseNode.Longitude; } }
 
-        public GtfsNode(StopTime stopTime, NodeBase BaseNode)
+        public GtfsNode(StopTime stopTime, NodeBase baseNode)
         {
-            this.BaseNode = BaseNode;
+            this.BaseNode = baseNode;
             Time = stopTime.ArrivalTime;
-            StopID = stopTime.StopId;
-            TripID = stopTime.TripId;
+            StopId = stopTime.StopId;
+            TripId = stopTime.TripId;
+            RouteId = stopTime.Trip.RouteId;
+            BlockId = stopTime.Trip.BlockId;
             Sequence = stopTime.Sequence;
             TimeBackwardNeighbors = new HashSet<INode>();
             TimeForwardNeighbors = new HashSet<INode>();

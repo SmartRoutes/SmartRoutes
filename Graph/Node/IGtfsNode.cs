@@ -1,18 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using SmartRoutes.Model.Gtfs;
+﻿using SmartRoutes.Model.Gtfs;
 
 namespace SmartRoutes.Graph.Node
 {
     public interface IGtfsNode : INode
     {
-        int StopID { get; }
-        int TripID { get; }
+        int StopId { get; }
+        int TripId { get; }
         int Sequence { get; }
+        int RouteId { get; }
+        int? BlockId { get; }
 
-        IGtfsNode CreateGtfsNode(StopTime stopTime, NodeBase Node);
+        IGtfsNode CreateGtfsNode(StopTime stopTime, NodeBase node);
     }
 }

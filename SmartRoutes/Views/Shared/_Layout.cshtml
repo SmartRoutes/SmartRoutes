@@ -5,18 +5,25 @@
     <meta name="viewport" content="width=device-width" />
     <title>@ViewBag.Title</title>
     @Styles.Render("~/Content/css")
-    @Scripts.Render("~/bundles/modernizr")
 </head>
 <body>
     <div id="sr-background">
-        @Html.Partial("_TopBannerView")
+        <div class="container">
+            <div class="row">
+                @Html.Partial("_TopBannerView")
+            </div>
 
-        @RenderBody()
+            @RenderBody()
 
-        @Html.Partial("_BottomBannerView")
+            <div class="row">
+                @Html.Partial("_BottomBannerView")
+            </div>
+        </div>
     </div>
 
     @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/knockout")
+    @Scripts.Render("~/bundles/routing")
     @Scripts.Render("~/bundles/smartroutes")
 </body>
 </html>

@@ -3,7 +3,7 @@ using System.Collections.ObjectModel;
 
 namespace SmartRoutes.Model.Srds
 {
-    public class Destination : ILocation
+    public class Destination : IDestination
     {
         private ICollection<AttributeValue> _attributeValues;
 

@@ -3,24 +3,26 @@
 
 
 <div class="sr-page-view" id="sr-main-page-view">
-    <div class="sr-float-container">
-        <!--Portal links-->
-        @{
-            Html.RenderAction("PortalView");
-        }
+    <div class="row">
+        <div class="col-lg-2">
+            @{
+                Html.RenderAction("PortalView");
+            }
+        </div>
 
-        <!--Description-->
-        @{
-            Html.RenderAction("DescriptionView");
-        }
+        <div class="col-lg-5">
+            <!--Description-->
+            @{
+                Html.RenderAction("DescriptionView");
+            }
+        </div>
 
-        <!--Map-->
-        @{
-            Html.RenderAction("SampleMapView");
-        }
-
-        <!--Clear both sides here because this is a float container.-->
-        <div style="clear:both;"></div>
+        <div class="col-lg-5">
+            <!--Map-->
+            @{
+                Html.RenderAction("SampleMapView");
+            }
+        </div>
     </div>
 
 </div>

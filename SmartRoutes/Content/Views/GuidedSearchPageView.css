@@ -1,0 +1,85 @@
+﻿
+
+/* Breadcrumb styling. */
+#sr-breadcrumb-content {
+    background-color: #1049a9;
+}
+
+.sr-list-spacer {
+    height: 20px;
+    background-color: #1049a9;
+}
+
+#sr-breadcrumb-list {
+
+}
+
+.sr-breadcrumb-list-element {
+    margin-bottom: 20px;
+    color: white;
+}
+
+.sr-breadcrumb-list-element:last-of-type {
+    margin-bottom: 0;
+}
+
+.sr-breadcrumb-link {
+    color: white;
+}
+
+/* Search form styling. */
+#sr-guided-search-form-view {
+    background-color: white;
+}
+
+.sr-form-page {
+}
+
+
+/* Child info form page styling. */
+.sr-child-info-view {
+    display: none;
+}
+
+.sr-child-info-view:first-of-type {
+    display: block;
+}
+
+.sr-child-info-view:last-of-type > .sr-child-info-section-separator {
+    display: none;
+}
+
+.sr-child-info-separator {
+    color: black;
+    background-color: black;
+    border-color: black;
+}
+
+.sr-collapse-button {
+    display: none;
+}
+
+/* Schedule type form page styling. */
+#sr-schedule-type-form-page-view {
+    display: none;
+}
+
+/* Locations and times form page styling. */
+
+#sr-location-time-form-page-view {
+    display: none;
+}
+
+.sr-location-time-section {
+    display: none;
+}
+
+/* Page view styling. */
+
+#sr-guided-search-page-view {
+    display: none;
+}
+
+.sr-search-page-title {
+
+}
