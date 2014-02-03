@@ -91,6 +91,7 @@
     <Compile Include="Node\DestinationNode.cs" />
     <Compile Include="Node\IDestinationNode.cs" />
     <Compile Include="Node\IGtfsNode.cs" />
+    <Compile Include="Node\LocationGoalNode.cs" />
     <Compile Include="Node\NodeBase.cs" />
     <Compile Include="Node\INode.cs" />
     <Compile Include="Node\GtfsNode.cs" />
