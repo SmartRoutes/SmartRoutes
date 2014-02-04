@@ -7,6 +7,7 @@ SmartRoutes.GuidedSearchViewController = (function() {
     var formPageSammyApp = null;
     var activePageElement = null;
     var activePageController = null;
+    var formPageFadeInTimeMS = 300;
 
     var buttonIDs = {
         nextButton: "sr-guided-search-button-next",
@@ -27,8 +28,9 @@ SmartRoutes.GuidedSearchViewController = (function() {
         "sr-schedule-type-form-page-view": "#/search/scheduletype",
         "sr-location-time-form-page-view": "#/search/locationsandtimes",
         "sr-accreditation-form-page-view": "#/search/accreditation",
-        "sr-service-type-form-page-view": "#/sereach/servicetype"
+        "sr-service-type-form-page-view": "#/search/servicetype"
     }
+
     var childInformationFormPageController = null;
     var scheduleTypeFormPageController = null;
     var locationAndTimeFormPageController = null;
@@ -52,53 +54,75 @@ SmartRoutes.GuidedSearchViewController = (function() {
             // Anywhere else just needs to navigate to #/search.
             // This controller will navigate to the correct sub-route.
             formPageSammyApp.setLocation(pageIDRouteMap[pageIDs.childInformationPageID]);
+
+            // Show the next navigation button.
+            $("#" + buttonIDs.nextButton).show();
+        }
+    };
+
+    // Transitions from the current page to the page controlled by the new controller.
+    // Additional arguments are passed to the new controller's RunPage function.
+    function TransitionPages(currentPageController, newPageController) {
+        RedirectToFirstPageIfFirstTimeVisiting();
+
+        activePageController.StopPage();
+
+        $(".sr-form-page").hide();
+        $("#" + newPageController.GetFormPageID()).fadeIn(formPageFadeInTimeMS);
+
+        activePageController = newPageController;
+        activePageElement = $("#" + activePageController.GetFormPageID());
+
+        var args = Array.prototype.slice.call(arguments);
+        var remainingArgs = args.slice(2);
+
+        // Pass the remaining arguments into the new active page.
+        activePageController["RunPage"].apply(activePageController, remainingArgs);
+
+        // Setup the navigation buttons based on the active page.
+        var nextPages = $(activePageElement).next(".sr-form-page");
+
+        if (nextPages.length === 0) {
+            // No remaining pages, change the next button text.
+            $("#" + buttonIDs.nextButton).text("Search");
+        }
+        else {
+            // The next button should indicate moving to the next page.
+            $("#" + buttonIDs.nextButton).text("Next >");
+        }
+
+        // Setup the previous button.
+        var previousPages = $(activePageElement).prev(".sr-form-page");
+        if (previousPages.length === 0) {
+            // No previous page.
+            $("#" + buttonIDs.previousButton).hide();
+        }
+        else {
+            $("#" + buttonIDs.previousButton).show();
         }
     };
 
     var InitPageSubroutes = function() {
         formPageSammyApp = $.sammy(function() {
-            // TODO: Validation should be handled when the Next button is clicked.
-            // However, we also need to prevent navigating directly to a URL.
-            // If the navigation wasn't done with the Next button, it might make sense
-            // to simply dump the user back on the first search form page?
-
             this.get(pageIDRouteMap[pageIDs.childInformationPageID], function() {
-                RedirectToFirstPageIfFirstTimeVisiting();
-
-                activePageController.StopPage();
-                $(".sr-form-page").hide();
-                activePageController = childInformationFormPageController;
-                activePageController.RunPage();
+                TransitionPages(activePageController, childInformationFormPageController, PageValidationCallbackHandler);
             });
 
             this.get(pageIDRouteMap[pageIDs.scheduleTypePageID], function() {
-                RedirectToFirstPageIfFirstTimeVisiting();
-
-                activePageController.StopPage();
-                $(".sr-form-page").hide();
-                activePageController = scheduleTypeFormPageController;
-                activePageController.RunPage(PageValidationCallbackHandler);
+                TransitionPages(activePageController, scheduleTypeFormPageController, PageValidationCallbackHandler);
             });
 
             this.get(pageIDRouteMap[pageIDs.locationAndTimePageID], function() {
-                RedirectToFirstPageIfFirstTimeVisiting();
-
-                $(".sr-form-page").hide();
-                $("#" + pageIDs.locationAndTimePageID).show();
+                var scheduleTypeSelection = scheduleTypeFormPageController.GetScheduleTypeInformation();
+                TransitionPages(activePageController, locationAndTimeFormPageController, PageValidationCallbackHandler, scheduleTypeSelection);
             });
 
             this.get(pageIDRouteMap[pageIDs.accreditationPageID], function() {
-                RedirectToFirstPageIfFirstTimeVisiting();
-
-                $(".sr-form-page").hide();
-                $("#" + pageIDs.accreditationPageID).show();
+                TransitionPages(activePageController, accreditationFormPageController, PageValidationCallbackHandler);
             });
 
             this.get(pageIDRouteMap[pageIDs.serviceTypePageID], function() {
-                RedirectToFirstPageIfFirstTimeVisiting();
-
-                $(".sr-form-page").hide();
-                $("#" + pageIDs.serviceTypePageID).show();
+                TransitionPages(activePageController, serviceTypeFormPageController, PageValidationCallbackHandler);
             });
         });
     };
@@ -112,15 +136,15 @@ SmartRoutes.GuidedSearchViewController = (function() {
     };
 
     var InitLocationAndTimePage = function() {
-        locationAndTimeFormPageController = new SmartRoutes.LocationAndTimeFormPageController(pageIDRouteMap);
+        locationAndTimeFormPageController = new SmartRoutes.LocationAndTimeFormPageController(pageIDs.locationAndTimePageID);
     };
 
     var InitAccreditationPage = function() {
-        accreditationFormPageController = new SmartRoutes.AccreditationFormPageController();
+        accreditationFormPageController = new SmartRoutes.AccreditationFormPageController(pageIDs.accreditationPageID);
     };
 
     var InitServiceTypeFormPage = function() {
-        serviceTypeFormPageController = new SmartRoutes.ServiceTypeFormPageController();
+        serviceTypeFormPageController = new SmartRoutes.ServiceTypeFormPageController(pageIDs.serviceTypePageID);
     };
 
     (function Init() {
@@ -141,8 +165,6 @@ SmartRoutes.GuidedSearchViewController = (function() {
             // Change the route, this will also change the page.
             var previousPageID = previousPage.attr("id");
             formPageSammyApp.setLocation(pageIDRouteMap[previousPageID]);
-
-            activePageElement = previousPage;
         }
     });
 
@@ -152,13 +174,8 @@ SmartRoutes.GuidedSearchViewController = (function() {
         if (nextPage.length > 0) {
             var nextPageID = nextPage.attr("id");
             formPageSammyApp.setLocation(pageIDRouteMap[nextPageID]);
-
-            // TODO: should do page validation here since the user
-            // has indicated that they want to move to the next page.
-            activePageElement = nextPage;
         }
     });
-
 
     return {
         // Public:

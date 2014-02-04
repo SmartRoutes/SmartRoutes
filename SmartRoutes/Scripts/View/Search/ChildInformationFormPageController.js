@@ -3,10 +3,11 @@
 SmartRoutes.ChildInformationFormPageController = (function(pageID) {
 
     // Private:
-    var childInformationPageID = pageID;
+    var childInformationFormPageID = pageID;
     var maxChildren = 3;
     var childCount = 1;
     var childInfoViewModels = new Array();
+    var validationCallback = null;
 
     (function Init() {
         // Setup the knockout viewmodel bindings.
@@ -68,8 +69,12 @@ SmartRoutes.ChildInformationFormPageController = (function(pageID) {
     return {
         // Public:
 
-        RunPage: function() {
-            $("#" + childInformationPageID).fadeIn(SmartRoutes.Constants.formPageFadeInTime);
+        RunPage: function(pageValidationCallback) {
+            validationCallback = pageValidationCallback;
+
+            // Just call the validation callback here since
+            // this page can't be invalid.
+            validationCallback(true);
         },
 
         StopPage: function() {
@@ -83,13 +88,17 @@ SmartRoutes.ChildInformationFormPageController = (function(pageID) {
             return true;
         },
 
+        GetFormPageID: function() {
+            return childInformationFormPageID;
+        },
+
         // Returns an array of objects containing the name, age, and gender
         // entered for the children.
-        GetChildInformation: function() {
+        GetChildInformationPayloads: function() {
             var childInformation = new Array();
 
             for (var childIndex = 0; childIndex < childCount; ++childIndex) {
-                childInformation.push({ name: value.name(), age: value.age(), gender: value.gender() });
+                childInformation.push(new SmartRoutes.Communication.ChildInformationPayload(value.name(), value.ageGroup()));
             }
 
             return childInformation;

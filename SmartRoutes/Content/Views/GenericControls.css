@@ -1,0 +1,8 @@
+﻿
+.sr-detailed-checkbox-description-container {
+    display: none;
+}
+
+.sr-detailed-checkbox-text:hover {
+    cursor: pointer;
+}

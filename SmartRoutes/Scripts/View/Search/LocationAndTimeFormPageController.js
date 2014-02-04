@@ -1,9 +1,18 @@
 ﻿
-SmartRoutes.LocationAndTimeFormPageController = function(formPageRouteMap) {
+SmartRoutes.LocationAndTimeFormPageController = function(pageID) {
     // Private:
 
-    var pageIDRouteMap = formPageRouteMap;
     var locationAndTimeViewModel = null;
+    var validationCallback = null;
+    var scheduleType = null;
+    var locationTimeFormPageID = pageID;
+
+    var locationTimeSectionIDs = {
+        dropOffDeparture: "sr-section-drop-off-departure",
+        dropOffDestination: "sr-section-drop-off-final-destination",
+        pickUpDeparture: "sr-section-pick-up-departure",
+        pickUpDestination: "sr-section-pick-up-final-destination"
+    };
 
     function InitBindings() {
         locationAndTimeViewModel = new SmartRoutes.LocationAndTimeViewModel();
@@ -37,8 +46,45 @@ SmartRoutes.LocationAndTimeFormPageController = function(formPageRouteMap) {
         InitBindings();
     })();
 
+    // Shows/hides the location and time sections depending on the
+    // schedule type selected.
+    function SetupViewsForScheduleType() {
+        if (scheduleType.dropOffChecked) {
+            $("#" + locationTimeSectionIDs.dropOffDeparture).show();
+            $("#" + locationTimeSectionIDs.dropOffDestination).show();
+        }
+        else {
+            $("#" + locationTimeSectionIDs.dropOffDeparture).hide();
+            $("#" + locationTimeSectionIDs.dropOffDestination).hide();
+        }
+
+        if (scheduleType.pickUpChecked) {
+            $("#" + locationTimeSectionIDs.pickUpDeparture).show();
+            $("#" + locationTimeSectionIDs.pickUpDestination).show();
+        }
+        else {
+            $("#" + locationTimeSectionIDs.pickUpDeparture).hide();
+            $("#" + locationTimeSectionIDs.pickUpDestination).hide();
+        }
+    };
+
     return {
         // Public: 
+
+        RunPage: function(pageValidationCallback, scheduleTypeSelection) {
+            validationCallback = pageValidationCallback;
+            scheduleType = scheduleTypeSelection;
+
+            SetupViewsForScheduleType();
+        },
+
+        StopPage: function() {
+            validationCallback = null;
+        },
+
+        GetFormPageID: function() {
+            return locationTimeFormPageID;
+        },
 
         GetLocationAndTimeViewModel: function() {
             return locationAndTimeViewModel;

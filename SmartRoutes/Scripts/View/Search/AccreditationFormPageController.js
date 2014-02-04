@@ -1,9 +1,12 @@
 ﻿
-SmartRoutes.AccreditationFormPageController = function() {
+SmartRoutes.AccreditationFormPageController = function(pageID) {
     // Private:
 
     var accreditations = new Array();
     var accreditationViewRaw = null;
+    var accreditationFormPageID = pageID;
+    var validationCallback = null;
+    var detailedCheckboxViewControllers = new Array();
 
     function CreateAndBindAccreditationViews() {
         // This might be called multiple times since we can't 
@@ -12,6 +15,13 @@ SmartRoutes.AccreditationFormPageController = function() {
             var accreditationListContainer = $("#sr-accreditation-list-container");
             for (var accreditationIndex = 0; accreditationIndex < accreditations.length; ++accreditationIndex) {
                 accreditationListContainer.append(accreditationViewRaw);
+                var detailedCheckboxView = $(accreditationListContainer).children().last(".sr-accreditation-view").children(".sr-detailed-checkbox-view");
+
+                var checkboxController = new SmartRoutes.DetailedCheckboxViewController(detailedCheckboxView, null);
+                checkboxController.SetExtraContent("<a class=\"sr-accreditation-link\" target=\"_blank\" data-bind=\"attr: {href: url}, text: url\"></a>")
+
+                detailedCheckboxViewControllers.push(checkboxController);
+
                 ko.applyBindings(accreditations[accreditationIndex], accreditationListContainer.children().last()[0]);
             }
         }
@@ -36,5 +46,16 @@ SmartRoutes.AccreditationFormPageController = function() {
     return {
         // Public:
 
+        RunPage: function(pageValidationCallback) {
+            validationCallback = pageValidationCallback;
+        },
+
+        StopPage: function() {
+            validationCallback = null;
+        },
+
+        GetFormPageID: function() {
+            return accreditationFormPageID;
+        }
     };
 };

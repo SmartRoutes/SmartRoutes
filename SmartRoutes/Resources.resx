@@ -192,4 +192,43 @@
   <data name="portalTextPlan" xml:space="preserve">
     <value>Plan</value>
   </data>
+  <data name="DayCampDescription" xml:space="preserve">
+    <value>Day Camp Description</value>
+  </data>
+  <data name="DayCampName" xml:space="preserve">
+    <value>Day Camp</value>
+  </data>
+  <data name="LicensedCenterDescription" xml:space="preserve">
+    <value>Licensed Center Description</value>
+  </data>
+  <data name="LicensedCenterName" xml:space="preserve">
+    <value>Licensed Center</value>
+  </data>
+  <data name="TypeAHomeDescription" xml:space="preserve">
+    <value>Type A Home Description</value>
+  </data>
+  <data name="TypeAHomeName" xml:space="preserve">
+    <value>Type A</value>
+  </data>
+  <data name="TypeBHomeDescription" xml:space="preserve">
+    <value>Type B Home Description</value>
+  </data>
+  <data name="TypeBHomeName" xml:space="preserve">
+    <value>Type B</value>
+  </data>
+  <data name="AgeGroupInfantName" xml:space="preserve">
+    <value>Infant</value>
+  </data>
+  <data name="AgeGroupOlderToddlerName" xml:space="preserve">
+    <value>Older Toddler</value>
+  </data>
+  <data name="AgeGroupPreschoolerName" xml:space="preserve">
+    <value>Preschool</value>
+  </data>
+  <data name="AgeGroupSchoolAgeName" xml:space="preserve">
+    <value>School Age</value>
+  </data>
+  <data name="AgeGroupYoungToddlerName" xml:space="preserve">
+    <value>Younger Toddler</value>
+  </data>
 </root>

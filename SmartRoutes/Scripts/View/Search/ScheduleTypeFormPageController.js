@@ -1,11 +1,9 @@
 ﻿
-// pageID - The element ID of the page
-// validationCallback - Function to be called after the form validates with a value
-// indicating if the form is valid (true) or invalid (false).
+// scheduleTypePageID - The element ID of the page
 SmartRoutes.ScheduleTypeFormPageController = (function(pageID) {
 
     // Private: 
-    var scheduleTypePageID = pageID;
+    var scheduleTypeFormPageID = pageID;
     var scheduleTypeViewModel = null;
     var pageValidationCallback = null;
 
@@ -29,7 +27,6 @@ SmartRoutes.ScheduleTypeFormPageController = (function(pageID) {
 
         RunPage: function(validationCallback) {
             pageValidationCallback = validationCallback;
-            $("#" + scheduleTypePageID).fadeIn(SmartRoutes.Constants.formPageFadeInTime);
         },
 
         StopPage: function() {
@@ -41,14 +38,14 @@ SmartRoutes.ScheduleTypeFormPageController = (function(pageID) {
             return !scheduleTypeViewModel.noScheduleTypeSelected();
         },
 
-        GetScheduleTypeInformation: function() {
-            var scheduleType = {
-                dropOffChecked: scheduleTypeViewModel.dropOffChecked(),
-                pickUpChecked: scheduleTypeViewModel.pickUpChecked()
-            }
+        GetFormPageID: function() {
+            return scheduleTypeFormPageID;
+        },
 
-            return scheduleType;
+        GetScheduleTypeInformationPayload: function() {
+            var payload = new SmartRoutes.Communication.ScheduleTypePayload(scheduleTypeViewModel.dropOffChecked(), scheduleTypeViewModel.pickUpChecked());
+
+            return payload;
         }
     };
-
 });

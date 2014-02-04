@@ -1,17 +1,17 @@
 ﻿
+@using SmartRoutes
 
 <div class="sr-child-info-view">
     @* The actual form. *@
     <div class="sr-child-info">
         <div class="">
             <input type="text" class="form-control sr-editbox" placeholder="Name (optional)" data-bind="value: name" />
-            <div class="input-group">
-                <input class="form-control sr-number-edit" type="number" min="1" max="17" placeholder="Age" data-bind="value: age">
-                <span class="input-group-addon">Years</span>
-            </div>
-            <select class="form-control sr-combobox" data-bind="value: gender">
-                <option value="male">Male</option>
-                <option value="female">Female</option>
+            <select data-bind="value: ageGroup">
+                <option value="@Resources.AgeGroupInfantName">@Resources.AgeGroupInfantName</option>
+                <option value="@Resources.AgeGroupYoungToddlerName">@Resources.AgeGroupYoungToddlerName</option>
+                <option value="@Resources.AgeGroupOlderToddlerName">@Resources.AgeGroupOlderToddlerName</option>
+                <option value="@Resources.AgeGroupPreschoolerName">@Resources.AgeGroupPreschoolerName</option>
+                <option value="@Resources.AgeGroupSchoolAgeName">@Resources.AgeGroupSchoolAgeName</option>
             </select>
         </div>
     </div>
@@ -20,10 +20,10 @@
     <div class="sr-child-info-section-separator">
         <hr class="sr-child-info-separator" />
         <button class="btn btn-default sr-expansion-button" >
-            <span class="glyphicon glyphicon-expand"></span>
+            <span class="glyphicon glyphicon-plus"></span>
         </button>
         <button class="btn btn-default sr-collapse-button">
-            <span class="glyphicon glyphicon-collapse-down"></span>
+            <span class="glyphicon glyphicon-minus"></span>
         </button>
     </div>
 </div>
