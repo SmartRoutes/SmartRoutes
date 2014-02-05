@@ -1,0 +1,17 @@
+﻿
+@using SmartRoutes.Models
+@model LoadingViewModel
+
+<div class="sr-loading-view" id="@Model.ID">
+    <div class="row">
+        <div class="sr-loading-animation-background col-lg-12">
+            <div class="row">
+                <div class="col-lg-offset-5 col-lg-2">
+                    @{
+                        Html.RenderPartial("~/Views/Shared/_ImageView.cshtml", @Model.LoadingImageModel);
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

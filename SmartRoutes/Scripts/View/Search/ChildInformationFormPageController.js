@@ -98,7 +98,8 @@ SmartRoutes.ChildInformationFormPageController = (function(pageID) {
             var childInformation = new Array();
 
             for (var childIndex = 0; childIndex < childCount; ++childIndex) {
-                childInformation.push(new SmartRoutes.Communication.ChildInformationPayload(value.name(), value.ageGroup()));
+                var childViewModel = childInfoViewModels[childIndex];
+                childInformation.push(new SmartRoutes.Communication.ChildInformationPayload(childViewModel.name(), childViewModel.ageGroup()));
             }
 
             return childInformation;

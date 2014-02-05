@@ -1,8 +1,15 @@
 ﻿
+/* Detailed checkbox view. */
+
 .sr-detailed-checkbox-description-container {
     display: none;
 }
 
 .sr-detailed-checkbox-text:hover {
     cursor: pointer;
+}
+
+/* Loading View. */
+.sr-loading-animation-background {
+    background-color: white;
 }
