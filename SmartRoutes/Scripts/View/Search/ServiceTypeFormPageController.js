@@ -1,4 +1,5 @@
 ﻿
+// This controller manages the service type (i.e. home type) form page.
 SmartRoutes.ServiceTypeFormPageController = function(pageID) {
     // Private:
     
@@ -52,6 +53,17 @@ SmartRoutes.ServiceTypeFormPageController = function(pageID) {
 
         GetFormPageID: function() {
             return serviceTypeFormPageID;
+        },
+        
+        // Gets an array of service type payload objects based on
+        // the current state of the service type form.
+        GetServiceTypePayloadArray: function() {
+            var serviceTypePayloadArray = new Array();
+            $.each(serviceTypes, function(key, value) {
+                serviceTypePayloadArray.push(new SmartRoutes.Communication.ServiceTypePayload(value));
+            });
+
+            return serviceTypePayloadArray;
         }
     };
 };

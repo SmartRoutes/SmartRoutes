@@ -5,6 +5,7 @@
 /// <reference path="\Communication\Payloads\ChildCareSearchQueryPayload.js" />
 /// <reference path="\Communication\Payloads\ChildInformationPayload.js" />
 /// <reference path="\Communication\Payloads\ScheduleTypePayload.js" />
+/// <reference path="\Communication\Payloads\ServiceTypePayload.js" />
 /// <reference path="\Library\bootstrap.js" />
 /// <reference path="\Library\bootstrap.min.js" />
 /// <reference path="\Library\jquery-2.0.3-vsdoc.js" />
