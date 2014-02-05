@@ -159,6 +159,7 @@
     <Content Include="Content\Views\GenericControls.css" />
     <Content Include="Content\Images\sample_map.png" />
     <Content Include="Scripts\Communication\Controllers\GuidedSearchCommunicationController.js" />
+    <Content Include="Scripts\Communication\Payloads\AccreditationPayload.js" />
     <Content Include="Scripts\Communication\Payloads\ChildCareSearchQueryPayload.js" />
     <Content Include="Scripts\Communication\Payloads\ChildInformationPayload.js" />
     <Content Include="Scripts\Communication\Payloads\ScheduleTypePayload.js" />

@@ -56,6 +56,16 @@ SmartRoutes.AccreditationFormPageController = function(pageID) {
 
         GetFormPageID: function() {
             return accreditationFormPageID;
+        },
+
+        GetAccreditationPayloadArray: function() {
+            var accreditationPayloadArray = new Array();
+
+            $.each(accreditations, function(key, value) {
+                accreditationPayloadArray.push(new SmartRoutes.Communication.AccreditationPayload(value));
+            });
+
+            return accreditationPayloadArray;
         }
     };
 };
