@@ -102,7 +102,7 @@ SmartRoutes.GuidedSearchViewController = (function() {
         }
     };
 
-    var InitPageSubroutes = function() {
+    function InitPageSubroutes() {
         formPageSammyApp = $.sammy(function() {
             this.get(pageIDRouteMap[pageIDs.childInformationPageID], function() {
                 TransitionPages(activePageController, childInformationFormPageController, PageValidationCallbackHandler);
@@ -127,23 +127,23 @@ SmartRoutes.GuidedSearchViewController = (function() {
         });
     };
 
-    var InitChildInfoPage = function() {
+    function InitChildInfoPage() {
         childInformationFormPageController = new SmartRoutes.ChildInformationFormPageController(pageIDs.childInformationPageID);
     };
 
-    var InitScheduleTypePage = function() {
+    function InitScheduleTypePage() {
         scheduleTypeFormPageController = new SmartRoutes.ScheduleTypeFormPageController(pageIDs.scheduleTypePageID);
     };
 
-    var InitLocationAndTimePage = function() {
+    function InitLocationAndTimePage() {
         locationAndTimeFormPageController = new SmartRoutes.LocationAndTimeFormPageController(pageIDs.locationAndTimePageID);
     };
 
-    var InitAccreditationPage = function() {
+    function InitAccreditationPage() {
         accreditationFormPageController = new SmartRoutes.AccreditationFormPageController(pageIDs.accreditationPageID);
     };
 
-    var InitServiceTypeFormPage = function() {
+    function InitServiceTypeFormPage() {
         serviceTypeFormPageController = new SmartRoutes.ServiceTypeFormPageController(pageIDs.serviceTypePageID);
     };
 
@@ -174,6 +174,10 @@ SmartRoutes.GuidedSearchViewController = (function() {
         if (nextPage.length > 0) {
             var nextPageID = nextPage.attr("id");
             formPageSammyApp.setLocation(pageIDRouteMap[nextPageID]);
+        }
+        else {
+            // No pages left, we should search.
+
         }
     });
 
