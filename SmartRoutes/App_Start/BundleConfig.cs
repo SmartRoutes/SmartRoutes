@@ -29,10 +29,11 @@ namespace SmartRoutes
                         "~/Scripts/Constants.js",
 
                         // Communication objects.
-                        "~/Scripts/Communication/Payloads/Requirement.js",
-                        "~/Scripts/Communication/Payloads/RangeRequirement.js",
-                        "~/Scripts/Communication/Payloads/Objective.js",
-                        "~/Scripts/Communication/Payloads/Query.js",
+                        "~/Scripts/Communication/Payloads/ChildInformationPayload.js",
+                        "~/Scripts/Communication/Payloads/ScheduleTypePayload.js",
+                        "~/Scripts/Communication/Payloads/AccreditationPayload.js",
+                        "~/Scripts/Communication/Payloads/ServiceTypePayload.js",
+                        "~/Scripts/Communication/Payloads/ChildCareSearchQueryPayload.js",
 
                         // Communication controllers.
                         "~/Scripts/Communication/Controllers/GuidedSearchCommunicationController.js",

@@ -1,4 +1,8 @@
 ﻿
+/* Loading animation styling. */
+#sr-guided-search-searching-animation-container {
+    display: none;
+}
 
 /* Breadcrumb styling. */
 #sr-breadcrumb-content {

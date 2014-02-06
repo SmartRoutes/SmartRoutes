@@ -52,6 +52,7 @@
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Web.Helpers, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Extensions" />
@@ -127,10 +128,16 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Models\Payloads\AccreditationPayload.cs" />
+    <Compile Include="Models\Payloads\ChildInformationPayload.cs" />
     <Compile Include="Controllers\GuidedSearchPageController.cs" />
     <Compile Include="Models\AccreditationModel.cs" />
     <Compile Include="Models\ChildInformationViewModel.cs" />
     <Compile Include="Models\DetailedCheckboxModel.cs" />
+    <Compile Include="Models\LoadingViewModel.cs" />
+    <Compile Include="Models\Payloads\ChildCareSearchQueryPayload.cs" />
+    <Compile Include="Models\Payloads\ScheduleTypePayload.cs" />
+    <Compile Include="Models\Payloads\ServiceTypePayload.cs" />
     <Compile Include="Models\PortalButtonModel.cs" />
     <Compile Include="Models\PortalViewModel.cs" />
     <Compile Include="Models\ServiceTypeModel.cs" />
@@ -156,12 +163,15 @@
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\Images\loading.gif" />
     <Content Include="Content\Views\GenericControls.css" />
     <Content Include="Content\Images\sample_map.png" />
     <Content Include="Scripts\Communication\Controllers\GuidedSearchCommunicationController.js" />
+    <Content Include="Scripts\Communication\Payloads\AccreditationPayload.js" />
     <Content Include="Scripts\Communication\Payloads\ChildCareSearchQueryPayload.js" />
     <Content Include="Scripts\Communication\Payloads\ChildInformationPayload.js" />
     <Content Include="Scripts\Communication\Payloads\ScheduleTypePayload.js" />
+    <Content Include="Scripts\Communication\Payloads\ServiceTypePayload.js" />
     <Content Include="Scripts\Constants.js" />
     <Content Include="Scripts\ViewModels\AccreditationViewModel.js" />
     <Content Include="Scripts\ViewModels\ChildInfoViewModel.js" />
@@ -235,6 +245,7 @@
     <Content Include="Views\Search\_ServiceTypeFormPageView.cshtml" />
     <Content Include="Views\Shared\_DetailedCheckboxView.cshtml" />
     <Content Include="Views\Search\_ServiceTypeView.cshtml" />
+    <Content Include="Views\Shared\_LoadingView.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

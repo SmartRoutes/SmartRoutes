@@ -15,6 +15,13 @@ SmartRoutes.GuidedSearchViewController = (function() {
         resultsButton: "sr-guided-search-button-return-results"
     };
 
+    var elementIDs = {
+        searchFormView: "sr-guided-search-form-view",
+        breadcrumbView: "sr-guided-search-breadcrumb-view",
+        searchContainer: "sr-guided-search-container",
+        searchingAnimationContainer: "sr-guided-search-searching-animation-container"
+    };
+
     var pageIDs = {
         childInformationPageID: "sr-child-information-form-page-view",
         scheduleTypePageID: "sr-schedule-type-form-page-view",
@@ -64,6 +71,7 @@ SmartRoutes.GuidedSearchViewController = (function() {
     // Additional arguments are passed to the new controller's RunPage function.
     function TransitionPages(currentPageController, newPageController) {
         RedirectToFirstPageIfFirstTimeVisiting();
+        ShowSearchForm();
 
         activePageController.StopPage();
 
@@ -102,7 +110,7 @@ SmartRoutes.GuidedSearchViewController = (function() {
         }
     };
 
-    var InitPageSubroutes = function() {
+    function InitPageSubroutes() {
         formPageSammyApp = $.sammy(function() {
             this.get(pageIDRouteMap[pageIDs.childInformationPageID], function() {
                 TransitionPages(activePageController, childInformationFormPageController, PageValidationCallbackHandler);
@@ -113,7 +121,7 @@ SmartRoutes.GuidedSearchViewController = (function() {
             });
 
             this.get(pageIDRouteMap[pageIDs.locationAndTimePageID], function() {
-                var scheduleTypeSelection = scheduleTypeFormPageController.GetScheduleTypeInformation();
+                var scheduleTypeSelection = scheduleTypeFormPageController.GetScheduleTypeInformationPayload();
                 TransitionPages(activePageController, locationAndTimeFormPageController, PageValidationCallbackHandler, scheduleTypeSelection);
             });
 
@@ -127,23 +135,23 @@ SmartRoutes.GuidedSearchViewController = (function() {
         });
     };
 
-    var InitChildInfoPage = function() {
+    function InitChildInfoPage() {
         childInformationFormPageController = new SmartRoutes.ChildInformationFormPageController(pageIDs.childInformationPageID);
     };
 
-    var InitScheduleTypePage = function() {
+    function InitScheduleTypePage() {
         scheduleTypeFormPageController = new SmartRoutes.ScheduleTypeFormPageController(pageIDs.scheduleTypePageID);
     };
 
-    var InitLocationAndTimePage = function() {
+    function InitLocationAndTimePage() {
         locationAndTimeFormPageController = new SmartRoutes.LocationAndTimeFormPageController(pageIDs.locationAndTimePageID);
     };
 
-    var InitAccreditationPage = function() {
+    function InitAccreditationPage() {
         accreditationFormPageController = new SmartRoutes.AccreditationFormPageController(pageIDs.accreditationPageID);
     };
 
-    var InitServiceTypeFormPage = function() {
+    function InitServiceTypeFormPage() {
         serviceTypeFormPageController = new SmartRoutes.ServiceTypeFormPageController(pageIDs.serviceTypePageID);
     };
 
@@ -155,6 +163,40 @@ SmartRoutes.GuidedSearchViewController = (function() {
         InitAccreditationPage();
         InitServiceTypeFormPage();
     })();
+
+    function ShowSearchingAnimation() {
+        $("#" + elementIDs.searchContainer).hide();
+        $("#" + elementIDs.searchingAnimationContainer).show();
+    };
+
+    function ShowSearchForm() {
+        $("#" + elementIDs.searchingAnimationContainer).hide();
+        $("#" + elementIDs.searchContainer).fadeIn(formPageFadeInTimeMS);
+    };
+
+    function CreateChildCareSearchPayload() {
+        var childCareSearchPayload = new SmartRoutes.Communication.ChildCareSearchQueryPayload(
+                                            childInformationFormPageController.GetChildInformationPayloads(),
+                                            scheduleTypeFormPageController.GetScheduleTypeInformationPayload(),
+                                            accreditationFormPageController.GetAccreditationPayloadArray(),
+                                            serviceTypeFormPageController.GetServiceTypePayloadArray());
+
+        return childCareSearchPayload;
+    };
+
+    function SearchCompletedCallback(data) {
+        // check data, return to search form or notify the page controller
+        // that we have data.
+    };
+
+    function PerformChildCareSearch() {
+        ShowSearchingAnimation();
+
+        var searchPayload = CreateChildCareSearchPayload();
+        var guidedSearchCommunicationController = new SmartRoutes.Communication.GuidedSearchCommunicationController();
+
+        guidedSearchCommunicationController.PerformChildCareSearch(searchPayload, SearchCompletedCallback);
+    };
 
     // Event handlers
 
@@ -174,6 +216,10 @@ SmartRoutes.GuidedSearchViewController = (function() {
         if (nextPage.length > 0) {
             var nextPageID = nextPage.attr("id");
             formPageSammyApp.setLocation(pageIDRouteMap[nextPageID]);
+        }
+        else {
+            // No pages left, we should search.
+            PerformChildCareSearch();
         }
     });
 

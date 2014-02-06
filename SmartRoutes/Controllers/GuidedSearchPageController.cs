@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+
 using SmartRoutes.Models;
+using SmartRoutes.Models.Payloads;
 
 namespace SmartRoutes.Controllers
 {
@@ -53,6 +55,16 @@ namespace SmartRoutes.Controllers
         public ActionResult ServiceTypeView()
         {
             return PartialView("~/Views/Search/_ServiceTypeView.cshtml");
+        }
+
+        public JsonResult PerformChildCareSearch(ChildCareSearchQueryPayload searchQuery)
+        {
+            if (searchQuery != null)
+            {
+                Console.WriteLine("break");
+            }
+
+            return null;
         }
     }
 }
