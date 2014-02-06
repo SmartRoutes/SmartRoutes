@@ -1,8 +1,7 @@
 ﻿
-SmartRoutes.Communication.ChildInformationPayload = function(childName, childAgeGroup) {
+SmartRoutes.Communication.ChildInformationPayload = function(childAgeGroup) {
 
     return {
-        name: childName,
-        ageGroup: childAgeGroup
+        AgeGroup: childAgeGroup
     };
 };

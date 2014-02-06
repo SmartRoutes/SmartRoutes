@@ -2,7 +2,7 @@
 SmartRoutes.Communication.AccreditationPayload = function(accreditationViewModel) {
 
     return {
-        name: accreditationViewModel.name(),
-        checked: accreditationViewModel.checked()
+        Name: accreditationViewModel.name(),
+        Checked: accreditationViewModel.checked()
     };
 };

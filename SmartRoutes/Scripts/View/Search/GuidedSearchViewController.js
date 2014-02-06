@@ -195,7 +195,7 @@ SmartRoutes.GuidedSearchViewController = (function() {
         var searchPayload = CreateChildCareSearchPayload();
         var guidedSearchCommunicationController = new SmartRoutes.Communication.GuidedSearchCommunicationController();
 
-        //guidedSearchCommunicationController.PerformChildCareSearch(searchPayload, SearchCompletedCallback);
+        guidedSearchCommunicationController.PerformChildCareSearch(searchPayload, SearchCompletedCallback);
     };
 
     // Event handlers

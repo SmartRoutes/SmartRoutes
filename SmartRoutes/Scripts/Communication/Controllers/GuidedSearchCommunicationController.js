@@ -48,13 +48,22 @@ SmartRoutes.Communication.GuidedSearchCommunicationController = function() {
         // a search.  The payload must contain all required properties.
         PerformChildCareSearch: function(childCareSearchQueryPayload, callback) {
             if (childCareSearchQueryPayload
-                && childCareSearchQueryPayload.childInformation
-                && childCareSearchQueryPayload.scheduleType
-                && childCareSearchQueryPayload.accreditations
-                && childCareSearchQueryPayload.serviceTypes) {
-                $.post(requestMap.performChildCareSearch, childCareSearchQueryPayload, function(data) {
-                    callback(data);
-                }, "json");
+                && childCareSearchQueryPayload.ChildInformation
+                && childCareSearchQueryPayload.ScheduleType
+                && childCareSearchQueryPayload.Accreditations
+                && childCareSearchQueryPayload.ServiceTypes) {
+                $.ajax({
+                    url: requestMap.performChildCareSearch,
+                    type: "POST",
+                    contentType: "application/json",
+                    data: JSON.stringify(childCareSearchQueryPayload),
+                    dataType: "json",
+                    success: function(data) {
+                        if (data) {
+                            callback(data);
+                        }
+                    }
+                });
             }
         }
     };

@@ -6,9 +6,9 @@
 SmartRoutes.Communication.ChildCareSearchQueryPayload = function(childInformationPayload, scheduleTypePayloadArray, accreditationPayloadArray, serviceTypePayload) {
 
     return {
-        childInformation: childInformationPayload,
-        scheduleType: scheduleTypePayloadArray,
-        accreditations: accreditationPayloadArray,
-        serviceTypes: serviceTypePayload
+        ChildInformation: childInformationPayload,
+        ScheduleType: scheduleTypePayloadArray,
+        Accreditations: accreditationPayloadArray,
+        ServiceTypes: serviceTypePayload
     };
 };

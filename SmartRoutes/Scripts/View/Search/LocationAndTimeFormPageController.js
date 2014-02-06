@@ -49,7 +49,7 @@ SmartRoutes.LocationAndTimeFormPageController = function(pageID) {
     // Shows/hides the location and time sections depending on the
     // schedule type selected.
     function SetupViewsForScheduleType() {
-        if (scheduleType.dropOffChecked) {
+        if (scheduleType.DropOffChecked) {
             $("#" + locationTimeSectionIDs.dropOffDeparture).show();
             $("#" + locationTimeSectionIDs.dropOffDestination).show();
         }
@@ -58,7 +58,7 @@ SmartRoutes.LocationAndTimeFormPageController = function(pageID) {
             $("#" + locationTimeSectionIDs.dropOffDestination).hide();
         }
 
-        if (scheduleType.pickUpChecked) {
+        if (scheduleType.PickUpChecked) {
             $("#" + locationTimeSectionIDs.pickUpDeparture).show();
             $("#" + locationTimeSectionIDs.pickUpDestination).show();
         }

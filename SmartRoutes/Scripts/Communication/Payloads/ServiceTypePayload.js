@@ -4,8 +4,8 @@ SmartRoutes.Communication.ServiceTypePayload = function(serviceTypeViewModel) {
 
     return {
         // The name for the service type.
-        name: serviceTypeViewModel.name(),
+        Name: serviceTypeViewModel.name(),
         // True if the service type is checked, false otherwise.
-        checked: serviceTypeViewModel.checked()
+        Checked: serviceTypeViewModel.checked()
     }
 };
