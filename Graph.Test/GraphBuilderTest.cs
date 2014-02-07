@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SmartRoutes.Graph.Node;
+using SmartRoutes.Model;
 using SmartRoutes.Model.Gtfs;
 using SmartRoutes.Model.Srds;
 

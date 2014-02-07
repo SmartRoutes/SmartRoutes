@@ -71,15 +71,15 @@ namespace SmartRoutes.Graph
                 var atWorkBy = new DateTime(1970, 1, 1, 10, 30, 0);
 
                 // find child cares close to home, choose names from them
-                Func<Destination, double> ordering = node => node.GetL1DistanceInFeet(homeLocation);
+                Func<IDestination, double> ordering = node => node.GetL1DistanceInFeet(homeLocation);
                 var closeChildCares = srdsCollection.Destinations.OrderBy(ordering);
 
                 // child care selected by name, since properties are not implemented yet
                 const string childCareName1 = "ANOINTED HANDS LEARNING CENTER";
                 const string childCareName2 = "DIVINE DAY CARE CENTER, INC. II";
 
-                Func<Destination, bool> Criteria1 = dest => dest.Name == childCareName1;
-                Func<Destination, bool> Criteria2 = dest => dest.Name == childCareName2;
+                Func<IDestination, bool> Criteria1 = dest => dest.Name == childCareName1;
+                Func<IDestination, bool> Criteria2 = dest => dest.Name == childCareName2;
 
                 var Criterion = new[] { Criteria1, Criteria2 };
 

@@ -20,7 +20,7 @@ namespace SmartRoutes.Graph
             Logger.Trace("GraphBuilder object created.");
         }
 
-        public IGraph BuildGraph(IEnumerable<StopTime> stopTimes, IEnumerable<Destination> destinations, GraphBuilderSettings settings)
+        public IGraph BuildGraph(IEnumerable<StopTime> stopTimes, IEnumerable<IDestination> destinations, GraphBuilderSettings settings)
         {
             _settings = settings;
 
@@ -30,7 +30,7 @@ namespace SmartRoutes.Graph
             StopTime[] stopTimeArray = stopTimes.ToArray();
 
             // enumerate the destinations
-            Destination[] destinationArray = destinations.ToArray();
+            IDestination[] destinationArray = destinations.ToArray();
 
             // collect all the stops
             Stop[] stops = stopTimeArray
@@ -185,7 +185,7 @@ namespace SmartRoutes.Graph
             Logger.Trace("GTFS Transfers connected successfully.");
         }
 
-        private IEnumerable<INode> InsertDestinationNodes(Stop[] stops, Destination[] destinations, IEnumerable<INode> graphNodes)
+        private IEnumerable<INode> InsertDestinationNodes(Stop[] stops, IDestination[] destinations, IEnumerable<INode> graphNodes)
         {
             if (stops == null || destinations == null || graphNodes == null)
             {

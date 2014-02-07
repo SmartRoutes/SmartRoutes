@@ -218,7 +218,7 @@ namespace SmartRoutes.Graph
 
             // return only one result per destination
             var uniqueDestinationResults = Results.Where(info => info.node as DestinationNode != null)
-                .GroupBy(info => new Tuple<Destination>(((DestinationNode)info.node).destination))
+                .GroupBy(info => new Tuple<IDestination>(((DestinationNode)info.node).Destination))
                 .Select(g => g.First());
 
             // return only one result per block (set of sequential trips)
@@ -252,14 +252,14 @@ namespace SmartRoutes.Graph
         }
 
         // creates goal check function which checks whether a node satisfies at least one criteria
-        private Func<INode, bool> CreateGoalCheckFromCriterion(IEnumerable<Func<Destination, bool>> Criterion)
+        private Func<INode, bool> CreateGoalCheckFromCriterion(IEnumerable<Func<IDestination, bool>> Criterion)
         {
             Func<INode, bool> GoalCheck = node =>
                 {
                     var destNode = node as DestinationNode;
                     if (destNode != null)
                     {
-                        var RemainingCriterion = Criterion.Where(F => !F(destNode.destination));
+                        var RemainingCriterion = Criterion.Where(F => !F(destNode.Destination));
 
                         if (RemainingCriterion.Count() != Criterion.Count())
                         {
@@ -280,7 +280,7 @@ namespace SmartRoutes.Graph
         }
 
         private IEnumerable<NodeInfo> SearchLocToDest(ILocation StartLocation, DateTime StartTime, TimeDirection Direction, 
-            IEnumerable<Func<Destination, bool>> Criterion, TimeSpan BasePathCost)
+            IEnumerable<Func<IDestination, bool>> Criterion, TimeSpan BasePathCost)
         {
             var FinalResults = new List<NodeInfo>();
             var StartNodeInfos = GetClosestGtfsNodeInfos(StartLocation, StartTime, Direction, BasePathCost);
@@ -291,7 +291,7 @@ namespace SmartRoutes.Graph
 
             foreach (var partialResult in partialResults)
             {
-                var RemainingCriterion = Criterion.Where(F => !F(((DestinationNode)partialResult.node).destination));
+                var RemainingCriterion = Criterion.Where(F => !F(((DestinationNode)partialResult.node).Destination));
 
                 if (RemainingCriterion.Count() == 0)
                 {
@@ -334,7 +334,7 @@ namespace SmartRoutes.Graph
         }
 
         public IEnumerable<NodeInfo> Search(ILocation StartLocation, ILocation EndLocation, 
-            DateTime StartTime, TimeDirection Direction, IEnumerable<Func<Destination, bool>> Criterion)
+            DateTime StartTime, TimeDirection Direction, IEnumerable<Func<IDestination, bool>> Criterion)
         {
             var startToDestinations = SearchLocToDest(StartLocation, StartTime, Direction, Criterion, TimeSpan.FromSeconds(0));
             return SearchDestToLoc(startToDestinations, Direction, EndLocation);

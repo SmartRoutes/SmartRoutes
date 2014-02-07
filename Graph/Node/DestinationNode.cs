@@ -1,21 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
-using SmartRoutes.Model.Srds;
+using SmartRoutes.Model;
 
 namespace SmartRoutes.Graph.Node
 {
     public class DestinationNode : IDestinationNode
     {
-        public DestinationNode(Destination destination, DateTime time, NodeBase baseNode)
+        public DestinationNode(IDestination destination, DateTime time, NodeBase baseNode)
         {
-            this.destination = destination;
+            Destination = destination;
             BaseNode = baseNode;
             Time = time;
             TimeBackwardNeighbors = new HashSet<INode>();
             TimeForwardNeighbors = new HashSet<INode>();
         }
 
-        public Destination destination { get; private set; }
+        public IDestination Destination { get; private set; }
         public DateTime Time { get; private set; }
         public NodeBase BaseNode { get; private set; }
         public ISet<INode> TimeBackwardNeighbors { get; private set; }
@@ -24,17 +24,17 @@ namespace SmartRoutes.Graph.Node
         // legacy properties
         public string Name
         {
-            get { return destination.Name; }
+            get { return Destination.Name; }
         }
 
         public double Latitude
         {
-            get { return destination.Latitude; }
+            get { return Destination.Latitude; }
         }
 
         public double Longitude
         {
-            get { return destination.Longitude; }
+            get { return Destination.Longitude; }
         }
     }
 }
