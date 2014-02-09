@@ -18,6 +18,7 @@
 /// <reference path="\View\DetailedCheckboxViewController.js" />
 /// <reference path="\View\PageController.js" />
 /// <reference path="\View\PortalViewController.js" />
+/// <reference path="\View\ResultsPageViewController.js" />
 /// <reference path="\View\Search\AccreditationFormPageController.js" />
 /// <reference path="\View\Search\ChildInformationFormPageController.js" />
 /// <reference path="\View\Search\GuidedSearchViewController.js" />

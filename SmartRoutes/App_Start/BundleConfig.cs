@@ -63,8 +63,9 @@ namespace SmartRoutes
                         "~/Scripts/View/Search/AccreditationFormPageController.js",
                         "~/Scripts/View/Search/ServiceTypeFormPageController.js",
 
-                        // The master search form controller.
+                        // Page Controllers.
                         "~/Scripts/View/Search/GuidedSearchViewController.js",
+                        "~/Scripts/View/ResultsPageViewController.js",
 
                         // This controller essentially runs the site.
                         "~/Scripts/View/PageController.js"));
@@ -76,7 +77,8 @@ namespace SmartRoutes
                         "~/Content/Views/GenericControls.css",
                         "~/Content/Views/MainPageView.css",
                         "~/Content/Views/PortalView.css",
-                        "~/Content/Views/GuidedSearchPageView.css"));
+                        "~/Content/Views/GuidedSearchPageView.css",
+                        "~/Content/Views/ResultsPageView.css"));
         }
     }
 }

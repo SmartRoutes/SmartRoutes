@@ -349,6 +349,24 @@ namespace SmartRoutes {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to #/feedback.
+        /// </summary>
+        public static string PageRouteFeedback {
+            get {
+                return ResourceManager.GetString("PageRouteFeedback", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to #/search.
+        /// </summary>
+        public static string PageRouteSearch {
+            get {
+                return ResourceManager.GetString("PageRouteSearch", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Feedback.
         /// </summary>
         public static string portalTextFeedback {

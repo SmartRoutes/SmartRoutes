@@ -14,6 +14,13 @@ namespace SmartRoutes.Models
             this.ID = id;
         }
 
+        public PortalButtonModel(string text, string path)
+        {
+            this.Text = text;
+            this.Path = path;
+            this.ID = string.Empty;
+        }
+
         public PortalButtonModel()
         {
         }
