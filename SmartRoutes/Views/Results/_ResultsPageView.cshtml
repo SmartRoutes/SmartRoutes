@@ -1,0 +1,19 @@
+﻿
+@using SmartRoutes.Models
+@using SmartRoutes
+
+<div id="sr-results-page-view">
+    @{
+        // Render the portal view.
+        PortalViewModel resultsPortal = new PortalViewModel("sr-portal-view-results-page");
+        resultsPortal.AddButtonModel(new PortalButtonModel(Resources.portalTextPlan, Resources.PageRouteSearch));
+        resultsPortal.AddButtonModel(new PortalButtonModel(Resources.portalTextFeedback, Resources.PageRouteFeedback));
+        Html.RenderPartial("~/Views/Shared/_PortalView.cshtml", resultsPortal);
+    }
+
+    @* Show the results list view. *@
+
+
+    @* Show the google maps view. *@
+    @Html.Partial("~/Views/Shared/_GoogleMapsView.cshtml")
+</div>

@@ -52,7 +52,6 @@
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="System.Web.Helpers, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Extensions" />
@@ -128,6 +127,7 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Controllers\ResultsPageController.cs" />
     <Compile Include="Models\Payloads\AccreditationPayload.cs" />
     <Compile Include="Models\Payloads\ChildInformationPayload.cs" />
     <Compile Include="Controllers\GuidedSearchPageController.cs" />
@@ -166,6 +166,7 @@
     <Content Include="Content\Images\loading.gif" />
     <Content Include="Content\Views\GenericControls.css" />
     <Content Include="Content\Images\sample_map.png" />
+    <Content Include="Content\Views\ResultsPageView.css" />
     <Content Include="Scripts\Communication\Controllers\GuidedSearchCommunicationController.js" />
     <Content Include="Scripts\Communication\Payloads\AccreditationPayload.js" />
     <Content Include="Scripts\Communication\Payloads\ChildCareSearchQueryPayload.js" />
@@ -203,6 +204,7 @@
     <Content Include="Scripts\Library\sammy-0.7.4.js" />
     <Content Include="Scripts\Library\sammy-0.7.4.min.js" />
     <Content Include="Scripts\View\DetailedCheckboxViewController.js" />
+    <Content Include="Scripts\View\ResultsPageViewController.js" />
     <Content Include="Scripts\View\Search\AccreditationFormPageController.js" />
     <Content Include="Scripts\View\Search\ChildInformationFormPageController.js" />
     <Content Include="Scripts\View\Search\GuidedSearchViewController.js" />
@@ -246,10 +248,13 @@
     <Content Include="Views\Shared\_DetailedCheckboxView.cshtml" />
     <Content Include="Views\Search\_ServiceTypeView.cshtml" />
     <Content Include="Views\Shared\_LoadingView.cshtml" />
+    <Content Include="Views\Results\_ResultsPageView.cshtml" />
+    <Content Include="Views\Shared\_GoogleMapsView.cshtml" />
+    <Content Include="Views\Results\_ResultsListView.cshtml" />
+    <Content Include="Views\Results\_ResultView.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Views\Results\" />
     <Folder Include="Views\RoutePlan\" />
     <Folder Include="Views\Shared\Banners\" />
     <Folder Include="Views\Shared\Feedback\" />
