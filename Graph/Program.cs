@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Ninject;
 using Ninject.Extensions.Conventions;
+using SmartRoutes.Demo.OdjfsDatabase;
 using SmartRoutes.Graph.Node;
 using SmartRoutes.Model;
 using SmartRoutes.Model.Gtfs;
@@ -34,24 +35,24 @@ namespace SmartRoutes.Graph
                 ******************* Fetch the data from the database and build the graph ********************
                 ********************************************************************************************/
 
-                Console.WriteLine("Fetching the GTFS data from the web.");
+                Console.WriteLine("Fetching the SORTA data from the web.");
                 DateTime tic = DateTime.Now;
                 var gtfsFetcher = kernel.Get<IEntityCollectionDownloader<GtfsArchive, GtfsCollection>>();
                 var gtfsCollection = gtfsFetcher.Download(new Uri("http://www.go-metro.com/uploads/GTFS/google_transit_info.zip"), null).Result;
                 DateTime toc = DateTime.Now;
                 Console.WriteLine("GTFS data fetched in {0} milliseconds.", (toc - tic).TotalMilliseconds);
                 
-                Console.WriteLine("Fetching the destination data from the web.");
+                Console.WriteLine("Fetching the ODJFS data from the database.");
                 tic = DateTime.Now;
-                var srdsFetcher = kernel.Get<IEntityCollectionDownloader<SrdsArchive, SrdsCollection>>();
-                var srdsCollection = srdsFetcher.Download(new Uri(SRDS_URL), null).Result;
+                var odjfsDatabase = new OdjfsDatabase("OdjfsDatabase");
+                var childCares = odjfsDatabase.GetChildCares().Result;
                 toc = DateTime.Now;
                 Console.WriteLine("Destination data fetched in {0} milliseconds.", (toc - tic).TotalMilliseconds);
 
                 Console.WriteLine("Creating Graph.");
                 tic = DateTime.Now;
                 var graphBuilder = kernel.Get<IGraphBuilder>();
-                var graph = graphBuilder.BuildGraph(gtfsCollection.StopTimes, srdsCollection.Destinations, GraphBuilderSettings.Default);
+                var graph = graphBuilder.BuildGraph(gtfsCollection.StopTimes, childCares, GraphBuilderSettings.Default);
                 toc = DateTime.Now;
                 Console.WriteLine("Graph created in {0} milliseconds.", (toc - tic).TotalMilliseconds);
                 Console.WriteLine("Finding route...");
@@ -70,20 +71,16 @@ namespace SmartRoutes.Graph
                 // have to be at work by 10:30 am
                 var atWorkBy = new DateTime(1970, 1, 1, 10, 30, 0);
 
-                // find child cares close to home, choose names from them
-                Func<IDestination, double> ordering = node => node.GetL1DistanceInFeet(homeLocation);
-                var closeChildCares = srdsCollection.Destinations.OrderBy(ordering);
-
                 // child care selected by name, since properties are not implemented yet
                 const string childCareName1 = "ANOINTED HANDS LEARNING CENTER";
                 const string childCareName2 = "DIVINE DAY CARE CENTER, INC. II";
 
-                Func<IDestination, bool> Criteria1 = dest => dest.Name == childCareName1;
-                Func<IDestination, bool> Criteria2 = dest => dest.Name == childCareName2;
+                Func<IDestination, bool> criteria1 = dest => dest.Name == childCareName1;
+                Func<IDestination, bool> criteria2 = dest => dest.Name == childCareName2;
 
-                var Criterion = new[] { Criteria1, Criteria2 };
+                var criterion = new[] { criteria1, criteria2 };
 
-                var results = graph.Search(workLocation, homeLocation, atWorkBy, TimeDirection.Backwards, Criterion);
+                var results = graph.Search(workLocation, homeLocation, atWorkBy, TimeDirection.Backwards, criterion);
 
                 toc = DateTime.Now;
                 Console.WriteLine("Route found in in {0} milliseconds.",

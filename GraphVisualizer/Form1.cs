@@ -6,6 +6,7 @@ using ILNumerics.Drawing;
 using ILNumerics.Drawing.Plotting;
 using Ninject;
 using Ninject.Extensions.Conventions;
+using SmartRoutes.Demo.OdjfsDatabase;
 using SmartRoutes.Graph;
 using SmartRoutes.Graph.Comparers;
 using SmartRoutes.Graph.Node;
@@ -69,17 +70,17 @@ namespace SmartRoutes.GraphVisualizer
                     .BindAllInterfaces());
 
                 // build the graph
-                SetGraphButtonText("Loading GTFS...");
+                SetGraphButtonText("Loading SORTA...");
                 var gtfsFetcher = kernel.Get<IEntityCollectionDownloader<GtfsArchive, GtfsCollection>>();
                 GtfsCollection gtfsCollection = gtfsFetcher.Download(new Uri("http://www.go-metro.com/uploads/GTFS/google_transit_info.zip"), null).Result;
 
-                SetGraphButtonText("Loading SRDS...");
-                var srdsFetcher = kernel.Get<IEntityCollectionDownloader<SrdsArchive, SrdsCollection>>();
-                SrdsCollection srdsCollection = srdsFetcher.Download(new Uri(SRDS_URL), null).Result;
+                SetGraphButtonText("Loading ODJFS...");
+                var odjfsDatabase = new OdjfsDatabase("OdjfsDatabase");
+                var childCares = odjfsDatabase.GetChildCares().Result;
 
                 SetGraphButtonText("Building graph...");
                 var graphBuilder = kernel.Get<IGraphBuilder>();
-                IGraph graph = graphBuilder.BuildGraph(gtfsCollection.StopTimes, srdsCollection.Destinations, GraphBuilderSettings.Default);
+                IGraph graph = graphBuilder.BuildGraph(gtfsCollection.StopTimes, childCares, GraphBuilderSettings.Default);
                 INode[] nodes = graph.GraphNodes;
 
                 SetGraphButtonText("Displaying nodes...");

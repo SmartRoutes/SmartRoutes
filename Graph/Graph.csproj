@@ -113,6 +113,10 @@
       <Project>{711cc508-53a8-4edb-bbca-b911935da4b0}</Project>
       <Name>Model</Name>
     </ProjectReference>
+    <ProjectReference Include="..\OdjfsDatabase\OdjfsDatabase.csproj">
+      <Project>{35dd36b4-fbfc-4d17-9f94-7e9b9df80c86}</Project>
+      <Name>OdjfsDatabase</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Reader\Reader.csproj">
       <Project>{4401fe23-f94a-4eda-aa76-ccd53548e10e}</Project>
       <Name>Reader</Name>
