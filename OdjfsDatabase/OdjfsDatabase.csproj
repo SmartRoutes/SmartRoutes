@@ -38,8 +38,9 @@
     <Reference Include="EntityFramework.SqlServer">
       <HintPath>..\packages\EntityFramework.6.0.2\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
-    <Reference Include="OdjfsScraper.Database">
-      <HintPath>..\packages\OdjfsScraper.Database.1.0.1\lib\net45\OdjfsScraper.Database.dll</HintPath>
+    <Reference Include="OdjfsScraper.Database, Version=1.0.3.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\OdjfsScraper.Database.1.0.3\lib\net45\OdjfsScraper.Database.dll</HintPath>
     </Reference>
     <Reference Include="OdjfsScraper.Model">
       <HintPath>..\packages\OdjfsScraper.Model.1.0.1\lib\net45\OdjfsScraper.Model.dll</HintPath>

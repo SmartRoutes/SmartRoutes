@@ -5,17 +5,21 @@ using System.Linq;
 using System.Threading.Tasks;
 using OdjfsScraper.Database;
 using SmartRoutes.Demo.OdjfsDatabase.Model;
+using DayCamp = OdjfsScraper.Model.ChildCares.DayCamp;
+using LicensedCenter = OdjfsScraper.Model.ChildCares.LicensedCenter;
+using TypeAHome = OdjfsScraper.Model.ChildCares.TypeAHome;
+using TypeBHome = OdjfsScraper.Model.ChildCares.TypeBHome;
 
 namespace SmartRoutes.Demo.OdjfsDatabase
 {
     public class OdjfsDatabase : IDisposable
     {
-        private readonly string _connectionString;
+        private readonly string _nameOrConnectionString;
         private Entities _ctx;
 
-        public OdjfsDatabase(string connectionString)
+        public OdjfsDatabase(string nameOrConnectionString)
         {
-            _connectionString = connectionString;
+            _nameOrConnectionString = nameOrConnectionString;
             _ctx = null;
         }
 
@@ -29,10 +33,11 @@ namespace SmartRoutes.Demo.OdjfsDatabase
 
         public async Task<IEnumerable<ChildCare>> GetChildCares()
         {
-            await Open();
+            Open();
 
             IEnumerable<OdjfsScraper.Model.ChildCares.ChildCare> inputChildCares = await _ctx
                 .ChildCares
+                .AsNoTracking()
                 .Where(c => c.Latitude.HasValue && c.Longitude.HasValue)
                 .ToArrayAsync();
 
@@ -41,28 +46,28 @@ namespace SmartRoutes.Demo.OdjfsDatabase
             // map each child care to its appropriote wrapper type
             foreach (OdjfsScraper.Model.ChildCares.ChildCare childCare in inputChildCares)
             {
-                var typeAHome = childCare as OdjfsScraper.Model.ChildCares.TypeAHome;
+                var typeAHome = childCare as TypeAHome;
                 if (typeAHome != null)
                 {
-                    outputChildCares.Add(new TypeAHome(typeAHome));
+                    outputChildCares.Add(new Model.TypeAHome(typeAHome));
                 }
 
-                var typeBHome = childCare as OdjfsScraper.Model.ChildCares.TypeBHome;
+                var typeBHome = childCare as TypeBHome;
                 if (typeBHome != null)
                 {
-                    outputChildCares.Add(new TypeBHome(typeBHome));
+                    outputChildCares.Add(new Model.TypeBHome(typeBHome));
                 }
 
-                var licensedCenter = childCare as OdjfsScraper.Model.ChildCares.LicensedCenter;
+                var licensedCenter = childCare as LicensedCenter;
                 if (licensedCenter != null)
                 {
-                    outputChildCares.Add(new LicensedCenter(licensedCenter));
+                    outputChildCares.Add(new Model.LicensedCenter(licensedCenter));
                 }
 
-                var dayCamp = childCare as OdjfsScraper.Model.ChildCares.DayCamp;
+                var dayCamp = childCare as DayCamp;
                 if (dayCamp != null)
                 {
-                    outputChildCares.Add(new DayCamp(dayCamp));
+                    outputChildCares.Add(new Model.DayCamp(dayCamp));
                 }
             }
 
@@ -74,13 +79,11 @@ namespace SmartRoutes.Demo.OdjfsDatabase
             Dispose();
         }
 
-        public async Task Open()
+        public void Open()
         {
             if (_ctx == null)
             {
-                _ctx = new Entities();
-                _ctx.Database.Connection.ConnectionString = _connectionString;
-                await _ctx.Database.Connection.OpenAsync();
+                _ctx = new Entities(_nameOrConnectionString);
             }
         }
     }
