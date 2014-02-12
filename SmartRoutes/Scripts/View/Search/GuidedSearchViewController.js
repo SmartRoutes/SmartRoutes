@@ -45,6 +45,8 @@ SmartRoutes.GuidedSearchViewController = (function() {
     var accreditationFormPageController = null;
     var serviceTypeFormPageController = null;
 
+    // Handles enabling/disabling the next button when a
+    // form page reports that it has invalid data.
     function PageValidationCallbackHandler(pageValid) {
         if (pageValid) {
             $("#" + buttonIDs.nextButton).removeAttr("disabled");
@@ -54,7 +56,9 @@ SmartRoutes.GuidedSearchViewController = (function() {
         }
     };
 
+    // Handles redirecting to the first form page if a direct URL is used.
     function RedirectToFirstPageIfFirstTimeVisiting() {
+        // TODO: this doesn't work like it should at the moment.
         if (!activePageController || !activePageElement) {
             activePageElement = $("#" + pageIDs.childInformationPageID);
             activePageController = childInformationFormPageController;
@@ -111,6 +115,7 @@ SmartRoutes.GuidedSearchViewController = (function() {
         }
     };
 
+    // Binds all the routes for the search form pages.
     function InitPageSubroutes() {
         formPageSammyApp = $.sammy(function() {
             this.get(pageIDRouteMap[pageIDs.childInformationPageID], function() {
@@ -135,6 +140,8 @@ SmartRoutes.GuidedSearchViewController = (function() {
             });
         });
     };
+
+    // These functions setup the individual pages.
 
     function InitChildInfoPage() {
         childInformationFormPageController = new SmartRoutes.ChildInformationFormPageController(pageIDs.childInformationPageID);
@@ -165,16 +172,19 @@ SmartRoutes.GuidedSearchViewController = (function() {
         InitServiceTypeFormPage();
     })();
 
+    // Displays the searching animation and hides the forms.
     function ShowSearchingAnimation() {
         $("#" + elementIDs.searchContainer).hide();
         $("#" + elementIDs.searchingAnimationContainer).show();
     };
 
+    // Shows the search forms and hides the loading animation.
     function ShowSearchForm() {
         $("#" + elementIDs.searchingAnimationContainer).hide();
         $("#" + elementIDs.searchContainer).fadeIn(formPageFadeInTimeMS);
     };
 
+    // Constructs the payload object for the complete search query.
     function CreateChildCareSearchPayload() {
         var childCareSearchPayload = new SmartRoutes.Communication.ChildCareSearchQueryPayload(
                                             childInformationFormPageController.GetChildInformationPayloads(),
@@ -185,6 +195,7 @@ SmartRoutes.GuidedSearchViewController = (function() {
         return childCareSearchPayload;
     };
 
+    // Receives data after the server performs a search.
     function SearchCompletedCallback(data) {
         // check data, return to search form or notify the page controller
         // that we have data.
@@ -193,6 +204,7 @@ SmartRoutes.GuidedSearchViewController = (function() {
         }
     };
 
+    // Initiates the child care search on the server.
     function PerformChildCareSearch() {
         ShowSearchingAnimation();
 
@@ -204,6 +216,7 @@ SmartRoutes.GuidedSearchViewController = (function() {
 
     // Event handlers
 
+    // Click handler for the previous button.
     $("#" + buttonIDs.previousButton).click(function() {
         var previousPage = $(activePageElement).prev(".sr-form-page");
 
@@ -214,6 +227,7 @@ SmartRoutes.GuidedSearchViewController = (function() {
         }
     });
 
+    // Click handler for the next button.
     $("#" + buttonIDs.nextButton).click(function() {
         var nextPage = $(activePageElement).next(".sr-form-page");
 

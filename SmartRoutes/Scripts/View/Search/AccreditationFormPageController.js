@@ -1,4 +1,5 @@
 ﻿
+// Handles the accreditation search form page.
 SmartRoutes.AccreditationFormPageController = function(pageID) {
     // Private:
 
@@ -30,11 +31,13 @@ SmartRoutes.AccreditationFormPageController = function(pageID) {
     (function Init() {
         var guidedSeachCommunicationController = new SmartRoutes.Communication.GuidedSearchCommunicationController();
 
+        // We need to retrieve the accreditation view HTML.
         guidedSeachCommunicationController.FetchAccreditationView(function(accreditationView) {
             accreditationViewRaw = accreditationView;
             CreateAndBindAccreditationViews();
         });
 
+        // We also need information on the accreditations.
         guidedSeachCommunicationController.FetchAccreditations(function(accreditationModels) {
             $.each(accreditationModels, function(key, value) {
                 accreditations.push(new SmartRoutes.AccreditationViewModel(value.Name, value.Description, value.URL, value.Checked));
@@ -46,18 +49,22 @@ SmartRoutes.AccreditationFormPageController = function(pageID) {
     return {
         // Public:
 
+        // Signals that this is now the active form page.
         RunPage: function(pageValidationCallback) {
             validationCallback = pageValidationCallback;
         },
 
+        // Signals that this form page is no longer active.
         StopPage: function() {
             validationCallback = null;
         },
 
+        // Gets the ID of this form page.
         GetFormPageID: function() {
             return accreditationFormPageID;
         },
 
+        // Gets the payload object for the accreditation selections.
         GetAccreditationPayloadArray: function() {
             var accreditationPayloadArray = new Array();
 

@@ -69,6 +69,7 @@ SmartRoutes.ChildInformationFormPageController = (function(pageID) {
     return {
         // Public:
 
+        // Signals that this is now the active form page.
         RunPage: function(pageValidationCallback) {
             validationCallback = pageValidationCallback;
 
@@ -77,6 +78,7 @@ SmartRoutes.ChildInformationFormPageController = (function(pageID) {
             validationCallback(true);
         },
 
+        // Signals that this is not the active form page.
         StopPage: function() {
             // Do nothing for now.
         },
@@ -88,6 +90,7 @@ SmartRoutes.ChildInformationFormPageController = (function(pageID) {
             return true;
         },
 
+        // Gets the ID for the form page element.
         GetFormPageID: function() {
             return childInformationFormPageID;
         },

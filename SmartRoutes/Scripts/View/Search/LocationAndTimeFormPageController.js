@@ -14,6 +14,7 @@ SmartRoutes.LocationAndTimeFormPageController = function(pageID) {
         pickUpDestination: "sr-section-pick-up-final-destination"
     };
 
+    // Handles binding the UI elements to javascript objects for data.
     function InitBindings() {
         locationAndTimeViewModel = new SmartRoutes.LocationAndTimeViewModel();
 
@@ -71,6 +72,7 @@ SmartRoutes.LocationAndTimeFormPageController = function(pageID) {
     return {
         // Public: 
 
+        // Signals that this is now the active form page.
         RunPage: function(pageValidationCallback, scheduleTypeSelection) {
             validationCallback = pageValidationCallback;
             scheduleType = scheduleTypeSelection;
@@ -78,15 +80,19 @@ SmartRoutes.LocationAndTimeFormPageController = function(pageID) {
             SetupViewsForScheduleType();
         },
 
+        // Signals that this is no longer the active form page.
         StopPage: function() {
             validationCallback = null;
         },
 
+        // Gets the ID of the form page element.
         GetFormPageID: function() {
             return locationTimeFormPageID;
         },
 
-        GetLocationAndTimeViewModel: function() {
+        // Gets a data payload object for the form page.
+        getLocationAndTimePayload: function() {
+            // Important TODO: forgot to add this,
             return locationAndTimeViewModel;
         }
     };
