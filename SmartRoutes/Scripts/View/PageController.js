@@ -32,7 +32,7 @@ SmartRoutes.pageController = (function () {
         this.get("#/search", function() {
             SmartRoutes.pageController.HideAllPages();
             $("#" + pageIDs.guidedSearchPage).show();
-            guidedSearchViewController.RunPage();
+            guidedSearchViewController.RunPage(SearchCompletedCallback);
         });
 
         this.get("#/results", function() {
@@ -59,6 +59,10 @@ SmartRoutes.pageController = (function () {
         // The sammy app should only be run after the document is ready.
         that.sammyApp.run("/#");
     });
+
+    function SearchCompletedCallback(data) {
+
+    };
 
     return {
         // Public

@@ -11,5 +11,9 @@ namespace SmartRoutes.Controllers
         //
         // GET: /ResultsPage/
 
+        public ActionResult ResultViewHtml()
+        {
+            return PartialView("~/Views/Results/_ResultView.cshtml");
+        }
     }
 }
