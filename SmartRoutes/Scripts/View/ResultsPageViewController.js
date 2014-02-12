@@ -5,5 +5,8 @@ SmartRoutes.ResultsPageViewController = function() {
     return {
         // Public:
 
+        RunPage: function() {
+            // This will need the results from the server to display.
+        }
     };
 };
