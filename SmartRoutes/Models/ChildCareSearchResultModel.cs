@@ -5,6 +5,9 @@ using System.Web;
 
 namespace SmartRoutes.Models
 {
+    /// <summary>
+    /// Model describing the results of a child care search.
+    /// </summary>
     public class ChildCareSearchResultModel
     {
         public ChildCareSearchResultModel()
@@ -12,6 +15,9 @@ namespace SmartRoutes.Models
 
         }
 
+        /// <summary>
+        /// Collection of child care information.
+        /// </summary>
         public IEnumerable<ChildCareModel> ChildCares
         {
             get;
