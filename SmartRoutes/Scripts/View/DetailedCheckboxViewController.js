@@ -1,10 +1,12 @@
 ﻿
+// Controller for the detailed checkbox view.
 SmartRoutes.DetailedCheckboxViewController = function(detailedCheckboxView, descriptionVisibilityChangedCallback) {
     // Private:
 
     var detailedTextClass = "sr-detailed-checkbox-description-container";
     var descriptionVisible = $(detailedCheckboxView).children("." + detailedTextClass).is(":visible");
 
+    // Click handler for the expander button in the detailed checkbox view.
     function DetailedCheckboxExpanderClicked() {
         // TODO: look into how to make this a nice animation.
         if (descriptionVisible) {
