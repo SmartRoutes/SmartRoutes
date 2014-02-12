@@ -128,6 +128,9 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\ResultsPageController.cs" />
+    <Compile Include="Models\BusinessHoursModel.cs" />
+    <Compile Include="Models\ChildCareModel.cs" />
+    <Compile Include="Models\ChildCareSearchResultModel.cs" />
     <Compile Include="Models\Payloads\AccreditationPayload.cs" />
     <Compile Include="Models\Payloads\ChildInformationPayload.cs" />
     <Compile Include="Controllers\GuidedSearchPageController.cs" />
