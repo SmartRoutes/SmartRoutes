@@ -59,12 +59,10 @@ namespace SmartRoutes.Controllers
 
         public JsonResult PerformChildCareSearch(ChildCareSearchQueryPayload searchQuery)
         {
-            if (searchQuery != null)
-            {
-                Console.WriteLine("break");
-            }
+            // This needs to be populated by the search results.
+            List<ChildCareSearchResultModel> results = new List<ChildCareSearchResultModel>();
 
-            return null;
+            return Json(results, JsonRequestBehavior.AllowGet); 
         }
     }
 }

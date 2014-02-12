@@ -8,7 +8,14 @@ SmartRoutes.pageController = (function () {
     var guidedSearchID = "sr-guided-search-view";
     var sammyApp = null;
 
+    var pageIDs = {
+        mainPage: "sr-main-page-view",
+        guidedSearchPage: "sr-guided-search-page-view",
+        resultsPage: "sr-results-page-view"
+    };
+
     var guidedSearchViewController = new SmartRoutes.GuidedSearchViewController();
+    var resultsPageViewController = new SmartRoutes.ResultsPageViewController();
 
     // Sammy wants the element to operate on and a function
     // that defines the routes.
@@ -18,19 +25,20 @@ SmartRoutes.pageController = (function () {
         // Main page route.
         this.get("#/", function() {
             SmartRoutes.pageController.HideAllPages();
-            $("#sr-main-page-view").show();
+            $("#" + pageIDs.mainPage).show();
         });
 
         // Search page route.
         this.get("#/search", function() {
             SmartRoutes.pageController.HideAllPages();
-            $("#sr-guided-search-page-view").show();
-            guidedSearchViewController.RunPage();
+            $("#" + pageIDs.guidedSearchPage).show();
+            guidedSearchViewController.RunPage(SearchCompletedCallback);
         });
 
         this.get("#/results", function() {
             SmartRoutes.pageController.HideAllPages();
-            $("#sr-results-page-view").show();
+            $("#" + pageIDs.resultsPage).show();
+            resultsPageViewController.RunPage();
         });
 
         this.get("#/plan", function() {
@@ -51,6 +59,10 @@ SmartRoutes.pageController = (function () {
         // The sammy app should only be run after the document is ready.
         that.sammyApp.run("/#");
     });
+
+    function SearchCompletedCallback(data) {
+
+    };
 
     return {
         // Public

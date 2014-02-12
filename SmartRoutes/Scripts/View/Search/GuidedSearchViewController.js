@@ -8,6 +8,7 @@ SmartRoutes.GuidedSearchViewController = (function() {
     var activePageElement = null;
     var activePageController = null;
     var formPageFadeInTimeMS = 300;
+    var searchCompletedCallback = null;
 
     var buttonIDs = {
         nextButton: "sr-guided-search-button-next",
@@ -187,6 +188,9 @@ SmartRoutes.GuidedSearchViewController = (function() {
     function SearchCompletedCallback(data) {
         // check data, return to search form or notify the page controller
         // that we have data.
+        if (searchCompletedCallback && data) {
+            searchCompletedCallback(data);
+        }
     };
 
     function PerformChildCareSearch() {
@@ -226,7 +230,7 @@ SmartRoutes.GuidedSearchViewController = (function() {
     return {
         // Public:
 
-        RunPage: function() {
+        RunPage: function(searchCompletedCallback) {
             RedirectToFirstPageIfFirstTimeVisiting();
         }
     };
