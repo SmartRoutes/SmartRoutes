@@ -189,6 +189,7 @@ SmartRoutes.GuidedSearchViewController = (function() {
         var childCareSearchPayload = new SmartRoutes.Communication.ChildCareSearchQueryPayload(
                                             childInformationFormPageController.GetChildInformationPayloads(),
                                             scheduleTypeFormPageController.GetScheduleTypeInformationPayload(),
+                                            locationAndTimeFormPageController.getLocationAndTimePayload(),
                                             accreditationFormPageController.GetAccreditationPayloadArray(),
                                             serviceTypeFormPageController.GetServiceTypePayloadArray());
 

@@ -36,6 +36,12 @@ namespace SmartRoutes.Models.Payloads
             set;
         }
 
+        public LocationsAndTimesPayload LocationsAndTimes
+        {
+            get;
+            set;
+        }
+
         /// <summary>
         /// A collection of information about the accreditations to include
         /// in a search.

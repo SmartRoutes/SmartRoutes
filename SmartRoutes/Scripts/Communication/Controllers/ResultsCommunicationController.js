@@ -1,7 +1,7 @@
 ﻿
 // Controller that handles communicating with the server for
 // results page requests.
-SmartRoutes.Communication.ResultsCommunicationController = new function() {
+SmartRoutes.Communication.ResultsCommunicationController =  function() {
     // Private:
 
     // The path to the results page controller.

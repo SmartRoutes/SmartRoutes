@@ -132,6 +132,7 @@
     <Compile Include="Models\ChildCareModel.cs" />
     <Compile Include="Models\ChildCareSearchResultModel.cs" />
     <Compile Include="Models\Payloads\AccreditationPayload.cs" />
+    <Compile Include="Models\Payloads\AddressPayload.cs" />
     <Compile Include="Models\Payloads\ChildInformationPayload.cs" />
     <Compile Include="Controllers\GuidedSearchPageController.cs" />
     <Compile Include="Models\AccreditationModel.cs" />
@@ -139,6 +140,7 @@
     <Compile Include="Models\DetailedCheckboxModel.cs" />
     <Compile Include="Models\LoadingViewModel.cs" />
     <Compile Include="Models\Payloads\ChildCareSearchQueryPayload.cs" />
+    <Compile Include="Models\Payloads\LocationsAndTimesPayload.cs" />
     <Compile Include="Models\Payloads\ScheduleTypePayload.cs" />
     <Compile Include="Models\Payloads\ServiceTypePayload.cs" />
     <Compile Include="Models\PortalButtonModel.cs" />
@@ -173,8 +175,10 @@
     <Content Include="Scripts\Communication\Controllers\GuidedSearchCommunicationController.js" />
     <Content Include="Scripts\Communication\Controllers\ResultsCommunicationController.js" />
     <Content Include="Scripts\Communication\Payloads\AccreditationPayload.js" />
+    <Content Include="Scripts\Communication\Payloads\AddressPayload.js" />
     <Content Include="Scripts\Communication\Payloads\ChildCareSearchQueryPayload.js" />
     <Content Include="Scripts\Communication\Payloads\ChildInformationPayload.js" />
+    <Content Include="Scripts\Communication\Payloads\LocationsAndTimesPayload.js" />
     <Content Include="Scripts\Communication\Payloads\ScheduleTypePayload.js" />
     <Content Include="Scripts\Communication\Payloads\ServiceTypePayload.js" />
     <Content Include="Scripts\Constants.js" />

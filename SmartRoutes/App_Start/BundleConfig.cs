@@ -29,6 +29,8 @@ namespace SmartRoutes
                         "~/Scripts/Constants.js",
 
                         // Communication objects.
+                        "~/Scripts/Communication/Payloads/AddressPayload.js",
+                        "~/Scripts/Communication/Payloads/LocationsAndTimesPayload.js",
                         "~/Scripts/Communication/Payloads/ChildInformationPayload.js",
                         "~/Scripts/Communication/Payloads/ScheduleTypePayload.js",
                         "~/Scripts/Communication/Payloads/AccreditationPayload.js",
@@ -37,6 +39,7 @@ namespace SmartRoutes
 
                         // Communication controllers.
                         "~/Scripts/Communication/Controllers/GuidedSearchCommunicationController.js",
+                        "~/Scripts/Communication/Controllers/ResultsCommunicationController.js",
 
                         // Common/Generic view controllers.
                         "~/Scripts/View/DetailedCheckboxViewController.js",

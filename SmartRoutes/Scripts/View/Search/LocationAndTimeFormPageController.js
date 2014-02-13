@@ -92,8 +92,49 @@ SmartRoutes.LocationAndTimeFormPageController = function(pageID) {
 
         // Gets a data payload object for the form page.
         getLocationAndTimePayload: function() {
-            // Important TODO: forgot to add this,
-            return locationAndTimeViewModel;
+            var payload = new SmartRoutes.Communication.LocationsAndTimesPayload();
+            var dropOffDepartureViewModel = locationAndTimeViewModel.dropOffDepartureViewModel.dropOffDepartureAddressViewModel;
+            payload.DropOffDepartureAddress = new SmartRoutes.Communication.AddressPayload(
+                                                dropOffDepartureViewModel.address(),
+                                                dropOffDepartureViewModel.addressLine2(),
+                                                dropOffDepartureViewModel.city(),
+                                                dropOffDepartureViewModel.state(),
+                                                dropOffDepartureViewModel.zipCode());
+
+            var dropOffDestinationViewModel = locationAndTimeViewModel.dropOffDestinationViewModel;
+            payload.DropOffLatestArrivalTime = dropOffDestinationViewModel.dropOffDestinationLatestTime();
+
+            var dropOffDestinationAddress = dropOffDestinationViewModel.dropOffDestinationAddressViewModel;
+            payload.DropOffDestinationAddress = new SmartRoutes.Communication.AddressPayload(
+                                                dropOffDestinationAddress.address(),
+                                                dropOffDestinationAddress.addressLine2(),
+                                                dropOffDestinationAddress.city(),
+                                                dropOffDestinationAddress.state(),
+                                                dropOffDestinationAddress.zipCode());
+
+            var pickUpDepartureViewModel = locationAndTimeViewModel.pickUpDepartureViewModel;
+            payload.PickUpDepartureTime = pickUpDepartureViewModel.pickUpDepartureTime();
+            payload.PickUpDepartureAddressSameAsDropOffDestination = pickUpDepartureViewModel.pickUpDepartureSameAsDestination();
+            var pickUpDepartureAddressViewModel = pickUpDepartureViewModel.pickUpDepartureAddressViewModel;
+            payload.PickUpDepartureAddress = new SmartRoutes.Communication.AddressPayload(
+                                                pickUpDepartureAddressViewModel.address(),
+                                                pickUpDepartureAddressViewModel.addressLine2(),
+                                                pickUpDepartureAddressViewModel.city(),
+                                                pickUpDepartureAddressViewModel.state(),
+                                                pickUpDepartureAddressViewModel.zipCode());
+
+
+            var pickUpDestinationViewModel = locationAndTimeViewModel.pickUpDestinationViewModel;
+            payload.PickUpDestinationSameAsDropOffDeparture = pickUpDestinationViewModel.dropOffDestinationSameAsDeparture();
+            var pickUpDestinationAddress = pickUpDestinationViewModel.pickUpDestinationAddressViewModel;
+            payload.PickUpDestinationAddress = new SmartRoutes.Communication.AddressPayload(
+                                                pickUpDestinationAddress.address(),
+                                                pickUpDestinationAddress.addressLine2(),
+                                                pickUpDestinationAddress.city(),
+                                                pickUpDestinationAddress.state(),
+                                                pickUpDestinationAddress.zipCode());
+
+            return payload;
         }
     };
 };
