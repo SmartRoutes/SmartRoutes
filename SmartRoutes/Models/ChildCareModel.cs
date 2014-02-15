@@ -5,6 +5,9 @@ using System.Web;
 
 namespace SmartRoutes.Models
 {
+    /// <summary>
+    /// Model describing a child care.
+    /// </summary>
     public class ChildCareModel
     {
         public ChildCareModel()
@@ -12,6 +15,9 @@ namespace SmartRoutes.Models
 
         }
 
+        /// <summary>
+        /// The name of a child care.
+        /// </summary>
         public string ChildCareName
         {
             get;
@@ -28,25 +34,37 @@ namespace SmartRoutes.Models
             set;
         }
 
+        /// <summary>
+        /// A link to some review page for a childcare.
+        /// </summary>
         public string ReviewLink
         {
             get;
             set;
         }
 
+        /// <summary>
+        /// The address of the child care (if available).
+        /// </summary>
         public string Address
         {
             get;
             set;
         }
 
+        /// <summary>
+        /// The phone number for the child care (if available).
+        /// </summary>
         public string PhoneNumber
         {
             get;
             set;
         }
 
-        public IEnumerable<BusinessHours> Hours
+        /// <summary>
+        /// Collection representing the business hours for the child care.
+        /// </summary>
+        public IEnumerable<BusinessHoursModel> Hours
         {
             get;
             set;

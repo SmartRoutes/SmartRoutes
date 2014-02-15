@@ -6,14 +6,21 @@ using System.Web.Mvc;
 
 namespace SmartRoutes.Controllers
 {
+    /// <summary>
+    /// Controller that handles requests for the results page.
+    /// </summary>
     public class ResultsPageController : Controller
     {
         //
         // GET: /ResultsPage/
 
-        public ActionResult ResultViewHtml()
+        /// <summary>
+        /// Gets the raw HTML for the result view.
+        /// </summary>
+        /// <returns>The HTML for the result view.</returns>
+        public ActionResult ResultListViewElement()
         {
-            return PartialView("~/Views/Results/_ResultView.cshtml");
+            return PartialView("~/Views/Results/_ResultListViewElement.cshtml");
         }
     }
 }

@@ -1,9 +1,13 @@
 ﻿
+// Controller that handles communication with the server
+// for guided search requests.
 SmartRoutes.Communication.GuidedSearchCommunicationController = function() {
     // Private:
 
+    // Path to the guided search controller.
     var guidedSearchControllerPath = "/GuidedSearchPage/";
 
+    // Map containing all requests that can be made and their paths.
     var requestMap = {
         accreditations: guidedSearchControllerPath + "Accreditations",
         serviceTypes: guidedSearchControllerPath + "ServiceTypes",

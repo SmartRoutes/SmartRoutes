@@ -9,11 +9,18 @@ using SmartRoutes.Models.Payloads;
 
 namespace SmartRoutes.Controllers
 {
+    /// <summary>
+    /// Controller that handles requests from the guided search page.
+    /// </summary>
     public class GuidedSearchPageController : Controller
     {
         //
         // GET: /GuidedSearchPage/
 
+        /// <summary>
+        /// Retrieves information about the available accreditations in JSON format.
+        /// </summary>
+        /// <returns>The JSON data.</returns>
         public JsonResult Accreditations()
         {
             // This stuff should probably go in a database eventually,
@@ -33,6 +40,10 @@ namespace SmartRoutes.Controllers
             return Json(accreditations, JsonRequestBehavior.AllowGet);
         }
 
+        /// <summary>
+        /// Returns information about the child care service types in JSON format.
+        /// </summary>
+        /// <returns>JSON information.</returns>
         public JsonResult ServiceTypes()
         {
             List<ServiceTypeModel> serviceTypes = new List<ServiceTypeModel>
@@ -47,20 +58,33 @@ namespace SmartRoutes.Controllers
             return Json(serviceTypes, JsonRequestBehavior.AllowGet);
         }
 
+        /// <summary>
+        /// Returns the raw HTML for the accreditation view.
+        /// </summary>
+        /// <returns>HTML string for the accreditation view.</returns>
         public ActionResult AccreditationView()
         {
             return PartialView("~/Views/Search/_AccreditationView.cshtml");
         }
 
+        /// <summary>
+        /// Returns the raw HTML for the service type view.
+        /// </summary>
+        /// <returns>HTML string for the service type view.</returns>
         public ActionResult ServiceTypeView()
         {
             return PartialView("~/Views/Search/_ServiceTypeView.cshtml");
         }
 
+        /// <summary>
+        /// Performs the child care search for the supplied query and returns
+        /// the results.
+        /// </summary>
+        /// <param name="searchQuery">The query for the search.</param>
+        /// <returns>The results of the search.</returns>
         public JsonResult PerformChildCareSearch(ChildCareSearchQueryPayload searchQuery)
         {
-            // This needs to be populated by the search results.
-            List<ChildCareSearchResultModel> results = new List<ChildCareSearchResultModel>();
+            ChildCareSearchResultsModel results = new ChildCareSearchResultsModel();
 
             return Json(results, JsonRequestBehavior.AllowGet); 
         }

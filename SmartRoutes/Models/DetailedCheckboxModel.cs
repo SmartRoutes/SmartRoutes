@@ -5,13 +5,25 @@ using System.Web;
 
 namespace SmartRoutes.Models
 {
+    /// <summary>
+    /// Model for a detailed checkbox view.
+    /// </summary>
     public class DetailedCheckboxModel
     {
+        /// <summary>
+        /// Constructor.
+        /// </summary>
         public DetailedCheckboxModel()
         {
 
         }
 
+        /// <summary>
+        /// Constructor.
+        /// </summary>
+        /// <param name="name">Name to use for the detailed checkbox (actually should
+        /// be the text property).</param>
+        /// <param name="description">Description for the item in the checkbox.</param>
         public DetailedCheckboxModel(string name, string description)
         {
             this.Name = name;
@@ -37,6 +49,9 @@ namespace SmartRoutes.Models
             set;
         }
 
+        /// <summary>
+        /// Flag indicating if the box is checked.
+        /// </summary>
         public bool Checked
         {
             get;

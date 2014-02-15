@@ -1,0 +1,29 @@
+﻿
+
+<div class="sr-results-list-view-element">
+    <h1 data-bind="value: serviceName"></h1>
+    <p data-bind="value: description"></p>
+    <a data-bind="attr: {href: serviceLink}">Service Link</a>
+
+    <h2>Route Summary</h2>
+    <span>Route Type: </span>
+    <span data-bind="value: routeType"></span>
+    <br />
+    <span>Routes: </span>
+    <span data-bind="value: routes"></span>
+    <br />
+    <div class="sr-drop-off-route-info-container">
+        <h3>Drop Off Information</h3>
+        <span>Departure Time: </span>
+        <span data-bind="value: dropOffDepartureTime"></span>
+        <span>Arrival time: </span>
+        <span data-bind="value: dropOffArrivalTime"></span>
+    </div>
+    <div class="sr-pick-up-route-info-container">
+        <h3>Pick Up Information</h3>
+        <span>Departure Time:</span>
+        <span data-bind="value: pickUpDepartureTime"></span>
+        <span>Arrival Time: </span>
+        <span data-bind="value: pickUpArrivalTime"></span>
+    </div>
+</div>

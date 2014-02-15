@@ -1,9 +1,13 @@
 ﻿
-SmartRoutes.Communication.ResultsCommunicationController = new function() {
+// Controller that handles communicating with the server for
+// results page requests.
+SmartRoutes.Communication.ResultsCommunicationController =  function() {
     // Private:
 
+    // The path to the results page controller.
     var resultsPageControllerPath = "/ResultsPage/";
 
+    // Map of all requests to their server paths.
     var requestMap = {
         ResultViewHtml: resultsPageControllerPath + "ResultViewHtml"
     };
@@ -12,7 +16,7 @@ SmartRoutes.Communication.ResultsCommunicationController = new function() {
         // Public:
 
         // Fetches the result view HTML from the server.
-        FetchResultViewHtml: function(callback) {
+        FetchResultListViewElementHtml: function(callback) {
             $.get(requestMap.ResultViewHtml, function(data) {
                 callback(data);
             });

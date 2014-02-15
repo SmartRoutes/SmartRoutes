@@ -5,6 +5,9 @@ using System.Web;
 
 namespace SmartRoutes.Models
 {
+    /// <summary>
+    /// Unused.
+    /// </summary>
     public class ChildInformationViewModel
     {
 

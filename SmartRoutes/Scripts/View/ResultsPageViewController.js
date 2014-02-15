@@ -5,17 +5,21 @@ SmartRoutes.ResultsPageViewController = function() {
     var resultData = null;
     var resultPageViewCommunicationController = new SmartRoutes.Communication.ResultsCommunicationController();
 
-    function FetchResultViewHtmlCallback(data) {
+    function FetchResultListViewElementHtmlCallback(data) {
         resultViewHtml = data;
     };
 
     function PopulateResultListView() {
-        
+        // TODO:
+        // Iterate over the results to
+        // 1) insert the HTML and 
+        // 2) Bind the html to data objects
+
     }
 
     (function Init() {
         // We need to retrieve the result view HTML.
-        resultPageViewCommunicationController.FetchResultViewHtml(FetchResultViewHtmlCallback);
+        resultPageViewCommunicationController.FetchResultListViewElementHtml(FetchResultListViewElementHtmlCallback);
     })();
 
     return {

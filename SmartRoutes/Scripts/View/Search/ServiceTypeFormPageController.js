@@ -9,6 +9,7 @@ SmartRoutes.ServiceTypeFormPageController = function(pageID) {
     var validationCallback = null;
     var detailedCheckboxViewControllers = new Array();
 
+    // Adds service type views to the page and binds them to data objects.
     function CreateAndBindServiceTypeViews() {
         if (serviceTypeViewRaw && (serviceTypes.length > 0)) {
             var serviceTypeListContainer = $("#sr-service-type-list-container");
@@ -27,6 +28,7 @@ SmartRoutes.ServiceTypeFormPageController = function(pageID) {
     (function Init() {
         var guidedSearchCommunicationController = new SmartRoutes.Communication.GuidedSearchCommunicationController();
 
+        // We need to get information for the service types.
         guidedSearchCommunicationController.FetchServiceTypes(function(serviceTypeData) {
             $.each(serviceTypeData, function(key, value) {
                 serviceTypes.push(new SmartRoutes.ServiceTypeViewModel(value.Name, value.Description, value.Checked));
@@ -34,6 +36,7 @@ SmartRoutes.ServiceTypeFormPageController = function(pageID) {
             CreateAndBindServiceTypeViews();
         });
 
+        // We need to fetch the HTML for the service type view.
         guidedSearchCommunicationController.FetchServiceTypeView(function(serviceTypeView) {
             serviceTypeViewRaw = serviceTypeView;
             CreateAndBindServiceTypeViews();
@@ -43,14 +46,17 @@ SmartRoutes.ServiceTypeFormPageController = function(pageID) {
     return {
         // Public: 
 
+        // Signals that the form page is now the active page.
         RunPage: function(pageValidationCallback) {
             validationCallback = pageValidationCallback;
         },
 
+        // Signals that this form page is no longer the active page.
         StopPage: function() {
             validationCallback = null;
         },
 
+        // Gets the ID for the form page elements.
         GetFormPageID: function() {
             return serviceTypeFormPageID;
         },
