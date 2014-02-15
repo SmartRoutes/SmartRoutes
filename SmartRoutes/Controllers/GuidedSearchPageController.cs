@@ -84,8 +84,9 @@ namespace SmartRoutes.Controllers
         /// <returns>The results of the search.</returns>
         public JsonResult PerformChildCareSearch(ChildCareSearchQueryPayload searchQuery)
         {
+            ChildCareSearchResultsModel results = new ChildCareSearchResultsModel();
 
-            return null; // Json(results, JsonRequestBehavior.AllowGet); 
+            return Json(results, JsonRequestBehavior.AllowGet); 
         }
     }
 }
