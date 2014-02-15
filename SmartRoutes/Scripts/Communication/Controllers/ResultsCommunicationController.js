@@ -16,7 +16,7 @@ SmartRoutes.Communication.ResultsCommunicationController =  function() {
         // Public:
 
         // Fetches the result view HTML from the server.
-        FetchResultViewHtml: function(callback) {
+        FetchResultListViewElementHtml: function(callback) {
             $.get(requestMap.ResultViewHtml, function(data) {
                 callback(data);
             });

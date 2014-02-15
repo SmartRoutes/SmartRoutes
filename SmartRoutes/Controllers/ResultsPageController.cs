@@ -18,9 +18,9 @@ namespace SmartRoutes.Controllers
         /// Gets the raw HTML for the result view.
         /// </summary>
         /// <returns>The HTML for the result view.</returns>
-        public ActionResult ResultViewHtml()
+        public ActionResult ResultListViewElement()
         {
-            return PartialView("~/Views/Results/_ResultView.cshtml");
+            return PartialView("~/Views/Results/_ResultListViewElement.cshtml");
         }
     }
 }
