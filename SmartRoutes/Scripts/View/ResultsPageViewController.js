@@ -12,8 +12,9 @@ SmartRoutes.ResultsPageViewController = function() {
     function PopulateResultListView() {
         // TODO:
         // Iterate over the results to
-        // 1) insert the HTML and 
-        // 2) Bind the html to data objects
+        // 1) Transform the results into view model objects
+        // 2) insert the HTML and 
+        // 3) Bind the html to view models
 
     }
 
