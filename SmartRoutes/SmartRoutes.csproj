@@ -146,7 +146,7 @@
     <Compile Include="Models\Payloads\ServiceTypePayload.cs" />
     <Compile Include="Models\PortalButtonModel.cs" />
     <Compile Include="Models\PortalViewModel.cs" />
-    <Compile Include="Models\RoutePlanModel.cs" />
+    <Compile Include="Models\ItineraryModel.cs" />
     <Compile Include="Models\ServiceTypeModel.cs" />
     <Compile Include="Resources.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -217,7 +217,7 @@
     <Content Include="Scripts\Library\sammy-0.7.4.min.js" />
     <Content Include="Scripts\View\DetailedCheckboxViewController.js" />
     <Content Include="Scripts\View\ResultsPageViewController.js" />
-    <Content Include="Scripts\View\RoutePlanPageViewController.js" />
+    <Content Include="Scripts\View\ItineraryPageViewController.js" />
     <Content Include="Scripts\View\Search\AccreditationFormPageController.js" />
     <Content Include="Scripts\View\Search\ChildInformationFormPageController.js" />
     <Content Include="Scripts\View\Search\GuidedSearchPageViewController.js" />
@@ -266,7 +266,10 @@
     <Content Include="Views\Results\_ResultsListView.cshtml" />
     <Content Include="Views\Results\_ResultsView.cshtml" />
     <Content Include="Views\Results\_ResultsListViewElement.cshtml" />
-    <Content Include="Views\RoutePlan\_RoutePlanPageView.cshtml" />
+    <Content Include="Views\RoutePlan\_ItineraryPageView.cshtml" />
+    <Content Include="Views\RoutePlan\_ItineraryView.cshtml" />
+    <Content Include="Views\RoutePlan\_ChildCareServiceDescriptionView.cshtml" />
+    <Content Include="Views\RoutePlan\_ChildCareServiceSummaryView.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

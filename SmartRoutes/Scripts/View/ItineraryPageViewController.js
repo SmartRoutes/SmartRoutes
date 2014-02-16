@@ -1,5 +1,5 @@
 ﻿
-SmartRoutes.RoutePlanPageViewController = function() {
+SmartRoutes.ItineraryPageViewController = function() {
     // Private:
 
     return {

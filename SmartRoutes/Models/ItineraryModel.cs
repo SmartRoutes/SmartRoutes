@@ -10,7 +10,7 @@ namespace SmartRoutes.Models
     /// to get from a location, to child care(s), and 
     /// on to the final destination.
     /// </summary>
-    public class RoutePlanModel
+    public class ItineraryModel
     {
         // TODO: figure out what this should look like
         // It may be worth having a collection of "steps"
@@ -37,7 +37,7 @@ namespace SmartRoutes.Models
         /// <summary>
         /// Constructor.
         /// </summary>
-        public RoutePlanModel()
+        public ItineraryModel()
         {
 
         }
