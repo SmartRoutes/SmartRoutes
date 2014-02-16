@@ -266,10 +266,10 @@
     <Content Include="Views\Results\_ResultsListView.cshtml" />
     <Content Include="Views\Results\_ResultsView.cshtml" />
     <Content Include="Views\Results\_ResultsListViewElement.cshtml" />
-    <Content Include="Views\RoutePlan\_ItineraryPageView.cshtml" />
-    <Content Include="Views\RoutePlan\_ItineraryView.cshtml" />
-    <Content Include="Views\RoutePlan\_ChildCareServiceDescriptionView.cshtml" />
-    <Content Include="Views\RoutePlan\_ChildCareServiceSummaryView.cshtml" />
+    <Content Include="Views\Itinerary\_ItineraryPageView.cshtml" />
+    <Content Include="Views\Itinerary\_ItineraryView.cshtml" />
+    <Content Include="Views\Itinerary\_ChildCareServiceDescriptionView.cshtml" />
+    <Content Include="Views\Itinerary\_ChildCareServiceSummaryView.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
