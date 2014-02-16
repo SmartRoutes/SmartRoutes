@@ -9,7 +9,7 @@ SmartRoutes.Communication.ResultsCommunicationController =  function() {
 
     // Map of all requests to their server paths.
     var requestMap = {
-        ResultViewHtml: resultsPageControllerPath + "ResultViewHtml"
+        ResultViewHtml: resultsPageControllerPath + "ResultListViewElement"
     };
 
     return {

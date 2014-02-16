@@ -209,6 +209,7 @@
     <Content Include="Scripts\ViewModels\LocationAndTimeViewModel.js" />
     <Content Include="Scripts\ViewModels\PickUpDepartureViewModel.js" />
     <Content Include="Scripts\ViewModels\PickUpDestinationViewModel.js" />
+    <Content Include="Scripts\ViewModels\ResultsListViewElementViewModel.js" />
     <Content Include="Scripts\ViewModels\ScheduleTypeViewModel.js" />
     <Content Include="Scripts\ViewModels\ServiceTypeViewModel.js" />
     <Content Include="Scripts\Library\sammy-0.7.4.js" />
@@ -217,7 +218,7 @@
     <Content Include="Scripts\View\ResultsPageViewController.js" />
     <Content Include="Scripts\View\Search\AccreditationFormPageController.js" />
     <Content Include="Scripts\View\Search\ChildInformationFormPageController.js" />
-    <Content Include="Scripts\View\Search\GuidedSearchViewController.js" />
+    <Content Include="Scripts\View\Search\GuidedSearchPageViewController.js" />
     <Content Include="Scripts\View\Search\LocationAndTimeFormPageController.js" />
     <Content Include="Scripts\View\PageController.js" />
     <Content Include="Scripts\View\PortalViewController.js" />

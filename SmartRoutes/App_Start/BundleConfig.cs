@@ -67,7 +67,7 @@ namespace SmartRoutes
                         "~/Scripts/View/Search/ServiceTypeFormPageController.js",
 
                         // Page Controllers.
-                        "~/Scripts/View/Search/GuidedSearchViewController.js",
+                        "~/Scripts/View/Search/GuidedSearchPageViewController.js",
                         "~/Scripts/View/ResultsPageViewController.js",
 
                         // This controller essentially runs the site.
