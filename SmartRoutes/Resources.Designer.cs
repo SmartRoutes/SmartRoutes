@@ -358,11 +358,29 @@ namespace SmartRoutes {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to #/Results.
+        /// </summary>
+        public static string PageRouteResults {
+            get {
+                return ResourceManager.GetString("PageRouteResults", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to #/search.
         /// </summary>
         public static string PageRouteSearch {
             get {
                 return ResourceManager.GetString("PageRouteSearch", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Back to Results.
+        /// </summary>
+        public static string portalTextBackToResults {
+            get {
+                return ResourceManager.GetString("portalTextBackToResults", resourceCulture);
             }
         }
         
