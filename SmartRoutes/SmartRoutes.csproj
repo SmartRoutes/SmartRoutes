@@ -130,7 +130,8 @@
     <Compile Include="Controllers\ResultsPageController.cs" />
     <Compile Include="Models\BusinessHoursModel.cs" />
     <Compile Include="Models\ChildCareModel.cs" />
-    <Compile Include="Models\ChildCareSearchResultModel.cs" />
+    <Compile Include="Models\ChildCareRouteModel.cs" />
+    <Compile Include="Models\ChildCareSearchResultsModel.cs" />
     <Compile Include="Models\Payloads\AccreditationPayload.cs" />
     <Compile Include="Models\Payloads\AddressPayload.cs" />
     <Compile Include="Models\Payloads\ChildInformationPayload.cs" />
@@ -145,6 +146,7 @@
     <Compile Include="Models\Payloads\ServiceTypePayload.cs" />
     <Compile Include="Models\PortalButtonModel.cs" />
     <Compile Include="Models\PortalViewModel.cs" />
+    <Compile Include="Models\RoutePlanModel.cs" />
     <Compile Include="Models\ServiceTypeModel.cs" />
     <Compile Include="Resources.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -259,7 +261,8 @@
     <Content Include="Views\Results\_ResultsPageView.cshtml" />
     <Content Include="Views\Shared\_GoogleMapsView.cshtml" />
     <Content Include="Views\Results\_ResultsListView.cshtml" />
-    <Content Include="Views\Results\_ResultView.cshtml" />
+    <Content Include="Views\Results\_ResultsView.cshtml" />
+    <Content Include="Views\Results\_ResultsListViewElement.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
