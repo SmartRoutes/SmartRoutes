@@ -1,9 +1,10 @@
 ﻿/* requires(SmartRoutes.js) */
 
-SmartRoutes.GuidedSearchViewController = (function() {
+SmartRoutes.GuidedSearchPageViewController = (function(pageID) {
 
     // Private:
     
+    var guidedSearchPageViewID = pageID;
     var formPageSammyApp = null;
     var activePageElement = null;
     var activePageController = null;
@@ -247,6 +248,15 @@ SmartRoutes.GuidedSearchViewController = (function() {
 
         RunPage: function(searchCompletedCallback) {
             RedirectToFirstPageIfFirstTimeVisiting();
+        },
+
+        StopPage: function() {
+            // Break this callback.
+            searchCompletedCallback = null;
+        },
+
+        GetPageViewID: function() {
+            return guidedSearchPageViewID;
         }
     };
 });

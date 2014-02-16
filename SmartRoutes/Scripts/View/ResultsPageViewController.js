@@ -1,6 +1,7 @@
 ﻿
-SmartRoutes.ResultsPageViewController = function() {
+SmartRoutes.ResultsPageViewController = function(pageID) {
     // Private:
+    var resultsPageViewID = pageID;
     var resultViewHtml = null;
     var resultData = null;
     var resultPageViewCommunicationController = new SmartRoutes.Communication.ResultsCommunicationController();
@@ -54,6 +55,14 @@ SmartRoutes.ResultsPageViewController = function() {
 
         RunPage: function(searchresults) {
             // This will need the results from the server to display.
+        },
+
+        StopPage: function() {
+
+        },
+
+        GetPageViewID: function() {
+            return resultsPageViewID;
         }
     };
 };

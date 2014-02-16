@@ -1,25 +1,22 @@
 ﻿
-SmartRoutes.ItineraryPageViewController = function(pageID) {
+SmartRoutes.MainPageViewController = function(pageID) {
     // Private:
 
-    var itineraryPageViewID = pageID;
-    (function Init() {
-
-    })();
+    var mainPageViewID = pageID;
 
     return {
         // Public:
 
         RunPage: function() {
-
+            // Do nothing.
         },
 
         StopPage: function() {
-
+            // Do nothing.
         },
 
         GetPageViewID: function() {
-            return itineraryPageViewID;
+            return mainPageViewID;
         }
     };
 };

@@ -21,6 +21,7 @@
 /// <reference path="\Library\sammy-0.7.4.min.js" />
 /// <reference path="\View\DetailedCheckboxViewController.js" />
 /// <reference path="\View\ItineraryPageViewController.js" />
+/// <reference path="\View\MainPageViewController.js" />
 /// <reference path="\View\PageController.js" />
 /// <reference path="\View\PortalViewController.js" />
 /// <reference path="\View\ResultsPageViewController.js" />

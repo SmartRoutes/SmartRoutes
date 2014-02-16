@@ -218,6 +218,7 @@
     <Content Include="Scripts\Library\sammy-0.7.4.js" />
     <Content Include="Scripts\Library\sammy-0.7.4.min.js" />
     <Content Include="Scripts\View\DetailedCheckboxViewController.js" />
+    <Content Include="Scripts\View\MainPageViewController.js" />
     <Content Include="Scripts\View\ResultsPageViewController.js" />
     <Content Include="Scripts\View\ItineraryPageViewController.js" />
     <Content Include="Scripts\View\Search\AccreditationFormPageController.js" />
