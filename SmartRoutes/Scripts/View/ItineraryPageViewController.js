@@ -2,6 +2,10 @@
 SmartRoutes.ItineraryPageViewController = function() {
     // Private:
 
+    (function Init() {
+
+    })();
+
     return {
         // Public:
 

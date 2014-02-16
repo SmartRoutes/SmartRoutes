@@ -1,6 +1,7 @@
 /// <reference path="\Constants.js" />
 /// <reference path="\SmartRoutes.js" />
 /// <reference path="\Communication\Controllers\GuidedSearchCommunicationController.js" />
+/// <reference path="\Communication\Controllers\ItineraryCommunicationController.js" />
 /// <reference path="\Communication\Controllers\ResultsCommunicationController.js" />
 /// <reference path="\Communication\Payloads\AccreditationPayload.js" />
 /// <reference path="\Communication\Payloads\AddressPayload.js" />

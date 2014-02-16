@@ -127,6 +127,7 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Controllers\ItineraryPageController.cs" />
     <Compile Include="Controllers\ResultsPageController.cs" />
     <Compile Include="Models\BusinessHoursModel.cs" />
     <Compile Include="Models\ChildCareModel.cs" />
@@ -176,6 +177,7 @@
     <Content Include="Content\Views\ResultsPageView.css" />
     <Content Include="Content\Views\RoutePlanPageView.css" />
     <Content Include="Scripts\Communication\Controllers\GuidedSearchCommunicationController.js" />
+    <Content Include="Scripts\Communication\Controllers\ItineraryCommunicationController.js" />
     <Content Include="Scripts\Communication\Controllers\ResultsCommunicationController.js" />
     <Content Include="Scripts\Communication\Payloads\AccreditationPayload.js" />
     <Content Include="Scripts\Communication\Payloads\AddressPayload.js" />

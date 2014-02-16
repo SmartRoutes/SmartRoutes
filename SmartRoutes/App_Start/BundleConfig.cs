@@ -40,6 +40,7 @@ namespace SmartRoutes
                         // Communication controllers.
                         "~/Scripts/Communication/Controllers/GuidedSearchCommunicationController.js",
                         "~/Scripts/Communication/Controllers/ResultsCommunicationController.js",
+                        "~/Scripts/Communication/Controllers/ItineraryCommunicationController.js",
 
                         // Common/Generic view controllers.
                         "~/Scripts/View/DetailedCheckboxViewController.js",
