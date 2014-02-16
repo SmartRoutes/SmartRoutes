@@ -16,7 +16,7 @@ SmartRoutes.pageController = (function () {
 
     var guidedSearchViewController = new SmartRoutes.GuidedSearchViewController();
     var resultsPageViewController = new SmartRoutes.ResultsPageViewController();
-    var routePlanPageViewController = new SmartRoutes.RoutePlanPageViewController();
+    var routePlanPageViewController = new SmartRoutes.ItineraryPageViewController();
 
     // Sammy wants the element to operate on and a function
     // that defines the routes.
