@@ -36,6 +36,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reader", "Reader\Reader.csp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Heap", "Heap\Heap.csproj", "{B66C6D7D-6D28-41CD-9AD0-04A944ED5AF1}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GraphVisualizer", "GraphVisualizer\GraphVisualizer.csproj", "{5481CFED-654C-4694-955A-DB8CA4FEC9FE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -74,6 +76,10 @@ Global
 		{B66C6D7D-6D28-41CD-9AD0-04A944ED5AF1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B66C6D7D-6D28-41CD-9AD0-04A944ED5AF1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B66C6D7D-6D28-41CD-9AD0-04A944ED5AF1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5481CFED-654C-4694-955A-DB8CA4FEC9FE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5481CFED-654C-4694-955A-DB8CA4FEC9FE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5481CFED-654C-4694-955A-DB8CA4FEC9FE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5481CFED-654C-4694-955A-DB8CA4FEC9FE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
