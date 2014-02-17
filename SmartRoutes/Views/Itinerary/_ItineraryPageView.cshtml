@@ -1,0 +1,23 @@
+﻿
+@using SmartRoutes.Models
+@using SmartRoutes
+
+<div id="sr-route-plan-page-view">
+    @{
+        // Render the portal view.
+        PortalViewModel resultsPortalModel = new PortalViewModel("sr-portal-route-plan-page");
+        resultsPortalModel.AddButtonModel(new PortalButtonModel(Resources.portalTextBackToResults, Resources.PageRouteResults));
+        resultsPortalModel.AddButtonModel(new PortalButtonModel(Resources.portalTextFeedback, Resources.PageRouteFeedback));
+        Html.RenderPartial("~/Views/Shared/_PortalView.cshtml", resultsPortalModel);
+    }
+
+    @* Render the route plan. *@
+    @Html.Partial("~/Views/Itinerary/_ItineraryView.cshtml")
+
+    @* Render the map. *@
+    @Html.Partial("~/Views/Shared/_GoogleMapsView.cshtml")
+
+    @* Render the child care service summary. *@
+    @Html.Partial("~/Views/Itinerary/_ChildCareServiceSummaryView.cshtml")
+
+</div>

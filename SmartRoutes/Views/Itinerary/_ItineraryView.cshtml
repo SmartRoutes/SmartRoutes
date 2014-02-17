@@ -1,0 +1,22 @@
+﻿
+<div class="sr-route-itinerary-view">
+    @* This is the title area for the list of steps. *@
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="sr-text-area-title">
+                <span class="sr-text-area-title-text">Itinerary</span>
+            </div>
+        </div>
+    </div>
+
+    @* This is the actual list of steps. *@
+    <div class="row">
+        <div class="col-lg-12">
+            <ol data-bind="foreach: itinerarySteps">
+                <li>
+                    <span data-bind="value: itineraryStep"></span>
+                </li>
+            </ol>
+        </div>
+    </div>
+</div>

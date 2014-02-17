@@ -40,6 +40,7 @@ namespace SmartRoutes
                         // Communication controllers.
                         "~/Scripts/Communication/Controllers/GuidedSearchCommunicationController.js",
                         "~/Scripts/Communication/Controllers/ResultsCommunicationController.js",
+                        "~/Scripts/Communication/Controllers/ItineraryCommunicationController.js",
 
                         // Common/Generic view controllers.
                         "~/Scripts/View/DetailedCheckboxViewController.js",
@@ -67,8 +68,10 @@ namespace SmartRoutes
                         "~/Scripts/View/Search/ServiceTypeFormPageController.js",
 
                         // Page Controllers.
-                        "~/Scripts/View/Search/GuidedSearchViewController.js",
+                        "~/Scripts/View/MainPageViewController.js",
+                        "~/Scripts/View/Search/GuidedSearchPageViewController.js",
                         "~/Scripts/View/ResultsPageViewController.js",
+                        "~/Scripts/View/ItineraryPageViewController.js",
 
                         // This controller essentially runs the site.
                         "~/Scripts/View/PageController.js"));
@@ -81,7 +84,8 @@ namespace SmartRoutes
                         "~/Content/Views/MainPageView.css",
                         "~/Content/Views/PortalView.css",
                         "~/Content/Views/GuidedSearchPageView.css",
-                        "~/Content/Views/ResultsPageView.css"));
+                        "~/Content/Views/ResultsPageView.css",
+                        "~/Content/Views/RoutePlanPageView.css"));
         }
     }
 }

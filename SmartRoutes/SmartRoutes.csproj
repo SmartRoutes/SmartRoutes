@@ -127,10 +127,12 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Controllers\ItineraryPageController.cs" />
     <Compile Include="Controllers\ResultsPageController.cs" />
     <Compile Include="Models\BusinessHoursModel.cs" />
     <Compile Include="Models\ChildCareModel.cs" />
-    <Compile Include="Models\ChildCareSearchResultModel.cs" />
+    <Compile Include="Models\ChildCareRouteModel.cs" />
+    <Compile Include="Models\ChildCareSearchResultsModel.cs" />
     <Compile Include="Models\Payloads\AccreditationPayload.cs" />
     <Compile Include="Models\Payloads\AddressPayload.cs" />
     <Compile Include="Models\Payloads\ChildInformationPayload.cs" />
@@ -145,6 +147,7 @@
     <Compile Include="Models\Payloads\ServiceTypePayload.cs" />
     <Compile Include="Models\PortalButtonModel.cs" />
     <Compile Include="Models\PortalViewModel.cs" />
+    <Compile Include="Models\ItineraryModel.cs" />
     <Compile Include="Models\ServiceTypeModel.cs" />
     <Compile Include="Resources.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -172,7 +175,9 @@
     <Content Include="Content\Views\GenericControls.css" />
     <Content Include="Content\Images\sample_map.png" />
     <Content Include="Content\Views\ResultsPageView.css" />
+    <Content Include="Content\Views\RoutePlanPageView.css" />
     <Content Include="Scripts\Communication\Controllers\GuidedSearchCommunicationController.js" />
+    <Content Include="Scripts\Communication\Controllers\ItineraryCommunicationController.js" />
     <Content Include="Scripts\Communication\Controllers\ResultsCommunicationController.js" />
     <Content Include="Scripts\Communication\Payloads\AccreditationPayload.js" />
     <Content Include="Scripts\Communication\Payloads\AddressPayload.js" />
@@ -207,15 +212,18 @@
     <Content Include="Scripts\ViewModels\LocationAndTimeViewModel.js" />
     <Content Include="Scripts\ViewModels\PickUpDepartureViewModel.js" />
     <Content Include="Scripts\ViewModels\PickUpDestinationViewModel.js" />
+    <Content Include="Scripts\ViewModels\ResultsListViewElementViewModel.js" />
     <Content Include="Scripts\ViewModels\ScheduleTypeViewModel.js" />
     <Content Include="Scripts\ViewModels\ServiceTypeViewModel.js" />
     <Content Include="Scripts\Library\sammy-0.7.4.js" />
     <Content Include="Scripts\Library\sammy-0.7.4.min.js" />
     <Content Include="Scripts\View\DetailedCheckboxViewController.js" />
+    <Content Include="Scripts\View\MainPageViewController.js" />
     <Content Include="Scripts\View\ResultsPageViewController.js" />
+    <Content Include="Scripts\View\ItineraryPageViewController.js" />
     <Content Include="Scripts\View\Search\AccreditationFormPageController.js" />
     <Content Include="Scripts\View\Search\ChildInformationFormPageController.js" />
-    <Content Include="Scripts\View\Search\GuidedSearchViewController.js" />
+    <Content Include="Scripts\View\Search\GuidedSearchPageViewController.js" />
     <Content Include="Scripts\View\Search\LocationAndTimeFormPageController.js" />
     <Content Include="Scripts\View\PageController.js" />
     <Content Include="Scripts\View\PortalViewController.js" />
@@ -259,11 +267,15 @@
     <Content Include="Views\Results\_ResultsPageView.cshtml" />
     <Content Include="Views\Shared\_GoogleMapsView.cshtml" />
     <Content Include="Views\Results\_ResultsListView.cshtml" />
-    <Content Include="Views\Results\_ResultView.cshtml" />
+    <Content Include="Views\Results\_ResultsView.cshtml" />
+    <Content Include="Views\Results\_ResultsListViewElement.cshtml" />
+    <Content Include="Views\Itinerary\_ItineraryPageView.cshtml" />
+    <Content Include="Views\Itinerary\_ItineraryView.cshtml" />
+    <Content Include="Views\Itinerary\_ChildCareServiceDescriptionView.cshtml" />
+    <Content Include="Views\Itinerary\_ChildCareServiceSummaryView.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Views\RoutePlan\" />
     <Folder Include="Views\Shared\Banners\" />
     <Folder Include="Views\Shared\Feedback\" />
   </ItemGroup>

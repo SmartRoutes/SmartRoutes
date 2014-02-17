@@ -20,7 +20,7 @@ namespace SmartRoutes.Controllers
         /// <returns>The HTML for the result view.</returns>
         public ActionResult ResultListViewElement()
         {
-            return PartialView("~/Views/Results/_ResultListViewElement.cshtml");
+            return PartialView("~/Views/Results/_ResultsListViewElement.cshtml");
         }
     }
 }

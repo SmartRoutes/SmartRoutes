@@ -237,4 +237,10 @@
   <data name="PageRouteSearch" xml:space="preserve">
     <value>#/search</value>
   </data>
+  <data name="PageRouteResults" xml:space="preserve">
+    <value>#/Results</value>
+  </data>
+  <data name="portalTextBackToResults" xml:space="preserve">
+    <value>Back to Results</value>
+  </data>
 </root>
