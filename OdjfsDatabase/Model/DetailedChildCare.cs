@@ -11,107 +11,107 @@ namespace SmartRoutes.Demo.OdjfsDatabase.Model
             _model = model;
         }
 
-        public DateTime? SundayEnd
+        public override DateTime? SundayEnd
         {
             get { return _model.SundayEnd; }
         }
 
-        public DateTime? SundayBegin
+        public override DateTime? SundayBegin
         {
             get { return _model.SundayBegin; }
         }
 
-        public bool SundayReported
+        public override bool SundayReported
         {
             get { return _model.SundayReported; }
         }
 
-        public DateTime? SaturdayBegin
+        public override DateTime? SaturdayBegin
         {
             get { return _model.SaturdayBegin; }
         }
 
-        public bool SaturdayReported
+        public override bool SaturdayReported
         {
             get { return _model.SaturdayReported; }
         }
 
-        public DateTime? SaturdayEnd
+        public override DateTime? SaturdayEnd
         {
             get { return _model.SaturdayEnd; }
         }
 
-        public DateTime? FridayEnd
+        public override DateTime? FridayEnd
         {
             get { return _model.FridayEnd; }
         }
 
-        public DateTime? FridayBegin
+        public override DateTime? FridayBegin
         {
             get { return _model.FridayBegin; }
         }
 
-        public bool FridayReported
+        public override bool FridayReported
         {
             get { return _model.FridayReported; }
         }
 
-        public DateTime? ThursdayEnd
+        public override DateTime? ThursdayEnd
         {
             get { return _model.ThursdayEnd; }
         }
 
-        public DateTime? ThursdayBegin
+        public override DateTime? ThursdayBegin
         {
             get { return _model.ThursdayBegin; }
         }
 
-        public bool ThursdayReported
+        public override bool ThursdayReported
         {
             get { return _model.ThursdayReported; }
         }
 
-        public DateTime? WednesdayEnd
+        public override DateTime? WednesdayEnd
         {
             get { return _model.WednesdayEnd; }
         }
 
-        public DateTime? TuesdayEnd
+        public override DateTime? TuesdayEnd
         {
             get { return _model.TuesdayEnd; }
         }
 
-        public DateTime? TuesdayBegin
+        public override DateTime? TuesdayBegin
         {
             get { return _model.TuesdayBegin; }
         }
 
-        public bool TuesdayReported
+        public override bool TuesdayReported
         {
             get { return _model.TuesdayReported; }
         }
 
-        public bool WednesdayReported
+        public override bool WednesdayReported
         {
             get { return _model.WednesdayReported; }
         }
 
-        public DateTime? WednesdayBegin
+        public override DateTime? WednesdayBegin
         {
             get { return _model.WednesdayBegin; }
         }
 
-        public DateTime? MondayEnd
+        public override DateTime? MondayEnd
         {
             get { return _model.MondayEnd; }
         }
 
-        public DateTime? MondayBegin
+        public override DateTime? MondayBegin
         {
             get { return _model.MondayBegin; }
         }
 
-        public bool MondayReported
+        public override bool MondayReported
         {
             get { return _model.MondayReported; }
         }
