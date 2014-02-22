@@ -1,0 +1,24 @@
+<html>
+  <head>
+    <style type="text/css">
+    .todo { color: red;}
+    </style>
+  </head>
+  <body>
+    <h1>SmartRoutes SDK</h1>
+    <h2>Requirements</h2>
+    <p>The SmartRoutes SDK is a tool designed for software developers to easily implement public transit routing logic in their own applications. To be clear, this documentation is <i>not</i> intended for the end-user of an application.</p>
+    <p>The SmartRoutes SDK cannot be used in all situations. To get started, make sure your situation matches all of these requirements:</p>
+    <ul>
+      <li>You are developing a .NET application.</li>
+      <li>You have GTFS data.</li>
+      <li>You have destinations, each with a latitude and longitude.</li>
+    </ul>
+    <h3>1. You are developing a .NET application.</h3>
+    <p>The SmartRoute graph search algorithm is writtin in C# and can be used by any .NET version 4.5 application. The most popular .NET languages are C# and Visual Basic .NET.</p>
+    <h3>2. You have GTFS data.</h3>
+    <p>GTFS stands for Google Transit Feed Specification. It is a data format made popular by Google to express all sorts of public transportation schedules (e.g. bus schedules and routes). Google has <a href="https://developers.google.com/transit/gtfs/reference">fully documented the specification</a> so that transit organizations can expose their own routes and schedules in a format that Google Maps (and other applications, such as SmartRoutes) can understand. Many transit organizations have already exposed their data in this format. If you are developing an application for your own locality, check the official website of your local transit organization or check the <a href="http://www.gtfs-data-exchange.com/">GTFS Data Exchange</a> website.</p>
+    <p>To use GTFS data with SmartRoutes, all you need is the standard ZIP file containing the supported <a href="#" class="todo">GTFS text files</a> on your local hard drive or at a URL.</p>
+    <h3>3. You have destinations, each with a latitude and longitude.</h3>
+  </body>
+</html>
