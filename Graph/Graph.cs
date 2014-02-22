@@ -334,9 +334,9 @@ namespace SmartRoutes.Graph
         }
 
         public IEnumerable<NodeInfo> Search(ILocation StartLocation, ILocation EndLocation, 
-            DateTime StartTime, TimeDirection Direction, IEnumerable<Func<IDestination, bool>> Criterion)
+            DateTime StartTime, TimeDirection Direction, IEnumerable<Func<IDestination, bool>> Criteria)
         {
-            var startToDestinations = SearchLocToDest(StartLocation, StartTime, Direction, Criterion, TimeSpan.FromSeconds(0));
+            var startToDestinations = SearchLocToDest(StartLocation, StartTime, Direction, Criteria, TimeSpan.FromSeconds(0));
             return SearchDestToLoc(startToDestinations, Direction, EndLocation);
         }
     }

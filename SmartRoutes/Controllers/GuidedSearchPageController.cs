@@ -1,11 +1,21 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Web;
 using System.Web.Mvc;
-
+using Ninject;
+using Ninject.Extensions.Conventions;
+using SmartRoutes.Demo.OdjfsDatabase;
+using SmartRoutes.Demo.OdjfsDatabase.Model;
+using SmartRoutes.Graph;
+using SmartRoutes.Model;
+using SmartRoutes.Model.Gtfs;
+using SmartRoutes.Model.Srds;
 using SmartRoutes.Models;
 using SmartRoutes.Models.Payloads;
+using SmartRoutes.Reader.Readers;
 
 namespace SmartRoutes.Controllers
 {
@@ -14,6 +24,34 @@ namespace SmartRoutes.Controllers
     /// </summary>
     public class GuidedSearchPageController : Controller
     {
+        private static IGraph _graph;
+        public static IGraph Graph
+        {
+            get { return _graph ?? (_graph = BuildGraph()); }
+        }
+
+        private static IGraph BuildGraph()
+        {
+            IKernel kernel = new StandardKernel(new GraphModule());
+
+            kernel.Bind(c => c
+                .FromAssemblyContaining(typeof(GtfsCollection), typeof(IEntityCollectionDownloader<,>))
+                .SelectAllClasses()
+                .BindAllInterfaces());
+
+            // get Metro models
+            var gtfsFetcher = kernel.Get<IEntityCollectionDownloader<GtfsArchive, GtfsCollection>>();
+            var gtfsCollection = gtfsFetcher.Download(new Uri("http://www.go-metro.com/uploads/GTFS/google_transit_info.zip"), null).Result;
+
+            // get child care models
+            var odjfsDatabase = new OdjfsDatabase("OdjfsDatabase");
+            var childCares = odjfsDatabase.GetChildCares().Result;
+
+            // build the graph
+            var graphBuilder = kernel.Get<IGraphBuilder>();
+            return graphBuilder.BuildGraph(gtfsCollection.StopTimes, childCares, GraphBuilderSettings.Default);
+        }
+
         //
         // GET: /GuidedSearchPage/
 
@@ -85,6 +123,67 @@ namespace SmartRoutes.Controllers
         public JsonResult PerformChildCareSearch(ChildCareSearchQueryPayload searchQuery)
         {
             ChildCareSearchResultsModel results = new ChildCareSearchResultsModel();
+
+            // starting at my address
+            var homeLocation = new Destination { Latitude = 39.122309, Longitude = -84.507639 };
+
+            // ending at the college of engineering
+            var workLocation = new Destination { Latitude = 39.133292, Longitude = -84.515099 };
+
+            if (searchQuery.ScheduleType.DropOffChecked)
+            {
+                var childInformation = searchQuery.ChildInformation.First();
+
+                Func<IDestination, bool> criterion = destination =>
+                {
+                    ChildCare childCare = destination as ChildCare;
+                    DetailedChildCare detailedChildCare = destination as DetailedChildCare;
+                    if (childCare == null)
+                    {
+                        return false;
+                    }
+
+                    if (detailedChildCare != null &&
+                        // detect if age groups are reported at all for this child care
+                        (detailedChildCare.Infants || detailedChildCare.YoungToddlers || detailedChildCare.OlderToddlers ||
+                         detailedChildCare.Gradeschoolers || detailedChildCare.Preschoolers))
+                    {
+                        if (childInformation.AgeGroup == Resources.AgeGroupInfantName && !detailedChildCare.Infants)
+                        {
+                            return false;
+                        }
+
+                        if (childInformation.AgeGroup == Resources.AgeGroupOlderToddlerName &&
+                            !detailedChildCare.OlderToddlers)
+                        {
+                            return false;
+                        }
+
+                        if (childInformation.AgeGroup == Resources.AgeGroupYoungToddlerName &&
+                            !detailedChildCare.YoungToddlers)
+                        {
+                            return false;
+                        }
+
+                        if (childInformation.AgeGroup == Resources.AgeGroupSchoolAgeName &&
+                            !detailedChildCare.Gradeschoolers)
+                        {
+                            return false;
+                        }
+
+                        if (childInformation.AgeGroup == Resources.AgeGroupPreschoolerName &&
+                            !detailedChildCare.Preschoolers)
+                        {
+                            return false;
+                        }
+                    }
+
+                    return true;
+                };
+
+                IEnumerable<NodeInfo> path = Graph.Search(homeLocation, workLocation, searchQuery.LocationsAndTimes.DropOffLatestArrivalTime,
+                    TimeDirection.Backwards, new[] {criterion});
+            }
 
             return Json(results, JsonRequestBehavior.AllowGet); 
         }

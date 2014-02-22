@@ -6,6 +6,8 @@ using System.Web.Http;
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
+using SmartRoutes.Controllers;
+using SmartRoutes.Graph;
 
 namespace SmartRoutes
 {
@@ -17,6 +19,8 @@ namespace SmartRoutes
         protected void Application_Start()
         {
             AreaRegistration.RegisterAllAreas();
+
+            IGraph graph = GuidedSearchPageController.Graph;
 
             WebApiConfig.Register(GlobalConfiguration.Configuration);
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
