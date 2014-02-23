@@ -10,9 +10,11 @@ namespace SmartRoutes.Models
     /// </summary>
     public class ChildCareSearchResultsModel
     {
+        /// <summary>
+        /// Constructor.
+        /// </summary>
         public ChildCareSearchResultsModel()
         {
-
         }
 
         /// <summary>
@@ -20,15 +22,42 @@ namespace SmartRoutes.Models
         /// </summary>
         public IEnumerable<ChildCareModel> ChildCares
         {
-            get;
-            set;
+            get
+            {
+                return this.childCares.AsEnumerable();
+            }
         }
 
-
+        /// <summary>
+        /// Collection of child care routes.
+        /// </summary>
         public IEnumerable<ChildCareRouteModel> Routes
         {
-            get;
-            set;
+            get
+            {
+                return this.routes.AsEnumerable();
+            }
         }
+
+        /// <summary>
+        /// Adds a child care route to the end of the collection.
+        /// </summary>
+        /// <param name="route">The route to add.</param>
+        public void AddChildCareRoute(ChildCareRouteModel route)
+        {
+            this.routes.Push(route);
+        }
+
+        /// <summary>
+        /// Adds a child care model to the end of the collection.
+        /// </summary>
+        /// <param name="childCare">The child care model to add.</param>
+        public void AddChildCare(ChildCareModel childCare)
+        {
+            this.childCares.Push(childCare); ;
+        }
+
+        private Stack<ChildCareRouteModel> routes = new Stack<ChildCareRouteModel>();
+        private Stack<ChildCareModel> childCares = new Stack<ChildCareModel>();
     }
 }

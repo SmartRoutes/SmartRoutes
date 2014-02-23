@@ -16,6 +16,7 @@ using SmartRoutes.Model.Srds;
 using SmartRoutes.Models;
 using SmartRoutes.Models.Payloads;
 using SmartRoutes.Reader.Readers;
+using SmartRoutes.Models.Itinerary;
 
 namespace SmartRoutes.Controllers
 {

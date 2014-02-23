@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using SmartRoutes.Models.Itinerary;
 
 namespace SmartRoutes.Models
 {
@@ -17,6 +18,15 @@ namespace SmartRoutes.Models
         public ChildCareRouteModel()
         {
 
+        }
+
+        /// <summary>
+        /// The priority for this result.
+        /// </summary>
+        public int ResultPriority
+        {
+            get;
+            set;
         }
 
         /// <summary>

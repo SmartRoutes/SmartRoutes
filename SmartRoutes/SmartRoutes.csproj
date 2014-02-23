@@ -142,6 +142,13 @@
     <Compile Include="Models\ChildCareModel.cs" />
     <Compile Include="Models\ChildCareRouteModel.cs" />
     <Compile Include="Models\ChildCareSearchResultsModel.cs" />
+    <Compile Include="Models\Itinerary\ArriveAction.cs" />
+    <Compile Include="Models\Itinerary\BoardBusAction.cs" />
+    <Compile Include="Models\Itinerary\DepartAction.cs" />
+    <Compile Include="Models\Itinerary\DropOffAction.cs" />
+    <Compile Include="Models\Itinerary\ExitBusAction.cs" />
+    <Compile Include="Models\Itinerary\IItineraryAction.cs" />
+    <Compile Include="Models\Itinerary\PickUpAction.cs" />
     <Compile Include="Models\Payloads\AccreditationPayload.cs" />
     <Compile Include="Models\Payloads\AddressPayload.cs" />
     <Compile Include="Models\Payloads\ChildInformationPayload.cs" />
@@ -156,7 +163,7 @@
     <Compile Include="Models\Payloads\ServiceTypePayload.cs" />
     <Compile Include="Models\PortalButtonModel.cs" />
     <Compile Include="Models\PortalViewModel.cs" />
-    <Compile Include="Models\ItineraryModel.cs" />
+    <Compile Include="Models\Itinerary\ItineraryModel.cs" />
     <Compile Include="Models\ServiceTypeModel.cs" />
     <Compile Include="Resources.Designer.cs">
       <AutoGen>True</AutoGen>
