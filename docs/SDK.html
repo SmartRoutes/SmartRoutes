@@ -1,7 +1,9 @@
+<!DOCTYPE HTML>
 <html>
   <head>
+    <meta charset="UTF-8" />
+    <title>SmartRoutes SDK</title>
     <style type="text/css">
-    .todo { color: red;}
     h1 {
       font-size: 36px;
     }
@@ -65,7 +67,7 @@
           <h3><a class="anchor" href="#requirement_2" name="requirement_2">You have GTFS data.</a></h3>
           <div>
             <p>GTFS stands for Google Transit Feed Specification. It is a data format made popular by Google to express all sorts of public transportation schedules (e.g. bus schedules and routes). Google has <a href="https://developers.google.com/transit/gtfs/reference">fully documented the specification</a> so that transit organizations can expose their own routes and schedules in a format that Google Maps (and other applications, such as SmartRoutes) can understand. Many transit organizations have already exposed their data in this format. If you are developing an application for your own locality, check the official website of your local transit organization or check the <a href="http://www.gtfs-data-exchange.com/">GTFS Data Exchange</a> website.</p>
-            <p>To use GTFS data with SmartRoutes, all you need is the standard ZIP file containing the supported <a href="#" class="todo">GTFS text files</a> on your local hard drive or at a URL.</p>
+            <p>To use GTFS data with SmartRoutes, all you need is the standard ZIP file containing the supported <a href="#supported_gtfs">GTFS text files</a> on your local hard drive or at a URL.</p>
           </div>
           <h3><a class="anchor" href="#requirement_3" name="requirement_3">You have destinations, each with a latitude and longitude.</a></h3>
           <div>
@@ -111,8 +113,9 @@
               <li><a href="https://developers.google.com/transit/gtfs/reference#trips_fields">trip</a> (<code>SmartRoutes.Model.Gtfs.Trip</code>)</li>
             </ul>
             <p>Since the GTFS text files are in an agreed upon format, the SmartRoutes SDK includes an additional assembly used for reading a GTFS zip file and instantiating the associated entities in memory. This parser is available in the <code>SmartRoutes.Reader</code> NuGet package. The parser can be used as follows to parse a ZIP file at an arbitrary location on the local file system into a connect object graph.</p>
+            <a name="supported_gtfs"></a>
             <pre>
-// create the parser
+// create the parser, <b>with child parsers for each supported text files</b>
 var parser = new GtfsCollectionParser(
     new AgencyCsvStreamParser(),
     new RouteCsvStreamParser(),
@@ -214,6 +217,19 @@ IEnumerable&lt;NodeInfo&gt; results = graph.Search(start, end, time, direction, 
           </div>
           <h3><a class="anchor" href="#using_8" name="using_8">Interpret the results.</a></h3>
           <div>
+            <p>This is an area where the SDK could be improved to become more usable for developers that are unfamiliar with the inner workings of SmartRoutes.</p>
+            <p>The return type of the <code>Search</code> method is <code>IEnumerable&lt;NodeInfo&gt;</code>. Each <code>NodeInfo</code> represents a unique itinerary to one or more destinations that match the provided criteria. The <code>NodeInfo</code> is a linked list representing a path through the internal SmartRoutes graph. The order of the linked list is determined by <code>TimeDirection</code> parameter provided to <code>Search</code>. The two important properties on the <code>NodeInfo</code> class are:</p>
+            <ul>
+              <li><code>INode node</code> - the node at this step in the itinerary, either a GTFS stop time or a destination.</li>
+              <li><code>NodeInfo parent</code> - the next <code>NodeInfo</code> in the path.</li>
+            </ul>
+            <p>The <code>node</code> property is either of type <code>DestinationNode</code> (with a pointer to your concrete destination class) or <code>GtfsNode</code> (with GTFS stop information). Each node has the following properties:</p>
+            <ul>
+              <li><code>string Name</code> - a name of the node, for display.</li>
+              <li><code>DateTime Time</code> - the time that the user would arrive at that node.</li>
+            </ul>
+            <p>For example, to find the time to travel between two nodes, simply subtract the <code>node.Time</code> property on a <code>NodeInfo</code> from its <code>parent</code>.</p>
+            <p><b>Important:</b> manually changing the values on any <code>INode</code> instance can cause problems with the correctness of the graph.</p>
           </div>
         </div>
       </div>
