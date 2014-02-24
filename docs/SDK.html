@@ -19,7 +19,7 @@
       border: 1px solid #DDD;
       background-color: #F8F8F8;
       border-radius: 3px;
-      font: 13px Consolas, monaco, monospace;
+      font-family: monospace;
     }
     code {
       padding: 0px;
@@ -28,7 +28,7 @@
       padding: 5px;
     }
     section {
-      width: 700px;
+      width: 800px;
       margin: 0 auto;
     }
     div {
@@ -36,54 +36,61 @@
       border-left: 1px solid #DDD;
       margin-left: 5px;
     }
+    a.anchor {
+      text-decoration: none;
+      color: black;
+    }
+    a.anchor:hover {
+      text-decoration: underline;
+    }
     </style>
   </head>
   <body>
     <section>
       <h1>SmartRoutes SDK</h1>
       <div>
-        <h2>Requirements</h2>
+        <h2><a class="anchor" href="#requirements" name="requirements">Requirements</a></h2>
         <div>
           <p>The SmartRoutes SDK is a tool designed for software developers to easily implement public transit routing logic in their own applications. To be clear, this documentation is <i>not</i> intended for the end-user of an application.</p>
           <p>The SmartRoutes SDK cannot be used in all situations. To get started, make sure your situation matches all of these requirements:</p>
           <ol>
-            <li>You are developing a .NET 4.5 application.</li>
-            <li>You have GTFS data.</li>
-            <li>You have destinations, each with a latitude and longitude.</li>
+            <li><a class="anchor" href="#requirement_1">You are developing a .NET 4.5 application.</a></li>
+            <li><a class="anchor" href="#requirement_2">You have GTFS data.</a></li>
+            <li><a class="anchor" href="#requirement_3">You have destinations, each with a latitude and longitude.</a></li>
           </ol>
-          <h3>You are developing a .NET 4.5 application.</h3>
+          <h3><a class="anchor" href="#requirement_1" name="requirement_1">You are developing a .NET 4.5 application.</a></h3>
           <div>
-            <p>The SmartRoute graph search algorithm is writtin in C# and can be used by any .NET version 4.5 application. The most popular .NET languages are C# and Visual Basic .NET.</p>
+            <p>The SmartRoute graph search algorithm is writtin in C# and can be used by any .NET version 4.5 application. The most popular .NET languages are C# and Visual Basic .NET. All example code will be in C#.</p>
           </div>
-          <h3>You have GTFS data.</h3>
+          <h3><a class="anchor" href="#requirement_2" name="requirement_2">You have GTFS data.</a></h3>
           <div>
             <p>GTFS stands for Google Transit Feed Specification. It is a data format made popular by Google to express all sorts of public transportation schedules (e.g. bus schedules and routes). Google has <a href="https://developers.google.com/transit/gtfs/reference">fully documented the specification</a> so that transit organizations can expose their own routes and schedules in a format that Google Maps (and other applications, such as SmartRoutes) can understand. Many transit organizations have already exposed their data in this format. If you are developing an application for your own locality, check the official website of your local transit organization or check the <a href="http://www.gtfs-data-exchange.com/">GTFS Data Exchange</a> website.</p>
             <p>To use GTFS data with SmartRoutes, all you need is the standard ZIP file containing the supported <a href="#" class="todo">GTFS text files</a> on your local hard drive or at a URL.</p>
           </div>
-          <h3>You have destinations, each with a latitude and longitude.</h3>
+          <h3><a class="anchor" href="#requirement_3" name="requirement_3">You have destinations, each with a latitude and longitude.</a></h3>
           <div>
             <p>SmartRoutes uses latitude and longitude to place your destinations in a 3 dimensional space: latitude, longitude, and time. A graph is suspended in this space to express the user's passage through time and space. More simply, SmartRoutes needs to know where destinations are so that the proper transit routes can be used! It is recommended that the location's latitude and longitude are precomputed and cached so improve the performance of the searching algorithm.</p>
           </div>
         </div>
-        <h2>Using the SmartRoutes SDK</h2>
+        <h2><a class="anchor" href="#using" name="using">Using the SmartRoutes SDK</a></h2>
         <div>
           <p>To use the SmartRoutes SDK in your project, you must follow the following steps:</p>
           <ol>
-            <li>Add the SDK to your project.</li>
-            <li>Implement the <code>IDestination</code> interface.</li>
-            <li>Instantiate GTFS instances.</li>
-            <li>Instantiate destination instances.</li>
-            <li>Create the graph.</li>
-            <li>Construct criteria.</li>
-            <li>Search the graph.</li>
-            <li>Interpret the results.</li>
+            <li><a class="anchor" href="#using_1">Add the SDK to your project.</a></li>
+            <li><a class="anchor" href="#using_2">Implement the <code>IDestination</code> interface.</a></li>
+            <li><a class="anchor" href="#using_3">Instantiate GTFS instances.</a></li>
+            <li><a class="anchor" href="#using_4">Instantiate destination instances.</a></li>
+            <li><a class="anchor" href="#using_5">Create the graph.</a></li>
+            <li><a class="anchor" href="#using_6">Construct criteria.</a></li>
+            <li><a class="anchor" href="#using_7">Search the graph.</a></li>
+            <li><a class="anchor" href="#using_8">Interpret the results.</a></li>
           </ol>
-          <h3>Add the SDK to your project.</h3>
+          <h3><a class="anchor" href="#using_1" name="using_1">Add the SDK to your project.</a></h3>
           <div>
             <p>NuGet is used add the SmartRoutes assemblies to your project. Make sure that <a href="http://nuget.codeplex.com/documentation?title=Getting%20Started">you understand NuGet</a> before getting started.</p>
             <p>The core of the searching logic is in <code>SmartRoutes.Graph.dll</code>, available on NuGet under the name <code>SmartRoutes.Graph</code>. This assembly has a single dependency on the <code>SmartRoutes.Model</code> package. This package will be automatically pulled in by NuGet upon installation of <code>SmartRoutes.Graph</code>.</p>
           </div>
-          <h3>Implement the <code>IDestination</code> interface.</h3>
+          <h3><a class="anchor" href="#using_2" name="using_2">Implement the <code>IDestination</code> interface.</a></h3>
           <div>
             <p>Each of your destinations should be represented by a concrete class that implements the <code>IDestination</code> interface. The full type name for this interface is <code>SmartRoutes.Model.IDestination</code> and is found in the <code>SmartRoutes.Model.dll</code> assembly. This interface itself implements the <code>ILocation</code> interface. In total, this requires you to implement the following read-only (only a <code>get</code> method is required) properties:</p>
             <ul>
@@ -94,7 +101,7 @@
             <p>In addition to these core properties, open hours properties must be implemented for each day of the week. These properties are used to improve the performance of the search algorithm by removing possible destinations if the destination is not open for business, in turn improving the quality of the results. The <code>&lt;day name&gt;Reported</code> boolean indicates whether or not valid open hours are available for this particular destination on that day of the week. If <code>&lt;day name&gt;Reported</code> is <code>true</code>, non-<code>null</code> values for <code>&lt;day name&gt;Begin</code> and <code>&lt;day name&gt;End</code> indicate the open and close times for that destination, respectively.</p>
             <p>If your destination does not have open and close times or this information is not availible, simply return <code>false</code> from all <code>&lt;day name&gt;Reported</code> properties and return <code>null</code> for the open and close times. SmartRoutes will interpret this as a destination that is open at all times of the day.</p>
           </div>
-          <h3>Instantiate GTFS instances.</h3>
+          <h3><a class="anchor" href="#using_3" name="using_3">Instantiate GTFS instances.</a></h3>
           <div>
             <p>C# representations of the <a href="https://developers.google.com/transit/gtfs/reference">GTFS entities</a> are provided as part of the <code>SmartRoutes.Model.dll</code> assembly. The following GTFS entities are currently used by SmartRoutes:</p>
             <ul>
@@ -121,7 +128,8 @@ var parser = new GtfsCollectionParser(
 var reader = new EntityCollectionReader&lt;GtfsArchive, GtfsCollection&gt;(parser);
 
 // read the ZIP file from the file system
-GtfsCollection gtfsObjectGraph = reader.Read(@"C:\my_gtfs_archive.zip", null).Result;</pre>
+GtfsCollection gtfsObjectGraph = reader.Read(
+    @"C:\my_gtfs_archive.zip", null).Result;</pre>
             <p>Loading from an arbitrary URL is just as easy.</p>
             <pre>
 // create the downloader, for instantiating from the web
@@ -129,7 +137,83 @@ var downloader = new EntityCollectionDownloader&lt;GtfsArchive, GtfsCollection&g
 
 // read the ZIP file from a URL
 GtfsCollection gtfsObjectGraph = downloader.Download(new Uri(
-    "https://www.example.com/my_gtfs_archive.zip"), null).Result;</pre>
+    "http://www.example.com/my_gtfs_archive.zip"), null).Result;</pre>
+          </div>
+          <h3><a class="anchor" href="#using_4" name="using_4">Instantiate destination instances.</a></h3>
+          <div>
+            <p>You must have a list of destinations in memory. <a href="#using_2">As mentioned above</a>, all of your destination instances must implement the <code>IDestination</code> interface. The most likely source of these instances are from some data access layer, such as <a href="http://msdn.microsoft.com/en-us/data/ef.aspx">Entity Framework</a> or <a href="http://nhforge.org/">NHibernate</a>.</p>
+          </div>
+          <h3><a class="anchor" href="#using_5" name="using_5">Create the graph.</a></h3>
+          <div>
+            <p>To build the graph (the data structure used for performing searches), instantiate a <code>GraphBuilder</code> instance (found in the <code>SmartRoutes.Graph</code> namespace) and call the <code>BuildGraph</code> method.</p>
+            <pre>// the entites must be in memory
+GtfsCollection gtfsObjectGraph = ...
+IEnumerable<IDestination> destinations = ...
+
+// build the graph
+var graphBuilder = new GraphBuilder();
+IGraph graph = graphBuilder.BuildGraph(
+  gtfsObjectGraph.StopTimes,
+  destinations,
+  GraphBuilderSettings.Default);</pre>
+            <p><b>Important:</b> the graph holds references to the provided destination entities so that searches can operate on your actual concrete entities (not just on the properties made available in <code>IDestination</code>).
+          </div>
+          <h3><a class="anchor" href="#using_6" name="using_6">Construct criteria.</a></h3>
+          <div>
+            <p>After the graph is created, you are almost ready to execute a search. Suppose your destination's concrete class is <code>GroceryStore</code> with a boolean property <code>HasPharmacy</code>, and you want to search for the most convenient grocery store that has a pharmacy. This kind of search can be accomplished with <b>criteria</b>. Criteria are functions that you, as the developer, write to match destinations.The type of all criteria is:</p>
+            <pre>Func&lt;IDestination, bool&gt;</pre>
+            <p>A single criterium is used to match a single destination. If you conduct a search with multiple criteria, one or can destinations can be matched. It is possible for one destination to be returned from a search if that destination matches all criteria.</p>
+            <p>For our example, you must instantiate a <code>Func&lt;IDestination, bool&gt;</code> that only returns <code>true</code> for <code>GroceryStore</code> instances with <code>HasPharmacy == true</code>.</p>
+            <pre>Func&lt;IDestination, bool&gt; criterion = destination =&gt;
+{
+    // exclude any destinations that are not grocery stores
+    GroceryStore groceryStore = destination as GroceryStore;
+    if(groceryStore == null)
+    {
+        return false;
+    }
+
+    // exclude grocery stores that do not have pharmacies
+    return groceryStore.HasPharmacy == true;
+}</pre>
+            <p>If you want to match any destination that was provided to the graph builder, simply create a criterion that always returns true:</p>
+            <pre>Func&lt;IDestination, bool&gt; criterion = destination =&gt;
+{
+    return true;
+}</pre>
+            <p>Since the type signature of a criterion is <code>Func&lt;IDestination, bool&gt;</code>, criteria can be easily generated based off of user-input, meaning the SmartRoutes SDK can be integrated into a web application, console application, etc.</p>
+          </div>
+          <h3><a class="anchor" href="#using_7" name="using_7">Search the graph.</a></h3>
+          <div>
+            <p>To search the graph, you need the following pieces of information:</p>
+            <ul>
+              <li>A start location for the resulting itineraries, with a latitude and longitude. The latitude and longitude must be stored in an object implementing the <code>ILocation</code> interface. <code>SmartRoutes.Model.Location</code> has been provided for convenience.</li>
+              <li>An end location, with the same requirements as the start location.</li>
+              <li>A time for the search. The time must be stored in a <code>System.DateTime</code> instance.</li>
+              <li>Whether the time for the search is a start time or an end time. The way to specify this is the <code>SmartRoutes.Graph.TimeDirection</code> enumeration. <code>Forwards</code> means the provided time is a start time. <code>Backwards</code> means the provided time is an end time.</li>
+              <li>One or more criteria, as mentioned <a href="#using_6">above</a>.</li>
+            </ul>
+            <p>Execute the search as follows:</p>
+
+            <pre>// create the graph
+IGraph graph = ...
+
+// the start and end locations
+ILocation start = new Location { Latitude = 38.8893, Longitude = -77.0501 };
+ILocation end = new Location { Latitude = 38.8977, Longitude = -77.0366 };
+
+// arrive at the destination by 10 AM at the latest
+DateTime time = new DateTime(1970, 1, 1, 10, 0, 0);
+TimeDirection direction = TimeDirection.Backwards;
+
+// some criteria...
+IEnumerable&lt;IDestination, bool&gt; criteria = ...
+
+// perform the search
+IEnumerable&lt;NodeInfo&gt; results = graph.Search(start, end, time, direction, criteria);</pre>
+          </div>
+          <h3><a class="anchor" href="#using_8" name="using_8">Interpret the results.</a></h3>
+          <div>
           </div>
         </div>
       </div>
