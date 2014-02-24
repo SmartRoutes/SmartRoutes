@@ -57,10 +57,10 @@ namespace SmartRoutes.GraphDemo
                 ********************************************************************************************/
 
                 // starting at my address
-                var homeLocation = new Destination { Latitude = 39.122309, Longitude = -84.507639 };
+                var homeLocation = new Location { Latitude = 39.122309, Longitude = -84.507639 };
 
                 // ending at the college of engineering
-                var workLocation = new Destination { Latitude = 39.133292, Longitude = -84.515099 };
+                var workLocation = new Location { Latitude = 39.133292, Longitude = -84.515099 };
 
                 // have to be at work by 10:30 am
                 var atWorkBy = new DateTime(1970, 1, 1, 10, 30, 0);
