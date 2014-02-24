@@ -39,6 +39,7 @@
   <ItemGroup>
     <Compile Include="EntityCollection.cs" />
     <Compile Include="IDestination.cs" />
+    <Compile Include="Location.cs" />
     <Compile Include="Srds\SrdsCollection.cs" />
     <Compile Include="Gtfs\GtfsCollection.cs" />
     <Compile Include="Srds\SrdsArchive.cs" />
