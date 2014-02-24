@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using SmartRoutes.Graph.Heap;
 
-namespace SmartRoutes.Heap.Test
+namespace SmartRoutes.Graph.Test
 {
     [TestClass]
     public class FibonacciHeapTest

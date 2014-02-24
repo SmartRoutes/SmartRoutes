@@ -5,8 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using Ninject;
 using Ninject.Modules;
+using SmartRoutes.Graph.Heap;
 using SmartRoutes.Graph.Node;
-using SmartRoutes.Heap;
 
 namespace SmartRoutes.Graph
 {

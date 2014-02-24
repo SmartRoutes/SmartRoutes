@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using SmartRoutes.Graph.Heap;
 using SmartRoutes.Graph.Node;
 using SmartRoutes.Model.Gtfs;
 using SmartRoutes.Model.Srds;
 using SmartRoutes.Model;
-using SmartRoutes.Heap;
 
 namespace SmartRoutes.Graph
 {

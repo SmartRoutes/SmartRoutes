@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using SmartRoutes.Graph.Heap;
 using SmartRoutes.Graph.Node;
-using SmartRoutes.Heap;
 
 namespace SmartRoutes.Graph
 {

@@ -69,10 +69,6 @@
       <Project>{efd2fc16-9536-4c25-9402-f728ba2f35da}</Project>
       <Name>Graph</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Heap\Heap.csproj">
-      <Project>{b66c6d7d-6d28-41cd-9ad0-04a944ed5af1}</Project>
-      <Name>Heap</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Model\Model.csproj">
       <Project>{711cc508-53a8-4edb-bbca-b911935da4b0}</Project>
       <Name>Model</Name>

@@ -52,7 +52,10 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="DijkstrasTest.cs" />
+    <Compile Include="FibonacciHeapTest.cs" />
     <Compile Include="GraphBuilderTest.cs" />
+    <Compile Include="GraphTestImplementation.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

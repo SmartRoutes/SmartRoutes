@@ -65,6 +65,10 @@
     <Compile Include="GraphBuilder\GraphBuilderSettings.cs" />
     <Compile Include="GraphBuilder\IGraphBuilder.cs" />
     <Compile Include="GraphModule.cs" />
+    <Compile Include="Heap\FibHeapHandle.cs" />
+    <Compile Include="Heap\FibHeapNode.cs" />
+    <Compile Include="Heap\FibonacciHeap.cs" />
+    <Compile Include="Heap\IFibonacciHeap.cs" />
     <Compile Include="IGraph.cs" />
     <Compile Include="Node\DestinationNode.cs" />
     <Compile Include="Node\IDestinationNode.cs" />
@@ -79,10 +83,6 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Heap\Heap.csproj">
-      <Project>{b66c6d7d-6d28-41cd-9ad0-04a944ed5af1}</Project>
-      <Name>Heap</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Model\Model.csproj">
       <Project>{711cc508-53a8-4edb-bbca-b911935da4b0}</Project>
       <Name>Model</Name>

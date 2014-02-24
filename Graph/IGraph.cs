@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using SmartRoutes.Graph.Node;
-using SmartRoutes.Heap;
 using SmartRoutes.Model;
 using SmartRoutes.Model.Gtfs;
 using SmartRoutes.Model.Srds;
