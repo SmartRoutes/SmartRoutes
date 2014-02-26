@@ -11,14 +11,38 @@ namespace SmartRoutes.Models.Itinerary
     /// to get from a location, to child care(s), and 
     /// on to the final destination.
     /// </summary>
-    public class ItineraryModel
+    public abstract class ItineraryModel
     {
+        public enum ItineraryType
+        {
+            DropOff = 0,
+            PickUp
+        }
+
         /// <summary>
         /// Constructor.
         /// </summary>
         public ItineraryModel()
         {
 
+        }
+
+        /// <summary>
+        /// The type of the itinerary.  Used for serialization.
+        /// </summary>
+        public abstract ItineraryType Type
+        {
+            get;
+        }
+
+        /// <summary>
+        /// A collection of route identifiers (like route numbers) that are
+        /// ordered by their usage in the route.
+        /// </summary>
+        public IEnumerable<string> Routes
+        {
+            get;
+            set;
         }
 
         /// <summary>

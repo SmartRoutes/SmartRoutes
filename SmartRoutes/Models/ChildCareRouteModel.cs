@@ -44,7 +44,7 @@ namespace SmartRoutes.Models
         /// a care service.  This or PickUpPlan may be null,
         /// but not both.
         /// </summary>
-        public ItineraryModel DropOffPlan
+        public DropOffItineraryModel DropOffPlan
         {
             get;
             set;
@@ -55,7 +55,7 @@ namespace SmartRoutes.Models
         /// a care service.  This or DropOffPlan may be null,
         /// but not both.
         /// </summary>
-        public ItineraryModel PickUpPlan
+        public PickUpItineraryModel PickUpPlan
         {
             get;
             set;
