@@ -101,7 +101,7 @@
               <li><code>string Longitude { get; }</code> - a double representing the longitude of the location.</li>
             </ul>
             <p>In addition to these core properties, open hours properties must be implemented for each day of the week. These properties are used to improve the performance of the search algorithm by removing possible destinations if the destination is not open for business, in turn improving the quality of the results. The <code>&lt;day name&gt;Reported</code> boolean indicates whether or not valid open hours are available for this particular destination on that day of the week. If <code>&lt;day name&gt;Reported</code> is <code>true</code>, non-<code>null</code> values for <code>&lt;day name&gt;Begin</code> and <code>&lt;day name&gt;End</code> indicate the open and close times for that destination, respectively.</p>
-            <p>If your destination does not have open and close times or this information is not availible, simply return <code>false</code> from all <code>&lt;day name&gt;Reported</code> properties and return <code>null</code> for the open and close times. SmartRoutes will interpret this as a destination that is open at all times of the day.</p>
+            <p>If your destination does not have open and close times or this information is not available, simply return <code>false</code> from all <code>&lt;day name&gt;Reported</code> properties and return <code>null</code> for the open and close times. SmartRoutes will interpret this as a destination that is open at all times of the day.</p>
           </div>
           <h3><a class="anchor" href="#using_3" name="using_3">Instantiate GTFS instances.</a></h3>
           <div>
