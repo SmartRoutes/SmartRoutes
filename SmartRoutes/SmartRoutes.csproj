@@ -146,9 +146,11 @@
     <Compile Include="Models\Itinerary\BoardBusAction.cs" />
     <Compile Include="Models\Itinerary\DepartAction.cs" />
     <Compile Include="Models\Itinerary\DropOffAction.cs" />
+    <Compile Include="Models\Itinerary\DropOffItineraryModel.cs" />
     <Compile Include="Models\Itinerary\ExitBusAction.cs" />
     <Compile Include="Models\Itinerary\IItineraryAction.cs" />
     <Compile Include="Models\Itinerary\PickUpAction.cs" />
+    <Compile Include="Models\Itinerary\PickUpItineraryModel.cs" />
     <Compile Include="Models\Payloads\AccreditationPayload.cs" />
     <Compile Include="Models\Payloads\AddressPayload.cs" />
     <Compile Include="Models\Payloads\ChildInformationPayload.cs" />
@@ -204,6 +206,8 @@
     <Content Include="Scripts\Communication\Payloads\ServiceTypePayload.js" />
     <Content Include="Scripts\Constants.js" />
     <Content Include="Scripts\ViewModels\AccreditationViewModel.js" />
+    <Content Include="Scripts\ViewModels\ChildCareResultRouteSummaryViewModel.js" />
+    <Content Include="Scripts\ViewModels\ChildCareViewModel.js" />
     <Content Include="Scripts\ViewModels\ChildInfoViewModel.js" />
     <Content Include="Content\Views\GuidedSearchPageView.css" />
     <Content Include="Content\Views\MainPageView.css" />
@@ -228,7 +232,6 @@
     <Content Include="Scripts\ViewModels\LocationAndTimeViewModel.js" />
     <Content Include="Scripts\ViewModels\PickUpDepartureViewModel.js" />
     <Content Include="Scripts\ViewModels\PickUpDestinationViewModel.js" />
-    <Content Include="Scripts\ViewModels\ResultsListViewElementViewModel.js" />
     <Content Include="Scripts\ViewModels\ScheduleTypeViewModel.js" />
     <Content Include="Scripts\ViewModels\ServiceTypeViewModel.js" />
     <Content Include="Scripts\Library\sammy-0.7.4.js" />
