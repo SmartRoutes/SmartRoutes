@@ -1,12 +1,12 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Cryptography;
-using System.Web;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using Ninject;
 using Ninject.Extensions.Conventions;
+using PolyGeocoder.Geocoders;
+using PolyGeocoder.Support;
 using SmartRoutes.Demo.OdjfsDatabase;
 using SmartRoutes.Demo.OdjfsDatabase.Model;
 using SmartRoutes.Graph;
@@ -16,16 +16,18 @@ using SmartRoutes.Model.Srds;
 using SmartRoutes.Models;
 using SmartRoutes.Models.Payloads;
 using SmartRoutes.Reader.Readers;
-using SmartRoutes.Models.Itinerary;
+using SmartRoutes.Support;
+using Location = PolyGeocoder.Support.Location;
 
 namespace SmartRoutes.Controllers
 {
     /// <summary>
-    /// Controller that handles requests from the guided search page.
+    ///     Controller that handles requests from the guided search page.
     /// </summary>
     public class GuidedSearchPageController : Controller
     {
         private static IGraph _graph;
+
         public static IGraph Graph
         {
             get { return _graph ?? (_graph = BuildGraph()); }
@@ -36,17 +38,19 @@ namespace SmartRoutes.Controllers
             IKernel kernel = new StandardKernel(new GraphModule());
 
             kernel.Bind(c => c
-                .FromAssemblyContaining(typeof(GtfsCollection), typeof(IEntityCollectionDownloader<,>))
+                .FromAssemblyContaining(typeof (GtfsCollection), typeof (IEntityCollectionDownloader<,>))
                 .SelectAllClasses()
                 .BindAllInterfaces());
 
             // get Metro models
             var gtfsFetcher = kernel.Get<IEntityCollectionDownloader<GtfsArchive, GtfsCollection>>();
-            var gtfsCollection = gtfsFetcher.Download(new Uri("http://www.go-metro.com/uploads/GTFS/google_transit_info.zip"), null).Result;
+            GtfsCollection gtfsCollection =
+                gtfsFetcher.Download(new Uri("http://www.go-metro.com/uploads/GTFS/google_transit_info.zip"), null)
+                    .Result;
 
             // get child care models
             var odjfsDatabase = new OdjfsDatabase("OdjfsDatabase");
-            var childCares = odjfsDatabase.GetChildCares().Result;
+            IEnumerable<ChildCare> childCares = odjfsDatabase.GetChildCares().Result;
 
             // build the graph
             var graphBuilder = kernel.Get<IGraphBuilder>();
@@ -57,48 +61,25 @@ namespace SmartRoutes.Controllers
         // GET: /GuidedSearchPage/
 
         /// <summary>
-        /// Retrieves information about the available accreditations in JSON format.
+        ///     Retrieves information about the available accreditations in JSON format.
         /// </summary>
         /// <returns>The JSON data.</returns>
         public JsonResult Accreditations()
         {
-            // This stuff should probably go in a database eventually,
-            // but as there is still debate about database issues, this
-            // is just done inline for now.
-            List<AccreditationModel> accreditations = new List<AccreditationModel>
-            {
-                new AccreditationModel(Resources.NAEYCName, Resources.NAEYCDescription, new Uri(Resources.NAEYCURL)),
-                new AccreditationModel(Resources.NECPAName, Resources.NECPADescription, new Uri(Resources.NECPAURL)),
-                new AccreditationModel(Resources.NACCPName, Resources.NACCPDescription, new Uri(Resources.NACCPURL)),
-                new AccreditationModel(Resources.NAFCCName, Resources.NAFCCDescription, new Uri(Resources.NAFCCURL)),
-                new AccreditationModel(Resources.COAName, Resources.COADescription, new Uri(Resources.COAURL)),
-                new AccreditationModel(Resources.ACSIName, Resources.ACSIDescription, new Uri(Resources.ACSIURL)),
-                new AccreditationModel(Resources.CCFPName, Resources.CCFPDescription, new Uri(Resources.CCFPURL))
-            };
-
-            return Json(accreditations, JsonRequestBehavior.AllowGet);
+            return Json(ResourceModels.AccreditationModels, JsonRequestBehavior.AllowGet);
         }
 
         /// <summary>
-        /// Returns information about the child care service types in JSON format.
+        ///     Returns information about the child care service types in JSON format.
         /// </summary>
         /// <returns>JSON information.</returns>
         public JsonResult ServiceTypes()
         {
-            List<ServiceTypeModel> serviceTypes = new List<ServiceTypeModel>
-            {
-                new ServiceTypeModel(Resources.TypeAHomeName, Resources.TypeAHomeDescription),
-                // I believe type B homes don't have addresses, so omit those for now.
-                //new ServiceTypeModel(Resources.TypeBHomeName, Resources.TypeBHomeDescription),
-                new ServiceTypeModel(Resources.LicensedCenterName, Resources.LicensedCenterDescription),
-                new ServiceTypeModel(Resources.DayCampName, Resources.DayCampDescription)
-            };
-
-            return Json(serviceTypes, JsonRequestBehavior.AllowGet);
+            return Json(ResourceModels.ServiceTypeModels, JsonRequestBehavior.AllowGet);
         }
 
         /// <summary>
-        /// Returns the raw HTML for the accreditation view.
+        ///     Returns the raw HTML for the accreditation view.
         /// </summary>
         /// <returns>HTML string for the accreditation view.</returns>
         public ActionResult AccreditationView()
@@ -107,7 +88,7 @@ namespace SmartRoutes.Controllers
         }
 
         /// <summary>
-        /// Returns the raw HTML for the service type view.
+        ///     Returns the raw HTML for the service type view.
         /// </summary>
         /// <returns>HTML string for the service type view.</returns>
         public ActionResult ServiceTypeView()
@@ -115,78 +96,128 @@ namespace SmartRoutes.Controllers
             return PartialView("~/Views/Search/_ServiceTypeView.cshtml");
         }
 
-        /// <summary>
-        /// Performs the child care search for the supplied query and returns
-        /// the results.
-        /// </summary>
-        /// <param name="searchQuery">The query for the search.</param>
-        /// <returns>The results of the search.</returns>
-        public JsonResult PerformChildCareSearch(ChildCareSearchQueryPayload searchQuery)
+        private static async Task<Destination> Geocode(ISimpleGeocoder geocoder,
+            IDictionary<string, Destination> destinations, AddressPayload addressPayload)
         {
-            ChildCareSearchResultsModel results = new ChildCareSearchResultsModel();
-
-            // starting at my address
-            var homeLocation = new Destination { Latitude = 39.122309, Longitude = -84.507639 };
-
-            // ending at the college of engineering
-            var workLocation = new Destination { Latitude = 39.133292, Longitude = -84.515099 };
-
-            if (searchQuery.ScheduleType.DropOffChecked)
+            // convert the request to a string
+            string request = string.Join(", ", new[]
             {
-                var childInformation = searchQuery.ChildInformation.First();
+                addressPayload.Address,
+                addressPayload.AddressLine2,
+                addressPayload.City,
+                addressPayload.State,
+                addressPayload.ZipCode
+            });
 
-                Func<IDestination, bool> criterion = destination =>
+            // try to get a previous response
+            Destination destination;
+            if (destinations.TryGetValue(request, out destination))
+            {
+                return destination;
+            }
+
+            // geocode the address and save the result to the dictionary
+            Response response = await geocoder.GeocodeAsync(request);
+            Location location = response.Locations.FirstOrDefault();
+            if (location != null)
+            {
+                destination = new Destination
                 {
-                    ChildCare childCare = destination as ChildCare;
-                    DetailedChildCare detailedChildCare = destination as DetailedChildCare;
-                    if (childCare == null)
+                    Latitude = location.Latitude,
+                    Longitude = location.Longitude,
+                    Name = location.Name
+                };
+            }
+            else
+            {
+                throw new GeocoderException(
+                    string.Format("The provivided address '{0}' could not be geocoded using geocode '{1}'.",
+                        request,
+                        geocoder.GetType().FullName));
+            }
+            destinations[request] = destination;
+
+            return destination;
+        }
+
+        private static Func<IDestination, bool> CreateCriterion(ChildCareSearchQueryPayload searchQuery, ChildInformationPayload childInformation)
+        {
+            return destination =>
+            {
+                var childCare = destination as ChildCare;
+                var detailedChildCare = destination as DetailedChildCare;
+                if (childCare == null)
+                {
+                    return false;
+                }
+
+                if (detailedChildCare != null)
+                {
+                    // check the age group
+                    if (ResourceModels.AgeGroupValidators.ContainsKey(childInformation.AgeGroup) && // is the age group valid?
+                        ResourceModels.AgeGroupValidators.Values.Any(validate => validate(detailedChildCare)) && // are any age groups reported?
+                        !ResourceModels.AgeGroupValidators[childInformation.AgeGroup](detailedChildCare)) // is the age group supported?
                     {
                         return false;
                     }
 
-                    if (detailedChildCare != null &&
-                        // detect if age groups are reported at all for this child care
-                        (detailedChildCare.Infants || detailedChildCare.YoungToddlers || detailedChildCare.OlderToddlers ||
-                         detailedChildCare.Gradeschoolers || detailedChildCare.Preschoolers))
+                    // check the accrediations
+                    var checkedAccreditations = searchQuery
+                        .Accreditations
+                        .Where(a => a.Checked && ResourceModels.AccreditationValidators.ContainsKey(a.Name))
+                        .ToArray();
+                    if (checkedAccreditations.Any() &&
+                        !checkedAccreditations.Any(a => ResourceModels.AccreditationValidators[a.Name](detailedChildCare)))
                     {
-                        if (childInformation.AgeGroup == Resources.AgeGroupInfantName && !detailedChildCare.Infants)
-                        {
-                            return false;
-                        }
-
-                        if (childInformation.AgeGroup == Resources.AgeGroupOlderToddlerName &&
-                            !detailedChildCare.OlderToddlers)
-                        {
-                            return false;
-                        }
-
-                        if (childInformation.AgeGroup == Resources.AgeGroupYoungToddlerName &&
-                            !detailedChildCare.YoungToddlers)
-                        {
-                            return false;
-                        }
-
-                        if (childInformation.AgeGroup == Resources.AgeGroupSchoolAgeName &&
-                            !detailedChildCare.Gradeschoolers)
-                        {
-                            return false;
-                        }
-
-                        if (childInformation.AgeGroup == Resources.AgeGroupPreschoolerName &&
-                            !detailedChildCare.Preschoolers)
-                        {
-                            return false;
-                        }
+                        return false;
                     }
+                }
 
-                    return true;
-                };
+                // check the service type
+                if (!ResourceModels.ServiceTypeValidators.Values.Any(validator => validator(childCare)))
+                {
+                    return false;
+                }
 
-                IEnumerable<NodeInfo> path = Graph.Search(homeLocation, workLocation, searchQuery.LocationsAndTimes.DropOffLatestArrivalTime,
-                    TimeDirection.Backwards, new[] {criterion});
+                return true;
+            };
+        }
+
+        /// <summary>
+        ///     Performs the child care search for the supplied query and returns
+        ///     the results.
+        /// </summary>
+        /// <param name="searchQuery">The query for the search.</param>
+        /// <returns>The results of the search.</returns>
+        public async Task<JsonResult> PerformChildCareSearchAsync(ChildCareSearchQueryPayload searchQuery)
+        {
+            var results = new ChildCareSearchResultsModel();
+
+            // geocode the start and end location
+            var geocoder = new OpenStreetMapGeocoder(new Client(), OpenStreetMapGeocoder.MapQuestEndpoint);
+            var responses = new Dictionary<string, Destination>();
+
+            if (searchQuery.ScheduleType.DropOffChecked)
+            {
+                Destination startLocation =
+                    await Geocode(geocoder, responses, searchQuery.LocationsAndTimes.DropOffDepartureAddress);
+                Destination endLocation =
+                    await Geocode(geocoder, responses, searchQuery.LocationsAndTimes.DropOffDestinationAddress);
+
+                Func<IDestination, bool>[] criteria = searchQuery
+                    .ChildInformation
+                    .Select(childInformation => CreateCriterion(searchQuery, childInformation))
+                    .ToArray();
+
+                IEnumerable<NodeInfo> path = Graph.Search(
+                    startLocation,
+                    endLocation,
+                    searchQuery.LocationsAndTimes.DropOffLatestArrivalTime,
+                    TimeDirection.Backwards,
+                    criteria);
             }
 
-            return Json(results, JsonRequestBehavior.AllowGet); 
+            return Json(results, JsonRequestBehavior.AllowGet);
         }
     }
 }
