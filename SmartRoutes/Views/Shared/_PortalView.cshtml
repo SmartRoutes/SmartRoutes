@@ -6,9 +6,7 @@
 <div class="sr-portal-view-container" id="@Model.ID">
     @foreach (var buttonModel in Model.ButtonModels)
     {
-        <button type="button" class="btn btn-default sr-portal-button" id="@buttonModel.ID">
-            <a href=@buttonModel.Path class="sr-portal-button-text">@buttonModel.Text</a>
-        </button>
+        <a href=@buttonModel.Path id="@buttonModel.ID" class="btn btn-default sr-portal-button sr-portal-button-text">@buttonModel.Text</a>
         <br />
     }
 </div>
