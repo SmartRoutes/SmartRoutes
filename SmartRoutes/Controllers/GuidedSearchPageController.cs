@@ -14,6 +14,7 @@ using SmartRoutes.Model;
 using SmartRoutes.Model.Gtfs;
 using SmartRoutes.Model.Srds;
 using SmartRoutes.Models;
+using SmartRoutes.Models.Itinerary;
 using SmartRoutes.Models.Payloads;
 using SmartRoutes.Reader.Readers;
 using SmartRoutes.Support;
@@ -96,8 +97,7 @@ namespace SmartRoutes.Controllers
             return PartialView("~/Views/Search/_ServiceTypeView.cshtml");
         }
 
-        private static async Task<Destination> Geocode(ISimpleGeocoder geocoder,
-            IDictionary<string, Destination> destinations, AddressPayload addressPayload)
+        private static Destination Geocode(ISimpleGeocoder geocoder, IDictionary<string, Destination> destinations, AddressPayload addressPayload)
         {
             // convert the request to a string
             string request = string.Join(", ", new[]
@@ -117,7 +117,7 @@ namespace SmartRoutes.Controllers
             }
 
             // geocode the address and save the result to the dictionary
-            Response response = await geocoder.GeocodeAsync(request);
+            Response response = geocoder.GeocodeAsync(request).Result;
             Location location = response.Locations.FirstOrDefault();
             if (location != null)
             {
@@ -183,33 +183,103 @@ namespace SmartRoutes.Controllers
             };
         }
 
+        private static ChildCareSearchResultsModel GetSpoofedSearchResults()
+        {
+            var results = new ChildCareSearchResultsModel();
+
+            results.AddChildCare(new ChildCareModel
+            {
+                Address = "47 CORRY BOULEVARD, CINCINNATI, OH, 45221",
+                ChildCareName = "ARLITT CHILD DEVELOPMENT CENTER",
+                Hours = new BusinessHoursModel[0],
+                Link = null,
+                PhoneNumber = "513-556-3802",
+                ReviewLink = null
+            });
+
+            /*
+            results.AddChildCare(new ChildCareModel
+            {
+                Address = "6601 HAMILTON, CINCINNATI, OH, 45224",
+                ChildCareName = "ANGELS OF JOY CHILDREN LEARNING CENTER",
+                Hours = new[]
+                {
+                    new BusinessHoursModel {Day = BusinessHoursModel.WeekDay.Monday, OpeningTime = "6:00 AM", ClosingTime = "11:55 PM"},
+                    new BusinessHoursModel {Day = BusinessHoursModel.WeekDay.Tuesday, OpeningTime = "6:00 AM", ClosingTime = "11:55 PM"},
+                    new BusinessHoursModel {Day = BusinessHoursModel.WeekDay.Wednesday, OpeningTime = "6:00 AM", ClosingTime = "11:55 PM"},
+                    new BusinessHoursModel {Day = BusinessHoursModel.WeekDay.Thursday, OpeningTime = "6:00 AM", ClosingTime = "11:55 PM"},
+                    new BusinessHoursModel {Day = BusinessHoursModel.WeekDay.Friday, OpeningTime = "6:00 AM", ClosingTime = "11:55 PM"}
+                },
+                Link = null,
+                PhoneNumber = null,
+                ReviewLink = null
+            });
+            results.AddChildCare(new ChildCareModel
+            {
+                Address = "1655 CHASE AVENUE, CINCINNATI, OH, 45223",
+                ChildCareName = "AMICUS CHILDREN LEARNING CENTER MCKIE",
+                Hours = new BusinessHoursModel[0],
+                Link = null,
+                PhoneNumber = "513-541-5300",
+                ReviewLink = null
+            });
+            */
+
+            var dropOff = new DropOffItineraryModel();
+            dropOff.AddAction(new DepartAction("2300 Stratford Ave, Cincinnati, OH 45219"));
+            dropOff.AddAction(new BoardBusAction("31", new DateTime(1970, 1, 1, 8, 13, 00), "Mcmillan St & Chickasaw St"));
+            dropOff.AddAction(new ExitBusAction(new DateTime(1970, 1, 1, 8, 25, 0), "Mcmillan St & Scioto St"));
+            dropOff.AddAction(new DropOffAction(new[] { 0 }, "ARLITT CHILD DEVELOPMENT CENTER"));
+            dropOff.AddAction(new BoardBusAction("31", new DateTime(1970, 1, 1, 8, 47, 0), "Mcmillan St & Scioto St"));
+            dropOff.AddAction(new ExitBusAction(new DateTime(1970, 1, 1, 9, 5, 0), "Mcmillan St & Symmes St"));
+            dropOff.AddAction(new ArriveAction("499 E McMillan St, Cincinnati, OH 45206"));
+            dropOff.Routes = new[] { "31", "31" };
+
+            var pickUp = new PickUpItineraryModel();
+            pickUp.AddAction(new DepartAction("499 E McMillan St, Cincinnati, OH 45206"));
+            pickUp.AddAction(new BoardBusAction("31", new DateTime(1970, 1, 1, 17, 3, 00), "Mcmillan St & Symmes St"));
+            pickUp.AddAction(new ExitBusAction(new DateTime(1970, 1, 1, 17, 20, 0), "Mcmillan St & Scioto St"));
+            pickUp.AddAction(new PickUpAction(new[] { 0 }, "ARLITT CHILD DEVELOPMENT CENTER"));
+            pickUp.AddAction(new BoardBusAction("31", new DateTime(1970, 1, 1, 17, 49, 0), "Mcmillan St & Scioto St"));
+            pickUp.AddAction(new ExitBusAction(new DateTime(1970, 1, 1, 18, 2, 0), "Mcmillan St & Chickasaw St"));
+            pickUp.AddAction(new ArriveAction("2300 Stratford Ave, Cincinnati, OH 45219"));
+
+            results.AddChildCareRoute(new ChildCareRouteModel
+            {
+                ResultPriority = 0,
+                ChildCareIndices = new[] { 0 },
+                DropOffPlan = dropOff,
+                PickUpPlan = pickUp
+            });
+
+            return results;
+        }
+
         /// <summary>
         ///     Performs the child care search for the supplied query and returns
         ///     the results.
         /// </summary>
         /// <param name="searchQuery">The query for the search.</param>
         /// <returns>The results of the search.</returns>
-        public async Task<JsonResult> PerformChildCareSearchAsync(ChildCareSearchQueryPayload searchQuery)
+        public JsonResult PerformChildCareSearch(ChildCareSearchQueryPayload searchQuery)
         {
-            var results = new ChildCareSearchResultsModel();
-
-            // geocode the start and end location
             var geocoder = new OpenStreetMapGeocoder(new Client(), OpenStreetMapGeocoder.MapQuestEndpoint);
             var responses = new Dictionary<string, Destination>();
 
+            IEnumerable<NodeInfo> dropOffResults = null;
+            IEnumerable<NodeInfo> pickUpResults = null;
+
             if (searchQuery.ScheduleType.DropOffChecked)
             {
-                Destination startLocation =
-                    await Geocode(geocoder, responses, searchQuery.LocationsAndTimes.DropOffDepartureAddress);
-                Destination endLocation =
-                    await Geocode(geocoder, responses, searchQuery.LocationsAndTimes.DropOffDestinationAddress);
+                Destination startLocation = Geocode(geocoder, responses, searchQuery.LocationsAndTimes.DropOffDepartureAddress);
+                Destination endLocation = Geocode(geocoder, responses, searchQuery.LocationsAndTimes.DropOffDestinationAddress);
 
                 Func<IDestination, bool>[] criteria = searchQuery
                     .ChildInformation
                     .Select(childInformation => CreateCriterion(searchQuery, childInformation))
                     .ToArray();
 
-                IEnumerable<NodeInfo> path = Graph.Search(
+                dropOffResults = Graph.Search(
                     startLocation,
                     endLocation,
                     searchQuery.LocationsAndTimes.DropOffLatestArrivalTime,
@@ -217,7 +287,25 @@ namespace SmartRoutes.Controllers
                     criteria);
             }
 
-            return Json(results, JsonRequestBehavior.AllowGet);
+            if (searchQuery.ScheduleType.PickUpChecked)
+            {
+                Destination startLocation = Geocode(geocoder, responses, searchQuery.LocationsAndTimes.PickUpDepartureAddress);
+                Destination endLocation = Geocode(geocoder, responses, searchQuery.LocationsAndTimes.PickUpDestinationAddress);
+
+                Func<IDestination, bool>[] criteria = searchQuery
+                    .ChildInformation
+                    .Select(childInformation => CreateCriterion(searchQuery, childInformation))
+                    .ToArray();
+
+                pickUpResults = Graph.Search(
+                    startLocation,
+                    endLocation,
+                    searchQuery.LocationsAndTimes.PickUpDepartureTime,
+                    TimeDirection.Forwards,
+                    criteria);
+            }
+
+            return Json(GetSpoofedSearchResults(), JsonRequestBehavior.AllowGet);
         }
     }
 }
