@@ -5,10 +5,14 @@
   </PropertyGroup>
   <Import Project="$(MSBuildCommunityTasksPath)\MSBuild.Community.Tasks.Targets" />
   <Target Name="Version">
-    <PropertyGroup>
-      <Major>1</Major>
+    <PropertyGroup Condition="'$(Major)' == ''">
+      <Major>0</Major>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Minor)' == ''">
       <Minor>0</Minor>
-      <Build>0</Build>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Patch)' == ''">
+      <Patch>0</Patch>
     </PropertyGroup>
     <GitVersion LocalPath="$(SolutionDir)">
       <Output TaskParameter="CommitHash" PropertyName="Revision" />
@@ -16,6 +20,11 @@
     <Time>
       <Output TaskParameter="Year" PropertyName="Year" />
     </Time>
-    <AssemblyInfo CodeLanguage="CS" OutputFile="Properties\AssemblyInfo.cs" AssemblyTitle="$(RootNamespace)" AssemblyDescription="" AssemblyCompany="" AssemblyProduct="$(RootNamespace)" AssemblyCopyright="Copyright (c) $(Year). All rights reserved." ComVisible="false" CLSCompliant="false" AssemblyInformationalVersion="$(Major).$(Minor).$(Build).$(Revision)" AssemblyVersion="$(Major).$(Minor).$(Build)" AssemblyFileVersion="$(Major).$(Minor).$(Build)" />
+    <PropertyGroup>
+      <Copyright>Copyright (c) $(Year). All rights reserved.</Copyright>
+      <Author>Alex Brath, Ben Smith, and Joel Verhagen</Author>
+      <Version>$(Major).$(Minor).$(Patch)</Version>
+    </PropertyGroup>
+    <AssemblyInfo CodeLanguage="CS" OutputFile="Properties\AssemblyInfo.cs" AssemblyTitle="$(RootNamespace)" AssemblyDescription="The $(RootNamespace) assembly of SmartRoutes." AssemblyCompany="$(Author)" AssemblyProduct="$(RootNamespace)" AssemblyCopyright="$(Copyright)" ComVisible="false" CLSCompliant="true" AssemblyInformationalVersion="$(Version)-$(Revision)" AssemblyVersion="$(Version)" AssemblyFileVersion="$(Version)" />
   </Target>
 </Project>
