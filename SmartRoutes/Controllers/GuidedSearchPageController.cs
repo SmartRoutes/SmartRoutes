@@ -4,17 +4,13 @@ using System.Linq;
 using System.Web.Mvc;
 using PolyGeocoder.Geocoders;
 using PolyGeocoder.Support;
-using SmartRoutes.Demo.OdjfsDatabase;
 using SmartRoutes.Demo.OdjfsDatabase.Model;
 using SmartRoutes.Graph;
 using SmartRoutes.Model;
-using SmartRoutes.Model.Gtfs;
 using SmartRoutes.Model.Srds;
 using SmartRoutes.Models;
 using SmartRoutes.Models.Itinerary;
 using SmartRoutes.Models.Payloads;
-using SmartRoutes.Reader.Parsers.Gtfs;
-using SmartRoutes.Reader.Readers;
 using SmartRoutes.Support;
 using Location = PolyGeocoder.Support.Location;
 
@@ -25,39 +21,6 @@ namespace SmartRoutes.Controllers
     /// </summary>
     public class GuidedSearchPageController : Controller
     {
-        private static IGraph _graph;
-
-        public static IGraph Graph
-        {
-            get { return _graph ?? (_graph = BuildGraph()); }
-        }
-
-        private static IGraph BuildGraph()
-        {
-            // get Metro models
-            var gtfsParser = new GtfsCollectionParser(
-                new AgencyCsvStreamParser(),
-                new RouteCsvStreamParser(),
-                new ServiceCsvStreamParser(),
-                new ServiceExceptionCsvStreamParser(),
-                new ShapePointCsvStreamParser(),
-                new StopTimeCsvStreamParser(),
-                new StopCsvStreamParser(),
-                new TripCsvStreamParser());
-            var gtfsFetcher = new EntityCollectionDownloader<GtfsArchive, GtfsCollection>(gtfsParser);
-            GtfsCollection gtfsCollection = gtfsFetcher
-                .Download(new Uri("http://www.go-metro.com/uploads/GTFS/google_transit_info.zip"), null)
-                .Result;
-
-            // get child care models
-            var odjfsDatabase = new OdjfsDatabase("OdjfsDatabase");
-            IEnumerable<ChildCare> childCares = odjfsDatabase.GetChildCares().Result;
-
-            // build the graph
-            var graphBuilder = new GraphBuilder();
-            return graphBuilder.BuildGraph(gtfsCollection.StopTimes, childCares, GraphBuilderSettings.Default);
-        }
-
         //
         // GET: /GuidedSearchPage/
 
@@ -269,6 +232,20 @@ namespace SmartRoutes.Controllers
             IEnumerable<NodeInfo> dropOffResults = null;
             IEnumerable<NodeInfo> pickUpResults = null;
 
+            // check for shared addresses between the pick up and drop off plans
+            if (searchQuery.ScheduleType.DropOffChecked && searchQuery.ScheduleType.PickUpChecked)
+            {
+                if (searchQuery.LocationsAndTimes.PickUpDepartureAddressSameAsDropOffDestination)
+                {
+                    searchQuery.LocationsAndTimes.PickUpDepartureAddress = searchQuery.LocationsAndTimes.DropOffDestinationAddress;
+                }
+
+                if (searchQuery.LocationsAndTimes.PickUpDestinationSameAsDropOffDeparture)
+                {
+                    searchQuery.LocationsAndTimes.PickUpDestinationAddress = searchQuery.LocationsAndTimes.DropOffDepartureAddress;
+                }
+            }
+
             if (searchQuery.ScheduleType.DropOffChecked)
             {
                 Destination startLocation = Geocode(geocoder, responses, searchQuery.LocationsAndTimes.DropOffDepartureAddress);
@@ -279,7 +256,7 @@ namespace SmartRoutes.Controllers
                     .Select(childInformation => CreateCriterion(searchQuery, childInformation))
                     .ToArray();
 
-                dropOffResults = Graph.Search(
+                dropOffResults = GraphSingleton.Instance.Graph.Search(
                     startLocation,
                     endLocation,
                     searchQuery.LocationsAndTimes.DropOffLatestArrivalTime,
@@ -297,7 +274,7 @@ namespace SmartRoutes.Controllers
                     .Select(childInformation => CreateCriterion(searchQuery, childInformation))
                     .ToArray();
 
-                pickUpResults = Graph.Search(
+                pickUpResults = GraphSingleton.Instance.Graph.Search(
                     startLocation,
                     endLocation,
                     searchQuery.LocationsAndTimes.PickUpDepartureTime,
