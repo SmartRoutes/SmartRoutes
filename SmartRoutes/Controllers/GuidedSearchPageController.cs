@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Web.Mvc;
-using Ninject;
-using Ninject.Extensions.Conventions;
 using PolyGeocoder.Geocoders;
 using PolyGeocoder.Support;
 using SmartRoutes.Demo.OdjfsDatabase;
@@ -16,6 +13,7 @@ using SmartRoutes.Model.Srds;
 using SmartRoutes.Models;
 using SmartRoutes.Models.Itinerary;
 using SmartRoutes.Models.Payloads;
+using SmartRoutes.Reader.Parsers.Gtfs;
 using SmartRoutes.Reader.Readers;
 using SmartRoutes.Support;
 using Location = PolyGeocoder.Support.Location;
@@ -36,25 +34,27 @@ namespace SmartRoutes.Controllers
 
         private static IGraph BuildGraph()
         {
-            IKernel kernel = new StandardKernel(new GraphModule());
-
-            kernel.Bind(c => c
-                .FromAssemblyContaining(typeof (GtfsCollection), typeof (IEntityCollectionDownloader<,>))
-                .SelectAllClasses()
-                .BindAllInterfaces());
-
             // get Metro models
-            var gtfsFetcher = kernel.Get<IEntityCollectionDownloader<GtfsArchive, GtfsCollection>>();
-            GtfsCollection gtfsCollection =
-                gtfsFetcher.Download(new Uri("http://www.go-metro.com/uploads/GTFS/google_transit_info.zip"), null)
-                    .Result;
+            var gtfsParser = new GtfsCollectionParser(
+                new AgencyCsvStreamParser(),
+                new RouteCsvStreamParser(),
+                new ServiceCsvStreamParser(),
+                new ServiceExceptionCsvStreamParser(),
+                new ShapePointCsvStreamParser(),
+                new StopTimeCsvStreamParser(),
+                new StopCsvStreamParser(),
+                new TripCsvStreamParser());
+            var gtfsFetcher = new EntityCollectionDownloader<GtfsArchive, GtfsCollection>(gtfsParser);
+            GtfsCollection gtfsCollection = gtfsFetcher
+                .Download(new Uri("http://www.go-metro.com/uploads/GTFS/google_transit_info.zip"), null)
+                .Result;
 
             // get child care models
             var odjfsDatabase = new OdjfsDatabase("OdjfsDatabase");
             IEnumerable<ChildCare> childCares = odjfsDatabase.GetChildCares().Result;
 
             // build the graph
-            var graphBuilder = kernel.Get<IGraphBuilder>();
+            var graphBuilder = new GraphBuilder();
             return graphBuilder.BuildGraph(gtfsCollection.StopTimes, childCares, GraphBuilderSettings.Default);
         }
 

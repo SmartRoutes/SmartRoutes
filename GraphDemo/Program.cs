@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Linq;
-using Ninject;
-using Ninject.Extensions.Conventions;
 using SmartRoutes.Demo.OdjfsDatabase;
 using SmartRoutes.Graph;
 using SmartRoutes.Graph.Node;
 using SmartRoutes.Model;
 using SmartRoutes.Model.Gtfs;
-using SmartRoutes.Model.Srds;
+using SmartRoutes.Reader.Parsers.Gtfs;
 using SmartRoutes.Reader.Readers;
 
 namespace SmartRoutes.GraphDemo
@@ -18,20 +16,22 @@ namespace SmartRoutes.GraphDemo
         {
             try
             {
-                IKernel kernel = new StandardKernel(new GraphModule());
-
-                kernel.Bind(c => c
-                    .FromAssemblyContaining(typeof(GtfsCollection), typeof(IEntityCollectionDownloader<,>))
-                    .SelectAllClasses()
-                    .BindAllInterfaces());
-
                 /********************************************************************************************
                 ******************* Fetch the data from the database and build the graph ********************
                 ********************************************************************************************/
 
                 Console.WriteLine("Fetching the SORTA data from the web.");
                 DateTime tic = DateTime.Now;
-                var gtfsFetcher = kernel.Get<IEntityCollectionDownloader<GtfsArchive, GtfsCollection>>();
+                var gtfsParser = new GtfsCollectionParser(
+                    new AgencyCsvStreamParser(),
+                    new RouteCsvStreamParser(),
+                    new ServiceCsvStreamParser(),
+                    new ServiceExceptionCsvStreamParser(),
+                    new ShapePointCsvStreamParser(),
+                    new StopTimeCsvStreamParser(),
+                    new StopCsvStreamParser(),
+                    new TripCsvStreamParser());
+                var gtfsFetcher = new EntityCollectionDownloader<GtfsArchive, GtfsCollection>(gtfsParser);
                 var gtfsCollection = gtfsFetcher.Download(new Uri("http://www.go-metro.com/uploads/GTFS/google_transit_info.zip"), null).Result;
                 DateTime toc = DateTime.Now;
                 Console.WriteLine("GTFS data fetched in {0} milliseconds.", (toc - tic).TotalMilliseconds);
@@ -45,7 +45,7 @@ namespace SmartRoutes.GraphDemo
 
                 Console.WriteLine("Creating Graph.");
                 tic = DateTime.Now;
-                var graphBuilder = kernel.Get<IGraphBuilder>();
+                var graphBuilder = new GraphBuilder();
                 var graph = graphBuilder.BuildGraph(gtfsCollection.StopTimes, childCares, GraphBuilderSettings.Default);
                 toc = DateTime.Now;
                 Console.WriteLine("Graph created in {0} milliseconds.", (toc - tic).TotalMilliseconds);

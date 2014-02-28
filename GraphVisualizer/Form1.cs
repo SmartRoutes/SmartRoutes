@@ -4,14 +4,12 @@ using System.Windows.Forms;
 using ILNumerics;
 using ILNumerics.Drawing;
 using ILNumerics.Drawing.Plotting;
-using Ninject;
-using Ninject.Extensions.Conventions;
 using SmartRoutes.Demo.OdjfsDatabase;
 using SmartRoutes.Graph;
 using SmartRoutes.Graph.Comparers;
 using SmartRoutes.Graph.Node;
 using SmartRoutes.Model.Gtfs;
-using SmartRoutes.Model.Srds;
+using SmartRoutes.Reader.Parsers.Gtfs;
 using SmartRoutes.Reader.Readers;
 
 namespace SmartRoutes.GraphVisualizer
@@ -62,16 +60,18 @@ namespace SmartRoutes.GraphVisualizer
 
             Task.Run(() =>
             {
-                IKernel kernel = new StandardKernel(new GraphModule());
-
-                kernel.Bind(c => c
-                    .FromAssemblyContaining(typeof (GtfsCollection), typeof (IEntityCollectionDownloader<,>))
-                    .SelectAllClasses()
-                    .BindAllInterfaces());
-
                 // build the graph
                 SetGraphButtonText("Loading SORTA...");
-                var gtfsFetcher = kernel.Get<IEntityCollectionDownloader<GtfsArchive, GtfsCollection>>();
+                var gtfsParser = new GtfsCollectionParser(
+                    new AgencyCsvStreamParser(),
+                    new RouteCsvStreamParser(),
+                    new ServiceCsvStreamParser(),
+                    new ServiceExceptionCsvStreamParser(),
+                    new ShapePointCsvStreamParser(),
+                    new StopTimeCsvStreamParser(),
+                    new StopCsvStreamParser(),
+                    new TripCsvStreamParser());
+                var gtfsFetcher = new EntityCollectionDownloader<GtfsArchive, GtfsCollection>(gtfsParser);
                 GtfsCollection gtfsCollection = gtfsFetcher.Download(new Uri("http://www.go-metro.com/uploads/GTFS/google_transit_info.zip"), null).Result;
 
                 SetGraphButtonText("Loading ODJFS...");
@@ -79,7 +79,7 @@ namespace SmartRoutes.GraphVisualizer
                 var childCares = odjfsDatabase.GetChildCares().Result;
 
                 SetGraphButtonText("Building graph...");
-                var graphBuilder = kernel.Get<IGraphBuilder>();
+                var graphBuilder = new GraphBuilder();
                 IGraph graph = graphBuilder.BuildGraph(gtfsCollection.StopTimes, childCares, GraphBuilderSettings.Default);
                 INode[] nodes = graph.GraphNodes;
 
