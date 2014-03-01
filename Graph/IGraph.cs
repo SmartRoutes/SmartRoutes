@@ -13,7 +13,7 @@ namespace SmartRoutes.Graph
     public interface IGraph
     {
         INode[] GraphNodes { get; }
-        IEnumerable<NodeInfo> Search(ILocation StartLocation, ILocation EndLocation,
+        IEnumerable<SearchResult> Search(ILocation StartLocation, ILocation EndLocation,
             DateTime StartTime, TimeDirection Direction, IEnumerable<Func<IDestination, bool>> Criteria);
     }
 }

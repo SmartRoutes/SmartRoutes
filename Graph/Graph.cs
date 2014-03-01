@@ -333,11 +333,13 @@ namespace SmartRoutes.Graph
             return FinalResults;
         }
 
-        public IEnumerable<NodeInfo> Search(ILocation StartLocation, ILocation EndLocation, 
+        public IEnumerable<SearchResult> Search(ILocation StartLocation, ILocation EndLocation, 
             DateTime StartTime, TimeDirection Direction, IEnumerable<Func<IDestination, bool>> Criteria)
         {
             var startToDestinations = SearchLocToDest(StartLocation, StartTime, Direction, Criteria, TimeSpan.FromSeconds(0));
-            return SearchDestToLoc(startToDestinations, Direction, EndLocation);
+            var finalResults = SearchDestToLoc(startToDestinations, Direction, EndLocation);
+
+            return finalResults.Select(info => new SearchResult(info));
         }
     }
 }
