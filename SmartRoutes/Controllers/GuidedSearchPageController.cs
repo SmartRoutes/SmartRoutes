@@ -229,8 +229,8 @@ namespace SmartRoutes.Controllers
             var geocoder = new OpenStreetMapGeocoder(new Client(), OpenStreetMapGeocoder.MapQuestEndpoint);
             var responses = new Dictionary<string, Destination>();
 
-            IEnumerable<NodeInfo> dropOffResults = null;
-            IEnumerable<NodeInfo> pickUpResults = null;
+            IEnumerable<SearchResult> dropOffResults = null;
+            IEnumerable<SearchResult> pickUpResults = null;
 
             // check for shared addresses between the pick up and drop off plans
             if (searchQuery.ScheduleType.DropOffChecked && searchQuery.ScheduleType.PickUpChecked)
