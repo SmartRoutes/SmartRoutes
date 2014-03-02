@@ -209,6 +209,8 @@
     <Content Include="Scripts\Communication\Payloads\ScheduleTypePayload.js" />
     <Content Include="Scripts\Communication\Payloads\ServiceTypePayload.js" />
     <Content Include="Scripts\Constants.js" />
+    <Content Include="Scripts\handlebars-v1.3.0.js" />
+    <Content Include="Scripts\handlebars.runtime-v1.3.0.js" />
     <Content Include="Scripts\ViewModels\AccreditationViewModel.js" />
     <Content Include="Scripts\ViewModels\ChildCareResultRouteSummaryViewModel.js" />
     <Content Include="Scripts\ViewModels\ChildCareViewModel.js" />
@@ -236,6 +238,7 @@
     <Content Include="Scripts\ViewModels\LocationAndTimeViewModel.js" />
     <Content Include="Scripts\ViewModels\PickUpDepartureViewModel.js" />
     <Content Include="Scripts\ViewModels\PickUpDestinationViewModel.js" />
+    <Content Include="Scripts\ViewModels\ResultListViewViewModel.js" />
     <Content Include="Scripts\ViewModels\ScheduleTypeViewModel.js" />
     <Content Include="Scripts\ViewModels\ServiceTypeViewModel.js" />
     <Content Include="Scripts\Library\sammy-0.7.4.js" />
@@ -291,11 +294,11 @@
     <Content Include="Views\Shared\_GoogleMapsView.cshtml" />
     <Content Include="Views\Results\_ResultsListView.cshtml" />
     <Content Include="Views\Results\_ResultsView.cshtml" />
-    <Content Include="Views\Results\_ResultsListViewElement.cshtml" />
     <Content Include="Views\Itinerary\_ItineraryPageView.cshtml" />
     <Content Include="Views\Itinerary\_ItineraryView.cshtml" />
     <Content Include="Views\Itinerary\_ChildCareServiceDescriptionView.cshtml" />
     <Content Include="Views\Itinerary\_ChildCareServiceSummaryView.cshtml" />
+    <Content Include="Views\Templates\_RouteSummaryTemplate.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

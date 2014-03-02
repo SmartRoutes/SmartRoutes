@@ -56,6 +56,7 @@ namespace SmartRoutes
                         "~/Scripts/ViewModels/LocationAndTimeViewModel.js",
                         "~/Scripts/ViewModels/AccreditationViewModel.js",
                         "~/Scripts/ViewModels/ServiceTypeViewModel.js",
+                        "~/Scripts/ViewModels/ResultListViewViewModel.js",
 
                         // Common controllers.
                         "~/Scripts/View/PortalViewController.js",

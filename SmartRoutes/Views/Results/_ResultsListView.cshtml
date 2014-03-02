@@ -1,4 +1,33 @@
 ﻿
 <div id="sr-results-list-view">
-    @* This is populated by javascript. *@
+    <ol data-bind="foreach: results">
+        <li>
+            <ul data-bind="foreach: childCareServices">
+                <li>
+                    <div class="sr-child-care-results-info-container">
+                        <h1 data-bind="value: serviceName"></h1>
+                        <a data-bind="attr: {href: serviceLink}">Service Link</a>
+                    </div>
+                </li>
+            </ul>
+
+            <div class="sr-route-results-info-container">
+                <h2>Route Summary</h2>
+                <div data-bind="visible: isDropOffPlan">
+                    <div class="sr-drop-off-summary-container">
+                        <h3 class="sr-route-type-heading">Drop Off Plan</h3>
+                        <span class="sr-results-route-summary-routes-label">Routes: </span>
+                        <span class="sr-results-route-summary-routes-container"></span>
+                    </div>
+                </div>
+                <div data-bind="visible: isPickUpPlan">
+                    <div class="sr-pick-up-summary-container">
+                        <h3 class="sr-route-type-heading">Pick Up Plan</h3>
+                        <span class="sr-results-route-summary-routes-label">Routes: </span>
+                        <span class="sr-results-route-summary-routes-container"></span>
+                    </div>
+                </div>
+            </div>
+        </li>
+    </ol>
 </div>

@@ -10,6 +10,7 @@ SmartRoutes.GuidedSearchPageViewController = (function(pageID) {
     var activePageController = null;
     var formPageFadeInTimeMS = 300;
     var searchCompletedCallback = null;
+    var lastSearchPayload = null;
 
     var buttonIDs = {
         nextButton: "sr-guided-search-button-next",
@@ -202,7 +203,7 @@ SmartRoutes.GuidedSearchPageViewController = (function(pageID) {
         // check data, return to search form or notify the page controller
         // that we have data.
         if (searchCompletedCallback && data) {
-            searchCompletedCallback(data);
+            searchCompletedCallback(data, lastSearchPayload);
         }
     };
 
@@ -212,6 +213,8 @@ SmartRoutes.GuidedSearchPageViewController = (function(pageID) {
 
         var searchPayload = CreateChildCareSearchPayload();
         var guidedSearchCommunicationController = new SmartRoutes.Communication.GuidedSearchCommunicationController();
+
+        lastSearchPayload = searchPayload;
 
         guidedSearchCommunicationController.PerformChildCareSearch(searchPayload, SearchCompletedCallback);
     };
@@ -246,8 +249,9 @@ SmartRoutes.GuidedSearchPageViewController = (function(pageID) {
     return {
         // Public:
 
-        RunPage: function(searchCompletedCallback) {
+        RunPage: function(resultsCallback) {
             RedirectToFirstPageIfFirstTimeVisiting();
+            searchCompletedCallback = resultsCallback;
         },
 
         StopPage: function() {

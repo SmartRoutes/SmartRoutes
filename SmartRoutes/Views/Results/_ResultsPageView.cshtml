@@ -3,18 +3,25 @@
 @using SmartRoutes
 
 <div id="sr-results-page-view">
-    @{
-        // Render the portal view.
-        PortalViewModel resultsPortal = new PortalViewModel("sr-portal-view-results-page");
-        resultsPortal.AddButtonModel(new PortalButtonModel(Resources.portalTextPlan, Resources.PageRouteSearch));
-        resultsPortal.AddButtonModel(new PortalButtonModel(Resources.portalTextFeedback, Resources.PageRouteFeedback));
-        Html.RenderPartial("~/Views/Shared/_PortalView.cshtml", resultsPortal);
-    }
+    <div class="row">
+        <div class="col-lg-2">
+            @{
+                // Render the portal view.
+                PortalViewModel resultsPortal = new PortalViewModel("sr-portal-view-results-page");
+                resultsPortal.AddButtonModel(new PortalButtonModel(Resources.portalTextPlan, Resources.PageRouteSearch));
+                resultsPortal.AddButtonModel(new PortalButtonModel(Resources.portalTextFeedback, Resources.PageRouteFeedback));
+                Html.RenderPartial("~/Views/Shared/_PortalView.cshtml", resultsPortal);
+            }
+        </div>
 
-    @* Show the results view. *@
-    @Html.Partial("~/Views/Results/_ResultsView.cshtml")
+        <div class="col-lg-4">
+            @* Show the results view. *@
+            @Html.Partial("~/Views/Results/_ResultsView.cshtml")
+        </div>
 
-
-    @* Show the google maps view. *@
-    @Html.Partial("~/Views/Shared/_GoogleMapsView.cshtml")
+        <div class="col-lg-6">
+            @* Show the google maps view. *@
+            @Html.Partial("~/Views/Shared/_GoogleMapsView.cshtml")
+        </div>
+    </div>
 </div>

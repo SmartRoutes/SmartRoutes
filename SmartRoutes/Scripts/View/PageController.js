@@ -7,6 +7,8 @@ SmartRoutes.pageController = (function () {
     var sammyApp = null;
     var activePageController = null;
     var pageTransitionFadeInTimeMS = 300;
+    var lastSearchResults = null;
+    var lastSearchQuery = null;
 
     var pageIDs = {
         mainPage: "sr-main-page-view",
@@ -53,7 +55,7 @@ SmartRoutes.pageController = (function () {
         });
 
         this.get("#/results", function() {
-            TransitionPages(resultsPageViewController);
+            TransitionPages(resultsPageViewController, lastSearchResults, lastSearchQuery);
         });
 
         this.get("#/plan", function() {
@@ -73,8 +75,16 @@ SmartRoutes.pageController = (function () {
         that.sammyApp.run("#/");
     });
 
-    function SearchCompletedCallback(data) {
-
+    function SearchCompletedCallback(data, searchQuery) {
+        if (data) {
+            lastSearchResults = data;
+            lastSearchQuery = searchQuery;
+            that.sammyApp.setLocation("#/results");
+        }
+        else {
+            alert("Unable to retrieve results at this time");
+            that.sammyApp.run("#/");
+        }
     };
 
     return {
