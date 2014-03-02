@@ -2,7 +2,45 @@
 
 <div class="sr-child-care-service-description-view">
     <div class="row">
-        @* TODO: determine what data needs to go here. 
-            Probably name, address, phone, hours, maybe others.*@
+        <div class="col-lg-12">
+            <div class="sr-text-area-title">
+                <div class="sr-text-area-title-text" data-bind="value: childCareName"></div>
+            </div>
+        </div>
+    </div>
+    <div class="sr-text-area-text">
+        <div class="col-lg-12">
+            <div class="row">
+                <div class="col-lg-6">
+                    <label class="sr-child-care-service-description-label">Address: </label>
+                    <span class="sr-child-care-service-description-text" data-bind="value: address"></span>
+                </div>
+                <div class="col-lg-6">
+                    <label class="sr-child-care-service-description-label">Phone: </label>
+                    <span class="sr-child-care-service-description-text" data-bind="value: phoneNumber"></span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <a data-bind="attr: {href: link}" title="Search for Service">Search for Service</a>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <a data-bind="attr: { href: reviewLink }" title="Reviews">Reviews</a>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="sr-child-care-service-description-hours-title">Business Hours</div>
+                    <ul data-bind="foreach: hours">
+                        <li>
+                            <label class="sr-child-care-service-description-hours-day-label" data-bind="value: day"></label>
+                            <span class="sr-child-care-service-description-hours-text" data-bind="value: timeRange"></span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
     </div>
 </div>

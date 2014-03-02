@@ -19,10 +19,21 @@ SmartRoutes.ChildCareViewModel = function(childCareModel) {
         var convertedHours = new Array();
 
         $.each(childCareModel.Hours, function(key, value) {
+            var day = weekDayMap[0];
+            if (value.Day > 0 && value.Day < weekDayMap.length) {
+                day = weekDayMap[value.Day];
+            }
+
+            var time = "";
+            if (value.OpeningTime && value.ClosingTime) {
+                time += value.OpeningTime;
+                time += " - ";
+                time += value.ClosingTime;
+            }
+
             convertedHours.push({
-                day: weekDayMap[value.Day],
-                openingTime: value.OpeningTime,
-                closingTime: value.closingTime
+                day: day,
+                timeRange: time
             });
         });
 
