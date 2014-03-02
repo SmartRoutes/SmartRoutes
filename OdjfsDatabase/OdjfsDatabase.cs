@@ -39,7 +39,7 @@ namespace SmartRoutes.Demo.OdjfsDatabase
                 .ChildCares
                 .AsNoTracking()
                 .Where(c => c.Latitude.HasValue && c.Longitude.HasValue)
-                .ToArrayAsync();
+                .ToArrayAsync().ConfigureAwait(false);
 
             IList<ChildCare> outputChildCares = new List<ChildCare>();
 

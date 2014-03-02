@@ -54,8 +54,11 @@ namespace SmartRoutes.GraphDemo
                     new StopTimeCsvStreamParser(),
                     new StopCsvStreamParser(),
                     new TripCsvStreamParser());
-                var gtfsFetcher = new EntityCollectionDownloader<GtfsArchive, GtfsCollection>(gtfsParser);
-                var gtfsCollection = gtfsFetcher.Download(new Uri("http://www.go-metro.com/uploads/GTFS/google_transit_info.zip"), null).Result;
+                //var gtfsFetcher = new EntityCollectionDownloader<GtfsArchive, GtfsCollection>(gtfsParser);
+                //var gtfsCollection = gtfsFetcher.Download(new Uri("http://www.go-metro.com/uploads/GTFS/google_transit_info.zip"), null).Result;
+                var gtfsReader = new EntityCollectionReader<GtfsArchive, GtfsCollection>(gtfsParser);
+                var gtfsCollection = gtfsReader.Read(LOCAL_PATH, null).Result;
+                
                 DateTime toc = DateTime.Now;
 
                 ResultsBox.Text += String.Format("GTFS data fetched in {0} milliseconds.\r\n", (toc - tic).TotalMilliseconds);
