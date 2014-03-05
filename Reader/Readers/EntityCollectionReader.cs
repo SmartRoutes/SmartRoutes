@@ -24,7 +24,7 @@ namespace SmartRoutes.Reader.Readers
             using (var fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read))
             {
                 var memoryStream = new MemoryStream();
-                await fileStream.CopyToAsync(memoryStream);
+                await fileStream.CopyToAsync(memoryStream).ConfigureAwait(false);
                 bytes = memoryStream.ToArray();
             }
 

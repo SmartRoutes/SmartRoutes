@@ -25,8 +25,8 @@ namespace SmartRoutes.Reader.Readers
         {
             // get the bytes
             Logger.Trace("Downloading the newest archive bytes from {0}.", uri);
-            HttpResponseMessage response = await _scraperClient.GetAsync(uri, HttpCompletionOption.ResponseContentRead);
-            ClientResponse clientResponse = await ClientResponse.Create(uri, response);
+            HttpResponseMessage response = await _scraperClient.GetAsync(uri, HttpCompletionOption.ResponseContentRead).ConfigureAwait(false);
+            ClientResponse clientResponse = await ClientResponse.Create(uri, response).ConfigureAwait(false);
 
             // parse the bytes
             return Parse(clientResponse.Content, currentArchive);

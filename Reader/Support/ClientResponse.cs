@@ -19,7 +19,7 @@ namespace SmartRoutes.Reader
             var output = new ClientResponse();
 
             // download the body
-            output.Content = await response.Content.ReadAsByteArrayAsync();
+            output.Content = await response.Content.ReadAsByteArrayAsync().ConfigureAwait(false);
 
             // copy over the headers
             output.Headers = new ClientResponseHeaders();
