@@ -19,20 +19,13 @@ SmartRoutes.ResultsPageViewController = function(pageID) {
         resultViewHtml = data;
     };
 
-    // Inserts result view HTML into the list view and binds it to view models
-    function InsertAndBindResultHTML() {
+    // Clears and repopulates the result list view with result data.
+    function PopulateResultListView(searchResults) {
+        resultsListViewModel.SetNewResults(searchResults);
+
         ko.applyBindings({
             results: resultsListViewModel.elements
         }, $("#" + elementIDs.resultsListView)[0]);
-
-
-    };
-
-
-    // Clears and repopulates the result list view with result data.
-    function PopulateResultListView(searchResults) {
-        InsertAndBindResultHTML(resultsListViewViewModels);
-
     };
 
     (function Init() {
@@ -47,6 +40,7 @@ SmartRoutes.ResultsPageViewController = function(pageID) {
             // This will need the results from the server to display.
             query = searchQuery;
             results = searchResults;
+            PopulateResultListView(results);
         },
 
         StopPage: function() {

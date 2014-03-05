@@ -4,7 +4,7 @@ SmartRoutes.ResultListViewViewModel = function() {
 
     var listViewElements = ko.observableArray();
 
-    function Reinitialize(results) {
+    function Reinitialize(searchResults) {
         // Transform the results into a summary for the results page.
         if (searchResults.Routes) {
             $.each(searchResults.Routes, function(key, route) {
@@ -25,7 +25,7 @@ SmartRoutes.ResultListViewViewModel = function() {
                         var childCareModel = searchResults.ChildCares[index];
 
                         if (childCareModel) {
-                            var serviceName = ko.obserable(childCareModel.ChildCareName);
+                            var serviceName = ko.observable(childCareModel.ChildCareName);
                             var link = ko.observable(childCareModel.Link);
 
                             services.push({
@@ -41,14 +41,14 @@ SmartRoutes.ResultListViewViewModel = function() {
 
                 // Gather drop off plan information.
                 if (route.DropOffPlan) {
-                    listElement.isDropOffPlan = true;
+                    isDropOff = true;
 
                     dropOffRoutes = route.DropOffPlan.Routes;
                 }
 
                 // Gather pick up plan information.
                 if (route.PickUpPlan) {
-                    listElement.isPickUpPlan = true;
+                    isPickUp = true;
 
                     pickUpRoutes = route.PickUpPlan.Routes;
                 }

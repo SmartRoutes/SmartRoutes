@@ -2,3 +2,7 @@
 #sr-results-page-view {
     display: none;
 }
+
+#sr-results-list-view {
+    background-color: white;
+}
