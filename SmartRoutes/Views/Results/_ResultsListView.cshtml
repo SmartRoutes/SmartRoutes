@@ -5,8 +5,8 @@
             <ul data-bind="foreach: childCareServices">
                 <li>
                     <div class="sr-child-care-results-info-container">
-                        <h2 data-bind="value: serviceName"></h2>
-                        <a data-bind="attr: {href: serviceLink}">Service Link</a>
+                        <h2 data-bind="text: serviceName"></h2>
+                        <a data-bind="attr: {href: serviceLink}" target="_blank">Service Link</a>
                     </div>
                 </li>
             </ul>
