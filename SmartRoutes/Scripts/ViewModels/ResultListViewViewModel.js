@@ -7,14 +7,15 @@ SmartRoutes.ResultListViewViewModel = function() {
     function Reinitialize(searchResults) {
         // Transform the results into a summary for the results page.
         if (searchResults.Routes) {
+            listViewElements = [];
             $.each(searchResults.Routes, function(key, route) {
-                var services = ko.observableArray();
+                var services = new Array();
 
-                var isPickUp = ko.observable(false);
-                var isDropOff = ko.observable(false);
+                var isPickUp = false;
+                var isDropOff = false;
 
-                var dropOffRoutes = ko.observable("");
-                var pickUpRoutes = ko.observable("");
+                var dropOffRoutes = "";
+                var pickUpRoutes = "";
 
                 // Pull information off the indexed child cares
                 // and add it to the view model.  There can be multiple
@@ -25,8 +26,8 @@ SmartRoutes.ResultListViewViewModel = function() {
                         var childCareModel = searchResults.ChildCares[index];
 
                         if (childCareModel) {
-                            var serviceName = ko.observable(childCareModel.ChildCareName);
-                            var link = ko.observable(childCareModel.Link);
+                            var serviceName = childCareModel.ChildCareName;
+                            var link = childCareModel.Link;
 
                             services.push({
                                 serviceName: serviceName,
@@ -57,7 +58,8 @@ SmartRoutes.ResultListViewViewModel = function() {
                     childCareServices: services,
                     isDropOffPlan: isDropOff,
                     dropOffRoutes: dropOffRoutes,
-                    isPickUpPlan: pickUpRoutes
+                    isPickUpPlan: isPickUp,
+                    pickupRoutes: pickUpRoutes
                 });
             });
         }
