@@ -23,11 +23,11 @@ namespace SmartRoutes.Graph
             while (current != null)
             {
                 longResults.Add(current);
-                current = current.parent;
+                current = current.Parent;
             }
 
             // make sure results are in ascending time
-            if (info.parent.node.Time < info.node.Time)
+            if (info.Parent.Node.Time < info.Node.Time)
             {
                 longResults = longResults.Reverse().ToList();
             }
@@ -41,15 +41,15 @@ namespace SmartRoutes.Graph
                 var curr = longResults[i];
                 var next = longResults[i + 1];
 
-                if (prev.node is IDestinationNode || curr.node is IDestinationNode || next.node is IDestinationNode)
+                if (prev.Node is IDestinationNode || curr.Node is IDestinationNode || next.Node is IDestinationNode)
                 {
                     shortResults.Add(curr);
                 }
                 else
                 {
-                    var prevGtfs = prev.node as IGtfsNode;
-                    var currGtfs = curr.node as IGtfsNode;
-                    var nextGtfs = next.node as IGtfsNode;
+                    var prevGtfs = prev.Node as IGtfsNode;
+                    var currGtfs = curr.Node as IGtfsNode;
+                    var nextGtfs = next.Node as IGtfsNode;
 
                     if (prevGtfs != null && currGtfs != null)
                     {
@@ -74,7 +74,7 @@ namespace SmartRoutes.Graph
             LongResults = longResults;
             ShortResults = shortResults;
             Destinations = ShortResults
-                .Select(ni => ni.node)
+                .Select(ni => ni.Node)
                 .OfType<IDestinationNode>()
                 .Select(dn => dn.Destination)
                 .ToList();

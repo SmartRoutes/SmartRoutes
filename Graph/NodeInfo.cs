@@ -11,18 +11,18 @@ namespace SmartRoutes.Graph
 
     public class NodeInfo
     {
-        internal FibHeapHandle<NodeBase, TimeSpan> handle;
-        internal TimeSpan pathCost;
-        internal NodeState state;
-        public INode node { get; internal set; }
-        public NodeInfo parent;
+        internal FibHeapHandle<NodeBase, TimeSpan> Handle;
+        internal TimeSpan PathCost;
+        internal NodeState State;
+        public INode Node { get; internal set; }
+        public NodeInfo Parent;
 
         public NodeInfo Copy()
         {
             var copy = new NodeInfo();
-            copy.pathCost = pathCost;
-            copy.node = node;
-            if (parent != null) copy.parent = parent.Copy();
+            copy.PathCost = PathCost;
+            copy.Node = Node;
+            if (Parent != null) copy.Parent = Parent.Copy();
             return copy;
         }
     }

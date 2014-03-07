@@ -81,25 +81,25 @@ namespace SmartRoutes.Graph
                     TimeSpan walkingTime = TimeSpan.FromSeconds(
                         location.GetL1DistanceInFeet(node) / _settings.WalkingFeetPerSecond);
                     var info = new NodeInfo();
-                    info.node = node;
-                    info.pathCost = (direction == TimeDirection.Forwards)
+                    info.Node = node;
+                    info.PathCost = (direction == TimeDirection.Forwards)
                         ? node.Time - time
                         : time - node.Time;
-                    info.pathCost += basePathCost + walkingTime;
-                    info.state = NodeState.Open;
+                    info.PathCost += basePathCost + walkingTime;
+                    info.State = NodeState.Open;
                     return info;
                 });
         }
 
         private static TimeSpan GetNextPathCost(NodeInfo currentInfo, INode neighbor, TimeDirection direction)
         {
-            TimeSpan travelTimeBetween = neighbor.Time - currentInfo.node.Time;
+            TimeSpan travelTimeBetween = neighbor.Time - currentInfo.Node.Time;
             TimeSpan pathCost = (direction == TimeDirection.Forwards)
-                ? currentInfo.pathCost + travelTimeBetween
-                : currentInfo.pathCost - travelTimeBetween;
+                ? currentInfo.PathCost + travelTimeBetween
+                : currentInfo.PathCost - travelTimeBetween;
 
             // penalize transfers
-            var gtfsCurrent = currentInfo.node as IGtfsNode;
+            var gtfsCurrent = currentInfo.Node as IGtfsNode;
             var gtfsNeighbor = neighbor as IGtfsNode;
             if (gtfsCurrent != null && gtfsNeighbor != null)
             {
@@ -124,8 +124,8 @@ namespace SmartRoutes.Graph
             // assign search info to StartNodes and place them in queue
             foreach (var nodeInfo in StartNodeInfos)
             {
-                nodeInfo.handle = heap.Insert(nodeInfo.node.BaseNode, nodeInfo.pathCost);
-                SearchInfo.Add(nodeInfo.node.BaseNode, nodeInfo);
+                nodeInfo.Handle = heap.Insert(nodeInfo.Node.BaseNode, nodeInfo.PathCost);
+                SearchInfo.Add(nodeInfo.Node.BaseNode, nodeInfo);
             }
 
             while (!heap.Empty())
@@ -139,14 +139,14 @@ namespace SmartRoutes.Graph
                     throw new KeyNotFoundException("Node removed from heap did not have associated search info: ");
                 }
 
-                var current = currentInfo.node;
+                var current = currentInfo.Node;
 
                 // check for completion
                 if (GoalCheck(current))
                 {
                     Results.Add(currentInfo);
                     if (Results.Count() > 30) break;
-                    currentInfo.state = NodeState.Closed;
+                    currentInfo.State = NodeState.Closed;
                     continue;
                 }
                 else
@@ -166,11 +166,11 @@ namespace SmartRoutes.Graph
                         ? current.Time + walkingTime
                         : current.Time - walkingTime;
                     var GoalInfo = new NodeInfo();
-                    GoalInfo.node = new LocationGoalNode(goalTime);
-                    GoalInfo.parent = currentInfo;
-                    GoalInfo.pathCost = currentInfo.pathCost + walkingTime;
-                    GoalInfo.handle = heap.Insert(GoalInfo.node.BaseNode, GoalInfo.pathCost);
-                    SearchInfo.Add(GoalInfo.node.BaseNode, GoalInfo);
+                    GoalInfo.Node = new LocationGoalNode(goalTime);
+                    GoalInfo.Parent = currentInfo;
+                    GoalInfo.PathCost = currentInfo.PathCost + walkingTime;
+                    GoalInfo.Handle = heap.Insert(GoalInfo.Node.BaseNode, GoalInfo.PathCost);
+                    SearchInfo.Add(GoalInfo.Node.BaseNode, GoalInfo);
                 }
 
                 // loop through neighbors and handle business
@@ -186,44 +186,44 @@ namespace SmartRoutes.Graph
                     {
                         // node is new, give it search info and place in queue
                         neighborInfo = new NodeInfo();
-                        neighborInfo.node = neighbor;
-                        neighborInfo.parent = currentInfo;
-                        neighborInfo.state = NodeState.Open;
-                        neighborInfo.pathCost = GetNextPathCost(currentInfo, neighbor, direction);
-                        neighborInfo.handle = heap.Insert(neighbor.BaseNode, neighborInfo.pathCost);
+                        neighborInfo.Node = neighbor;
+                        neighborInfo.Parent = currentInfo;
+                        neighborInfo.State = NodeState.Open;
+                        neighborInfo.PathCost = GetNextPathCost(currentInfo, neighbor, direction);
+                        neighborInfo.Handle = heap.Insert(neighbor.BaseNode, neighborInfo.PathCost);
                         SearchInfo.Add(neighbor.BaseNode, neighborInfo);
                     }
                     else
                     {
                         // neighbor is in queue, check state
-                        if (neighborInfo.state == NodeState.Open)
+                        if (neighborInfo.State == NodeState.Open)
                         {
                             // update neighborInfo if this route is better
                             TimeSpan newPathCost = GetNextPathCost(currentInfo, neighbor, direction);
-                            if (newPathCost < neighborInfo.pathCost)
+                            if (newPathCost < neighborInfo.PathCost)
                             {
                                 // update search info and update queue for new key
-                                neighborInfo.pathCost = newPathCost;
-                                neighborInfo.parent = currentInfo;
-                                neighborInfo.node = neighbor;
-                                heap.UpdateKey(neighborInfo.handle, newPathCost);
+                                neighborInfo.PathCost = newPathCost;
+                                neighborInfo.Parent = currentInfo;
+                                neighborInfo.Node = neighbor;
+                                heap.UpdateKey(neighborInfo.Handle, newPathCost);
                             }
                         }
                     }
                 }
 
                 // and we're done with current
-                currentInfo.state = NodeState.Closed;
+                currentInfo.State = NodeState.Closed;
             }
 
             // return only one result per destination
-            var uniqueDestinationResults = Results.Where(info => info.node as DestinationNode != null)
-                .GroupBy(info => new Tuple<IDestination>(((DestinationNode)info.node).Destination))
+            var uniqueDestinationResults = Results.Where(info => info.Node as DestinationNode != null)
+                .GroupBy(info => new Tuple<IDestination>(((DestinationNode)info.Node).Destination))
                 .Select(g => g.First());
 
             // return only one result per block (set of sequential trips)
-            var uniqueBlockResults = Results.Where(info => info.node as LocationGoalNode != null && info.parent.node as IGtfsNode != null)
-                .GroupBy(info => new Tuple<int, int?>(((IGtfsNode)info.parent.node).TripId, ((IGtfsNode)info.parent.node).BlockId))
+            var uniqueBlockResults = Results.Where(info => info.Node as LocationGoalNode != null && info.Parent.Node as IGtfsNode != null)
+                .GroupBy(info => new Tuple<int, int?>(((IGtfsNode)info.Parent.Node).TripId, ((IGtfsNode)info.Parent.Node).BlockId))
                 .Select(g => g.First());
 
             return uniqueBlockResults.Concat(uniqueDestinationResults);
@@ -231,22 +231,22 @@ namespace SmartRoutes.Graph
 
         private NodeInfo ConcatResults(NodeInfo A, NodeInfo B, TimeDirection Direction)
         {
-            if (A.node.Time < B.node.Time) return ConcatResults(B, A, Direction);
+            if (A.Node.Time < B.Node.Time) return ConcatResults(B, A, Direction);
 
             if (Direction == TimeDirection.Forwards)
             {
                 var current = A;
-                while (current.parent != null) current = current.parent;
-                if (current.node.Time < B.node.Time) throw new Exception("Cannot concat results: overlapping times");
-                current.parent = B;
+                while (current.Parent != null) current = current.Parent;
+                if (current.Node.Time < B.Node.Time) throw new Exception("Cannot concat results: overlapping times");
+                current.Parent = B;
                 return A;
             }
             else
             {
                 var current = B;
-                while (current.parent != null) current = current.parent;
-                if (current.node.Time > A.node.Time) throw new Exception("Cannot concat results: overlapping times");
-                current.parent = A;
+                while (current.Parent != null) current = current.Parent;
+                if (current.Node.Time > A.Node.Time) throw new Exception("Cannot concat results: overlapping times");
+                current.Parent = A;
                 return B;
             }
         }
@@ -291,7 +291,7 @@ namespace SmartRoutes.Graph
 
             foreach (var partialResult in partialResults)
             {
-                var RemainingCriterion = Criterion.Where(F => !F(((DestinationNode)partialResult.node).Destination));
+                var RemainingCriterion = Criterion.Where(F => !F(((DestinationNode)partialResult.Node).Destination));
 
                 if (RemainingCriterion.Count() == 0)
                 {
@@ -299,7 +299,7 @@ namespace SmartRoutes.Graph
                 }
                 else
                 {
-                    var remainingResults = SearchLocToDest(partialResult.node, partialResult.node.Time, Direction, RemainingCriterion, partialResult.pathCost);
+                    var remainingResults = SearchLocToDest(partialResult.Node, partialResult.Node.Time, Direction, RemainingCriterion, partialResult.PathCost);
 
                     if (remainingResults.Count() == 0) continue;
 
@@ -319,7 +319,7 @@ namespace SmartRoutes.Graph
 
             foreach (var info in NodeInfos)
             {
-                var StartNodeInfos = GetClosestGtfsNodeInfos(info.node, info.node.Time, Direction, info.pathCost);
+                var StartNodeInfos = GetClosestGtfsNodeInfos(info.Node, info.Node.Time, Direction, info.PathCost);
 
                 Func<INode, bool> GoalCheck = node =>
                     {
@@ -333,11 +333,11 @@ namespace SmartRoutes.Graph
             return FinalResults;
         }
 
-        public IEnumerable<SearchResult> Search(ILocation StartLocation, ILocation EndLocation, 
-            DateTime StartTime, TimeDirection Direction, IEnumerable<Func<IDestination, bool>> Criteria)
+        public IEnumerable<SearchResult> Search(ILocation startLocation, ILocation endLocation, 
+            DateTime startTime, TimeDirection direction, IEnumerable<Func<IDestination, bool>> criteria)
         {
-            var startToDestinations = SearchLocToDest(StartLocation, StartTime, Direction, Criteria, TimeSpan.FromSeconds(0));
-            var finalResults = SearchDestToLoc(startToDestinations, Direction, EndLocation);
+            var startToDestinations = SearchLocToDest(startLocation, startTime, direction, criteria, TimeSpan.FromSeconds(0));
+            var finalResults = SearchDestToLoc(startToDestinations, direction, endLocation);
 
             return finalResults.Select(info => new SearchResult(info));
         }
