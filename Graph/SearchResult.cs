@@ -53,14 +53,14 @@ namespace SmartRoutes.Graph
 
                     if (prevGtfs != null && currGtfs != null)
                     {
-                        if (prevGtfs.BlockId != currGtfs.BlockId)
+                        if (prevGtfs.RouteId != currGtfs.RouteId)
                         {
                             shortResults.Add(curr);
                         }
                     }
                     else if (currGtfs != null && nextGtfs != null)
                     {
-                        if (currGtfs.BlockId != nextGtfs.BlockId)
+                        if (currGtfs.RouteId != nextGtfs.RouteId)
                         {
                             shortResults.Add(curr);
                         }
