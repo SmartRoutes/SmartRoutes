@@ -79,7 +79,7 @@ namespace SmartRoutes.Graph
                 {
                     var prevGtfs = prev.node as IGtfsNode;
                     var currGtfs = curr.node as IGtfsNode;
-                    var nextGtfs = curr.node as IGtfsNode;
+                    var nextGtfs = next.node as IGtfsNode;
 
                     if (prevGtfs != null && currGtfs != null)
                     {
