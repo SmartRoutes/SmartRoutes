@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using SmartRoutes.Graph.Heap;
 using SmartRoutes.Graph.Node;
+using SmartRoutes.Model;
 
 namespace SmartRoutes.Graph
 {
@@ -40,40 +39,41 @@ namespace SmartRoutes.Graph
     // from Search's return value
     public class SearchResult
     {
-        public List<NodeInfo> LongResults { get; private set; }
-        public List<NodeInfo> ShortResults { get; private set; }
+        public IEnumerable<NodeInfo> LongResults { get; private set; }
+        public IEnumerable<NodeInfo> ShortResults { get; private set; }
+        public IEnumerable<IDestination> Destinations { get; private set; } 
 
         public SearchResult(NodeInfo info)
         {
-            LongResults = new List<NodeInfo>();
-            ShortResults = new List<NodeInfo>();
+            IList<NodeInfo> longResults = new List<NodeInfo>();
+            IList<NodeInfo> shortResults = new List<NodeInfo>();
 
             var current = info;
 
             while (current != null)
             {
-                LongResults.Add(current);
+                longResults.Add(current);
                 current = current.parent;
             }
 
             // make sure results are in ascending time
             if (info.parent.node.Time < info.node.Time)
             {
-                LongResults = LongResults.Reverse().ToList();
+                longResults = longResults.Reverse().ToList();
             }
 
             // create short results, which only include bus route end-points and destinations
-            ShortResults.Add(LongResults.First());
+            shortResults.Add(longResults.First());
 
-            for (int i = 1; i < LongResults.Count - 1; i++)
+            for (int i = 1; i < longResults.Count - 1; i++)
             {
-                var prev = LongResults[i - 1];
-                var curr = LongResults[i];
-                var next = LongResults[i + 1];
+                var prev = longResults[i - 1];
+                var curr = longResults[i];
+                var next = longResults[i + 1];
 
                 if (prev.node is IDestinationNode || curr.node is IDestinationNode || next.node is IDestinationNode)
                 {
-                    ShortResults.Add(curr);
+                    shortResults.Add(curr);
                 }
                 else
                 {
@@ -85,27 +85,29 @@ namespace SmartRoutes.Graph
                     {
                         if (prevGtfs.BlockId != currGtfs.BlockId)
                         {
-                            ShortResults.Add(curr);
+                            shortResults.Add(curr);
                         }
                     }
                     else if (currGtfs != null && nextGtfs != null)
                     {
                         if (currGtfs.BlockId != nextGtfs.BlockId)
                         {
-                            ShortResults.Add(curr);
+                            shortResults.Add(curr);
                         }
                     }
                 }
             }
 
-            ShortResults.Add(LongResults.Last());
+            shortResults.Add(longResults.Last());
+
+            // set the container properties
+            LongResults = longResults;
+            ShortResults = shortResults;
+            Destinations = ShortResults
+                .Select(ni => ni.node)
+                .OfType<IDestinationNode>()
+                .Select(dn => dn.Destination)
+                .ToList();
         }
-    }
-
-    public static class ExtensionMethods
-    {
-
-
-
     }
 }
