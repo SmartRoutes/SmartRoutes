@@ -59,7 +59,7 @@ namespace SmartRoutes.Graph
             // make sure results are in ascending time
             if (info.parent.node.Time < info.node.Time)
             {
-                LongResults.Reverse();
+                LongResults = LongResults.Reverse().ToList();
             }
 
             // create short results, which only include bus route end-points and destinations
