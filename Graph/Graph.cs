@@ -339,7 +339,9 @@ namespace SmartRoutes.Graph
             var startToDestinations = SearchLocToDest(startLocation, startTime, direction, criteria, TimeSpan.FromSeconds(0));
             var finalResults = SearchDestToLoc(startToDestinations, direction, endLocation);
 
-            return finalResults.Select(info => new SearchResult(info));
+            return finalResults
+                .Select(info => new SearchResult(info))
+                .ToArray();
         }
     }
 }
