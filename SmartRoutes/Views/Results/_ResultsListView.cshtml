@@ -5,24 +5,23 @@
             <ul data-bind="foreach: childCareServices">
                 <li>
                     <div class="sr-child-care-results-info-container">
-                        <h2 data-bind="text: serviceName"></h2>
-                        <a data-bind="attr: {href: serviceLink}" target="_blank">Service Link</a>
+                        <span class="sr-results-child-care-service-name" data-bind="text: serviceName"></span>
+                        <a class="sr-results-child-care-service-link" data-bind="attr: {href: serviceLink}" target="_blank">Service Link</a>
                     </div>
                 </li>
             </ul>
 
             <div class="sr-route-results-info-container">
-                <h3>Route Summary</h3>
                 <div data-bind="visible: isDropOffPlan">
                     <div class="sr-drop-off-summary-container">
-                        <h3 class="sr-route-type-heading">Drop Off Plan</h3>
+                        <span class="sr-results-route-type-heading">Drop Off Plan</span>
                         <span class="sr-results-route-summary-routes-label">Routes: </span>
                         <span class="sr-results-route-summary-routes-container sr-results-drop-off-route-summary-container"></span>
                     </div>
                 </div>
                 <div data-bind="visible: isPickUpPlan">
                     <div class="sr-pick-up-summary-container">
-                        <h3 class="sr-route-type-heading">Pick Up Plan</h3>
+                        <span class="sr-results-route-type-heading">Pick Up Plan</span>
                         <span class="sr-results-route-summary-routes-label">Routes: </span>
                         <span class="sr-results-route-summary-routes-container sr-results-pick-up-route-summary-container"></span>
                     </div>

@@ -58,7 +58,7 @@ SmartRoutes.ResultListViewViewModel = function() {
                     isDropOffPlan: isDropOff,
                     dropOffRoutes: dropOffRoutes,
                     isPickUpPlan: isPickUp,
-                    pickupRoutes: pickUpRoutes
+                    pickUpRoutes: pickUpRoutes
                 });
             });
         }
