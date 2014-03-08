@@ -5,7 +5,7 @@ using System.Web;
 
 namespace SmartRoutes.Models.Itinerary
 {
-    public class PickUpAction : IItineraryAction
+    public class PickUpAction : IChildItineraryAction
     {
         /// <summary>
         /// Constructor.

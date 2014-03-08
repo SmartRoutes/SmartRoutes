@@ -134,6 +134,7 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Models\Itinerary\IChildItineraryAction.cs" />
     <Compile Include="Support\Accrediation.cs" />
     <Compile Include="Support\AgeGroup.cs" />
     <Compile Include="Support\GeocoderException.cs" />

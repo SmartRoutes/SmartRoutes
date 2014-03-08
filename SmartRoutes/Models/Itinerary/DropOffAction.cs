@@ -5,7 +5,7 @@ using System.Web;
 
 namespace SmartRoutes.Models.Itinerary
 {
-    public class DropOffAction : IItineraryAction
+    public class DropOffAction : IChildItineraryAction
     {
         /// <summary>
         /// Constructor.
@@ -22,7 +22,7 @@ namespace SmartRoutes.Models.Itinerary
         /// <param name="serviceName">The name of the service used in this action.</param>
         public DropOffAction(IEnumerable<int> childIndices, string serviceName)
         {
-            this.ChildIndices = ChildIndices;
+            this.ChildIndices = childIndices;
             this.ServiceName = serviceName;
         }
 
