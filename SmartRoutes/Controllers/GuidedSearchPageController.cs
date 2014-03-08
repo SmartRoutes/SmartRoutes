@@ -211,7 +211,7 @@ namespace SmartRoutes.Controllers
             pickUp.AddAction(new BoardBusAction("34", new DateTime(1970, 1, 1, 17, 49, 0), "Mcmillan St & Scioto St"));
             pickUp.AddAction(new ExitBusAction(new DateTime(1970, 1, 1, 18, 2, 0), "Mcmillan St & Chickasaw St"));
             pickUp.AddAction(new ArriveAction("2300 Stratford Ave, Cincinnati, OH 45219"));
-            pickUp.Routes = new[] { "33:" , "34" };
+            pickUp.Routes = new[] { "33" , "34" };
 
             results.AddChildCareRoute(new ChildCareRouteModel
             {
