@@ -20,6 +20,9 @@ namespace SmartRoutes
             bundles.Add(new ScriptBundle("~/bundles/routing").Include(
                         "~/Scripts/library/sammy-{version}.js"));
 
+            bundles.Add(new ScriptBundle("~/bundles/handlebars").Include(
+                        "~/Scripts/library/handlebars-v1.3.0.js"));
+
             // Initialization order matters here.  Dependencies must
             // be bundled before the script that needs them.
             bundles.Add(new ScriptBundle("~/bundles/smartroutes").Include(

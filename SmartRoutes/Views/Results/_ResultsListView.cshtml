@@ -1,7 +1,7 @@
 ﻿
 <div id="sr-results-list-view">
     <ol data-bind="foreach: results">
-        <li>
+        <li class="sr-results-list-element">
             <ul data-bind="foreach: childCareServices">
                 <li>
                     <div class="sr-child-care-results-info-container">
@@ -17,14 +17,14 @@
                     <div class="sr-drop-off-summary-container">
                         <h3 class="sr-route-type-heading">Drop Off Plan</h3>
                         <span class="sr-results-route-summary-routes-label">Routes: </span>
-                        <span class="sr-results-route-summary-routes-container"></span>
+                        <span class="sr-results-route-summary-routes-container sr-results-drop-off-route-summary-container"></span>
                     </div>
                 </div>
                 <div data-bind="visible: isPickUpPlan">
                     <div class="sr-pick-up-summary-container">
                         <h3 class="sr-route-type-heading">Pick Up Plan</h3>
                         <span class="sr-results-route-summary-routes-label">Routes: </span>
-                        <span class="sr-results-route-summary-routes-container"></span>
+                        <span class="sr-results-route-summary-routes-container sr-results-pick-up-route-summary-container"></span>
                     </div>
                 </div>
             </div>
