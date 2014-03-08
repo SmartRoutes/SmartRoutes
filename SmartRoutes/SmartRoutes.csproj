@@ -211,8 +211,8 @@
     <Content Include="Scripts\Communication\Payloads\ScheduleTypePayload.js" />
     <Content Include="Scripts\Communication\Payloads\ServiceTypePayload.js" />
     <Content Include="Scripts\Constants.js" />
-    <Content Include="Scripts\handlebars-v1.3.0.js" />
-    <Content Include="Scripts\handlebars.runtime-v1.3.0.js" />
+    <Content Include="Scripts\Library\handlebars-v1.3.0.js" />
+    <Content Include="Scripts\Library\handlebars.runtime-v1.3.0.js" />
     <Content Include="Scripts\ViewModels\AccreditationViewModel.js" />
     <Content Include="Scripts\ViewModels\ChildCareResultRouteSummaryViewModel.js" />
     <Content Include="Scripts\ViewModels\ChildCareViewModel.js" />
@@ -301,6 +301,7 @@
     <Content Include="Views\Itinerary\_ChildCareServiceDescriptionView.cshtml" />
     <Content Include="Views\Itinerary\_ChildCareServiceSummaryView.cshtml" />
     <Content Include="Views\Templates\_RouteSummaryTemplate.cshtml" />
+    <Content Include="Views\Templates\_Templates.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

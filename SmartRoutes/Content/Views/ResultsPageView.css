@@ -6,3 +6,7 @@
 #sr-results-list-view {
     background-color: white;
 }
+
+.sr-results-route-summary-route-arrow:last-of-type {
+    display: none;
+}

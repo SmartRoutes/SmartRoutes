@@ -160,9 +160,9 @@ namespace SmartRoutes.Controllers
                 Address = "47 CORRY BOULEVARD, CINCINNATI, OH, 45221",
                 ChildCareName = "ARLITT CHILD DEVELOPMENT CENTER",
                 Hours = new BusinessHoursModel[0],
-                Link = null,
+                Link = "http://www.google.com/#q=test",
                 PhoneNumber = "513-556-3802",
-                ReviewLink = null
+                ReviewLink = "http://www.google.com/#q=review"
             });
 
             /*
@@ -197,25 +197,26 @@ namespace SmartRoutes.Controllers
             dropOff.AddAction(new DepartAction("2300 Stratford Ave, Cincinnati, OH 45219"));
             dropOff.AddAction(new BoardBusAction("31", new DateTime(1970, 1, 1, 8, 13, 00), "Mcmillan St & Chickasaw St"));
             dropOff.AddAction(new ExitBusAction(new DateTime(1970, 1, 1, 8, 25, 0), "Mcmillan St & Scioto St"));
-            dropOff.AddAction(new DropOffAction(new[] {0}, "ARLITT CHILD DEVELOPMENT CENTER"));
-            dropOff.AddAction(new BoardBusAction("31", new DateTime(1970, 1, 1, 8, 47, 0), "Mcmillan St & Scioto St"));
+            dropOff.AddAction(new DropOffAction(new[] { 0 }, "ARLITT CHILD DEVELOPMENT CENTER"));
+            dropOff.AddAction(new BoardBusAction("32", new DateTime(1970, 1, 1, 8, 47, 0), "Mcmillan St & Scioto St"));
             dropOff.AddAction(new ExitBusAction(new DateTime(1970, 1, 1, 9, 5, 0), "Mcmillan St & Symmes St"));
             dropOff.AddAction(new ArriveAction("499 E McMillan St, Cincinnati, OH 45206"));
-            dropOff.Routes = new[] {"31", "31"};
+            dropOff.Routes = new[] { "31", "32" };
 
             var pickUp = new PickUpItineraryModel();
             pickUp.AddAction(new DepartAction("499 E McMillan St, Cincinnati, OH 45206"));
-            pickUp.AddAction(new BoardBusAction("31", new DateTime(1970, 1, 1, 17, 3, 00), "Mcmillan St & Symmes St"));
+            pickUp.AddAction(new BoardBusAction("33", new DateTime(1970, 1, 1, 17, 3, 00), "Mcmillan St & Symmes St"));
             pickUp.AddAction(new ExitBusAction(new DateTime(1970, 1, 1, 17, 20, 0), "Mcmillan St & Scioto St"));
-            pickUp.AddAction(new PickUpAction(new[] {0}, "ARLITT CHILD DEVELOPMENT CENTER"));
-            pickUp.AddAction(new BoardBusAction("31", new DateTime(1970, 1, 1, 17, 49, 0), "Mcmillan St & Scioto St"));
+            pickUp.AddAction(new PickUpAction(new[] { 0 }, "ARLITT CHILD DEVELOPMENT CENTER"));
+            pickUp.AddAction(new BoardBusAction("34", new DateTime(1970, 1, 1, 17, 49, 0), "Mcmillan St & Scioto St"));
             pickUp.AddAction(new ExitBusAction(new DateTime(1970, 1, 1, 18, 2, 0), "Mcmillan St & Chickasaw St"));
             pickUp.AddAction(new ArriveAction("2300 Stratford Ave, Cincinnati, OH 45219"));
+            pickUp.Routes = new[] { "33:" , "34" };
 
             results.AddChildCareRoute(new ChildCareRouteModel
             {
                 ResultPriority = 0,
-                ChildCareIndices = new[] {0},
+                ChildCareIndices = new[] { 0 },
                 DropOffPlan = dropOff,
                 PickUpPlan = pickUp
             });
