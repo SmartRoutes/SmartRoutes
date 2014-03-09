@@ -204,6 +204,7 @@ namespace SmartRoutes.Support
                     cc.State,
                     cc.ZipCode);
                 model.PhoneNumber = cc.PhoneNumber;
+                model.Link = string.Format("http://www.odjfs.state.oh.us/cdc/results2.asp?provider_number={0}", cc.ExternalUrlId);
 
                 var dcc = cc as DetailedChildCare;
                 if (dcc != null)
