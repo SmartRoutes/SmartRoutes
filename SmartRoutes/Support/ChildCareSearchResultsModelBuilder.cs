@@ -137,6 +137,8 @@ namespace SmartRoutes.Support
             string departureAddress = model is DropOffItineraryModel ? _dropOffDepartureAddress : _pickUpDepartureAddress;
             string destinationAddress = model is DropOffItineraryModel ? _dropOffDestinationAddress : _pickUpDestinationAddress;
 
+            IList<string> routes = new List<string>();
+
             int? previousTripId = null;
             model.AddAction(new DepartAction(departureAddress));
             foreach (NodeInfo current in searchResult.ShortResults)
@@ -152,6 +154,8 @@ namespace SmartRoutes.Support
                             currentGtfs.stopTime.Trip.Headsign ?? currentGtfs.stopTime.Trip.Route.ShortName,
                             current.Node.Time,
                             currentGtfs.stopTime.Stop.Name));
+
+                        routes.Add(currentGtfs.stopTime.Trip.Route.ShortName);
                     }
                     else
                     {
@@ -186,7 +190,9 @@ namespace SmartRoutes.Support
                     }
                 }
             }
+
             model.AddAction(new ArriveAction(destinationAddress));
+            model.Routes = routes;
 
             return model;
         }
