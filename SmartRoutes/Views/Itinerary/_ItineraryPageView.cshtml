@@ -3,21 +3,36 @@
 @using SmartRoutes
 
 <div class="sr-page-view" id="sr-itinerary-page-view">
-    @{
-        // Render the portal view.
-        PortalViewModel resultsPortalModel = new PortalViewModel("sr-portal-route-plan-page");
-        resultsPortalModel.AddButtonModel(new PortalButtonModel(Resources.portalTextBackToResults, Resources.PageRouteResults));
-        resultsPortalModel.AddButtonModel(new PortalButtonModel(Resources.portalTextFeedback, Resources.PageRouteFeedback));
-        Html.RenderPartial("~/Views/Shared/_PortalView.cshtml", resultsPortalModel);
-    }
+    <div class="row">
+        <div class="col-lg-2">
+            @{
+                // Render the portal view.
+                PortalViewModel resultsPortalModel = new PortalViewModel("sr-portal-route-plan-page");
+                resultsPortalModel.AddButtonModel(new PortalButtonModel(Resources.portalTextBackToResults, Resources.PageRouteResults));
+                resultsPortalModel.AddButtonModel(new PortalButtonModel(Resources.portalTextFeedback, Resources.PageRouteFeedback));
+                Html.RenderPartial("~/Views/Shared/_PortalView.cshtml", resultsPortalModel);
+            }
+        </div>
 
-    @* Render the route plan. *@
-    @Html.Partial("~/Views/Itinerary/_ItineraryView.cshtml")
+        <div class="col-lg-4">
+            @* Render the route plan. *@
+            @Html.Partial("~/Views/Itinerary/_ItineraryView.cshtml")
+        </div>
 
-    @* Render the map. *@
-    @Html.Partial("~/Views/Shared/_GoogleMapsView.cshtml")
+        <div class="col-lg-3 col-lg-offset-1">
+            <div class="row">
+                <div class="col-lg-12">
+                    @* Render the map. *@
+                    @Html.Partial("~/Views/Shared/_GoogleMapsView.cshtml")
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    @* Render the child care service summary. *@
+                    @Html.Partial("~/Views/Itinerary/_ChildCareServiceSummaryView.cshtml")
+                </div>
+            </div>
+        </div>
 
-    @* Render the child care service summary. *@
-    @Html.Partial("~/Views/Itinerary/_ChildCareServiceSummaryView.cshtml")
-
+    </div>
 </div>

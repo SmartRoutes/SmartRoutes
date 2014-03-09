@@ -12,11 +12,13 @@
     @* This is the actual list of steps. *@
     <div class="row">
         <div class="col-lg-12">
-            <ol data-bind="foreach: itinerarySteps">
-                <li>
-                    <span data-bind="value: itineraryStep"></span>
-                </li>
-            </ol>
+            <div class="sr-itinerary-steps-container">
+                <ol data-bind="foreach: itinerarySteps">
+                    <li class="sr-itinerary-step-element">
+                        @*These are populated via javascript handlebars templates.*@
+                    </li>
+                </ol>
+            </div>
         </div>
     </div>
 </div>

@@ -376,7 +376,7 @@ namespace SmartRoutes {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Back to Results.
+        ///   Looks up a localized string similar to Results.
         /// </summary>
         public static string portalTextBackToResults {
             get {

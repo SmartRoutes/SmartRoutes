@@ -197,7 +197,7 @@
     <Content Include="Content\Views\GenericControls.css" />
     <Content Include="Content\Images\sample_map.png" />
     <Content Include="Content\Views\ResultsPageView.css" />
-    <Content Include="Content\Views\RoutePlanPageView.css" />
+    <Content Include="Content\Views\ItineraryPageView.css" />
     <Content Include="Scripts\Communication\Controllers\GuidedSearchCommunicationController.js" />
     <Content Include="Scripts\Communication\Controllers\ItineraryCommunicationController.js" />
     <Content Include="Scripts\Communication\Controllers\ResultsCommunicationController.js" />

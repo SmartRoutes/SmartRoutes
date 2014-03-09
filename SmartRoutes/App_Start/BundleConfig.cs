@@ -89,7 +89,7 @@ namespace SmartRoutes
                         "~/Content/Views/PortalView.css",
                         "~/Content/Views/GuidedSearchPageView.css",
                         "~/Content/Views/ResultsPageView.css",
-                        "~/Content/Views/RoutePlanPageView.css"));
+                        "~/Content/Views/ItineraryPageView.css"));
         }
     }
 }
