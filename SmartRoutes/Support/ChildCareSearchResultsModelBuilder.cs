@@ -102,7 +102,7 @@ namespace SmartRoutes.Support
                     if (route.PickUpSearchResult != null)
                     {
                         m.PickUpPlan = GetItineraryModel(route.PickUpSearchResult, new PickUpItineraryModel());
-                        CollectChildIndices(m.DropOffPlan, childIndices);
+                        CollectChildIndices(m.PickUpPlan, childIndices);
                     }
 
                     m.ChildCareIndices = childIndices.ToArray();
