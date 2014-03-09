@@ -271,8 +271,8 @@ namespace SmartRoutes.Controllers
             if (searchQuery.ScheduleType.DropOffChecked)
             {
                 dropOffResults = GraphSingleton.Instance.Graph.Search(
-                    Geocode(geocoder, responses, dropOffDepartureAddress),
                     Geocode(geocoder, responses, dropOffDestinationAddress),
+                    Geocode(geocoder, responses, dropOffDepartureAddress),
                     StandardizeTime(searchQuery.LocationsAndTimes.DropOffLatestArrivalTime),
                     TimeDirection.Backwards,
                     criteria);
