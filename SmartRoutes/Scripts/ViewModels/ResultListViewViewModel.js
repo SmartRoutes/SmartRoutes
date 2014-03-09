@@ -16,6 +16,8 @@ SmartRoutes.ResultListViewViewModel = function() {
                 var dropOffRoutes = "";
                 var pickUpRoutes = "";
 
+                var navLink = "#/itinerary?index=" + key;
+
                 // Pull information off the indexed child cares
                 // and add it to the view model.  There can be multiple
                 // child cares.
@@ -58,7 +60,8 @@ SmartRoutes.ResultListViewViewModel = function() {
                     isDropOffPlan: isDropOff,
                     dropOffRoutes: dropOffRoutes,
                     isPickUpPlan: isPickUp,
-                    pickUpRoutes: pickUpRoutes
+                    pickUpRoutes: pickUpRoutes,
+                    navLink: navLink
                 });
             });
         }

@@ -10,3 +10,9 @@
 .sr-results-route-summary-route-arrow:last-of-type {
     display: none;
 }
+
+.sr-results-view-itinerary-button {
+    height: 35px;
+    color: white;
+    /*TODO: find a better font?*/
+}

@@ -58,7 +58,7 @@ SmartRoutes.pageController = (function () {
             TransitionPages(resultsPageViewController, lastSearchResults, lastSearchQuery);
         });
 
-        this.get("#/plan", function() {
+        this.get("#/itinerary", function() {
             TransitionPages(itineraryPageViewController);
         });
 
