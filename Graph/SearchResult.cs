@@ -9,8 +9,22 @@ namespace SmartRoutes.Graph
     // from Search's return value
     public class SearchResult
     {
+        /// <summary>
+        /// The nodes in chronological order, with all intermediate nodes.
+        /// Example: AAAAA BBBBBBB 1 CCCCCC 2 DDDDD
+        ///   A, B, C, D = GTFS stop times
+        ///   1, 2 = destinations
+        /// </summary>
         public IEnumerable<NodeInfo> LongResults { get; private set; }
+
+        /// <summary>
+        /// The nodes in chronological order, without intermediate nodes.
+        /// Example: AA BB 1 CC 2 DD
+        ///   A, B, C, D = GTFS stop times
+        ///   1, 2 = destinations
+        /// </summary>
         public IEnumerable<NodeInfo> ShortResults { get; private set; }
+
         public IEnumerable<IDestination> Destinations { get; private set; } 
 
         public SearchResult(NodeInfo info)
@@ -18,12 +32,11 @@ namespace SmartRoutes.Graph
             IList<NodeInfo> longResults = new List<NodeInfo>();
             IList<NodeInfo> shortResults = new List<NodeInfo>();
 
-            var current = info;
-
-            while (current != null)
+            var currentChild = info;
+            while (currentChild != null)
             {
-                longResults.Add(current);
-                current = current.Parent;
+                longResults.Add(currentChild);
+                currentChild = currentChild.Parent;
             }
 
             // make sure results are in ascending time
@@ -34,41 +47,32 @@ namespace SmartRoutes.Graph
 
             // create short results, which only include bus route end-points and destinations
             shortResults.Add(longResults.First());
-
-            for (int i = 1; i < longResults.Count - 1; i++)
+            NodeInfo previous = null;
+            IGtfsNode previousGtfs = null;
+            foreach (NodeInfo current in longResults)
             {
-                var prev = longResults[i - 1];
-                var curr = longResults[i];
-                var next = longResults[i + 1];
-
-                if (prev.Node is IDestinationNode || curr.Node is IDestinationNode || next.Node is IDestinationNode)
+                if (previous == null)
                 {
-                    shortResults.Add(curr);
+                    previous = current;
+                    previousGtfs = previous.Node as IGtfsNode;
+                    continue;
                 }
-                else
+                var currentGtfs = current.Node as IGtfsNode;
+                if (previousGtfs != null && (currentGtfs == null || previousGtfs.TripId != currentGtfs.TripId))
                 {
-                    var prevGtfs = prev.Node as IGtfsNode;
-                    var currGtfs = curr.Node as IGtfsNode;
-                    var nextGtfs = next.Node as IGtfsNode;
-
-                    if (prevGtfs != null && currGtfs != null)
-                    {
-                        if (prevGtfs.RouteId != currGtfs.RouteId)
-                        {
-                            shortResults.Add(curr);
-                        }
-                    }
-                    else if (currGtfs != null && nextGtfs != null)
-                    {
-                        if (currGtfs.RouteId != nextGtfs.RouteId)
-                        {
-                            shortResults.Add(curr);
-                        }
-                    }
+                    shortResults.Add(previous);
                 }
+                if (previousGtfs == null || currentGtfs == null || previousGtfs.TripId != currentGtfs.TripId)
+                {
+                    shortResults.Add(current);
+                }
+                previous = current;
+                previousGtfs = previous.Node as IGtfsNode;
             }
-
-            shortResults.Add(longResults.Last());
+            if (previousGtfs != null)
+            {
+                shortResults.Add(previous);
+            }
 
             // set the container properties
             LongResults = longResults;
