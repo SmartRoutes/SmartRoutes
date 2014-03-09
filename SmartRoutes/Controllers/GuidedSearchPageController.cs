@@ -141,7 +141,12 @@ namespace SmartRoutes.Controllers
                 }
 
                 // check the service type
-                if (!ResourceModels.ServiceTypeValidators.Values.Any(validator => validator(childCare)))
+                ServiceTypePayload[] checkedServiceTypes = searchQuery
+                    .ServiceTypes
+                    .Where(s => s.Checked && ResourceModels.ServiceTypeValidators.ContainsKey(s.Name))
+                    .ToArray();
+                if (checkedServiceTypes.Any() &&
+                    !checkedServiceTypes.Any(s => ResourceModels.ServiceTypeValidators[s.Name](childCare)))
                 {
                     return false;
                 }
