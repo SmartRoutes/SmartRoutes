@@ -13,7 +13,7 @@
     <script id="sr-itinerary-step-drop-off" type="text/x-handlebars-template">
         <span class="sr-itinerary-text">Drop </span>
         {{#each children}}
-        {{#if @index}}
+        {{#if @@index}}
         @*Don't insert an 'and' for the first item.*@
         <span class="sr-itinerary-text">and </span>
         {{/if}}
@@ -26,7 +26,7 @@
     <script id="sr-itinerary-step-pick-up" type="text/x-handlebars-template">
         <span class="sr-itinerary-text">Pick </span>
         {{#each children}}
-        {{#if @index}}
+        {{#if @@index}}
         <span class="sr-itinerary-text">and </span>
         {{/if}}
         <span class="sr-itinerary-text sr-itinerary-child-name">{{this}}</span>
