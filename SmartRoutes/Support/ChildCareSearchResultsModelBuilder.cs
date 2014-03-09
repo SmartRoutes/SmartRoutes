@@ -67,7 +67,11 @@ namespace SmartRoutes.Support
             }
             foreach (ChildCareRouteModel childCareRouteModel in _chldCareRouteModels)
             {
-                model.AddChildCareRoute(childCareRouteModel);
+                if ((_dropOffSearchResults.Length == 0) == (childCareRouteModel.DropOffPlan == null) &&
+                    (_pickUpSearchResults.Length == 0) == (childCareRouteModel.PickUpPlan == null))
+                {
+                    model.AddChildCareRoute(childCareRouteModel);
+                }
             }
 
             return model;
