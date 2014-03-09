@@ -300,6 +300,7 @@
     <Content Include="Views\Itinerary\_ChildCareServiceSummaryView.cshtml" />
     <Content Include="Views\Templates\_RouteSummaryTemplate.cshtml" />
     <Content Include="Views\Templates\_Templates.cshtml" />
+    <Content Include="Views\Templates\ItineraryStepsTemplates.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
