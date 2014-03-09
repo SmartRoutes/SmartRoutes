@@ -100,8 +100,7 @@ namespace SmartRoutes.Controllers
 
             return string.Join(", ", new[]
             {
-                addressPayload.Address,
-                addressPayload.AddressLine2,
+                (addressPayload.Address + " " + (addressPayload.AddressLine2 ?? string.Empty)).Trim(),
                 addressPayload.City,
                 addressPayload.State,
                 addressPayload.ZipCode
@@ -224,6 +223,13 @@ namespace SmartRoutes.Controllers
             return results;
         }
 
+        private DateTime StandardizeTime(DateTime dateTime)
+        {
+            return new DateTime(
+                1970, 1, 1,
+                dateTime.Hour, dateTime.Minute, dateTime.Second, dateTime.Millisecond);
+        }
+
         /// <summary>
         ///     Performs the child care search for the supplied query and returns
         ///     the results.
@@ -267,7 +273,7 @@ namespace SmartRoutes.Controllers
                 dropOffResults = GraphSingleton.Instance.Graph.Search(
                     Geocode(geocoder, responses, dropOffDepartureAddress),
                     Geocode(geocoder, responses, dropOffDestinationAddress),
-                    searchQuery.LocationsAndTimes.DropOffLatestArrivalTime,
+                    StandardizeTime(searchQuery.LocationsAndTimes.DropOffLatestArrivalTime),
                     TimeDirection.Backwards,
                     criteria);
             }
@@ -278,7 +284,7 @@ namespace SmartRoutes.Controllers
                 pickUpResults = GraphSingleton.Instance.Graph.Search(
                     Geocode(geocoder, responses, pickUpDepartureAddress),
                     Geocode(geocoder, responses, pickUpDestinationAddress),
-                    searchQuery.LocationsAndTimes.PickUpDepartureTime,
+                    StandardizeTime(searchQuery.LocationsAndTimes.PickUpDepartureTime),
                     TimeDirection.Forwards,
                     criteria);
             }
