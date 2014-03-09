@@ -13,18 +13,17 @@ namespace SmartRoutes.Support
 {
     public class ChildCareSearchResultsModelBuilder
     {
-        private string _dropOffDepartureAddress;
-        private string _dropOffDestinationAddress;
-        private string _pickUpDepartureAddress;
-        private string _pickUpDestinationAddress;
         private ChildCareModel[] _childCareModels;
         private ChildCareRoute[] _childCareRoutes;
         private ChildCareRouteModel[] _chldCareRouteModels;
         private Func<IDestination, bool>[] _criteria;
+        private string _dropOffDepartureAddress;
+        private string _dropOffDestinationAddress;
         private SearchResult[] _dropOffSearchResults;
         private IDestination[] _indexToDestination;
+        private string _pickUpDepartureAddress;
+        private string _pickUpDestinationAddress;
         private SearchResult[] _pickUpSearchResults;
-
 
         private static string GetSearchResultDestinationsKey(IDictionary<IDestination, string> destinationToKey, SearchResult searchResult)
         {
@@ -138,58 +137,55 @@ namespace SmartRoutes.Support
             string departureAddress = model is DropOffItineraryModel ? _dropOffDepartureAddress : _pickUpDepartureAddress;
             string destinationAddress = model is DropOffItineraryModel ? _dropOffDestinationAddress : _pickUpDestinationAddress;
 
-            NodeInfo previous = null;
+            int? previousTripId = null;
+            model.AddAction(new DepartAction(departureAddress));
             foreach (NodeInfo current in searchResult.ShortResults)
             {
-                if (previous == null)
-                {
-                    model.AddAction(new DepartAction(departureAddress));
-                    previous = current;
-                    continue;
-                }
+                var currentGtfs = current.Node as IGtfsNode;
+                var currentDestination = current.Node as IDestinationNode;
 
-                var previousGtfsNode = previous.Node as IGtfsNode;
-                var currentGtfsNode = current.Node as IGtfsNode;
-                var currentDestinationNode = current.Node as IDestinationNode;
-
-                if (currentGtfsNode != null)
+                if (currentGtfs != null)
                 {
-                    if (previousGtfsNode == null || (previousGtfsNode.TripId != currentGtfsNode.TripId))
+                    if (currentGtfs.TripId != previousTripId)
                     {
                         model.AddAction(new BoardBusAction(
-                            currentGtfsNode.stopTime.Trip.Headsign ?? currentGtfsNode.stopTime.Trip.Route.ShortName,
+                            currentGtfs.stopTime.Trip.Headsign ?? currentGtfs.stopTime.Trip.Route.ShortName,
                             current.Node.Time,
-                            currentGtfsNode.stopTime.Stop.Name));
-                    }
-                    else if (previousGtfsNode.TripId == currentGtfsNode.TripId)
-                    {
-                        model.AddAction(new ExitBusAction(
-                            current.Node.Time,
-                            currentGtfsNode.stopTime.Stop.Name));
-                    }
-                }
-                else if (currentDestinationNode != null)
-                {
-                    int[] childIndices = _criteria
-                        .Select((c, i) => new {Criterion = c, Index = i})
-                        .Where(t => t.Criterion(currentDestinationNode.Destination))
-                        .Select(t => t.Index)
-                        .ToArray();
-                    string name = currentDestinationNode.Name;
-
-                    if (model is DropOffItineraryModel)
-                    {
-                        model.AddAction(new DropOffAction(childIndices, name));
+                            currentGtfs.stopTime.Stop.Name));
                     }
                     else
                     {
-                        model.AddAction(new PickUpAction(childIndices, name));
+                        model.AddAction(new ExitBusAction(
+                            current.Node.Time,
+                            currentGtfs.stopTime.Stop.Name));
+                    }
+
+                    previousTripId = currentGtfs.TripId;
+                }
+                else
+                {
+                    previousTripId = null;
+
+                    if (currentDestination != null)
+                    {
+                        int[] childIndices = _criteria
+                            .Select((c, i) => new {Criterion = c, Index = i})
+                            .Where(t => t.Criterion(currentDestination.Destination))
+                            .Select(t => t.Index)
+                            .ToArray();
+                        string name = currentDestination.Name;
+
+                        if (model is DropOffItineraryModel)
+                        {
+                            model.AddAction(new DropOffAction(childIndices, name));
+                        }
+                        else
+                        {
+                            model.AddAction(new PickUpAction(childIndices, name));
+                        }
                     }
                 }
-
-                previous = current;
             }
-
             model.AddAction(new ArriveAction(destinationAddress));
 
             return model;
