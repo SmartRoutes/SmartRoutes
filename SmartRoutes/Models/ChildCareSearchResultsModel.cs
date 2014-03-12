@@ -45,7 +45,7 @@ namespace SmartRoutes.Models
         /// <param name="route">The route to add.</param>
         public void AddChildCareRoute(ChildCareRouteModel route)
         {
-            this.routes.Push(route);
+            this.routes.Add(route);
         }
 
         /// <summary>
@@ -54,10 +54,10 @@ namespace SmartRoutes.Models
         /// <param name="childCare">The child care model to add.</param>
         public void AddChildCare(ChildCareModel childCare)
         {
-            this.childCares.Push(childCare); ;
+            this.childCares.Add(childCare);
         }
 
-        private Stack<ChildCareRouteModel> routes = new Stack<ChildCareRouteModel>();
-        private Stack<ChildCareModel> childCares = new Stack<ChildCareModel>();
+        private IList<ChildCareRouteModel> routes = new List<ChildCareRouteModel>();
+        private IList<ChildCareModel> childCares = new List<ChildCareModel>();
     }
 }

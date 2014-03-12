@@ -62,9 +62,9 @@ namespace SmartRoutes.Models.Itinerary
         /// <param name="action"></param>
         public void AddAction(IItineraryAction action)
         {
-            this.actions.Push(action);
+            this.actions.Add(action);
         }
 
-        private Stack<IItineraryAction> actions = new Stack<IItineraryAction>();
+        private IList<IItineraryAction> actions = new List<IItineraryAction>();
     }
 }
