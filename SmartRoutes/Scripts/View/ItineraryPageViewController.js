@@ -8,7 +8,8 @@ SmartRoutes.ItineraryPageViewController = function(pageID) {
     var children = null;
 
     var elementIDs = {
-        itineraryDropOffList: "sr-itinerary-drop-off-list"
+        itineraryDropOffList: "sr-itinerary-drop-off-list",
+        itineraryPickUpList: "sr-itinerary-pick-up-list"
     };
 
     var actions = {
@@ -118,10 +119,17 @@ SmartRoutes.ItineraryPageViewController = function(pageID) {
             var node = $("#" + elementIDs.itineraryDropOffList);
             AppendItinerarySteps(node, routeModel.DropOffPlan)
         }
+        else {
+            $("#" + elementIDs.itineraryDropOffList).hide();
+        }
 
         // Handle the pick up itinerary (if it exists).
         if (routeModel.PickUpPlan) {
-            // TODO: 
+            var node = $("#" + elementIDs.itineraryPickUpList);
+            AppendItinerarySteps(node, routeModel.PickUpPlan);
+        }
+        else {
+            $("#" + elementIDs.itineraryPickUpList).hide();
         }
     };
 
