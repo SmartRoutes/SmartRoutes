@@ -1,7 +1,11 @@
 ﻿
-<div>
+<div id="sr-template-container">
     @*Add templates here to be included on the page.*@
     @Html.Partial("~/Views/Templates/_RouteSummaryTemplate.cshtml")
 
     @Html.Partial("~/Views/Templates/_ItineraryStepsTemplates.cshtml")
+
+    <div id="sr-child-care-service-description-template">
+        @Html.Partial("~/Views/Itinerary/_ChildCareServiceDescriptionView.cshtml")
+    </div>
 </div>

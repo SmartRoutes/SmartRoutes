@@ -163,10 +163,34 @@ namespace SmartRoutes.Controllers
             {
                 Address = "47 CORRY BOULEVARD, CINCINNATI, OH, 45221",
                 ChildCareName = "ARLITT CHILD DEVELOPMENT CENTER",
-                Hours = new BusinessHoursModel[0],
                 Link = "http://www.google.com/#q=test",
                 PhoneNumber = "513-556-3802",
-                ReviewLink = "http://www.google.com/#q=review"
+                ReviewLink = "http://www.google.com/#q=review",
+                Hours = new[] 
+                { 
+                    new BusinessHoursModel {Day = BusinessHoursModel.WeekDay.Monday, OpeningTime = "6:00 AM", ClosingTime = "11:55 PM"},
+                    new BusinessHoursModel {Day = BusinessHoursModel.WeekDay.Tuesday, OpeningTime = "6:00 AM", ClosingTime = "11:55 PM"},
+                    new BusinessHoursModel {Day = BusinessHoursModel.WeekDay.Wednesday, OpeningTime = "6:00 AM", ClosingTime = "11:55 PM"},
+                    new BusinessHoursModel {Day = BusinessHoursModel.WeekDay.Thursday, OpeningTime = "6:00 AM", ClosingTime = "11:55 PM"},
+                    new BusinessHoursModel {Day = BusinessHoursModel.WeekDay.Friday, OpeningTime = "6:00 AM", ClosingTime = "11:55 PM"}
+                }
+            });
+
+            results.AddChildCare(new ChildCareModel
+            {
+                Address = "47 Space Jam Avenue, CINCINNATI, OH, 12345",
+                ChildCareName = "Wilford Brimley's Price is Right",
+                Link = "http://www.google.com/#q=Wilford%20Brimley",
+                PhoneNumber = "513-555-1234",
+                ReviewLink = "http://www.google.com/#q=review%20wilford%20brimley",
+                Hours = new[] 
+                { 
+                    new BusinessHoursModel {Day = BusinessHoursModel.WeekDay.Monday, OpeningTime = "5:00 AM", ClosingTime = "12:00 PM"},
+                    new BusinessHoursModel {Day = BusinessHoursModel.WeekDay.Tuesday, OpeningTime = "6:00 AM", ClosingTime = "11:00 PM"},
+                    new BusinessHoursModel {Day = BusinessHoursModel.WeekDay.Wednesday, OpeningTime = "7:00 AM", ClosingTime = "10:00 PM"},
+                    new BusinessHoursModel {Day = BusinessHoursModel.WeekDay.Thursday, OpeningTime = "8:00 AM", ClosingTime = "9:00 PM"},
+                    new BusinessHoursModel {Day = BusinessHoursModel.WeekDay.Friday, OpeningTime = "9:00 AM", ClosingTime = "8:00 PM"}
+                }
             });
 
             /*
@@ -203,14 +227,20 @@ namespace SmartRoutes.Controllers
             dropOff.AddAction(new ExitBusAction(new DateTime(1970, 1, 1, 8, 25, 0), "Mcmillan St & Scioto St"));
             dropOff.AddAction(new DropOffAction(new[] { 0 }, "ARLITT CHILD DEVELOPMENT CENTER"));
             dropOff.AddAction(new BoardBusAction("32", new DateTime(1970, 1, 1, 8, 47, 0), "Mcmillan St & Scioto St"));
-            dropOff.AddAction(new ExitBusAction(new DateTime(1970, 1, 1, 9, 5, 0), "Mcmillan St & Symmes St"));
+            dropOff.AddAction(new ExitBusAction(new DateTime(1970, 1, 1, 9, 50, 0), "Space Jam Avenue"));
+            dropOff.AddAction(new DropOffAction(new[] { 1 }, "Wilford Brimley's Price is Right"));
+            dropOff.AddAction(new BoardBusAction("32", new DateTime(1970, 1, 1, 8, 57, 0), "Space Jame Avenue"));
+            dropOff.AddAction(new ExitBusAction(new DateTime(1970, 1, 1, 9, 15, 0), "Mcmillan St & Symmes St"));
             dropOff.AddAction(new ArriveAction("499 E McMillan St, Cincinnati, OH 45206"));
             dropOff.Routes = new[] { "31", "32" };
 
             var pickUp = new PickUpItineraryModel();
             pickUp.AddAction(new DepartAction("499 E McMillan St, Cincinnati, OH 45206"));
             pickUp.AddAction(new BoardBusAction("33", new DateTime(1970, 1, 1, 17, 3, 00), "Mcmillan St & Symmes St"));
-            pickUp.AddAction(new ExitBusAction(new DateTime(1970, 1, 1, 17, 20, 0), "Mcmillan St & Scioto St"));
+            pickUp.AddAction(new ExitBusAction(new DateTime(1970, 1, 1, 17, 20, 0), "Space Jam Avenue"));
+            pickUp.AddAction(new PickUpAction(new[] { 1 }, "Wilford Brimley's Price is Right"));
+            pickUp.AddAction(new BoardBusAction("33", new DateTime(1970, 1, 1, 17, 25, 00), "Space Jame Avenue"));
+            pickUp.AddAction(new ExitBusAction(new DateTime(1970, 1, 1, 17, 30, 0), "Mcmillan St & Scioto St"));
             pickUp.AddAction(new PickUpAction(new[] { 0 }, "ARLITT CHILD DEVELOPMENT CENTER"));
             pickUp.AddAction(new BoardBusAction("34", new DateTime(1970, 1, 1, 17, 49, 0), "Mcmillan St & Scioto St"));
             pickUp.AddAction(new ExitBusAction(new DateTime(1970, 1, 1, 18, 2, 0), "Mcmillan St & Chickasaw St"));
@@ -220,7 +250,7 @@ namespace SmartRoutes.Controllers
             results.AddChildCareRoute(new ChildCareRouteModel
             {
                 ResultPriority = 0,
-                ChildCareIndices = new[] { 0 },
+                ChildCareIndices = new[] { 0, 1 },
                 DropOffPlan = dropOff,
                 PickUpPlan = pickUp
             });

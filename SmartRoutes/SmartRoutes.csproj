@@ -214,6 +214,7 @@
     <Content Include="Scripts\Library\handlebars-v1.3.0.js" />
     <Content Include="Scripts\Library\handlebars.runtime-v1.3.0.js" />
     <Content Include="Scripts\ViewModels\AccreditationViewModel.js" />
+    <Content Include="Scripts\ViewModels\ChildCareDescriptionViewModel.js" />
     <Content Include="Scripts\ViewModels\ChildCareResultRouteSummaryViewModel.js" />
     <Content Include="Scripts\ViewModels\ChildCareViewModel.js" />
     <Content Include="Scripts\ViewModels\ChildInfoViewModel.js" />

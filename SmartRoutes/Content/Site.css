@@ -92,20 +92,22 @@ textarea {
     height: 50px;
 }
 
+#sr-template-container {
+    display: none;
+}
+
 /* Common styling for text areas
 ------------------------------------------------------------*/
-.sr-text-area-title {
+.sr-section-title {
     background-color: #4479d4;
-    width: 400px;
     height: 64px;
 }
 
-.sr-text-area-title-text {
+.sr-section-title-text {
     font: 24px arial;
 }
 
 .sr-text-area-text {
     background-color: white;
-    width: 400px;
     height: 250px;
 }

@@ -35,6 +35,7 @@
 /// <reference path="\View\Search\ServiceTypeFormPageController.js" />
 /// <reference path="\ViewModels\AccreditationViewModel.js" />
 /// <reference path="\ViewModels\AddressViewModel.js" />
+/// <reference path="\ViewModels\ChildCareDescriptionViewModel.js" />
 /// <reference path="\ViewModels\ChildCareResultRouteSummaryViewModel.js" />
 /// <reference path="\ViewModels\ChildCareViewModel.js" />
 /// <reference path="\ViewModels\ChildInfoViewModel.js" />

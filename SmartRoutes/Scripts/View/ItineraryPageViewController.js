@@ -6,10 +6,13 @@ SmartRoutes.ItineraryPageViewController = function(pageID) {
     var results = null;
     var resultIndex = 0;
     var children = null;
+    var childCareDescriptionViewModels = new Array();
 
     var elementIDs = {
         itineraryDropOffList: "sr-itinerary-drop-off-list",
-        itineraryPickUpList: "sr-itinerary-pick-up-list"
+        itineraryPickUpList: "sr-itinerary-pick-up-list",
+        childCareServiceDescriptionTemplate: "sr-child-care-service-description-template",
+        childCareServiceDescriptionContainer: "sr-child-care-service-description-container",
     };
 
     var actions = {
@@ -146,7 +149,38 @@ SmartRoutes.ItineraryPageViewController = function(pageID) {
     };
 
     function PopulateChildCareInfo(allChildCares, indicesToDisplay) {
-        
+        if (allChildCares && indicesToDisplay) {
+            var descriptionHTML = $("#" + elementIDs.childCareServiceDescriptionTemplate).html();
+            var descriptionContainer = $("#" + elementIDs.childCareServiceDescriptionContainer);
+
+            // Remove any existing bindings.
+            ko.cleanNode(descriptionContainer);
+
+            // Clear out the view models.
+            childCareDescriptionViewModels = new Array();
+
+            // Remove any existing nodes.
+            descriptionContainer.empty();
+
+            // Insert the new nodes and bind them.
+            $.each(indicesToDisplay, function(arrayIndex, childCareIndex) {
+                if ((childCareIndex >= 0) && (childCareIndex < indicesToDisplay.length)) {
+                    descriptionContainer.append(descriptionHTML);
+
+                    // Add a viewmodel for the child care.
+                    var viewModel = new SmartRoutes.ChildCareDescriptionViewModel(allChildCares[childCareIndex]);
+                    childCareDescriptionViewModels.push(viewModel);
+
+                    // Get the element we just added.
+                    var addedElement = descriptionContainer.children().last();
+                    
+                    // Bind the view model to the element.
+                    if (addedElement.length > 0) {
+                        ko.applyBindings(viewModel, addedElement[0]);
+                    }
+                }
+            });
+        }
     };
 
     function ShowItinerary(index) {
