@@ -59,7 +59,8 @@ SmartRoutes.pageController = (function () {
         });
 
         this.get("#/itinerary", function() {
-            TransitionPages(itineraryPageViewController, lastSearchResults);
+            var childNames = guidedSearchPageViewController.GetChildNames();
+            TransitionPages(itineraryPageViewController, lastSearchResults, childNames);
         });
 
         this.get("#/feedback", function() {

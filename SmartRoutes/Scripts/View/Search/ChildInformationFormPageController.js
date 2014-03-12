@@ -107,5 +107,20 @@ SmartRoutes.ChildInformationFormPageController = (function(pageID) {
 
             return childInformation;
         },
+
+        GetChildNames: function() {
+            var childNames = new Array();
+
+            $.each(childInfoViewModels, function(index, model) {
+                if (model.name() !== "") {
+                    childNames.push(model.name());
+                }
+                else {
+                    childNames.push("Child " + (index + 1).toString());
+                }
+            });
+
+            return childNames;
+        },
     };
 });

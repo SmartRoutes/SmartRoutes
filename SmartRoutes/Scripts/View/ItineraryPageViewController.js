@@ -80,15 +80,27 @@ SmartRoutes.ItineraryPageViewController = function(pageID) {
                 template = actions.Depart.template;
             }
             else if (action.Action == actions.DropOff.type) {
+                var childrenForThisAction = new Array();
+
+                $.each(action.ChildIndices, function(index, childIndex) {
+                    childrenForThisAction.push(children[childIndex]);
+                });
+
                 templateData = {
-                    children: children,
+                    children: childrenForThisAction,
                     serviceName: action.ServiceName
                 };
                 template = actions.DropOff.template;
             }
             else if (action.Action == actions.PickUp.type) {
+                var childrenForThisAction = new Array();
+
+                $.each(action.ChildIndices, function(index, childIndex) {
+                    childrenForThisAction.push(children[childIndex]);
+                });
+
                 templateData = {
-                    children: children,
+                    children: childrenForThisAction,
                     serviceName: action.ServiceName
                 }
                 template = actions.PickUp.template;

@@ -261,6 +261,10 @@ SmartRoutes.GuidedSearchPageViewController = (function(pageID) {
 
         GetPageViewID: function() {
             return guidedSearchPageViewID;
+        },
+
+        GetChildNames: function() {
+            return childInformationFormPageController.GetChildNames();
         }
     };
 });
