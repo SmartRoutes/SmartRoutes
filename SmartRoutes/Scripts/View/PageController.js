@@ -59,7 +59,7 @@ SmartRoutes.pageController = (function () {
         });
 
         this.get("#/itinerary", function() {
-            TransitionPages(itineraryPageViewController);
+            TransitionPages(itineraryPageViewController, lastSearchResults);
         });
 
         this.get("#/feedback", function() {
