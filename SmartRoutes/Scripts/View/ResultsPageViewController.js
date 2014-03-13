@@ -12,14 +12,15 @@ SmartRoutes.ResultsPageViewController = function(pageID) {
 
     var elementIDs = {
         resultsListView: "sr-results-list-view",
-        routeSummaryTemplate: "sr-results-routes-summary-template"
+        routeSummaryTemplate: "sr-results-routes-summary-template",
+        dropOffSummarycontainer: "sr-results-drop-off-route-summary-container",
+        pickUpSummaryContainer: "sr-results-pick-up-route-summary-container"
     };
 
     var elementClasses = {
         resultListElement: "sr-results-list-element",
         routeSummaryContainer: "sr-results-route-summary-routes-container",
-        dropOffSummarycontainer: "sr-results-drop-off-route-summary-container",
-        pickUpSummaryContainer: "sr-results-pick-up-route-summary-container"
+        
     };
 
     // Receives the result list view from the server. 
@@ -41,16 +42,16 @@ SmartRoutes.ResultsPageViewController = function(pageID) {
         var resultsListElements = $("." + elementClasses.resultListElement);
         $.each(resultsListViewModel.elements(), function(index, value) {
             // Add the drop off route summary.
-            $("." + elementClasses.dropOffSummarycontainer,
-              resultsListElements[index]).html(template({
-                  routes: value.dropOffRoutes
-              }));
+            var dropOffRoute = template({
+                routes: value.dropOffRoutes
+            })
+            $("#" + elementIDs.dropOffSummarycontainer, resultsListElements[index]).append(dropOffRoute);
 
             // Add the pick up route summary.
-            $("." + elementClasses.pickUpSummaryContainer,
-              resultsListElements[index]).html(template({
-                  routes: value.pickUpRoutes
-              }));
+            var pickUpRoute = template({
+                routes:value.pickUpRoutes
+            })
+            $("#" + elementIDs.pickUpSummaryContainer, resultsListElements[index]).append(pickUpRoute);
         });
     };
 

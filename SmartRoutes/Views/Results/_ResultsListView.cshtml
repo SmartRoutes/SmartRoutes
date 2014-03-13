@@ -9,21 +9,21 @@
                         <a class="sr-results-child-care-service-link" data-bind="attr: {href: serviceLink}" target="_blank">Service Link</a>
                     </div>
                 </li>
-            </ul>
+            </ul>
 
             <div class="sr-route-results-info-container">
                 <div data-bind="visible: isDropOffPlan">
                     <div class="sr-drop-off-summary-container">
                         <span class="sr-results-route-type-heading">Drop Off Plan</span>
                         <span class="sr-results-route-summary-routes-label">Routes: </span>
-                        <span class="sr-results-route-summary-routes-container sr-results-drop-off-route-summary-container"></span>
+                        <div id="sr-results-drop-off-route-summary-container" class="sr-results-route-summary-routes-container"></div>
                     </div>
                 </div>
                 <div data-bind="visible: isPickUpPlan">
                     <div class="sr-pick-up-summary-container">
                         <span class="sr-results-route-type-heading">Pick Up Plan</span>
                         <span class="sr-results-route-summary-routes-label">Routes: </span>
-                        <span class="sr-results-route-summary-routes-container sr-results-pick-up-route-summary-container"></span>
+                        <div id="sr-results-pick-up-route-summary-container" class="sr-results-route-summary-routes-container"></div>
                     </div>
                 </div>
             </div>
