@@ -9,6 +9,8 @@ SmartRoutes.pageController = (function () {
     var pageTransitionFadeInTimeMS = 300;
     var lastSearchResults = null;
     var lastSearchQuery = null;
+    var lastSearchResultsKey = "last-search-results";
+    var lastSearchQueryKey = "last-search-query";
 
     var pageIDs = {
         mainPage: "sr-main-page-view",
@@ -21,6 +23,12 @@ SmartRoutes.pageController = (function () {
     var guidedSearchPageViewController = new SmartRoutes.GuidedSearchPageViewController(pageIDs.guidedSearchPage);
     var resultsPageViewController = new SmartRoutes.ResultsPageViewController(pageIDs.resultsPage);
     var itineraryPageViewController = new SmartRoutes.ItineraryPageViewController(pageIDs.itineraryPage);
+
+    // Callback for storing data when the page refreshes.
+    $(window).bind("beforeunload", function() {
+        window.sessionStorage.setItem(lastSearchResultsKey, JSON.stringify(lastSearchResults));
+        window.sessionStorage.setItem(lastSearchQueryKey, JSON.stringify(lastSearchQuery));
+    });
 
     // Handles transitioning from one page to another.
     function TransitionPages(newPageController) {
@@ -71,6 +79,9 @@ SmartRoutes.pageController = (function () {
 
     $(document).ready(function() {
         SmartRoutes.pageController.HideAllPages();
+
+        lastSearchResults = JSON.parse(window.sessionStorage.getItem(lastSearchResultsKey));
+        lastSearchQuery = JSON.parse(window.sessionStorage.getItem(lastSearchQueryKey));
 
         // The sammy app should only be run after the document is ready.
         that.sammyApp.run("#/");
