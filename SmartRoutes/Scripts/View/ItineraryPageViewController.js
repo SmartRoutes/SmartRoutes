@@ -11,6 +11,8 @@ SmartRoutes.ItineraryPageViewController = function(pageID) {
     var elementIDs = {
         itineraryDropOffList: "sr-itinerary-drop-off-list",
         itineraryPickUpList: "sr-itinerary-pick-up-list",
+        itineraryDropOffContainer: "sr-itinerary-drop-off-container",
+        itineraryPickUpContainer: "sr-itinerary-pick-up-container",
         childCareServiceDescriptionTemplate: "sr-child-care-service-description-template",
         childCareServiceDescriptionContainer: "sr-child-care-service-description-container",
     };
@@ -132,19 +134,21 @@ SmartRoutes.ItineraryPageViewController = function(pageID) {
         // Handle the drop off itinerary (if it exists).
         if (routeModel.DropOffPlan && routeModel.DropOffPlan.ItineraryActions) {
             var node = $("#" + elementIDs.itineraryDropOffList);
-            AppendItinerarySteps(node, routeModel.DropOffPlan)
+            AppendItinerarySteps(node, routeModel.DropOffPlan);
+            $("#" + elementIDs.itineraryDropOffContainer).show();
         }
         else {
-            $("#" + elementIDs.itineraryDropOffList).hide();
+            $("#" + elementIDs.itineraryDropOffContainer).hide();
         }
 
         // Handle the pick up itinerary (if it exists).
-        if (routeModel.PickUpPlan) {
+        if (routeModel.PickUpPlan && routeModel.PickUpPlan.ItineraryActions) {
             var node = $("#" + elementIDs.itineraryPickUpList);
             AppendItinerarySteps(node, routeModel.PickUpPlan);
+            $("#" + elementIDs.itineraryPickUpContainer).show();
         }
         else {
-            $("#" + elementIDs.itineraryPickUpList).hide();
+            $("#" + elementIDs.itineraryPickUpContainer).hide();
         }
     };
 

@@ -3,14 +3,14 @@
     <script id="sr-itinerary-step-depart" type="text/x-handlebars-template">
         <li class="sr-itinerary-step">
             <span class="sr-itinerary-text">Depart from </span>
-            <span class="sr-itinerary-text sr-itinerary-address">{{address}}</span>
+            <span class="sr-itinerary-text sr-itinerary-interest-text sr-itinerary-address">{{address}}</span>
         </li>
     </script>
 
     <script id="sr-itinerary-step-arrive" type="text/x-handlebars-template">
         <li>
             <span class="sr-itinerary-text">Proceed to </span>
-            <span class="sr-itinerary-text sr-itinerary-address">{{address}}</span>
+            <span class="sr-itinerary-text sr-itinerary-interest-text sr-itinerary-address">{{address}}</span>
         </li>
     </script>
 
@@ -22,10 +22,10 @@
             @*Don't insert an 'and' for the first item.*@
             <span class="sr-itinerary-text">and </span>
             {{/if}}
-            <span class="sr-itinerary-text sr-itinerary-child-name">{{this}}</span>
+            <span class="sr-itinerary-text sr-itinerary-interest-text sr-itinerary-child-name">{{this}}</span>
             {{/each}}
             <span class="sr-itinerary-text"> off at </span>
-            <span class="sr-itinerary-text sr-itinerary-service-name">{{serviceName}}</span>
+            <span class="sr-itinerary-text sr-itinerary-interest-text sr-itinerary-service-name">{{serviceName}}</span>
         </li>
     </script>
 
@@ -36,30 +36,30 @@
             {{#if @@index}}
             <span class="sr-itinerary-text">and </span>
             {{/if}}
-            <span class="sr-itinerary-text sr-itinerary-child-name">{{this}}</span>
+            <span class="sr-itinerary-text sr-itinerary-interest-text sr-itinerary-child-name">{{this}}</span>
             {{/each}}
             <span class="sr-itinerary-text">up from </span>
-            <span class="sr-itinerary-text sr-itinerary-service-name">{{serviceName}}</span>
+            <span class="sr-itinerary-text sr-itinerary-interest-text sr-itinerary-service-name">{{serviceName}}</span>
         </li>
     </script>
 
     <script id="sr-itinerary-step-board" type="text/x-handlebars-template">
         <li class="sr-itinerary-step">
             <span class="sr-itinerary-text">Board bus route </span>
-            <span class="sr-itinerary-text sr-itinerary-route-number">{{routeNumber}}</span>
+            <span class="sr-itinerary-text sr-itinerary-interest-text sr-itinerary-route-number">{{routeNumber}}</span>
             <span class="sr-itinerary-text"> at approximately </span>
-            <span class="sr-itinerary-text sr-itinerary-time">{{time}}</span>
+            <span class="sr-itinerary-text sr-itinerary-interest-text sr-itinerary-time">{{time}}</span>
             <span class="sr-itinerary-text"> near </span>
-            <span class="sr-itinerary-text sr-itinerary-stop-name">{{stopName}}</span> 
+            <span class="sr-itinerary-text sr-itinerary-interest-text sr-itinerary-stop-name">{{stopName}}</span> 
         </li>
     </script>
 
     <script id="sr-itinerary-step-exit" type="text/x-handlebars-template">
         <li class="sr-itinerary-step">
             <span class="sr-itinerary-text">Exit bus at approximately </span>
-            <span class="sr-itinerary-text sr-itinerary-time">{{time}}</span>
+            <span class="sr-itinerary-text sr-itinerary-interest-text sr-itinerary-time">{{time}}</span>
             <span class="sr-itinerary-text"> near </span>
-            <span class="sr-itinerary-text sr-itinerary-stop-name">{{stopName}}</span>
+            <span class="sr-itinerary-text sr-itinerary-interest-text sr-itinerary-stop-name">{{stopName}}</span>
         </li>
     </script>
 

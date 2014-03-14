@@ -10,3 +10,29 @@
 .sr-child-care-service-description-view {
     background-color: white;
 }
+
+/*This is common to all child names, service names, addresses
+  times, and stop names.*/
+.sr-itinerary-interest-text {
+    color: #1049a9;
+}
+
+.sr-itinerary-child-name {
+
+}
+
+.sr-itinerary-service-name {
+
+}
+
+.sr-itinerary-address {
+
+}
+
+.sr-itinerary-time {
+
+}
+
+.sr-itinerary-stop-name {
+
+}
