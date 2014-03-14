@@ -21,27 +21,29 @@ SmartRoutes.ChildCareDescriptionViewModel = function(childCareModel) {
 
     function SetupHours() {
         hours.removeAll();
-        $.each(childCareModel.Hours, function(index, hourModel) {
-            var day = dayMap[0];
-            if (hourModel.Day && (hourModel.Day > 0) && (hourModel.Day < dayMap.length)) {
-                day = dayMap[hourModel.Day];
-            }
+        if (childCareModel.Hours) {
+            $.each(childCareModel.Hours, function(index, hourModel) {
+                var day = dayMap[0];
+                if (hourModel.Day && (hourModel.Day > 0) && (hourModel.Day < dayMap.length)) {
+                    day = dayMap[hourModel.Day];
+                }
 
-            var timeRange = "";
-            if (hourModel.OpeningTime) {
-                timeRange += hourModel.OpeningTime;
-            }
+                var timeRange = "";
+                if (hourModel.OpeningTime) {
+                    timeRange += hourModel.OpeningTime;
+                }
 
-            if (hourModel.ClosingTime) {
-                timeRange += " - ";
-                timeRange += hourModel.ClosingTime;
-            }
+                if (hourModel.ClosingTime) {
+                    timeRange += " - ";
+                    timeRange += hourModel.ClosingTime;
+                }
 
-            hours.push({
-                day: day,
-                timeRange: timeRange
+                hours.push({
+                    day: day,
+                    timeRange: timeRange
+                });
             });
-        });
+        }
     };
 
     (function Init() {
