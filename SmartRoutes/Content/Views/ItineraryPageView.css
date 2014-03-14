@@ -11,6 +11,22 @@
     background-color: white;
 }
 
+.sr-itinerary-section-heading {
+    font: 24px arial bold;
+}
+
+/************************************************************
+    These styles are for the child care service description view.
+*/
+
+.sr-child-care-service-description-name {
+    font: 24px arial bold;
+}
+
+/************************************************************
+    These styles are for the itinerary steps.
+*/
+
 /*This is common to all child names, service names, addresses
   times, and stop names.*/
 .sr-itinerary-interest-text {
