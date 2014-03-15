@@ -24,6 +24,7 @@ namespace SmartRoutes.Support
         private string _pickUpDepartureAddress;
         private string _pickUpDestinationAddress;
         private SearchResult[] _pickUpSearchResults;
+        private IDictionary<IDestination, int> _destinationToIndex;
 
         private static string GetSearchResultDestinationsKey(IDictionary<IDestination, string> destinationToKey, SearchResult searchResult)
         {
@@ -52,6 +53,7 @@ namespace SmartRoutes.Support
 
             // build dependent models
             _indexToDestination = CollectDestinations().ToArray();
+            _destinationToIndex = GetDestinationToIndex();
             _childCareModels = GetChildCareModels().ToArray();
 
             _childCareRoutes = SortChildCareRoutes(GetChildCareRoutes()).ToArray();
@@ -77,6 +79,13 @@ namespace SmartRoutes.Support
             return model;
         }
 
+        private IDictionary<IDestination, int> GetDestinationToIndex()
+        {
+            return _indexToDestination
+                .Select((d, i) => new {Destination = d, Index = i})
+                .ToDictionary(d => d.Destination, d => d.Index);
+        }
+
         private IEnumerable<ChildCareRoute> SortChildCareRoutes(IEnumerable<ChildCareRoute> routes)
         {
             return routes
@@ -96,31 +105,29 @@ namespace SmartRoutes.Support
                 {
                     var m = new ChildCareRouteModel();
 
-                    ISet<int> childIndices = new HashSet<int>();
+                    ISet<int> childCareIndices = new HashSet<int>();
                     if (route.DropOffSearchResult != null)
                     {
-                        m.DropOffPlan = GetItineraryModel(route.DropOffSearchResult, new DropOffItineraryModel());
-                        CollectChildIndices(m.DropOffPlan, childIndices);
+                        m.DropOffPlan = GetItineraryModel(route.DropOffSearchResult, new DropOffItineraryModel(), childCareIndices);
                     }
 
                     if (route.PickUpSearchResult != null)
                     {
-                        m.PickUpPlan = GetItineraryModel(route.PickUpSearchResult, new PickUpItineraryModel());
-                        CollectChildIndices(m.PickUpPlan, childIndices);
+                        m.PickUpPlan = GetItineraryModel(route.PickUpSearchResult, new PickUpItineraryModel(), childCareIndices);
                     }
 
-                    m.ChildCareIndices = childIndices.ToArray();
+                    m.ChildCareIndices = childCareIndices.ToArray();
                     m.ResultPriority = i;
 
                     return m;
                 });
         }
 
-        private static void CollectChildIndices(ItineraryModel model, ISet<int> childIndices)
+        private static void CollectChildCareIndices(ItineraryModel model, ISet<int> childCareIndices)
         {
             foreach (IChildItineraryAction action in model.ItineraryActions.OfType<IChildItineraryAction>())
             {
-                childIndices.UnionWith(action.ChildIndices);
+                childCareIndices.UnionWith(action.ChildIndices);
             }
         }
 
@@ -133,7 +140,7 @@ namespace SmartRoutes.Support
                 .Distinct();
         }
 
-        private T GetItineraryModel<T>(SearchResult searchResult, T model) where T : ItineraryModel
+        private T GetItineraryModel<T>(SearchResult searchResult, T model, ISet<int> childCareIndices) where T : ItineraryModel
         {
             string departureAddress = model is DropOffItineraryModel ? _dropOffDepartureAddress : _pickUpDepartureAddress;
             string destinationAddress = model is DropOffItineraryModel ? _dropOffDestinationAddress : _pickUpDestinationAddress;
@@ -173,12 +180,18 @@ namespace SmartRoutes.Support
 
                     if (currentDestination != null)
                     {
+                        // infer the children that will be dropped off at this location
                         int[] childIndices = _criteria
                             .Select((c, i) => new {Criterion = c, Index = i})
                             .Where(t => t.Criterion(currentDestination.Destination))
                             .Select(t => t.Index)
                             .ToArray();
+
+                        // get the name of the destination
                         string name = currentDestination.Name;
+
+                        // infer the unique index of this destination
+                        childCareIndices.Add(_destinationToIndex[currentDestination.Destination]);
 
                         if (model is DropOffItineraryModel)
                         {
