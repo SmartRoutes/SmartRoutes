@@ -17,7 +17,11 @@ namespace SmartRoutes.Models
             /// <summary>
             /// Indicates a failure with location transformation.
             /// </summary>
-            GeocodeFail
+            DropOffDepartureGeocodeFail,
+            DropOffDestinationGeocodeFail,
+
+            PickUpDepartureGeocodeFail,
+            PickUpDestinationGecodeFail
         }
 
         /// <summary>
