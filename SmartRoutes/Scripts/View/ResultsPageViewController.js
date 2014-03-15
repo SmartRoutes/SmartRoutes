@@ -30,6 +30,9 @@ SmartRoutes.ResultsPageViewController = function(pageID) {
 
     // Clears and repopulates the result list view with result data.
     function PopulateResultListView(searchResults) {
+        // Remove any existing bindings.
+        ko.cleanNode(("#" + elementIDs.resultsListView)[0]);
+
         resultsListViewModel.SetNewResults(searchResults);
 
         ko.applyBindings({

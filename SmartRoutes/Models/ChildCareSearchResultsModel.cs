@@ -40,6 +40,16 @@ namespace SmartRoutes.Models
         }
 
         /// <summary>
+        /// Object that represents the status (i.e. success/failure)
+        /// of the search.
+        /// </summary>
+        public SearchResultsStatus Status
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
         /// Adds a child care route to the end of the collection.
         /// </summary>
         /// <param name="route">The route to add.</param>

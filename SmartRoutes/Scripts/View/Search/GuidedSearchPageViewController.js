@@ -22,7 +22,8 @@ SmartRoutes.GuidedSearchPageViewController = (function(pageID) {
         searchFormView: "sr-guided-search-form-view",
         breadcrumbView: "sr-guided-search-breadcrumb-view",
         searchContainer: "sr-guided-search-container",
-        searchingAnimationContainer: "sr-guided-search-searching-animation-container"
+        searchingAnimationContainer: "sr-guided-search-searching-animation-container",
+        alert: "sr-location-time-alert"
     };
 
     var pageIDs = {
