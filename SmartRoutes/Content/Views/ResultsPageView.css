@@ -16,3 +16,7 @@
     color: white;
     /*TODO: find a better font?*/
 }
+
+.sr-results-child-care-service-name {
+    font: 16px bold;
+}
