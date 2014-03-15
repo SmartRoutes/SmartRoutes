@@ -72,6 +72,7 @@ namespace SmartRoutes.Support
                     model.AddChildCareRoute(childCareRouteModel);
                 }
             }
+            model.Status = new SearchResultsStatus(SearchResultsStatus.StatusCode.ResultsOk);
 
             return model;
         }
