@@ -21,7 +21,7 @@ namespace SmartRoutes.Models
             DropOffDestinationGeocodeFail,
 
             PickUpDepartureGeocodeFail,
-            PickUpDestinationGecodeFail
+            PickUpDestinationGeocodeFail
         }
 
         /// <summary>
