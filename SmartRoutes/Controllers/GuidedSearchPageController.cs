@@ -81,10 +81,7 @@ namespace SmartRoutes.Controllers
             }
             else
             {
-                throw new GeocoderException(
-                    string.Format("The provivided address '{0}' could not be geocoded using geocode '{1}'.",
-                        request,
-                        geocoder.GetType().FullName));
+                return null;
             }
             destinations[request] = location;
 
@@ -202,9 +199,26 @@ namespace SmartRoutes.Controllers
             IEnumerable<SearchResult> dropOffResults = Enumerable.Empty<SearchResult>();
             if (searchQuery.ScheduleType.DropOffChecked)
             {
+                var destination = Geocode(geocoder, responses, dropOffDestinationAddress);
+                var departure = Geocode(geocoder, responses, dropOffDepartureAddress);
+                if (departure == null)
+                {
+                    return Json(new ChildCareSearchResultsModel
+                    {
+                        Status = new SearchResultsStatus(SearchResultsStatus.StatusCode.DropOffDepartureGeocodeFail)
+                    });
+                }
+                if (destination == null)
+                {
+                    return Json(new ChildCareSearchResultsModel
+                    {
+                        Status = new SearchResultsStatus(SearchResultsStatus.StatusCode.DropOffDestinationGeocodeFail)
+                    });
+                }
+
                 dropOffResults = GraphSingleton.Instance.Graph.Search(
-                    Geocode(geocoder, responses, dropOffDestinationAddress),
-                    Geocode(geocoder, responses, dropOffDepartureAddress),
+                    destination,
+                    departure,
                     StandardizeTime(searchQuery.LocationsAndTimes.DropOffLatestArrivalTime),
                     TimeDirection.Backwards,
                     criteria);
@@ -213,9 +227,26 @@ namespace SmartRoutes.Controllers
             IEnumerable<SearchResult> pickUpResults = Enumerable.Empty<SearchResult>();
             if (searchQuery.ScheduleType.PickUpChecked)
             {
+                var departure = Geocode(geocoder, responses, pickUpDepartureAddress);
+                var destination = Geocode(geocoder, responses, pickUpDestinationAddress);
+                if (departure == null)
+                {
+                    return Json(new ChildCareSearchResultsModel
+                    {
+                        Status = new SearchResultsStatus(SearchResultsStatus.StatusCode.PickUpDepartureGeocodeFail)
+                    });
+                }
+                if (destination == null)
+                {
+                    return Json(new ChildCareSearchResultsModel
+                    {
+                        Status = new SearchResultsStatus(SearchResultsStatus.StatusCode.PickUpDestinationGeocodeFail)
+                    });
+                }
+
                 pickUpResults = GraphSingleton.Instance.Graph.Search(
-                    Geocode(geocoder, responses, pickUpDepartureAddress),
-                    Geocode(geocoder, responses, pickUpDestinationAddress),
+                    departure,
+                    destination,
                     StandardizeTime(searchQuery.LocationsAndTimes.PickUpDepartureTime),
                     TimeDirection.Forwards,
                     criteria);
