@@ -7,11 +7,44 @@ SmartRoutes.LocationAndTimeFormPageController = function(pageID) {
     var scheduleType = null;
     var locationTimeFormPageID = pageID;
 
-    var locationTimeSectionIDs = {
+    var elementIDs = {
         dropOffDeparture: "sr-section-drop-off-departure",
         dropOffDestination: "sr-section-drop-off-final-destination",
         pickUpDeparture: "sr-section-pick-up-departure",
-        pickUpDestination: "sr-section-pick-up-final-destination"
+        pickUpDestination: "sr-section-pick-up-final-destination",
+        pickUpDepartureAddressContainer: "sr-pick-up-departure-address-container",
+        pickUpDestinationAddressContainer: "sr-pick-up-destination-address-container"
+    };
+
+    function UpdateAddressViewModelsFromUISelection() {
+        if (locationAndTimeViewModel.pickUpDepartureViewModel.pickUpDepartureSameAsDestination()) {
+            locationAndTimeViewModel.pickUpDepartureViewModel.pickUpDepartureAddressViewModel.CopyFromAddress(
+                locationAndTimeViewModel.dropOffDestinationViewModel.dropOffDestinationAddressViewModel);
+        }
+
+        if (locationAndTimeViewModel.pickUpDestinationViewModel.dropOffDestinationSameAsDeparture()) {
+            locationAndTimeViewModel.pickUpDestinationViewModel.pickUpDestinationAddressViewModel.CopyFromAddress(
+                locationAndTimeViewModel.dropOffDepartureViewModel.dropOffDepartureAddressViewModel);
+        }
+    };
+
+    function SameAddressCallback(container, sameAsDropOff, sourceAddress, destinationAddress) {
+        if (sameAsDropOff) {
+            container.hide();
+        }
+        else {
+            container.show();
+        }
+    };
+
+    function BindCallbacks() {
+        locationAndTimeViewModel.pickUpDepartureViewModel.pickUpDepartureSameAsDestination.subscribe(function(newValue) {
+            SameAddressCallback($("#" + elementIDs.pickUpDepartureAddressContainer), newValue);
+        });
+
+        locationAndTimeViewModel.pickUpDestinationViewModel.dropOffDestinationSameAsDeparture.subscribe(function (newValue) {
+            SameAddressCallback($("#" + elementIDs.pickUpDestinationAddressContainer), newValue);
+        });
     };
 
     // Handles binding the UI elements to javascript objects for data.
@@ -35,37 +68,38 @@ SmartRoutes.LocationAndTimeFormPageController = function(pageID) {
                          $("#sr-pick-up-destination-supplemental-input")[0]);
         ko.applyBindings(locationAndTimeViewModel.pickUpDestinationViewModel.pickUpDestinationAddressViewModel,
                          $("#sr-pick-up-destination-address-container")[0]);
-    };
 
-    // This function shows the various sections determined by the
-    // schedule type page.
-    function InitViewSectionVisibility() {
-
+        BindCallbacks();
     };
 
     (function Init() {
         InitBindings();
+
+        // Kinda hackish, but forcing these elements to notify subscribers of their initial
+        // value so the ui is setup correctly.
+        locationAndTimeViewModel.pickUpDepartureViewModel.pickUpDepartureSameAsDestination.valueHasMutated();
+        locationAndTimeViewModel.pickUpDestinationViewModel.dropOffDestinationSameAsDeparture.valueHasMutated();
     })();
 
     // Shows/hides the location and time sections depending on the
     // schedule type selected.
     function SetupViewsForScheduleType() {
         if (scheduleType.DropOffChecked) {
-            $("#" + locationTimeSectionIDs.dropOffDeparture).show();
-            $("#" + locationTimeSectionIDs.dropOffDestination).show();
+            $("#" + elementIDs.dropOffDeparture).show();
+            $("#" + elementIDs.dropOffDestination).show();
         }
         else {
-            $("#" + locationTimeSectionIDs.dropOffDeparture).hide();
-            $("#" + locationTimeSectionIDs.dropOffDestination).hide();
+            $("#" + elementIDs.dropOffDeparture).hide();
+            $("#" + elementIDs.dropOffDestination).hide();
         }
 
         if (scheduleType.PickUpChecked) {
-            $("#" + locationTimeSectionIDs.pickUpDeparture).show();
-            $("#" + locationTimeSectionIDs.pickUpDestination).show();
+            $("#" + elementIDs.pickUpDeparture).show();
+            $("#" + elementIDs.pickUpDestination).show();
         }
         else {
-            $("#" + locationTimeSectionIDs.pickUpDeparture).hide();
-            $("#" + locationTimeSectionIDs.pickUpDestination).hide();
+            $("#" + elementIDs.pickUpDeparture).hide();
+            $("#" + elementIDs.pickUpDestination).hide();
         }
     };
 
@@ -83,6 +117,8 @@ SmartRoutes.LocationAndTimeFormPageController = function(pageID) {
         // Signals that this is no longer the active form page.
         StopPage: function() {
             validationCallback = null;
+
+            UpdateAddressViewModelsFromUISelection();
         },
 
         // Gets the ID of the form page element.
