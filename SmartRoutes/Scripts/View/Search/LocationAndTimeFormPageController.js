@@ -13,7 +13,9 @@ SmartRoutes.LocationAndTimeFormPageController = function(pageID) {
         pickUpDeparture: "sr-section-pick-up-departure",
         pickUpDestination: "sr-section-pick-up-final-destination",
         pickUpDepartureAddressContainer: "sr-pick-up-departure-address-container",
-        pickUpDestinationAddressContainer: "sr-pick-up-destination-address-container"
+        pickUpDestinationAddressContainer: "sr-pick-up-destination-address-container",
+        duplicateDestinationOptionContainer: "sr-duplicate-drop-off-destination-option-container",
+        duplicateDepartureOptionContainer: "sr-duplicate-drop-off-departure-option-container",
     };
 
     function UpdateAddressViewModelsFromUISelection() {
@@ -87,10 +89,20 @@ SmartRoutes.LocationAndTimeFormPageController = function(pageID) {
         if (scheduleType.DropOffChecked) {
             $("#" + elementIDs.dropOffDeparture).show();
             $("#" + elementIDs.dropOffDestination).show();
+            
+            $("#" + elementIDs.duplicateDepartureOptionContainer).show();
+            $("#" + elementIDs.duplicateDestinationOptionContainer).show();
         }
         else {
             $("#" + elementIDs.dropOffDeparture).hide();
             $("#" + elementIDs.dropOffDestination).hide();
+
+            $("#" + elementIDs.duplicateDepartureOptionContainer).hide();
+            $("#" + elementIDs.duplicateDestinationOptionContainer).hide();
+
+            // These can't be true since there isn't a drop off schedule.
+            locationAndTimeViewModel.pickUpDepartureViewModel.pickUpDepartureSameAsDestination(false);
+            locationAndTimeViewModel.pickUpDestinationViewModel.dropOffDestinationSameAsDeparture(false);
         }
 
         if (scheduleType.PickUpChecked) {
