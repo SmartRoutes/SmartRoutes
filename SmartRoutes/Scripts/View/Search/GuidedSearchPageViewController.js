@@ -40,7 +40,17 @@ SmartRoutes.GuidedSearchPageViewController = (function(pageID) {
         "sr-location-time-form-page-view": "#/search/locationsandtimes",
         "sr-accreditation-form-page-view": "#/search/accreditation",
         "sr-service-type-form-page-view": "#/search/servicetype"
-    }
+    };
+
+    var searchResultStatus = {
+        ResultsOk: 0,
+
+        DropOffDepartureGeocodeFail: 1,
+        DropOffDestinationGeocodeFail: 2,
+
+        PickUpDepartureGeocodeFail: 3,
+        PickUpDestinationGecodeFail: 4,
+    };
 
     var childInformationFormPageController = null;
     var scheduleTypeFormPageController = null;
@@ -199,12 +209,44 @@ SmartRoutes.GuidedSearchPageViewController = (function(pageID) {
         return childCareSearchPayload;
     };
 
+    function HandleSearchError(status) {
+        var navPath = "/#";
+        if (!status || (status && !status.Code) || (status && !status.Message)) {
+            alert("Unable to retrieve results from the server");
+        }
+        else {
+            var errorNode = null;
+            switch (status.Code) {
+                case searchResultStatus.DropOffDepartureGeocodeFail:
+                case searchResultStatus.DropOffDestinationGeocodeFail:
+                case searchResultStatus.PickUpDepartureGeocodeFail:
+                case searchResultStatus.PickUpDestinationGecodeFail:
+                    // TODO: where does the error get handled?
+                    // This should probably tell the location/time controller
+                    // to set an error on a section, but when do errors get cleared?
+                    // Lazy way would be to have the guided search controller hide them all.
+                    // Alternatively, have the pages clear their own errors if something changes.
+                    break;
+                default:
+                    alert("An unexpected error occured.");
+                    break;
+            }
+
+            if (errorNode) {
+
+            }
+        }
+    };
+
     // Receives data after the server performs a search.
     function SearchCompletedCallback(data) {
         // check data, return to search form or notify the page controller
         // that we have data.
-        if (searchCompletedCallback && data) {
+        if (searchCompletedCallback && data && data.Status && (data.Status.Code == searchResultStatus.ResultsOk)) {
             searchCompletedCallback(data, lastSearchPayload);
+        }
+        else {
+            HandleSearchError(data.Status);
         }
     };
 
