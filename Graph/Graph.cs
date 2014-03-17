@@ -310,7 +310,15 @@ namespace SmartRoutes.Graph
                 }
             }
 
-            return FinalResults;
+            // ensure that destination sets are unique
+            var UniqueDestSet = new HashSet<IEnumerable<IDestination>>();
+            var UniqueResults = FinalResults.Where(result => 
+                {
+                    var searchresult = new SearchResult(result);
+                    return UniqueDestSet.Add(searchresult.Destinations);
+                }); 
+
+            return UniqueResults;
         }
 
         private IEnumerable<NodeInfo> SearchDestToLoc(IEnumerable<NodeInfo> NodeInfos, TimeDirection Direction, ILocation EndLocation)
