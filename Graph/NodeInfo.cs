@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using SmartRoutes.Graph.Heap;
 using SmartRoutes.Graph.Node;
 
@@ -11,8 +12,9 @@ namespace SmartRoutes.Graph
 
     public class NodeInfo
     {
-        internal FibHeapHandle<NodeBase, TimeSpan> Handle;
+        internal FibHeapHandle<Tuple<NodeBase, string>, TimeSpan> Handle;
         internal NodeState State;
+        internal string UnsatisfiedCriteria;
         public INode Node { get; internal set; }
         public NodeInfo Parent;
         public TimeSpan PathCost { get; internal set; }

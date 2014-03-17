@@ -14,8 +14,9 @@ namespace SmartRoutes.GraphDemo
     {
         static void Main(string[] args)
         {
-            var form = new GraphTester();
-            form.ShowDialog();
+            //var form = new GraphTester();
+            //form.ShowDialog();
+            SimpleTest();
         }
 
         private static void SimpleTest()
@@ -72,11 +73,13 @@ namespace SmartRoutes.GraphDemo
             // child care selected by name, since properties are not implemented yet
             const string childCareName1 = "ANOINTED HANDS LEARNING CENTER";
             const string childCareName2 = "DIVINE DAY CARE CENTER, INC. II";
+            const string childCareName3 = "UC EARLY LEARNING CENTER";
 
             Func<IDestination, bool> criteria1 = dest => dest.Name == childCareName1;
             Func<IDestination, bool> criteria2 = dest => dest.Name == childCareName2;
+            Func<IDestination, bool> criteria3 = dest => dest.Name == childCareName3;
 
-            var criterion = new[] { criteria1, criteria2 };
+            var criterion = new[] { criteria1, criteria2, criteria3 };
 
             var results = graph.Search(workLocation, homeLocation, atWorkBy, TimeDirection.Backwards, criterion);
 

@@ -7,6 +7,8 @@ using SmartRoutes.Model.Gtfs;
 using SmartRoutes.Model.Srds;
 using SmartRoutes.Model;
 
+
+
 namespace SmartRoutes.Graph
 {
     public class Graph : IGraph
@@ -91,6 +93,38 @@ namespace SmartRoutes.Graph
                 });
         }
 
+        private IEnumerable<IGtfsNode> GetDestinationNeighbors(IDestinationNode node, TimeDirection direction)
+        {
+            var returnList = new List<IGtfsNode>();
+            var uniqueNodeBases = new HashSet<NodeBase>();
+
+            var q = new Queue<IDestinationNode>();
+            q.Enqueue(node);
+
+            while (q.Count() > 0)
+            {
+                var current = q.Dequeue();
+                var neighbors = (direction == TimeDirection.Forwards)
+                    ? current.TimeForwardNeighbors
+                    : current.TimeBackwardNeighbors;
+
+                foreach (var neighbor in neighbors.OfType<IGtfsNode>())
+                {
+                    if (uniqueNodeBases.Add(neighbor.BaseNode))
+                    {
+                        returnList.Add(neighbor);
+                    }
+                }
+
+                foreach (var neighbor in neighbors.OfType<IDestinationNode>())
+                {
+                    q.Enqueue(neighbor);
+                }
+            }
+
+            return returnList;
+        }
+
         private static TimeSpan GetNextPathCost(NodeInfo currentInfo, INode neighbor, TimeDirection direction)
         {
             TimeSpan travelTimeBetween = neighbor.Time - currentInfo.Node.Time;
@@ -112,48 +146,49 @@ namespace SmartRoutes.Graph
             return pathCost;
         }
 
-        private IEnumerable<NodeInfo> Dijkstras(IEnumerable<NodeInfo> StartNodeInfos, Func<INode, bool> GoalCheck, TimeDirection direction, ILocation EndLocation = null)
+        private IEnumerable<NodeInfo> Dijkstras(IEnumerable<NodeInfo> StartNodeInfos, IEnumerable<Func<INode, bool>> Criteria, TimeDirection direction, ILocation EndLocation = null)
         {
+            var searchKeyMgr = new SearchKeyManager(Criteria);
+
             var Results = new List<NodeInfo>();
 
             if (StartNodeInfos.Count() == 0) return Results;
 
-            var SearchInfo = new Dictionary<NodeBase, NodeInfo>();
-            var heap = new FibonacciHeap<NodeBase, TimeSpan>();
+            var SearchInfo = new Dictionary<Tuple<NodeBase, string>, NodeInfo>();
+            var heap = new FibonacciHeap<Tuple<NodeBase, string>, TimeSpan>();
 
             // assign search info to StartNodes and place them in queue
             foreach (var nodeInfo in StartNodeInfos)
             {
-                nodeInfo.Handle = heap.Insert(nodeInfo.Node.BaseNode, nodeInfo.PathCost);
-                SearchInfo.Add(nodeInfo.Node.BaseNode, nodeInfo);
+                nodeInfo.UnsatisfiedCriteria = searchKeyMgr.UnsatisfiedCriteria(nodeInfo.Node);
+                var nodeKey = new Tuple<NodeBase, string>(nodeInfo.Node.BaseNode, nodeInfo.UnsatisfiedCriteria);
+                nodeInfo.Handle = heap.Insert(nodeKey, nodeInfo.PathCost);
+                SearchInfo.Add(nodeKey, nodeInfo);
             }
 
             while (!heap.Empty())
             {
-                NodeBase currentBase = heap.DeleteMin();
+                Tuple<NodeBase, string> currentSearchKey = heap.DeleteMin();
 
                 // get search info
                 NodeInfo currentInfo = null;
-                if (!SearchInfo.TryGetValue(currentBase, out currentInfo))
+                if (!SearchInfo.TryGetValue(currentSearchKey, out currentInfo))
                 {
                     throw new KeyNotFoundException("Node removed from heap did not have associated search info: ");
                 }
 
+                // stop searching if path cost is too large
+                if (currentInfo.PathCost > TimeSpan.FromHours(2)) break;
+
                 var current = currentInfo.Node;
 
                 // check for completion
-                if (GoalCheck(current))
+                if (currentInfo.UnsatisfiedCriteria == "")
                 {
                     Results.Add(currentInfo);
-                    if (Results.Count() > 30) break;
+                    if (EndLocation != null) break;
                     currentInfo.State = NodeState.Closed;
                     continue;
-                }
-                else
-                {
-                    // if this is destination, no need to visit, otherwise search
-                    // cuts through destinations to avoid transfer pathcost penalty
-                    if (current as DestinationNode != null) continue;
                 }
 
                 // if looking for end location, check if current is close enough and if so
@@ -169,29 +204,49 @@ namespace SmartRoutes.Graph
                     GoalInfo.Node = new LocationGoalNode(goalTime);
                     GoalInfo.Parent = currentInfo;
                     GoalInfo.PathCost = currentInfo.PathCost + walkingTime;
-                    GoalInfo.Handle = heap.Insert(GoalInfo.Node.BaseNode, GoalInfo.PathCost);
-                    SearchInfo.Add(GoalInfo.Node.BaseNode, GoalInfo);
+                    GoalInfo.UnsatisfiedCriteria = "";
+
+                    var GoalSearchKey = new Tuple<NodeBase, string>(GoalInfo.Node.BaseNode, "");
+                    GoalInfo.Handle = heap.Insert(GoalSearchKey, GoalInfo.PathCost);
+                    SearchInfo.Add(GoalSearchKey, GoalInfo);
+                }
+
+                // determine neighbors. this is straightforward for gtfs nodes, less so for destination nodes
+                IEnumerable<INode> Neighbors = null;
+
+                if (current as IGtfsNode != null)
+                {
+                    Neighbors = (direction == TimeDirection.Forwards) ?
+                        current.TimeForwardNeighbors : current.TimeBackwardNeighbors;
+                }
+                // if this is a destination which does not satisfy any new criteria,
+                // there is no need to visit neighbors. otherwise search
+                // cuts through destinations to avoid transfer pathcost penalty
+                else if (currentInfo.UnsatisfiedCriteria != currentInfo.Parent.UnsatisfiedCriteria)
+                {
+                    Neighbors = GetDestinationNeighbors(current as IDestinationNode, direction);
                 }
 
                 // loop through neighbors and handle business
-                var Neighbors = (direction == TimeDirection.Forwards) ?
-                    current.TimeForwardNeighbors : current.TimeBackwardNeighbors;
-
-                foreach (var neighbor in Neighbors)
+                foreach (var neighbor in Neighbors ?? new INode[0])
                 {
                     if (neighbor.BaseNode == current.BaseNode) continue;
 
+                    var neighborSearchKey = searchKeyMgr.neighborKey(neighbor, currentInfo);
+
                     NodeInfo neighborInfo = null;
-                    if (!SearchInfo.TryGetValue(neighbor.BaseNode, out neighborInfo))
+                    if (!SearchInfo.TryGetValue(neighborSearchKey, out neighborInfo))
                     {
-                        // node is new, give it search info and place in queue
+                        // neighbor is new, or neighbor has been reached but with different criteria satisfied
+                        // give it search info and place in queue
                         neighborInfo = new NodeInfo();
                         neighborInfo.Node = neighbor;
                         neighborInfo.Parent = currentInfo;
                         neighborInfo.State = NodeState.Open;
                         neighborInfo.PathCost = GetNextPathCost(currentInfo, neighbor, direction);
-                        neighborInfo.Handle = heap.Insert(neighbor.BaseNode, neighborInfo.PathCost);
-                        SearchInfo.Add(neighbor.BaseNode, neighborInfo);
+                        neighborInfo.Handle = heap.Insert(neighborSearchKey, neighborInfo.PathCost);
+                        neighborInfo.UnsatisfiedCriteria = neighborSearchKey.Item2;
+                        SearchInfo.Add(neighborSearchKey, neighborInfo);
                     }
                     else
                     {
@@ -282,33 +337,19 @@ namespace SmartRoutes.Graph
         private IEnumerable<NodeInfo> SearchLocToDest(ILocation StartLocation, DateTime StartTime, TimeDirection Direction, 
             IEnumerable<Func<IDestination, bool>> Criterion, TimeSpan BasePathCost)
         {
-            var FinalResults = new List<NodeInfo>();
             var StartNodeInfos = GetClosestGtfsNodeInfos(StartLocation, StartTime, Direction, BasePathCost);
-
-            var partialResults = Dijkstras(StartNodeInfos, CreateGoalCheckFromCriterion(Criterion), Direction);
-
-            if (partialResults.Count() == 0) return FinalResults;
-
-            foreach (var partialResult in partialResults)
-            {
-                var RemainingCriterion = Criterion.Where(F => !F(((DestinationNode)partialResult.Node).Destination));
-
-                if (RemainingCriterion.Count() == 0)
+            var DijkstraCriteria = Criterion.Select(F =>
                 {
-                    FinalResults.Add(partialResult);
-                }
-                else
-                {
-                    var remainingResults = SearchLocToDest(partialResult.Node, partialResult.Node.Time, Direction, RemainingCriterion, partialResult.PathCost);
+                    return new Func<INode, bool>(n =>
+                        {
+                            var dest = n as IDestinationNode;
 
-                    if (remainingResults.Count() == 0) continue;
+                            if (dest == null) return false;
+                            else return F(dest.Destination);
+                        });
+                });
 
-                    foreach (var result in remainingResults)
-                    {
-                        FinalResults.Add(ConcatResults(partialResult, result.Copy(), Direction));
-                    }
-                }
-            }
+            var FinalResults = Dijkstras(StartNodeInfos, DijkstraCriteria, Direction);
 
             // ensure that destination sets are unique
             var UniqueDestSet = new HashSet<IEnumerable<IDestination>>();
@@ -334,7 +375,7 @@ namespace SmartRoutes.Graph
                         return node as LocationGoalNode != null;
                     };
 
-                var results = Dijkstras(StartNodeInfos, GoalCheck, Direction, EndLocation);
+                var results = Dijkstras(StartNodeInfos, new[] { GoalCheck }, Direction, EndLocation);
                 FinalResults.Add(ConcatResults(results.First(), info, Direction));
             }
 
