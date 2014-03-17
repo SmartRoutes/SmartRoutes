@@ -63,9 +63,8 @@ namespace SmartRoutes.Graph.Heap
             // remove min from RootsOfRank array, if it is there
             if (RootsOfRank[Min.Rank] == Min) RootsOfRank[Min.Rank] = null;
 
-            // remove min from roots and merge children of min into roots
+            // remove min from roots
             Roots.RemoveAll(x => x == Min);
-            foreach (var child in Min.Children.ToArray()) AddToRoot(child);
 
             // update min
             if (Roots.Count > 0)
@@ -80,6 +79,9 @@ namespace SmartRoutes.Graph.Heap
             {
                 Min = null;
             }
+
+            // merge children of min into roots
+            foreach (var child in ReturnMin.Children.ToArray()) AddToRoot(child);
 
             if (ReturnMin.HandleTo != null) ReturnMin.HandleTo.ValidHandle = false;
             return ReturnMin.Element;
