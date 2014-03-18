@@ -53,6 +53,7 @@
     <Compile Include="Comparers\ComparerForStopSorting.cs" />
     <Compile Include="Comparers\ComparerForTransferSorting.cs" />
     <Compile Include="Comparers\ComparerForTripSorting.cs" />
+    <Compile Include="DestinationCollectionComparer.cs" />
     <Compile Include="Graph.cs" />
     <Compile Include="GraphBuilder\GraphBuilder.cs" />
     <Compile Include="GraphBuilder\GraphBuilderSettings.cs" />
@@ -71,6 +72,7 @@
     <Compile Include="Node\INode.cs" />
     <Compile Include="Node\GtfsNode.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SearchKeyManager.cs" />
     <Compile Include="SearchResult.cs" />
   </ItemGroup>
   <ItemGroup>
