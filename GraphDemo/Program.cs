@@ -81,7 +81,7 @@ namespace SmartRoutes.GraphDemo
 
             var criterion = new[] { criteria1, criteria2, criteria3 };
 
-            var results = graph.Search(workLocation, homeLocation, atWorkBy, TimeDirection.Backwards, criterion);
+            var results = graph.Search(workLocation, homeLocation, atWorkBy, TimeDirection.Backwards, criterion, 15);
 
             toc = DateTime.Now;
             Console.WriteLine("Route found in in {0} milliseconds.",

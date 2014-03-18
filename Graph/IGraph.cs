@@ -16,6 +16,6 @@ namespace SmartRoutes.Graph
         INode[] GraphNodes { get; }
 
         IEnumerable<SearchResult> Search(ILocation startLocation, ILocation endLocation,
-            DateTime startTime, TimeDirection direction, IEnumerable<Func<IDestination, bool>> criteria);
+            DateTime startTime, TimeDirection direction, IEnumerable<Func<IDestination, bool>> criteria, int maxCount);
     }
 }

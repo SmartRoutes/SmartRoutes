@@ -146,7 +146,7 @@ namespace SmartRoutes.Graph
             return pathCost;
         }
 
-        private IEnumerable<SearchResult> Dijkstras(IEnumerable<NodeInfo> StartNodeInfos, IEnumerable<Func<INode, bool>> Criteria, TimeDirection direction, ILocation EndLocation = null)
+        private IEnumerable<SearchResult> Dijkstras(IEnumerable<NodeInfo> StartNodeInfos, IEnumerable<Func<INode, bool>> Criteria, int maxCount, TimeDirection direction, ILocation EndLocation = null)
         {
             var searchKeyMgr = new SearchKeyManager(Criteria);
 
@@ -199,7 +199,7 @@ namespace SmartRoutes.Graph
                         Results.Add(currentResult);
                     }
                     
-                    if (EndLocation != null || Results.Count() > 14) break;
+                    if (EndLocation != null || Results.Count() >= maxCount) break;
                     currentInfo.State = NodeState.Closed;
                     continue;
                 }
@@ -288,7 +288,7 @@ namespace SmartRoutes.Graph
         }
 
         private IEnumerable<SearchResult> SearchLocToDest(ILocation StartLocation, DateTime StartTime, TimeDirection Direction, 
-            IEnumerable<Func<IDestination, bool>> Criterion, TimeSpan BasePathCost)
+            IEnumerable<Func<IDestination, bool>> Criterion, int maxCount, TimeSpan BasePathCost)
         {
             var StartNodeInfos = GetClosestGtfsNodeInfos(StartLocation, StartTime, Direction, BasePathCost);
             var DijkstraCriteria = Criterion.Select(F =>
@@ -302,12 +302,12 @@ namespace SmartRoutes.Graph
                         });
                 });
 
-            var FinalResults = Dijkstras(StartNodeInfos, DijkstraCriteria, Direction);
+            var FinalResults = Dijkstras(StartNodeInfos, DijkstraCriteria, maxCount, Direction);
 
             return FinalResults;
         }
 
-        private IEnumerable<SearchResult> SearchDestToLoc(IEnumerable<SearchResult> PartialResults, TimeDirection Direction, ILocation EndLocation)
+        private IEnumerable<SearchResult> SearchDestToLoc(IEnumerable<SearchResult> PartialResults, TimeDirection Direction, ILocation EndLocation, int maxCount)
         {
             var FinalResults = new List<SearchResult>();
 
@@ -323,18 +323,18 @@ namespace SmartRoutes.Graph
                         return node as LocationGoalNode != null;
                     };
 
-                var results = Dijkstras(StartNodeInfos, new[] { GoalCheck }, Direction, EndLocation);
+                var results = Dijkstras(StartNodeInfos, new[] { GoalCheck }, maxCount, Direction, EndLocation);
                 FinalResults.Add(result.Concat(results.First()));
             }
 
             return FinalResults;
         }
 
-        public IEnumerable<SearchResult> Search(ILocation startLocation, ILocation endLocation, 
-            DateTime startTime, TimeDirection direction, IEnumerable<Func<IDestination, bool>> criteria)
+        public IEnumerable<SearchResult> Search(ILocation startLocation, ILocation endLocation,
+            DateTime startTime, TimeDirection direction, IEnumerable<Func<IDestination, bool>> criteria, int maxCount)
         {
-            var startToDestinations = SearchLocToDest(startLocation, startTime, direction, criteria, TimeSpan.FromSeconds(0));
-            var finalResults = SearchDestToLoc(startToDestinations, direction, endLocation);
+            var startToDestinations = SearchLocToDest(startLocation, startTime, direction, criteria, maxCount, TimeSpan.FromSeconds(0));
+            var finalResults = SearchDestToLoc(startToDestinations, direction, endLocation, maxCount);
 
             return finalResults;
         }

@@ -221,7 +221,8 @@ namespace SmartRoutes.Controllers
                     departure,
                     StandardizeTime(searchQuery.LocationsAndTimes.DropOffLatestArrivalTime),
                     TimeDirection.Backwards,
-                    criteria);
+                    criteria,
+                    10);
             }
 
             IEnumerable<SearchResult> pickUpResults = Enumerable.Empty<SearchResult>();
@@ -249,7 +250,8 @@ namespace SmartRoutes.Controllers
                     destination,
                     StandardizeTime(searchQuery.LocationsAndTimes.PickUpDepartureTime),
                     TimeDirection.Forwards,
-                    criteria);
+                    criteria,
+                    10);
             }
 
             // create the model resprentation of the search results
