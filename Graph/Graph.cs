@@ -146,11 +146,14 @@ namespace SmartRoutes.Graph
             return pathCost;
         }
 
-        private IEnumerable<NodeInfo> Dijkstras(IEnumerable<NodeInfo> StartNodeInfos, IEnumerable<Func<INode, bool>> Criteria, TimeDirection direction, ILocation EndLocation = null)
+        private IEnumerable<SearchResult> Dijkstras(IEnumerable<NodeInfo> StartNodeInfos, IEnumerable<Func<INode, bool>> Criteria, TimeDirection direction, ILocation EndLocation = null)
         {
             var searchKeyMgr = new SearchKeyManager(Criteria);
 
-            var Results = new List<NodeInfo>();
+            var Results = new List<SearchResult>();
+
+            // ensure that destination sets are unique
+            var UniqueDestCollSet = new HashSet<IEnumerable<IDestination>>(new DestinationCollectionComparer());
 
             if (StartNodeInfos.Count() == 0) return Results;
 
@@ -185,8 +188,18 @@ namespace SmartRoutes.Graph
                 // check for completion
                 if (currentInfo.UnsatisfiedCriteria == "")
                 {
-                    Results.Add(currentInfo);
-                    if (EndLocation != null) break;
+                    var currentResult = new SearchResult(currentInfo);
+
+                    if (EndLocation != null)
+                    {
+                        Results.Add(currentResult);
+                    }
+                    else if (UniqueDestCollSet.Add(currentResult.Destinations))
+                    {
+                        Results.Add(currentResult);
+                    }
+                    
+                    if (EndLocation != null || Results.Count() > 14) break;
                     currentInfo.State = NodeState.Closed;
                     continue;
                 }
@@ -271,70 +284,10 @@ namespace SmartRoutes.Graph
                 currentInfo.State = NodeState.Closed;
             }
 
-            // return only one result per destination
-            var uniqueDestinationResults = Results.Where(info => info.Node as DestinationNode != null)
-                .GroupBy(info => new Tuple<IDestination>(((DestinationNode)info.Node).Destination))
-                .Select(g => g.First());
-
-            // return only one result per block (set of sequential trips)
-            var uniqueBlockResults = Results.Where(info => info.Node as LocationGoalNode != null && info.Parent.Node as IGtfsNode != null)
-                .GroupBy(info => new Tuple<int, int?>(((IGtfsNode)info.Parent.Node).TripId, ((IGtfsNode)info.Parent.Node).BlockId))
-                .Select(g => g.First());
-
-            return uniqueBlockResults.Concat(uniqueDestinationResults);
+            return Results;
         }
 
-        private NodeInfo ConcatResults(NodeInfo A, NodeInfo B, TimeDirection Direction)
-        {
-            if (A.Node.Time < B.Node.Time) return ConcatResults(B, A, Direction);
-
-            if (Direction == TimeDirection.Forwards)
-            {
-                var current = A;
-                while (current.Parent != null) current = current.Parent;
-                if (current.Node.Time < B.Node.Time) throw new Exception("Cannot concat results: overlapping times");
-                current.Parent = B;
-                return A;
-            }
-            else
-            {
-                var current = B;
-                while (current.Parent != null) current = current.Parent;
-                if (current.Node.Time > A.Node.Time) throw new Exception("Cannot concat results: overlapping times");
-                current.Parent = A;
-                return B;
-            }
-        }
-
-        // creates goal check function which checks whether a node satisfies at least one criteria
-        private Func<INode, bool> CreateGoalCheckFromCriterion(IEnumerable<Func<IDestination, bool>> Criterion)
-        {
-            Func<INode, bool> GoalCheck = node =>
-                {
-                    var destNode = node as DestinationNode;
-                    if (destNode != null)
-                    {
-                        var RemainingCriterion = Criterion.Where(F => !F(destNode.Destination));
-
-                        if (RemainingCriterion.Count() != Criterion.Count())
-                        {
-                            return true;
-                        }
-                        else
-                        {
-                            return false;
-                        }
-                    }
-                    else
-                    {
-                        return false;
-                    }
-                };
-
-            return GoalCheck;
-        }
-
-        private IEnumerable<NodeInfo> SearchLocToDest(ILocation StartLocation, DateTime StartTime, TimeDirection Direction, 
+        private IEnumerable<SearchResult> SearchLocToDest(ILocation StartLocation, DateTime StartTime, TimeDirection Direction, 
             IEnumerable<Func<IDestination, bool>> Criterion, TimeSpan BasePathCost)
         {
             var StartNodeInfos = GetClosestGtfsNodeInfos(StartLocation, StartTime, Direction, BasePathCost);
@@ -351,23 +304,18 @@ namespace SmartRoutes.Graph
 
             var FinalResults = Dijkstras(StartNodeInfos, DijkstraCriteria, Direction);
 
-            // ensure that destination sets are unique
-            var UniqueDestSet = new HashSet<IEnumerable<IDestination>>();
-            var UniqueResults = FinalResults.Where(result => 
-                {
-                    var searchresult = new SearchResult(result);
-                    return UniqueDestSet.Add(searchresult.Destinations);
-                }); 
-
-            return UniqueResults;
+            return FinalResults;
         }
 
-        private IEnumerable<NodeInfo> SearchDestToLoc(IEnumerable<NodeInfo> NodeInfos, TimeDirection Direction, ILocation EndLocation)
+        private IEnumerable<SearchResult> SearchDestToLoc(IEnumerable<SearchResult> PartialResults, TimeDirection Direction, ILocation EndLocation)
         {
-            var FinalResults = new List<NodeInfo>();
+            var FinalResults = new List<SearchResult>();
 
-            foreach (var info in NodeInfos)
+            foreach (var result in PartialResults)
             {
+                var info = (Direction == TimeDirection.Forwards)
+                    ? result.LongResults.Last()
+                    : result.LongResults.First();
                 var StartNodeInfos = GetClosestGtfsNodeInfos(info.Node, info.Node.Time, Direction, info.PathCost);
 
                 Func<INode, bool> GoalCheck = node =>
@@ -376,7 +324,7 @@ namespace SmartRoutes.Graph
                     };
 
                 var results = Dijkstras(StartNodeInfos, new[] { GoalCheck }, Direction, EndLocation);
-                FinalResults.Add(ConcatResults(results.First(), info, Direction));
+                FinalResults.Add(result.Concat(results.First()));
             }
 
             return FinalResults;
@@ -388,9 +336,7 @@ namespace SmartRoutes.Graph
             var startToDestinations = SearchLocToDest(startLocation, startTime, direction, criteria, TimeSpan.FromSeconds(0));
             var finalResults = SearchDestToLoc(startToDestinations, direction, endLocation);
 
-            return finalResults
-                .Select(info => new SearchResult(info))
-                .ToArray();
+            return finalResults;
         }
     }
 }

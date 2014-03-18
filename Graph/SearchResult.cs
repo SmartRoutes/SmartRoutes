@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using SmartRoutes.Graph.Node;
 using SmartRoutes.Model;
@@ -25,7 +26,9 @@ namespace SmartRoutes.Graph
         /// </summary>
         public IEnumerable<NodeInfo> ShortResults { get; private set; }
 
-        public IEnumerable<IDestination> Destinations { get; private set; } 
+        public IEnumerable<IDestination> Destinations { get; private set; }
+
+        private TimeDirection OriginalSearchDirection;
 
         public SearchResult(NodeInfo info)
         {
@@ -43,6 +46,11 @@ namespace SmartRoutes.Graph
             if (info.Parent.Node.Time < info.Node.Time)
             {
                 longResults = longResults.Reverse().ToList();
+                OriginalSearchDirection = TimeDirection.Backwards;
+            }
+            else
+            {
+                OriginalSearchDirection = TimeDirection.Forwards;
             }
 
             // create short results, which only include bus route end-points and destinations
@@ -82,6 +90,49 @@ namespace SmartRoutes.Graph
                 .OfType<IDestinationNode>()
                 .Select(dn => dn.Destination)
                 .ToList();
+        }
+
+        public SearchResult Concat(SearchResult newResult)
+        {
+            if (OriginalSearchDirection != newResult.OriginalSearchDirection)
+            {
+                throw new Exception("Cannot concat result, search directions not compatible.");
+            }
+
+            if (OriginalSearchDirection == TimeDirection.Forwards)
+            {
+                if (LongResults.Last().Node.Time < newResult.LongResults.First().Node.Time)
+                {
+                    LongResults.Last().Parent = newResult.LongResults.First();
+                    return new SearchResult(LongResults.First());
+                }
+                else if (LongResults.First().Node.Time >= newResult.LongResults.Last().Node.Time)
+                {
+                    newResult.LongResults.Last().Parent = LongResults.First();
+                    return new SearchResult(newResult.LongResults.First());
+                }
+                else
+                {
+                    throw new Exception("Cannot concat result, search times overlap.");
+                }
+            }
+            else
+            {
+                if (LongResults.First().Node.Time > newResult.LongResults.Last().Node.Time)
+                {
+                    LongResults.First().Parent = newResult.LongResults.Last();
+                    return new SearchResult(LongResults.Last());
+                }
+                else if (newResult.LongResults.First().Node.Time >= LongResults.Last().Node.Time)
+                {
+                    newResult.LongResults.First().Parent = LongResults.Last();
+                    return new SearchResult(newResult.LongResults.Last());
+                }
+                else
+                {
+                    throw new Exception("Cannot concat result, search times overlap.");
+                }
+            }
         }
     }
 }
