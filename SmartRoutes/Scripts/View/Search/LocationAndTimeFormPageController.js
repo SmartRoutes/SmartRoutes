@@ -18,6 +18,10 @@ SmartRoutes.LocationAndTimeFormPageController = function(pageID) {
         duplicateDepartureOptionContainer: "sr-duplicate-drop-off-departure-option-container",
     };
 
+    var elementClasses = {
+        geocodeFailure: "sr-geocode-fail-error",
+    };
+
     function UpdateAddressViewModelsFromUISelection() {
         if (locationAndTimeViewModel.pickUpDepartureViewModel.pickUpDepartureSameAsDestination()) {
             locationAndTimeViewModel.pickUpDepartureViewModel.pickUpDepartureAddressViewModel.CopyFromAddress(
@@ -30,6 +34,7 @@ SmartRoutes.LocationAndTimeFormPageController = function(pageID) {
         }
     };
 
+    // Handles clicking the "address same as..." checkboxes by hiding/showing the fields.
     function SameAddressCallback(container, sameAsDropOff, sourceAddress, destinationAddress) {
         if (sameAsDropOff) {
             container.hide();
@@ -115,6 +120,12 @@ SmartRoutes.LocationAndTimeFormPageController = function(pageID) {
         }
     };
 
+    function SetGeocodeFailureError(section) {
+        if (section) {
+            $("." + elementClasses.geocodeFailure, section).show();
+        }
+    };
+
     return {
         // Public: 
 
@@ -136,6 +147,28 @@ SmartRoutes.LocationAndTimeFormPageController = function(pageID) {
         // Gets the ID of the form page element.
         GetFormPageID: function() {
             return locationTimeFormPageID;
+        },
+
+        SetErrorFromSearchStatus: function(status, statusCodes) {
+            var section = null;
+            switch (status.Code) {
+                case statusCodes.DropOffDepartureGeocodeFail:
+                    section = $("#" + elementIDs.dropOffDeparture);
+                    break;
+                case statusCodes.DropOffDestinationGeocodeFail:
+                    section = $("#" + elementIDs.dropOffDestination);
+                    break;
+                case statusCodes.PickUpDepartureGeocodeFail:
+                    section = $("#" + elementIDs.pickUpDeparture);
+                    break;
+                case statusCodes.PickUpDestinationGeocodeFail:
+                    section = $("#" + elementIDs.pickUpDestination);
+                    break;
+                default:
+                    alert("An unexpected error occured.")
+                    break;
+            }
+            SetGeocodeFailureError(section);
         },
 
         // Gets a data payload object for the form page.

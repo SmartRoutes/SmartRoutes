@@ -78,6 +78,10 @@
     display: none;
 }
 
+.sr-geocode-fail-error {
+    display: none;
+}
+
 /* Accreditation form page styling. */
 
 /* Page view styling. */

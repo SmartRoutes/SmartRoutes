@@ -211,29 +211,21 @@ SmartRoutes.GuidedSearchPageViewController = (function(pageID) {
 
     function HandleSearchError(status) {
         var navPath = "/#";
-        if (!status || (status && !status.Code) || (status && !status.Message)) {
+        if (!status || (status && !status.Code)) {
             alert("Unable to retrieve results from the server");
         }
         else {
-            var errorNode = null;
             switch (status.Code) {
                 case searchResultStatus.DropOffDepartureGeocodeFail:
                 case searchResultStatus.DropOffDestinationGeocodeFail:
                 case searchResultStatus.PickUpDepartureGeocodeFail:
                 case searchResultStatus.PickUpDestinationGecodeFail:
-                    // TODO: where does the error get handled?
-                    // This should probably tell the location/time controller
-                    // to set an error on a section, but when do errors get cleared?
-                    // Lazy way would be to have the guided search controller hide them all.
-                    // Alternatively, have the pages clear their own errors if something changes.
+                    locationAndTimeFormPageController.SetErrorFromSearchStatus(status, searchResultStatus);
+                    formPageSammyApp.setLocation(pageIDRouteMap[pageIDs.locationAndTimePageID]);
                     break;
                 default:
                     alert("An unexpected error occured.");
                     break;
-            }
-
-            if (errorNode) {
-
             }
         }
     };
