@@ -53,7 +53,7 @@ namespace SmartRoutes.Graph
 
                 foreach (var dest in obj)
                 {
-                    hash = 23 * dest.GetHashCode();
+                    hash = hash * 23 + dest.GetHashCode();
                 }
 
                 return hash;
