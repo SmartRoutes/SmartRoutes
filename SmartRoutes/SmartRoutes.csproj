@@ -305,6 +305,7 @@
     <Content Include="Views\Templates\_RouteSummaryTemplate.cshtml" />
     <Content Include="Views\Templates\_Templates.cshtml" />
     <Content Include="Views\Templates\_ItineraryStepsTemplates.cshtml" />
+    <Content Include="Views\Search\_GeocodeFailureErrorView.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

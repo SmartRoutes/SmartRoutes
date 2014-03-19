@@ -133,8 +133,9 @@ SmartRoutes.ItineraryPageViewController = function(pageID) {
     function PopulateItineraryList(routeModel) {
         // Handle the drop off itinerary (if it exists).
         if (routeModel.DropOffPlan && routeModel.DropOffPlan.ItineraryActions) {
-            var node = $("#" + elementIDs.itineraryDropOffList);
-            AppendItinerarySteps(node, routeModel.DropOffPlan);
+            var dropOffList = $("#" + elementIDs.itineraryDropOffList);
+            dropOffList.empty();
+            AppendItinerarySteps(dropOffList, routeModel.DropOffPlan);
             $("#" + elementIDs.itineraryDropOffContainer).show();
         }
         else {
@@ -143,8 +144,9 @@ SmartRoutes.ItineraryPageViewController = function(pageID) {
 
         // Handle the pick up itinerary (if it exists).
         if (routeModel.PickUpPlan && routeModel.PickUpPlan.ItineraryActions) {
-            var node = $("#" + elementIDs.itineraryPickUpList);
-            AppendItinerarySteps(node, routeModel.PickUpPlan);
+            var pickUpList = $("#" + elementIDs.itineraryPickUpList);
+            pickUpList.empty();
+            AppendItinerarySteps(pickUpList, routeModel.PickUpPlan);
             $("#" + elementIDs.itineraryPickUpContainer).show();
         }
         else {
