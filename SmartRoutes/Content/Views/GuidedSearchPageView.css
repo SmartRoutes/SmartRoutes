@@ -57,11 +57,7 @@
     display: none;
 }
 
-.sr-child-info-separator {
-    color: black;
-    background-color: black;
-    border-color: black;
-}
+
 
 .sr-collapse-button {
     display: none;
@@ -92,4 +88,10 @@
 
 .sr-search-page-title {
 
+}
+
+.sr-guided-search-separator {
+    color: black;
+    background-color: black;
+    border-color: black;
 }
