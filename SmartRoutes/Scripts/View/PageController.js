@@ -11,6 +11,16 @@ SmartRoutes.pageController = (function () {
     var lastSearchQuery = null;
     var lastSearchResultsKey = "last-search-results";
     var lastSearchQueryKey = "last-search-query";
+    var activePageURL = null;
+    var activePageURLKey = "SRActivePageBaseURL";
+
+    var pageURLs = {
+        root: "#/",
+        search: "#/search",
+        results: "#/results",
+        itinerary: "#/itinerary",
+        feedback: "#/feedback"
+    };
 
     var pageIDs = {
         mainPage: "sr-main-page-view",
@@ -53,25 +63,29 @@ SmartRoutes.pageController = (function () {
         // Setup the routes.
 
         // Main page route.
-        this.get("#/", function() {
+        this.get(pageURLs.root, function() {
             TransitionPages(mainPageViewController);
+            activePageURL = pageURLs.root;
         });
 
         // Search page route.
-        this.get("#/search", function() {
+        this.get(pageURLs.search, function() {
             TransitionPages(guidedSearchPageViewController, SearchCompletedCallback);
+            activePageURL = pageURLs.search;
         });
 
-        this.get("#/results", function() {
+        this.get(pageURLs.results, function() {
             TransitionPages(resultsPageViewController, lastSearchResults, lastSearchQuery);
+            activePageURL = pageURLs.results;
         });
 
-        this.get("#/itinerary", function() {
+        this.get(pageURLs.itinerary, function() {
             var childNames = guidedSearchPageViewController.GetChildNames();
             TransitionPages(itineraryPageViewController, lastSearchResults, childNames);
+            activePageURL = pageURLs.itinerary;
         });
 
-        this.get("#/feedback", function() {
+        this.get(pageURLs.feedback, function() {
             // This logic is a bit more complicated.
             // The feedback form needs to overlay the page.
         });
@@ -83,8 +97,11 @@ SmartRoutes.pageController = (function () {
         lastSearchResults = JSON.parse(window.sessionStorage.getItem(lastSearchResultsKey));
         lastSearchQuery = JSON.parse(window.sessionStorage.getItem(lastSearchQueryKey));
 
+        var lastActivePageURL = window.sessionStorage.getItem(activePageURLKey);
+
         // The sammy app should only be run after the document is ready.
         that.sammyApp.run("#/");
+
     });
 
     function SearchCompletedCallback(data, searchQuery) {
@@ -104,6 +121,10 @@ SmartRoutes.pageController = (function () {
         HideAllPages: function() {
             // Maybe need to do more fine-grained hiding to animate it?
             $(".sr-page-view").hide();
-        }
+        },
+
+        HasActivePage: function() {
+            return activePageController !== null;
+        },
     };
 })();

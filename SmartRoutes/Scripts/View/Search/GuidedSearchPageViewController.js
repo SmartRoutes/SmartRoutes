@@ -11,6 +11,7 @@ SmartRoutes.GuidedSearchPageViewController = (function(pageID) {
     var formPageFadeInTimeMS = 300;
     var searchCompletedCallback = null;
     var lastSearchPayload = null;
+    var pageVisitedKey = "SRGuidedSearchPageVisited";
 
     var buttonIDs = {
         nextButton: "sr-guided-search-button-next",
@@ -71,8 +72,16 @@ SmartRoutes.GuidedSearchPageViewController = (function(pageID) {
 
     // Handles redirecting to the first form page if a direct URL is used.
     function RedirectToFirstPageIfFirstTimeVisiting() {
-        // TODO: this doesn't work like it should at the moment.
-        if (!activePageController || !activePageElement) {
+        var navigatedToFirstPage = false;
+
+        var pageVisited = false;
+        var pageVisitedString = window.sessionStorage.getItem(pageVisitedKey);
+
+        if (pageVisitedString === "true") {
+            pageVisited = true;
+        }
+
+        if (!pageVisited) {
             activePageElement = $("#" + pageIDs.childInformationPageID);
             activePageController = childInformationFormPageController;
 
@@ -82,12 +91,22 @@ SmartRoutes.GuidedSearchPageViewController = (function(pageID) {
 
             // Show the next navigation button.
             $("#" + buttonIDs.nextButton).show();
+            navigatedToFirstPage = true;
+            window.sessionStorage.setItem(pageVisitedKey, true);
         }
+
+        return navigatedToFirstPage;
     };
 
     // Transitions from the current page to the page controlled by the new controller.
     // Additional arguments are passed to the new controller's RunPage function.
     function TransitionPages(currentPageController, newPageController) {
+        if (!SmartRoutes.pageController.HasActivePage()) {
+            // No active page, the browser was probably refreshed.
+            // Rerun the parent route so we are actually the active page.
+            sammyApp.runRoute("get", "#/search");
+        }
+
         RedirectToFirstPageIfFirstTimeVisiting();
         ShowSearchForm();
 
@@ -183,6 +202,8 @@ SmartRoutes.GuidedSearchPageViewController = (function(pageID) {
         InitLocationAndTimePage();
         InitAccreditationPage();
         InitServiceTypeFormPage();
+
+        window.sessionStorage.setItem(pageVisitedKey, false);
     })();
 
     // Displays the searching animation and hides the forms.

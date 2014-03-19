@@ -8,6 +8,7 @@ SmartRoutes.ChildInformationFormPageController = (function(pageID) {
     var childCount = 1;
     var childInfoViewModels = new Array();
     var validationCallback = null;
+    var pageVisitedKey = "childInfoPageVisited";
 
     (function Init() {
         // Setup the knockout viewmodel bindings.
@@ -76,6 +77,8 @@ SmartRoutes.ChildInformationFormPageController = (function(pageID) {
             // Just call the validation callback here since
             // this page can't be invalid.
             validationCallback(true);
+
+            window.sessionStorage.setItem(pageVisitedKey, true);
         },
 
         // Signals that this is not the active form page.
@@ -88,6 +91,16 @@ SmartRoutes.ChildInformationFormPageController = (function(pageID) {
             // This is a tautology.  The name isn't required
             // and can be arbitrary.
             return true;
+        },
+
+        GetPageVisited: function() {
+            var visitedString = window.sessionStorage.getItem(pageVisitedKey);
+            var visited = false;
+            if (visitedString === "true") {
+                visited = true;
+            }
+
+            return visited;
         },
 
         // Gets the ID for the form page element.
