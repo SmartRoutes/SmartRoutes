@@ -7,6 +7,9 @@ SmartRoutes.ResultListViewViewModel = function() {
     function Reinitialize(searchResults) {
         // Transform the results into a summary for the results page.
         if (searchResults.Routes) {
+            // Clear the list.
+            listViewElements([]);
+
             $.each(searchResults.Routes, function(key, route) {
                 var services = new Array();
 

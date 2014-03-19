@@ -35,10 +35,6 @@ SmartRoutes.ResultsPageViewController = function(pageID) {
 
         resultsListViewModel.SetNewResults(searchResults);
 
-        ko.applyBindings({
-            results: resultsListViewModel.elements
-        }, $("#" + elementIDs.resultsListView)[0]);
-
         // Setup the route summary section.
         var templateSource = $("#" + elementIDs.routeSummaryTemplate).html();
         var template = Handlebars.compile(templateSource);
@@ -59,6 +55,9 @@ SmartRoutes.ResultsPageViewController = function(pageID) {
     };
 
     (function Init() {
+        ko.applyBindings({
+            results: resultsListViewModel.elements
+        }, $("#" + elementIDs.resultsListView)[0]);
     })();
 
     return {

@@ -238,7 +238,7 @@
     <value>#/search</value>
   </data>
   <data name="PageRouteResults" xml:space="preserve">
-    <value>#/Results</value>
+    <value>#/results</value>
   </data>
   <data name="portalTextBackToResults" xml:space="preserve">
     <value>Results</value>
