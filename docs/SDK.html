@@ -195,6 +195,7 @@ IGraph graph = graphBuilder.BuildGraph(
               <li>A time for the search. The time must be stored in a <code>System.DateTime</code> instance.</li>
               <li>Whether the time for the search is a start time or an end time. The way to specify this is the <code>SmartRoutes.Graph.TimeDirection</code> enumeration. <code>Forwards</code> means the provided time is a start time. <code>Backwards</code> means the provided time is an end time.</li>
               <li>One or more criteria, as mentioned <a href="#using_6">above</a>.</li>
+              <li>The maximum number of results you want.</li>
             </ul>
             <p>Execute the search as follows:</p>
 
@@ -212,18 +213,28 @@ TimeDirection direction = TimeDirection.Backwards;
 // some criteria...
 IEnumerable&lt;IDestination, bool&gt; criteria = ...
 
+// how many results we want -- fewer than this number could be returned
+int n = 10;
+
 // perform the search
-IEnumerable&lt;NodeInfo&gt; results = graph.Search(start, end, time, direction, criteria);</pre>
+IEnumerable&lt;SearchResult&gt; results = graph.Search(start, end, time, direction, criteria, n);</pre>
           </div>
           <h3><a class="anchor" href="#using_8" name="using_8">Interpret the results.</a></h3>
           <div>
             <p>This is an area where the SDK could be improved to become more usable for developers that are unfamiliar with the inner workings of SmartRoutes.</p>
-            <p>The return type of the <code>Search</code> method is <code>IEnumerable&lt;NodeInfo&gt;</code>. Each <code>NodeInfo</code> represents a unique itinerary to one or more destinations that match the provided criteria. The <code>NodeInfo</code> is a linked list representing a path through the internal SmartRoutes graph. The order of the linked list is determined by <code>TimeDirection</code> parameter provided to <code>Search</code>. The two important properties on the <code>NodeInfo</code> class are:</p>
+            <p>The return type of the <code>Search</code> method is <code>IEnumerable&lt;SearchResult&gt;</code>. Each <code>SearchResult</code> represents a unique itinerary to one or more destinations that collectively match all of the provided criteria. The <code>SearchResult</code> class has three important properties:</p>
+            <ol>
+              <li><code>IEnumerable&lt;NodeInfo&gt; LongResults</code> - every single step in the itinerary. Each <code>NodeInfo</code> represents one of three things: arriving at a bus stop, arriving at a destination, and arriving at the final destination.</li>
+              <li><code>IEnumerable&lt;NodeInfo&gt; ShortResults</code> - a condensed version of <code>LongResults</code>. The only GTFS nodes that are includes are where the user is boarding and leaving the transit medium.</li>
+              <li><code>IEnumerable&lt;IDestination&gt; Destinations</code> - all of the destinations include in this itinerary.</li>
+            </ol>
+            <p>The order of <code>NodeInfo</code> instances in <code>LongResults</code> and <code>ShortResults</code> is in ascending chronological order.</p>
+            <p>A <code>NodeInfo</code> is a linked list representing a path through the internal SmartRoutes graph. The two important properties on the <code>NodeInfo</code> class are:</p>
             <ul>
-              <li><code>INode node</code> - the node at this step in the itinerary, either a GTFS stop time or a destination.</li>
-              <li><code>NodeInfo parent</code> - the next <code>NodeInfo</code> in the path.</li>
+              <li><code>INode node</code> - the node at this step in the itinerary, either a GTFS stop time, a destination, or the final destination.</li>
+              <li><code>NodeInfo parent</code> - the next <code>NodeInfo</code> in the path. <b>Note:</b> if you follow the linked list represented by this property, you will get the contents of the <code>LongResults</code> property above. The order is either in ascending or descending chronological order, determined by the <code>TimeDirection</code> parameter to the <code>Search</code> function.</li>
             </ul>
-            <p>The <code>node</code> property is either of type <code>DestinationNode</code> (with a pointer to your concrete destination class) or <code>GtfsNode</code> (with GTFS stop information). Each node has the following properties:</p>
+            <p>The <code>node</code> property is of type <code>DestinationNode</code> (with a pointer to your concrete destination class), <code>GtfsNode</code> (with GTFS stop information), or <code>LocationGoalNode</code> (which is not available to SDK users). Each node has the following properties:</p>
             <ul>
               <li><code>string Name</code> - a name of the node, for display.</li>
               <li><code>DateTime Time</code> - the time that the user would arrive at that node.</li>
