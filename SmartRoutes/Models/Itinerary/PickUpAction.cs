@@ -19,12 +19,14 @@ namespace SmartRoutes.Models.Itinerary
         /// Convenience constructor.
         /// </summary>
         /// <param name="childIndices">The child indices in the original
-        /// query used in this action.</param>
+        ///     query used in this action.</param>
         /// <param name="serviceName">The name of the service for this action.</param>
-        public PickUpAction(IEnumerable<int> childIndices, string serviceName)
+        /// <param name="childCareId">The ID of the associated child care.</param>
+        public PickUpAction(IEnumerable<int> childIndices, string serviceName, int childCareId)
         {
             this.ChildIndices = childIndices;
             this.ServiceName = serviceName;
+            this.ChildCareId = childCareId;
         }
 
         /// <summary>
@@ -57,5 +59,10 @@ namespace SmartRoutes.Models.Itinerary
             get;
             set;
         }
+
+        /// <summary>
+        /// The ID of the associated child care service.
+        /// </summary>
+        public int ChildCareId { get; set; }
     }
 }

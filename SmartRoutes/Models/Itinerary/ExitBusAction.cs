@@ -21,10 +21,12 @@ namespace SmartRoutes.Models.Itinerary
         /// </summary>
         /// <param name="exitTime">The time at which to exit the bus.</param>
         /// <param name="stopName">The name of the stop to exit the bus at.</param>
-        public ExitBusAction(DateTime exitTime, string stopName)
+        /// <param name="stopTimeId">The ID of the associated GTFS stop time.</param>
+        public ExitBusAction(DateTime exitTime, string stopName, int stopTimeId)
         {
             this.ExitTime = exitTime;
             this.StopName = stopName;
+            this.StopTimeId = stopTimeId;
         }
 
         /// <summary>
@@ -67,5 +69,10 @@ namespace SmartRoutes.Models.Itinerary
             get;
             set;
         }
+
+        /// <summary>
+        /// The ID of the associate GTFS stop time.
+        /// </summary>
+        public int StopTimeId { get; set; }
     }
 }

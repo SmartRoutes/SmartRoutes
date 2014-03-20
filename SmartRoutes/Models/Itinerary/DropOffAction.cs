@@ -20,10 +20,12 @@ namespace SmartRoutes.Models.Itinerary
         /// </summary>
         /// <param name="childIndices">The indices of children included in this action.</param>
         /// <param name="serviceName">The name of the service used in this action.</param>
-        public DropOffAction(IEnumerable<int> childIndices, string serviceName)
+        /// <param name="childCareId">The ID of the associate child care.</param>
+        public DropOffAction(IEnumerable<int> childIndices, string serviceName, int childCareId)
         {
             this.ChildIndices = childIndices;
             this.ServiceName = serviceName;
+            this.ChildCareId = childCareId;
         }
 
         /// <summary>
@@ -56,5 +58,10 @@ namespace SmartRoutes.Models.Itinerary
             get;
             set;
         }
+
+        /// <summary>
+        /// The ID of the associated child care service.
+        /// </summary>
+        public int ChildCareId { get; set; }
     }
 }

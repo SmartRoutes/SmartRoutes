@@ -12,6 +12,11 @@ namespace SmartRoutes.Demo.OdjfsDatabase.Model
             _model = model;
         }
 
+        public int Id
+        {
+            get { return _model.Id; }
+        }
+
         public string CountyName
         {
             get { return _model.County.Name; }

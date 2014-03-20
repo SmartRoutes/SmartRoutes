@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Script.Serialization;
+using SmartRoutes.Model.Gtfs;
 
 namespace SmartRoutes.Models.Itinerary
 {
@@ -22,11 +23,13 @@ namespace SmartRoutes.Models.Itinerary
         /// <param name="routeNumber">The route number to board.</param>
         /// <param name="boardTime">The time at which to board the bus.</param>
         /// <param name="stopName">The name of the stop to board the bus at.</param>
-        public BoardBusAction(string routeNumber, DateTime boardTime, string stopName)
+        /// <param name="stopTimeId">The ID of the associated GTFS stop time.</param>
+        public BoardBusAction(string routeNumber, DateTime boardTime, string stopName, int stopTimeId)
         {
             this.RouteNumber = routeNumber;
             this.BoardTime = boardTime;
             this.StopName = stopName;
+            this.StopTimeId = stopTimeId;
         }
 
         /// <summary>
@@ -78,5 +81,10 @@ namespace SmartRoutes.Models.Itinerary
             get;
             set;
         }
+
+        /// <summary>
+        /// The ID of the associate GTFS stop time.
+        /// </summary>
+        public int StopTimeId { get; set; }
     }
 }

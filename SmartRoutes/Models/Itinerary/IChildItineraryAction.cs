@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Security.Cryptography.X509Certificates;
 
 namespace SmartRoutes.Models.Itinerary
 {
@@ -23,5 +24,10 @@ namespace SmartRoutes.Models.Itinerary
             get;
             set;
         }
+
+        /// <summary>
+        /// The ID of the associated child care service.
+        /// </summary>
+        int ChildCareId { get; set; }
     }
 }

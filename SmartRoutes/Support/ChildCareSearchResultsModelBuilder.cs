@@ -158,6 +158,7 @@ namespace SmartRoutes.Support
             {
                 var currentGtfs = current.Node as IGtfsNode;
                 var currentDestination = current.Node as IDestinationNode;
+                var currentChildCare = currentDestination != null ? currentDestination.Destination as ChildCare : null;
 
                 if (currentGtfs != null)
                 {
@@ -166,7 +167,8 @@ namespace SmartRoutes.Support
                         model.AddAction(new BoardBusAction(
                             currentGtfs.stopTime.Trip.Headsign ?? currentGtfs.stopTime.Trip.Route.ShortName,
                             current.Node.Time,
-                            currentGtfs.stopTime.Stop.Name));
+                            currentGtfs.stopTime.Stop.Name,
+                            currentGtfs.stopTime.Id));
 
                         routes.Add(currentGtfs.stopTime.Trip.Route.ShortName);
                     }
@@ -174,7 +176,8 @@ namespace SmartRoutes.Support
                     {
                         model.AddAction(new ExitBusAction(
                             current.Node.Time,
-                            currentGtfs.stopTime.Stop.Name));
+                            currentGtfs.stopTime.Stop.Name,
+                            currentGtfs.stopTime.Id));
                     }
 
                     previousTripId = currentGtfs.TripId;
@@ -183,7 +186,7 @@ namespace SmartRoutes.Support
                 {
                     previousTripId = null;
 
-                    if (currentDestination != null)
+                    if (currentChildCare != null)
                     {
                         // infer the children that will be dropped off at this location
                         int[] childIndices = _criteria
@@ -200,11 +203,11 @@ namespace SmartRoutes.Support
 
                         if (model is DropOffItineraryModel)
                         {
-                            model.AddAction(new DropOffAction(childIndices, name));
+                            model.AddAction(new DropOffAction(childIndices, name, currentChildCare.Id));
                         }
                         else
                         {
-                            model.AddAction(new PickUpAction(childIndices, name));
+                            model.AddAction(new PickUpAction(childIndices, name, currentChildCare.Id));
                         }
                     }
                 }
