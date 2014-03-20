@@ -28,6 +28,16 @@ namespace SmartRoutes.Models.Itinerary
         }
 
         /// <summary>
+        /// The duration of the itinerary, i.e. the time spent to get from
+        /// the departure address to the destination address.
+        /// </summary>
+        public TimeSpan PathCost
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
         /// The type of the itinerary.  Used for serialization.
         /// </summary>
         public abstract ItineraryType Type

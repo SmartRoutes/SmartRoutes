@@ -13,16 +13,16 @@ namespace SmartRoutes.Graph
         /// <summary>
         /// The nodes in chronological order, with all intermediate nodes.
         /// Example: AAAAA BBBBBBB 1 CCCCCC 2 DDDDD
-        ///   A, B, C, D = GTFS stop times
-        ///   1, 2 = destinations
+        ///   (A, B, C, D = GTFS stop times)
+        ///   (1, 2 = destinations)
         /// </summary>
         public IEnumerable<NodeInfo> LongResults { get; private set; }
 
         /// <summary>
         /// The nodes in chronological order, without intermediate nodes.
         /// Example: AA BB 1 CC 2 DD
-        ///   A, B, C, D = GTFS stop times
-        ///   1, 2 = destinations
+        ///   (A, B, C, D = GTFS stop times)
+        ///   (1, 2 = destinations)
         /// </summary>
         public IEnumerable<NodeInfo> ShortResults { get; private set; }
 

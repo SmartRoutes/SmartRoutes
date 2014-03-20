@@ -91,11 +91,16 @@ namespace SmartRoutes.Support
             return routes
                 .OrderBy(r =>
                 {
-                    TimeSpan dropOffTime = r.DropOffSearchResult != null ? r.DropOffSearchResult.ShortResults.Last().PathCost : new TimeSpan(0);
-                    TimeSpan pickUpTime = r.PickUpSearchResult != null ? r.PickUpSearchResult.ShortResults.Last().PathCost : new TimeSpan(0);
+                    TimeSpan dropOffTime = r.DropOffSearchResult != null ? GetTimeSpan(r.DropOffSearchResult.LongResults) : new TimeSpan(0);
+                    TimeSpan pickUpTime = r.PickUpSearchResult != null ? GetTimeSpan(r.PickUpSearchResult.LongResults) : new TimeSpan(0);
 
                     return dropOffTime + pickUpTime;
                 });
+        }
+
+        private TimeSpan GetTimeSpan(IEnumerable<NodeInfo> nodeInfos)
+        {
+            return nodeInfos.Last().Node.Time - nodeInfos.First().Node.Time;
         }
 
         private IEnumerable<ChildCareRouteModel> GetChildCareRouteModels()
@@ -207,6 +212,7 @@ namespace SmartRoutes.Support
 
             model.AddAction(new ArriveAction(destinationAddress));
             model.Routes = routes;
+            model.PathCost = GetTimeSpan(searchResult.LongResults);
 
             return model;
         }

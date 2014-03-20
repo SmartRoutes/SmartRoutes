@@ -15,9 +15,9 @@ namespace SmartRoutes.Graph
         internal FibHeapHandle<Tuple<NodeBase, string>, TimeSpan> Handle;
         internal NodeState State;
         internal string UnsatisfiedCriteria;
+        internal TimeSpan PathCost;
         public INode Node { get; internal set; }
-        public NodeInfo Parent;
-        public TimeSpan PathCost { get; internal set; }
+        public NodeInfo Parent { get; internal set; }
 
         public NodeInfo Copy()
         {
