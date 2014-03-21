@@ -137,13 +137,6 @@
     <Compile Include="Models\Itinerary\IAddressAction.cs" />
     <Compile Include="Models\Itinerary\IBusAction.cs" />
     <Compile Include="Models\Itinerary\IChildItinerary.cs" />
-    <Compile Include="Models\Map\AddressLocationModel.cs" />
-    <Compile Include="Models\Map\ChildCareTimeLocationModel.cs" />
-    <Compile Include="Models\Map\LocationModel.cs" />
-    <Compile Include="Models\Map\TimeLocationModel.cs" />
-    <Compile Include="Models\Map\MapModel.cs" />
-    <Compile Include="Models\Map\StopTimeLocationModel.cs" />
-    <Compile Include="Models\Payloads\MapQueryPayload.cs" />
     <Compile Include="Models\SearchResultsStatus.cs" />
     <Compile Include="Support\Accrediation.cs" />
     <Compile Include="Support\AgeGroup.cs" />
