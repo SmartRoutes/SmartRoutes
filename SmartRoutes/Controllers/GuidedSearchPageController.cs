@@ -88,22 +88,6 @@ namespace SmartRoutes.Controllers
             return location;
         }
 
-        private static string GetAddressString(AddressPayload addressPayload)
-        {
-            if (addressPayload == null)
-            {
-                return null;
-            }
-
-            return string.Join(", ", new[]
-            {
-                (addressPayload.Address + " " + (addressPayload.AddressLine2 ?? string.Empty)).Trim(),
-                addressPayload.City,
-                addressPayload.State,
-                addressPayload.ZipCode
-            });
-        }
-
         private static Func<IDestination, bool> CreateCriterion(ChildCareSearchQueryPayload searchQuery, ChildInformationPayload childInformation)
         {
             return destination =>
@@ -168,10 +152,10 @@ namespace SmartRoutes.Controllers
         public JsonResult PerformChildCareSearch(ChildCareSearchQueryPayload searchQuery)
         {
             // create the address strings
-            string dropOffDepartureAddress = GetAddressString(searchQuery.LocationsAndTimes.DropOffDepartureAddress);
-            string dropOffDestinationAddress = GetAddressString(searchQuery.LocationsAndTimes.DropOffDestinationAddress);
-            string pickUpDepartureAddress = GetAddressString(searchQuery.LocationsAndTimes.PickUpDepartureAddress);
-            string pickUpDestinationAddress = GetAddressString(searchQuery.LocationsAndTimes.PickUpDestinationAddress);
+            string dropOffDepartureAddress = searchQuery.LocationsAndTimes.DropOffDepartureAddress.ToString();
+            string dropOffDestinationAddress = searchQuery.LocationsAndTimes.DropOffDestinationAddress.ToString();
+            string pickUpDepartureAddress = searchQuery.LocationsAndTimes.PickUpDepartureAddress.ToString();
+            string pickUpDestinationAddress = searchQuery.LocationsAndTimes.PickUpDestinationAddress.ToString();
 
             // check for shared addresses between the pick up and drop off plans
             if (searchQuery.ScheduleType.DropOffChecked && searchQuery.ScheduleType.PickUpChecked)
