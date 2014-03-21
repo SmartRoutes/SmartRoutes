@@ -46,8 +46,9 @@ namespace SmartRoutes.Models.Itinerary
         }
 
         /// <summary>
-        /// A collection of route identifiers (like route numbers) that are
-        /// ordered by their usage in the route.
+        /// A collection of route numbers and child cares that are
+        /// ordered by their usage in the itinerary.
+        /// TODO: rename this to "Summary"
         /// </summary>
         public IEnumerable<string> Routes
         {
