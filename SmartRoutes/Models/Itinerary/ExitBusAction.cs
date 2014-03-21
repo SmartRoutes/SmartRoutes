@@ -6,7 +6,7 @@ using System.Web.Script.Serialization;
 
 namespace SmartRoutes.Models.Itinerary
 {
-    public class ExitBusAction : IItineraryAction
+    public class ExitBusAction : IBusItineraryAction
     {
         /// <summary>
         /// Constructor;
@@ -19,11 +19,13 @@ namespace SmartRoutes.Models.Itinerary
         /// <summary>
         /// Convenience constructor.
         /// </summary>
+        /// <param name="routeNumber"></param>
         /// <param name="exitTime">The time at which to exit the bus.</param>
         /// <param name="stopName">The name of the stop to exit the bus at.</param>
         /// <param name="stopTimeId">The ID of the associated GTFS stop time.</param>
-        public ExitBusAction(DateTime exitTime, string stopName, int stopTimeId)
+        public ExitBusAction(string routeNumber, DateTime exitTime, string stopName, int stopTimeId)
         {
+            this.RouteNumber = routeNumber;
             this.ExitTime = exitTime;
             this.StopName = stopName;
             this.StopTimeId = stopTimeId;
@@ -38,6 +40,15 @@ namespace SmartRoutes.Models.Itinerary
             {
                 return ItineraryActionType.ExitBus;
             }
+        }
+
+        /// <summary>
+        /// The identification number for the route.
+        /// </summary>
+        public string RouteNumber
+        {
+            get;
+            set;
         }
 
         /// <summary>

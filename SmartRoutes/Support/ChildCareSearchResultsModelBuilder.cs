@@ -293,10 +293,11 @@ namespace SmartRoutes.Support
 
                 if (currentGtfs != null)
                 {
+                    string routeNumber = currentGtfs.stopTime.Trip.Headsign ?? currentGtfs.stopTime.Trip.Route.ShortName;
                     if (currentGtfs.TripId != previousTripId)
                     {
                         model.AddAction(new BoardBusAction(
-                            currentGtfs.stopTime.Trip.Headsign ?? currentGtfs.stopTime.Trip.Route.ShortName,
+                            routeNumber,
                             current.Node.Time,
                             currentGtfs.stopTime.Stop.Name,
                             currentGtfs.stopTime.Id));
@@ -306,6 +307,7 @@ namespace SmartRoutes.Support
                     else
                     {
                         model.AddAction(new ExitBusAction(
+                            routeNumber,
                             current.Node.Time,
                             currentGtfs.stopTime.Stop.Name,
                             currentGtfs.stopTime.Id));

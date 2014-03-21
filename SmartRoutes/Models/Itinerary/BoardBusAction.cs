@@ -7,7 +7,7 @@ using SmartRoutes.Model.Gtfs;
 
 namespace SmartRoutes.Models.Itinerary
 {
-    public class BoardBusAction : IItineraryAction
+    public class BoardBusAction : IBusItineraryAction
     {
         /// <summary>
         /// Constructor.
