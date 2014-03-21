@@ -146,6 +146,7 @@
     <Compile Include="Support\Accrediation.cs" />
     <Compile Include="Support\AgeGroup.cs" />
     <Compile Include="Support\ChildCareSearchResultsModelBuilder.cs" />
+    <Compile Include="Support\ExtensionMethods.cs" />
     <Compile Include="Support\GeocoderException.cs" />
     <Compile Include="Controllers\ItineraryPageController.cs" />
     <Compile Include="Controllers\ResultsPageController.cs" />

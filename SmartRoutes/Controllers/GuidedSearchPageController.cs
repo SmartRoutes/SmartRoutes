@@ -59,35 +59,6 @@ namespace SmartRoutes.Controllers
             return PartialView("~/Views/Search/_ServiceTypeView.cshtml");
         }
 
-        private static ILocation Geocode(ISimpleGeocoder geocoder, IDictionary<string, ILocation> destinations, string request)
-        {
-            // try to get a previous response
-            ILocation location;
-            if (destinations.TryGetValue(request, out location))
-            {
-                return location;
-            }
-
-            // geocode the address and save the result to the dictionary
-            Response response = geocoder.GeocodeAsync(request).Result;
-            Location geocodedLocation = response.Locations.FirstOrDefault();
-            if (geocodedLocation != null)
-            {
-                location = new Model.Location
-                {
-                    Latitude = geocodedLocation.Latitude,
-                    Longitude = geocodedLocation.Longitude
-                };
-            }
-            else
-            {
-                return null;
-            }
-            destinations[request] = location;
-
-            return location;
-        }
-
         private static Func<IDestination, bool> CreateCriterion(ChildCareSearchQueryPayload searchQuery, ChildInformationPayload childInformation)
         {
             return destination =>
@@ -183,8 +154,8 @@ namespace SmartRoutes.Controllers
             IEnumerable<SearchResult> dropOffResults = Enumerable.Empty<SearchResult>();
             if (searchQuery.ScheduleType.DropOffChecked)
             {
-                var destination = Geocode(geocoder, responses, dropOffDestinationAddress);
-                var departure = Geocode(geocoder, responses, dropOffDepartureAddress);
+                var destination = geocoder.GetLocationOrNull(responses, dropOffDestinationAddress).Result;
+                var departure = geocoder.GetLocationOrNull(responses, dropOffDepartureAddress).Result;
                 if (departure == null)
                 {
                     return Json(new ChildCareSearchResultsModel
@@ -212,8 +183,8 @@ namespace SmartRoutes.Controllers
             IEnumerable<SearchResult> pickUpResults = Enumerable.Empty<SearchResult>();
             if (searchQuery.ScheduleType.PickUpChecked)
             {
-                var departure = Geocode(geocoder, responses, pickUpDepartureAddress);
-                var destination = Geocode(geocoder, responses, pickUpDestinationAddress);
+                var departure = geocoder.GetLocationOrNull(responses, pickUpDepartureAddress).Result;
+                var destination = geocoder.GetLocationOrNull(responses, pickUpDestinationAddress).Result;
                 if (departure == null)
                 {
                     return Json(new ChildCareSearchResultsModel
