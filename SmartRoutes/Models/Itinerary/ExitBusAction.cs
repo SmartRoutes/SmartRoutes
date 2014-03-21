@@ -25,8 +25,8 @@ namespace SmartRoutes.Models.Itinerary
         /// <param name="exitTime">The time at which to exit the bus.</param>
         /// <param name="stopName">The name of the stop to exit the bus at.</param>
         /// <param name="stopTimeId">The ID of the associated GTFS stop time.</param>
-        
-        public ExitBusAction(ILocation location, string routeNumber, DateTime exitTime, string stopName, int stopTimeId)
+        /// <param name="routePath">The </param>
+        public ExitBusAction(ILocation location, string routeNumber, DateTime exitTime, string stopName, int stopTimeId, IEnumerable<Location> routePath)
         {
             this.Latitude = location.Latitude;
             this.Longitude = location.Longitude;
@@ -34,7 +34,13 @@ namespace SmartRoutes.Models.Itinerary
             this.ExitTime = exitTime;
             this.StopName = stopName;
             this.StopTimeId = stopTimeId;
+            this.RoutePath = routePath;
         }
+
+        /// <summary>
+        /// A sequence of latitude-longitude pairs that show the path of the bus.
+        /// </summary>
+        public IEnumerable<Location> RoutePath { get; set; }
 
         /// <summary>
         /// The type of action (used for serialization).

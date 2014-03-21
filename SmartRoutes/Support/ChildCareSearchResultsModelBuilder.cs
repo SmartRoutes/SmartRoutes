@@ -8,6 +8,7 @@ using SmartRoutes.Demo.OdjfsDatabase.Model;
 using SmartRoutes.Graph;
 using SmartRoutes.Graph.Node;
 using SmartRoutes.Model;
+using SmartRoutes.Model.Gtfs;
 using SmartRoutes.Models;
 using SmartRoutes.Models.Itinerary;
 using SmartRoutes.Models.Payloads;
@@ -305,7 +306,7 @@ namespace SmartRoutes.Support
 
             IList<string> summary = new List<string>();
 
-            int? previousTripId = null;
+            IGtfsNode previousGtfs = null;
             model.AddAction(new DepartAction(departureLocation, departureAddress));
             foreach (NodeInfo current in searchResult.ShortResults)
             {
@@ -316,7 +317,7 @@ namespace SmartRoutes.Support
                 if (currentGtfs != null)
                 {
                     string routeNumber = currentGtfs.stopTime.Trip.Headsign ?? currentGtfs.stopTime.Trip.Route.ShortName;
-                    if (currentGtfs.TripId != previousTripId)
+                    if (previousGtfs == null || currentGtfs.TripId != previousGtfs.TripId)
                     {
                         model.AddAction(new BoardBusAction(
                             currentGtfs.stopTime.Stop,
@@ -334,14 +335,19 @@ namespace SmartRoutes.Support
                             routeNumber,
                             current.Node.Time,
                             currentGtfs.stopTime.Stop.Name,
-                            currentGtfs.stopTime.Id));
+                            currentGtfs.stopTime.Id,
+                            previousGtfs
+                                .stopTime
+                                .GetStopsBetween(currentGtfs.stopTime)
+                                .Select(s => s.GetLocation())
+                                .ToArray()));
                     }
 
-                    previousTripId = currentGtfs.TripId;
+                    previousGtfs = currentGtfs;
                 }
                 else
                 {
-                    previousTripId = null;
+                    previousGtfs = null;
 
                     if (currentChildCare != null)
                     {

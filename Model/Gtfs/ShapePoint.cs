@@ -1,6 +1,6 @@
 ﻿namespace SmartRoutes.Model.Gtfs
 {
-    public class ShapePoint
+    public class ShapePoint : ILocation
     {
         public int Id { get; set; }
 
