@@ -326,7 +326,7 @@ namespace SmartRoutes.Support
                             currentGtfs.stopTime.Stop.Name,
                             currentGtfs.stopTime.Id));
 
-                        summary.Add("Route:" + currentGtfs.stopTime.Trip.Route.ShortName);
+                        summary.Add("RouteNumber:" + currentGtfs.stopTime.Trip.Route.ShortName);
                     }
                     else
                     {
@@ -372,7 +372,7 @@ namespace SmartRoutes.Support
                         {
                             model.AddAction(new PickUpAction(currentChildCare, childIndices, name, currentChildCare.Id));
                         }
-                        summary.Add("ChildCare:" + name);
+                        summary.Add("ServiceName:" + name);
                     }
                 }
             }
