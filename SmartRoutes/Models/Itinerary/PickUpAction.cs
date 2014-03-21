@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using SmartRoutes.Model;
 
 namespace SmartRoutes.Models.Itinerary
 {
-    public class PickUpAction : IChildItineraryAction
+    public class PickUpAction : IChildItinerary
     {
         /// <summary>
         /// Constructor.
@@ -18,12 +19,14 @@ namespace SmartRoutes.Models.Itinerary
         /// <summary>
         /// Convenience constructor.
         /// </summary>
-        /// <param name="childIndices">The child indices in the original
-        ///     query used in this action.</param>
+        /// <param name="location">The location of the child care service.</param>
+        /// <param name="childIndices">The child indices in the original query used in this action.</param>
         /// <param name="serviceName">The name of the service for this action.</param>
         /// <param name="childCareId">The ID of the associated child care.</param>
-        public PickUpAction(IEnumerable<int> childIndices, string serviceName, int childCareId)
+        public PickUpAction(ILocation location, IEnumerable<int> childIndices, string serviceName, int childCareId)
         {
+            this.Latitude = location.Latitude;
+            this.Longitude = location.Longitude;
             this.ChildIndices = childIndices;
             this.ServiceName = serviceName;
             this.ChildCareId = childCareId;
@@ -64,5 +67,15 @@ namespace SmartRoutes.Models.Itinerary
         /// The ID of the associated child care service.
         /// </summary>
         public int ChildCareId { get; set; }
+
+        /// <summary>
+        /// The latitude of the child care service.
+        /// </summary>
+        public double Latitude { get; set; }
+
+        /// <summary>
+        /// The longitude of the child care service.
+        /// </summary>
+        public double Longitude { get; set; }
     }
 }

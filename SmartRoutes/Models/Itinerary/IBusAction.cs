@@ -1,6 +1,8 @@
-﻿namespace SmartRoutes.Models.Itinerary
+﻿using SmartRoutes.Model;
+
+namespace SmartRoutes.Models.Itinerary
 {
-    public interface IBusItineraryAction : IItineraryAction
+    public interface IBusAction : IItineraryAction
     {
         /// <summary>
         /// The identification number for the route.

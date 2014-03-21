@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Script.Serialization;
+using SmartRoutes.Model;
 
 namespace SmartRoutes.Models.Itinerary
 {
-    public class ExitBusAction : IBusItineraryAction
+    public class ExitBusAction : IBusAction
     {
         /// <summary>
         /// Constructor;
@@ -19,12 +20,16 @@ namespace SmartRoutes.Models.Itinerary
         /// <summary>
         /// Convenience constructor.
         /// </summary>
-        /// <param name="routeNumber"></param>
+        /// <param name="location">The location of the stop to exit at.</param>
+        /// <param name="routeNumber">The route number of the board to exit.</param>
         /// <param name="exitTime">The time at which to exit the bus.</param>
         /// <param name="stopName">The name of the stop to exit the bus at.</param>
         /// <param name="stopTimeId">The ID of the associated GTFS stop time.</param>
-        public ExitBusAction(string routeNumber, DateTime exitTime, string stopName, int stopTimeId)
+        
+        public ExitBusAction(ILocation location, string routeNumber, DateTime exitTime, string stopName, int stopTimeId)
         {
+            this.Latitude = location.Latitude;
+            this.Longitude = location.Longitude;
             this.RouteNumber = routeNumber;
             this.ExitTime = exitTime;
             this.StopName = stopName;
@@ -85,5 +90,15 @@ namespace SmartRoutes.Models.Itinerary
         /// The ID of the associate GTFS stop time.
         /// </summary>
         public int StopTimeId { get; set; }
+
+        /// <summary>
+        /// The latitude of the bus stop.
+        /// </summary>
+        public double Latitude { get; set; }
+
+        /// <summary>
+        /// The longitude of the bus stop.
+        /// </summary>
+        public double Longitude { get; set; }
     }
 }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using SmartRoutes.Model;
 
 namespace SmartRoutes.Models.Itinerary
 {
@@ -18,7 +19,7 @@ namespace SmartRoutes.Models.Itinerary
         ExitBus
     }
 
-    public interface IItineraryAction
+    public interface IItineraryAction : ILocation
     {
         /// <summary>
         /// The type of action (used for serialization).

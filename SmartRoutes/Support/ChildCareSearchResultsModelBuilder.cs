@@ -20,12 +20,19 @@ namespace SmartRoutes.Support
         private ChildCareRouteModel[] _chldCareRouteModels;
         private Func<IDestination, bool>[] _criteria;
         private IDictionary<IDestination, int> _destinationToIndex;
+
         private string _dropOffDepartureAddress;
+        private ILocation _dropOffDepartureLocation;
         private string _dropOffDestinationAddress;
+        private ILocation _dropOffDestinationLocation;
         private SearchResult[] _dropOffSearchResults;
+
         private IDestination[] _indexToDestination;
+
         private string _pickUpDepartureAddress;
+        private ILocation _pickUpDepartureLocation;
         private string _pickUpDestinationAddress;
+        private ILocation _pickUpDestinationLocation;
         private SearchResult[] _pickUpSearchResults;
 
         private static string GetSearchResultDestinationsKey(IDictionary<IDestination, string> destinationToKey, SearchResult searchResult)
@@ -71,16 +78,16 @@ namespace SmartRoutes.Support
             IEnumerable<SearchResult> dropOffSearchResults = Enumerable.Empty<SearchResult>();
             if (searchQuery.ScheduleType.DropOffChecked)
             {
-                ILocation destination = geocoder.GetLocationOrNull(responses, dropOffDestinationAddress).Result;
-                ILocation departure = geocoder.GetLocationOrNull(responses, dropOffDepartureAddress).Result;
-                if (departure == null)
+                _dropOffDepartureLocation = geocoder.GetLocationOrNull(responses, dropOffDepartureAddress).Result;
+                _dropOffDestinationLocation = geocoder.GetLocationOrNull(responses, dropOffDestinationAddress).Result;
+                if (_dropOffDepartureLocation == null)
                 {
                     return new ChildCareSearchResultsModel
                     {
                         Status = new SearchResultsStatus(SearchResultsStatus.StatusCode.DropOffDepartureGeocodeFail)
                     };
                 }
-                if (destination == null)
+                if (_dropOffDestinationLocation == null)
                 {
                     return new ChildCareSearchResultsModel
                     {
@@ -89,8 +96,8 @@ namespace SmartRoutes.Support
                 }
 
                 dropOffSearchResults = GraphSingleton.Instance.Graph.Search(
-                    destination,
-                    departure,
+                    _dropOffDepartureLocation,
+                    _dropOffDestinationLocation,
                     StandardizeTime(searchQuery.LocationsAndTimes.DropOffLatestArrivalTime),
                     TimeDirection.Backwards,
                     criteria,
@@ -100,16 +107,16 @@ namespace SmartRoutes.Support
             IEnumerable<SearchResult> pickUpSearchResults = Enumerable.Empty<SearchResult>();
             if (searchQuery.ScheduleType.PickUpChecked)
             {
-                ILocation departure = geocoder.GetLocationOrNull(responses, pickUpDepartureAddress).Result;
-                ILocation destination = geocoder.GetLocationOrNull(responses, pickUpDestinationAddress).Result;
-                if (departure == null)
+                _pickUpDepartureLocation = geocoder.GetLocationOrNull(responses, pickUpDepartureAddress).Result;
+                _pickUpDestinationLocation = geocoder.GetLocationOrNull(responses, pickUpDestinationAddress).Result;
+                if (_pickUpDepartureLocation == null)
                 {
                     return new ChildCareSearchResultsModel
                     {
                         Status = new SearchResultsStatus(SearchResultsStatus.StatusCode.PickUpDepartureGeocodeFail)
                     };
                 }
-                if (destination == null)
+                if (_pickUpDestinationLocation == null)
                 {
                     return new ChildCareSearchResultsModel
                     {
@@ -118,8 +125,8 @@ namespace SmartRoutes.Support
                 }
 
                 pickUpSearchResults = GraphSingleton.Instance.Graph.Search(
-                    departure,
-                    destination,
+                    _pickUpDepartureLocation,
+                    _pickUpDestinationLocation,
                     StandardizeTime(searchQuery.LocationsAndTimes.PickUpDepartureTime),
                     TimeDirection.Forwards,
                     criteria,
@@ -278,13 +285,29 @@ namespace SmartRoutes.Support
 
         private T GetItineraryModel<T>(SearchResult searchResult, T model, ISet<int> childCareIndices) where T : ItineraryModel
         {
-            string departureAddress = model is DropOffItineraryModel ? _dropOffDepartureAddress : _pickUpDepartureAddress;
-            string destinationAddress = model is DropOffItineraryModel ? _dropOffDestinationAddress : _pickUpDestinationAddress;
+            string departureAddress;
+            ILocation departureLocation;
+            string destinationAddress;
+            ILocation destinationLocation;
+            if (model is DropOffItineraryModel)
+            {
+                departureAddress = _dropOffDepartureAddress;
+                departureLocation = _dropOffDepartureLocation;
+                destinationAddress = _dropOffDestinationAddress;
+                destinationLocation = _dropOffDepartureLocation;
+            }
+            else
+            {
+                departureAddress = _pickUpDepartureAddress;
+                departureLocation = _pickUpDepartureLocation;
+                destinationAddress = _pickUpDestinationAddress;
+                destinationLocation = _pickUpDepartureLocation;
+            }
 
             IList<string> routes = new List<string>();
 
             int? previousTripId = null;
-            model.AddAction(new DepartAction(departureAddress));
+            model.AddAction(new DepartAction(departureLocation, departureAddress));
             foreach (NodeInfo current in searchResult.ShortResults)
             {
                 var currentGtfs = current.Node as IGtfsNode;
@@ -297,6 +320,7 @@ namespace SmartRoutes.Support
                     if (currentGtfs.TripId != previousTripId)
                     {
                         model.AddAction(new BoardBusAction(
+                            currentGtfs.stopTime.Stop,
                             routeNumber,
                             current.Node.Time,
                             currentGtfs.stopTime.Stop.Name,
@@ -307,6 +331,7 @@ namespace SmartRoutes.Support
                     else
                     {
                         model.AddAction(new ExitBusAction(
+                            currentGtfs.stopTime.Stop,
                             routeNumber,
                             current.Node.Time,
                             currentGtfs.stopTime.Stop.Name,
@@ -336,17 +361,17 @@ namespace SmartRoutes.Support
 
                         if (model is DropOffItineraryModel)
                         {
-                            model.AddAction(new DropOffAction(childIndices, name, currentChildCare.Id));
+                            model.AddAction(new DropOffAction(currentChildCare, childIndices, name, currentChildCare.Id));
                         }
                         else
                         {
-                            model.AddAction(new PickUpAction(childIndices, name, currentChildCare.Id));
+                            model.AddAction(new PickUpAction(currentChildCare, childIndices, name, currentChildCare.Id));
                         }
                     }
                 }
             }
 
-            model.AddAction(new ArriveAction(destinationAddress));
+            model.AddAction(new ArriveAction(destinationLocation, destinationAddress));
             model.Routes = routes;
             model.PathCost = GetTimeSpan(searchResult.LongResults);
 

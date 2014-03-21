@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using SmartRoutes.Model;
 
 namespace SmartRoutes.Models.Itinerary
 {
-    public class DepartAction : IItineraryAction
+    public class DepartAction : IAddressAction
     {
         /// <summary>
         /// Constructor.
@@ -18,9 +19,12 @@ namespace SmartRoutes.Models.Itinerary
         /// <summary>
         /// Constructor.
         /// </summary>
+        /// <param name="location">The location of the departure address.</param>
         /// <param name="address">The address from which to depart.</param>
-        public DepartAction(string address)
+        public DepartAction(ILocation location, string address)
         {
+            this.Latitude = location.Latitude;
+            this.Longitude = location.Longitude;
             this.Address = address;
         }
 
@@ -42,6 +46,22 @@ namespace SmartRoutes.Models.Itinerary
         {
             get;
             set;
+        }
+
+        /// <summary>
+        /// The longitude of the departure location.
+        /// </summary>
+        public double Latitude
+        {
+            get; set;
+        }
+
+        /// <summary>
+        /// The latitude of the departure location.
+        /// </summary>
+        public double Longitude
+        {
+            get; set;
         }
     }
 }

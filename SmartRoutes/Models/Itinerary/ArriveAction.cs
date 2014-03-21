@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using SmartRoutes.Model;
 
 namespace SmartRoutes.Models.Itinerary
 {
@@ -18,9 +19,12 @@ namespace SmartRoutes.Models.Itinerary
         /// <summary>
         /// Convenience constructor.
         /// </summary>
+        /// <param name="location">The location of the arrival address.</param>
         /// <param name="address">The address to arrive at.</param>
-        public ArriveAction(string address)
+        public ArriveAction(ILocation location, string address)
         {
+            this.Latitude = location.Latitude;
+            this.Longitude = location.Longitude;
             this.Address = address;
         }
 
@@ -43,5 +47,15 @@ namespace SmartRoutes.Models.Itinerary
             get;
             set;
         }
+
+        /// <summary>
+        /// The latitude of the arrival location.
+        /// </summary>
+        public double Latitude { get; set; }
+
+        /// <summary>
+        /// The longitude of the arrival location.
+        /// </summary>
+        public double Longitude { get; set; }
     }
 }

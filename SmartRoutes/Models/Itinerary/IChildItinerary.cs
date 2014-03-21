@@ -2,7 +2,7 @@
 
 namespace SmartRoutes.Models.Itinerary
 {
-    public interface IChildItineraryAction : IItineraryAction
+    public interface IChildItinerary : IItineraryAction
     {
         /// <summary>
         /// This collection should index the original search query.

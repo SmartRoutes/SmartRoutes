@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Script.Serialization;
+using SmartRoutes.Model;
 using SmartRoutes.Model.Gtfs;
 
 namespace SmartRoutes.Models.Itinerary
 {
-    public class BoardBusAction : IBusItineraryAction
+    public class BoardBusAction : IBusAction
     {
         /// <summary>
         /// Constructor.
@@ -20,12 +21,15 @@ namespace SmartRoutes.Models.Itinerary
         /// <summary>
         /// Convenience constructor.
         /// </summary>
+        /// <param name="location">The location of the bus stop.</param>
         /// <param name="routeNumber">The route number to board.</param>
         /// <param name="boardTime">The time at which to board the bus.</param>
         /// <param name="stopName">The name of the stop to board the bus at.</param>
         /// <param name="stopTimeId">The ID of the associated GTFS stop time.</param>
-        public BoardBusAction(string routeNumber, DateTime boardTime, string stopName, int stopTimeId)
+        public BoardBusAction(ILocation location, string routeNumber, DateTime boardTime, string stopName, int stopTimeId)
         {
+            this.Latitude = location.Latitude;
+            this.Longitude = location.Longitude;
             this.RouteNumber = routeNumber;
             this.BoardTime = boardTime;
             this.StopName = stopName;
@@ -86,5 +90,15 @@ namespace SmartRoutes.Models.Itinerary
         /// The ID of the associate GTFS stop time.
         /// </summary>
         public int StopTimeId { get; set; }
+
+        /// <summary>
+        /// The latitude of the bus stop.
+        /// </summary>
+        public double Latitude { get; set; }
+
+        /// <summary>
+        /// The longitude of the bus stop.
+        /// </summary>
+        public double Longitude { get; set; }
     }
 }
