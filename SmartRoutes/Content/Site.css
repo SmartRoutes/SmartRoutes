@@ -62,8 +62,8 @@ body {
 .sr-section-title {
     background-color: #4479d4;
     height: 35px;
+    margin-bottom: 15px;
 }
-
 .sr-section-title-text {
     font: 30px arial;
     color: white;
