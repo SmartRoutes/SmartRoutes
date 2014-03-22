@@ -4,7 +4,8 @@
     <script id="sr-results-routes-summary-template" type="text/x-handlebars-template">
         <div>
             {{#each routes}}
-            <span class="sr-results-route-summary-route-number">{{this}}</span>
+                <span class="sr-results-route-summary-icon-container">{{{RouteSummaryIconHelper this}}}</span>
+                <span class="sr-results-route-summary-text">{{RouteSummaryTextHelper this}}</span>
             <span class="glyphicon glyphicon-arrow-right sr-results-route-summary-route-arrow"></span>
             {{/each}}
         </div>

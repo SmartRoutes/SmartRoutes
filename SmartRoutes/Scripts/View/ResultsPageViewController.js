@@ -5,6 +5,10 @@ SmartRoutes.ResultsPageViewController = function(pageID) {
     var resultViewHtml = null;
     var resultData = null;
     var resultPageViewCommunicationController = new SmartRoutes.Communication.ResultsCommunicationController();
+    var serviceNameSummaryPrefix = "ServiceName:";
+    var routeNumberSummaryPrefix = "RouteNumber:";
+    var serviceNameIconPath = "Content/Images/ServiceIcon.png";
+    var routeNumberIconPath = "Content/Images/RouteIcon.png";
 
     var resultsListViewModel = new SmartRoutes.ResultListViewViewModel();;
     var query = null;
@@ -26,6 +30,40 @@ SmartRoutes.ResultsPageViewController = function(pageID) {
     // Receives the result list view from the server. 
     function FetchResultListViewElementHtmlCallback(data) {
         resultViewHtml = data;
+    };
+
+    // Handlebars helper that receives a route summary string
+    // and returns the image tag for that string.
+    function RouteSummaryIconHelper(obj) {
+        var iconTag = "<img src=\"";
+        if (obj && (typeof obj === "string")) {
+            if (obj.slice(0, serviceNameSummaryPrefix.length) == serviceNameSummaryPrefix) {
+                iconTag += serviceNameIconPath;
+            }
+            else if (obj.slice(0, routeNumberSummaryPrefix.length) == routeNumberSummaryPrefix) {
+                iconTag += routeNumberIconPath;
+            }
+        }
+
+        iconTag += "\" class=\"sr-route-summary-icon\"/>";
+
+        return new Handlebars.SafeString(iconTag);
+    };
+
+    // Handlbars helper that extracts a route or service name
+    // from the special summary string.
+    function RouteSummaryTextHelper(obj) {
+        var summaryText = "";
+        if (obj && (typeof obj === "string")) {
+            if (obj.slice(0, serviceNameSummaryPrefix.length) == serviceNameSummaryPrefix) {
+                summaryText = obj.substring(serviceNameSummaryPrefix.length);
+            }
+            else if (obj.slice(0, routeNumberSummaryPrefix.length) == routeNumberSummaryPrefix) {
+                summaryText = obj.substring(routeNumberSummaryPrefix.length);
+            }
+        }
+
+        return new Handlebars.SafeString(summaryText);
     };
 
     // Clears and repopulates the result list view with result data.
@@ -55,6 +93,9 @@ SmartRoutes.ResultsPageViewController = function(pageID) {
     };
 
     (function Init() {
+        Handlebars.registerHelper("RouteSummaryIconHelper", RouteSummaryIconHelper);
+        Handlebars.registerHelper("RouteSummaryTextHelper", RouteSummaryTextHelper);
+
         ko.applyBindings({
             results: resultsListViewModel.elements
         }, $("#" + elementIDs.resultsListView)[0]);

@@ -18,5 +18,10 @@
 }
 
 .sr-results-child-care-service-name {
-    font: 16px bold;
+    font: bold;
+}
+
+.sr-route-summary-icon {
+    height: 24px;
+    width: 24px;
 }
