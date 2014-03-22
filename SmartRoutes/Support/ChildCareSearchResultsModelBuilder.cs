@@ -294,14 +294,14 @@ namespace SmartRoutes.Support
                 departureAddress = _dropOffDepartureAddress;
                 departureLocation = _dropOffDepartureLocation;
                 destinationAddress = _dropOffDestinationAddress;
-                destinationLocation = _dropOffDepartureLocation;
+                destinationLocation = _dropOffDestinationLocation;
             }
             else
             {
                 departureAddress = _pickUpDepartureAddress;
                 departureLocation = _pickUpDepartureLocation;
                 destinationAddress = _pickUpDestinationAddress;
-                destinationLocation = _pickUpDepartureLocation;
+                destinationLocation = _pickUpDestinationLocation;
             }
 
             IList<string> summary = new List<string>();
