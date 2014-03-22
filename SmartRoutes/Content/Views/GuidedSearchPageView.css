@@ -7,6 +7,9 @@
 /* Breadcrumb styling. */
 #sr-breadcrumb-content {
     background-color: #1049a9;
+    border: 6px solid;
+    border-color: #1049a9;
+    border-radius: 20px;
 }
 
 .sr-list-spacer {
