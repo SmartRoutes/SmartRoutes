@@ -3,6 +3,25 @@
 /* Common page styling. */
 #sr-background {
     background-color: #d7d7d7;
+    height: 100%;
+}
+
+html {
+    height: 100%;
+}
+
+body {
+    height: 100%;
+    padding-top: 70px;
+    padding-bottom: 70px;
+}
+
+#sr-content-view-spacer-top {
+    height: 20px;
+}
+
+#sr-content-view-spacer-bottom {
+    height: 20px;
 }
 
 
