@@ -7,8 +7,8 @@ SmartRoutes.ResultsPageViewController = function(pageID) {
     var resultPageViewCommunicationController = new SmartRoutes.Communication.ResultsCommunicationController();
     var serviceNameSummaryPrefix = "ServiceName:";
     var routeNumberSummaryPrefix = "RouteNumber:";
-    var serviceNameIconPath = "Content/Images/ServiceIcon.png";
-    var routeNumberIconPath = "Content/Images/RouteIcon.png";
+    var serviceNameIconPath = "Content/Images/ServiceIcon24.png";
+    var routeNumberIconPath = "Content/Images/RouteIcon24.png";
 
     var resultsListViewModel = new SmartRoutes.ResultListViewViewModel();;
     var query = null;
@@ -56,7 +56,7 @@ SmartRoutes.ResultsPageViewController = function(pageID) {
         var summaryText = "";
         if (obj && (typeof obj === "string")) {
             if (obj.slice(0, serviceNameSummaryPrefix.length) == serviceNameSummaryPrefix) {
-                summaryText = obj.substring(serviceNameSummaryPrefix.length);
+                summaryText = "";
             }
             else if (obj.slice(0, routeNumberSummaryPrefix.length) == routeNumberSummaryPrefix) {
                 summaryText = obj.substring(routeNumberSummaryPrefix.length);
