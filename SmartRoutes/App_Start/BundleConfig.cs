@@ -82,9 +82,9 @@ namespace SmartRoutes
                         "~/Scripts/View/PageController.js"));
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
-                        "~/Content/site.css",
                         "~/Content/bootstrap-theme.css",
                         "~/Content/bootstrap.css",
+                        "~/Content/site.css",
                         "~/Content/Views/GenericControls.css",
                         "~/Content/Views/MainPageView.css",
                         "~/Content/Views/PortalView.css",
