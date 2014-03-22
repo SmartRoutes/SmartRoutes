@@ -2,10 +2,14 @@
 @model SmartRoutes.Models.SummaryViewModel
 
 <div class="sr-text-area-view" id="@Model.ID">
-    <div class="sr-section-title">
-        <h3 class="sr-section-title-text">
-            @Model.Title
-        </h3>
+    <div class="row">
+        <div class="col-lg-12 text-center">
+            <div class="sr-section-title">
+                <span class="sr-section-title-text">
+                    @Model.Title
+                </span>
+            </div>
+        </div>
     </div>
     <p class="sr-text-area-text">
         @Model.Text
