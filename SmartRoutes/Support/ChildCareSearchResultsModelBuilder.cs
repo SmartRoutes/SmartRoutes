@@ -83,8 +83,8 @@ namespace SmartRoutes.Support
                 }
 
                 _dropOffSearchResults = GraphSingleton.Instance.Graph.Search(
-                    _dropOffDepartureLocation,
                     _dropOffDestinationLocation,
+                    _dropOffDepartureLocation,
                     StandardizeTime(searchQuery.LocationsAndTimes.DropOffLatestArrivalTime),
                     TimeDirection.Backwards,
                     _criteria,
