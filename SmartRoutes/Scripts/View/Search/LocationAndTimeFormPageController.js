@@ -10,6 +10,7 @@ SmartRoutes.LocationAndTimeFormPageController = function(pageID) {
     var notEmptyOrWhitespaceRegex = "[A-Za-z0-9]";
     // This might not be perfect, but it's close enough.
     var zipCodeRegex = "^\s*(([0-9]{5})|([0-9]{5}[\s\-][0-9]{4}))\s*$";
+    var pageVisited = false;
 
     var elementIDs = {
         dropOffDeparture: "sr-section-drop-off-departure",
@@ -29,6 +30,7 @@ SmartRoutes.LocationAndTimeFormPageController = function(pageID) {
         cityField: "sr-address-view-city-field",
         zipCodeField: "sr-address-view-zip-code-field",
         validationError: "sr-validation-error-view",
+        locationTimeField: "sr-location-time-field",
     };
 
     function UpdateAddressViewModelsFromUISelection() {
@@ -53,7 +55,7 @@ SmartRoutes.LocationAndTimeFormPageController = function(pageID) {
         }
     };
 
-    function FormValidationCallback(element, valid, errorElement) {
+    function FormValidationCallback(valid, element) {
         var validationErrorView = element.next("." + elementClasses.validationError);
 
         if (valid) {
@@ -63,9 +65,7 @@ SmartRoutes.LocationAndTimeFormPageController = function(pageID) {
             validationErrorView.show();
         }
 
-        if (validationCallback) {
-            validationCallback(validator.IsFormValid());
-        }
+        UpdateAddressViewModelsFromUISelection();
     };
 
     function BindCallbacks() {
@@ -103,38 +103,56 @@ SmartRoutes.LocationAndTimeFormPageController = function(pageID) {
         BindCallbacks();
     };
 
-    function InitFormValidator() {
-        var dropOffDepartureSection = $("#" + elementIDs.dropOffDeparture);
-        validator.AddTextField($("." + elementClasses.addressField, dropOffDepartureSection), FormValidationCallback, notEmptyOrWhitespaceRegex, dropOffDepartureSection);
-        validator.AddTextField($("." + elementClasses.cityField, dropOffDepartureSection), FormValidationCallback, notEmptyOrWhitespaceRegex, dropOffDepartureSection);
-        validator.AddTextField($("." + elementClasses.zipCodeField, dropOffDepartureSection), FormValidationCallback, zipCodeRegex, dropOffDepartureSection);
-
-        var dropOffDestinationSection = $("#" + elementIDs.dropOffDestination);
-        validator.AddTextField($("." + elementClasses.addressField, dropOffDestinationSection), FormValidationCallback, notEmptyOrWhitespaceRegex, dropOffDestinationSection);
-        validator.AddTextField($("." + elementClasses.cityField, dropOffDestinationSection), FormValidationCallback, notEmptyOrWhitespaceRegex, dropOffDestinationSection);
-        validator.AddTextField($("." + elementClasses.zipCodeField, dropOffDestinationSection), FormValidationCallback, zipCodeRegex, dropOffDestinationSection);
-
-        var pickupDepartureSection = $("#" + elementIDs.pickUpDeparture);
-        validator.AddTextField($("." + elementClasses.addressField, pickupDepartureSection), FormValidationCallback, notEmptyOrWhitespaceRegex, pickupDepartureSection);
-        validator.AddTextField($("." + elementClasses.cityField, pickupDepartureSection), FormValidationCallback, notEmptyOrWhitespaceRegex, pickupDepartureSection);
-        validator.AddTextField($("." + elementClasses.zipCodeField, pickupDepartureSection), FormValidationCallback, zipCodeRegex, pickupDepartureSection);
-
-        var pickUpDestinationSection = $("#" + elementIDs.pickUpDestination);
-        validator.AddTextField($("." + elementClasses.addressField, pickUpDestinationSection), FormValidationCallback, notEmptyOrWhitespaceRegex, pickUpDestinationSection);
-        validator.AddTextField($("." + elementClasses.cityField, pickUpDestinationSection), FormValidationCallback, notEmptyOrWhitespaceRegex, pickUpDestinationSection);
-        validator.AddTextField($("." + elementClasses.zipCodeField, pickUpDestinationSection), FormValidationCallback, zipCodeRegex, pickUpDestinationSection);
-    };
-
     (function Init() {
         InitBindings();
-
-        InitFormValidator();
 
         // Kinda hackish, but forcing these elements to notify subscribers of their initial
         // value so the ui is setup correctly.
         locationAndTimeViewModel.pickUpDepartureViewModel.pickUpDepartureSameAsDestination.valueHasMutated();
         locationAndTimeViewModel.pickUpDestinationViewModel.dropOffDestinationSameAsDeparture.valueHasMutated();
     })();
+
+    function AddDropOffValidators() {
+        var dropOffDepartureSection = $("#" + elementIDs.dropOffDeparture);
+        validator.AddTextField(locationAndTimeViewModel.dropOffDepartureViewModel.dropOffDepartureAddressViewModel.address,
+                               FormValidationCallback,
+                               notEmptyOrWhitespaceRegex,
+                               $("." + elementClasses.addressField, dropOffDepartureSection));
+        validator.AddTextField(locationAndTimeViewModel.dropOffDepartureViewModel.dropOffDepartureAddressViewModel.city,
+                               FormValidationCallback,
+                               notEmptyOrWhitespaceRegex,
+                               $("." + elementClasses.cityField, dropOffDepartureSection));
+        validator.AddTextField(locationAndTimeViewModel.dropOffDepartureViewModel.dropOffDepartureAddressViewModel.zipCode,
+                               FormValidationCallback,
+                               zipCodeRegex,
+                               $("." + elementClasses.zipCodeField, dropOffDepartureSection));
+
+        var dropOffDestinationSection = $("#" + elementIDs.dropOffDestination);
+        validator.AddTextField(locationAndTimeViewModel.dropOffDestinationViewModel.dropOffDestinationAddressViewModel.address,
+                               FormValidationCallback, notEmptyOrWhitespaceRegex, $("." + elementClasses.addressField, dropOffDestinationSection));
+        validator.AddTextField(locationAndTimeViewModel.dropOffDestinationViewModel.dropOffDestinationAddressViewModel.city,
+                               FormValidationCallback, notEmptyOrWhitespaceRegex, $("." + elementClasses.cityField, dropOffDestinationSection));
+        validator.AddTextField(locationAndTimeViewModel.dropOffDestinationViewModel.dropOffDestinationAddressViewModel.zipCode,
+                               FormValidationCallback, zipCodeRegex, $("." + elementClasses.zipCodeField, dropOffDestinationSection));
+    };
+
+    function AddPickUpValidators() {
+        var pickupDepartureSection = $("#" + elementIDs.pickUpDeparture);
+        validator.AddTextField(locationAndTimeViewModel.pickUpDepartureViewModel.pickUpDepartureAddressViewModel.address,
+                               FormValidationCallback, notEmptyOrWhitespaceRegex, $("." + elementClasses.addressField, pickupDepartureSection));
+        validator.AddTextField(locationAndTimeViewModel.pickUpDepartureViewModel.pickUpDepartureAddressViewModel.city,
+                               FormValidationCallback, notEmptyOrWhitespaceRegex, $("." + elementClasses.cityField, pickupDepartureSection));
+        validator.AddTextField(locationAndTimeViewModel.pickUpDepartureViewModel.pickUpDepartureAddressViewModel.zipCode,
+                               FormValidationCallback, zipCodeRegex, $("." + elementClasses.zipCodeField, pickupDepartureSection));
+
+        var pickUpDestinationSection = $("#" + elementIDs.pickUpDestination);
+        validator.AddTextField(locationAndTimeViewModel.pickUpDestinationViewModel.pickUpDestinationAddressViewModel.address,
+                               FormValidationCallback, notEmptyOrWhitespaceRegex, $("." + elementClasses.addressField, pickUpDestinationSection));
+        validator.AddTextField(locationAndTimeViewModel.pickUpDestinationViewModel.pickUpDestinationAddressViewModel.city,
+                               FormValidationCallback, notEmptyOrWhitespaceRegex, $("." + elementClasses.cityField, pickUpDestinationSection));
+        validator.AddTextField(locationAndTimeViewModel.pickUpDestinationViewModel.pickUpDestinationAddressViewModel.zipCode,
+                               FormValidationCallback, zipCodeRegex, $("." + elementClasses.zipCodeField, pickUpDestinationSection));
+    };
 
     // Shows/hides the location and time sections depending on the
     // schedule type selected.
@@ -145,6 +163,8 @@ SmartRoutes.LocationAndTimeFormPageController = function(pageID) {
             
             $("#" + elementIDs.duplicateDepartureOptionContainer).show();
             $("#" + elementIDs.duplicateDestinationOptionContainer).show();
+
+            AddDropOffValidators();
         }
         else {
             $("#" + elementIDs.dropOffDeparture).hide();
@@ -161,6 +181,8 @@ SmartRoutes.LocationAndTimeFormPageController = function(pageID) {
         if (scheduleType.PickUpChecked) {
             $("#" + elementIDs.pickUpDeparture).show();
             $("#" + elementIDs.pickUpDestination).show();
+
+            AddPickUpValidators();
         }
         else {
             $("#" + elementIDs.pickUpDeparture).hide();
@@ -183,6 +205,14 @@ SmartRoutes.LocationAndTimeFormPageController = function(pageID) {
             scheduleType = scheduleTypeSelection;
 
             SetupViewsForScheduleType();
+
+            if (pageVisited) {
+                // If we've already visited the page, force all the fields
+                // to validate and display errors.  The first time we visit the page,
+                // we don't want to bombard the user with error messages before
+                // they've even touched anything.
+                validator.ValidateAllFields();
+            }
         },
 
         // Signals that this is no longer the active form page.
@@ -190,11 +220,18 @@ SmartRoutes.LocationAndTimeFormPageController = function(pageID) {
             validationCallback = null;
 
             UpdateAddressViewModelsFromUISelection();
+
+            validator.ClearValidators();
+            pageVisited = true;
         },
 
         // Gets the ID of the form page element.
         GetFormPageID: function() {
             return locationTimeFormPageID;
+        },
+
+        IsPageValid: function() {
+            return validator.IsFormValid();
         },
 
         SetErrorFromSearchStatus: function(status, statusCodes) {

@@ -60,6 +60,11 @@ SmartRoutes.ServiceTypeFormPageController = function(pageID) {
         GetFormPageID: function() {
             return serviceTypeFormPageID;
         },
+
+        IsPageValid: function() {
+            // TODO: 
+            return true;
+        },
         
         // Gets an array of service type payload objects based on
         // the current state of the service type form.

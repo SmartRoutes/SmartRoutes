@@ -64,6 +64,10 @@ SmartRoutes.AccreditationFormPageController = function(pageID) {
             return accreditationFormPageID;
         },
 
+        IsPageValid: function() {
+            return true;
+        },
+
         // Gets the payload object for the accreditation selections.
         GetAccreditationPayloadArray: function() {
             var accreditationPayloadArray = new Array();

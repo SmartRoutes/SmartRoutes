@@ -3,13 +3,13 @@
     <div class="row">
         <div class="col-lg-12">
             <div>
-                <input class="sr-address-view-address-field" type="text" placeholder="Address" data-bind="value: address" />
+                <input class="sr-address-view-address-field sr-location-time-field" type="text" placeholder="Address" data-bind="value: address" />
                 @{
                     Html.RenderPartial("~/Views/Search/_ValidationErrorView.cshtml", "The address field cannot be empty.");
                 }
             </div>
             <div>
-                <input class="sr-address-view-address-field-2" type="text" placeholder="Address Line 2" data-bind="value: addressLine2" />
+                <input class="sr-address-view-address-field-2 sr-location-time-field" type="text" placeholder="Address Line 2" data-bind="value: addressLine2" />
             </div>
             <div>
                 <input class="sr-address-view-city-field" type="text" placeholder="City" data-bind="value: city" />
@@ -23,7 +23,7 @@
                 </select>
             </div>
             <div>
-                <input class="sr-address-view-zip-code-field" type="text" placeholder="Zip" data-bind="value: zipCode" />
+                <input class="sr-address-view-zip-code-field sr-location-time-field" type="text" placeholder="Zip" data-bind="value: zipCode" />
                 @{
                     Html.RenderPartial("~/Views/Search/_ValidationErrorView.cshtml", "The zip code must in either 5 or 9 digit format.");
                 }

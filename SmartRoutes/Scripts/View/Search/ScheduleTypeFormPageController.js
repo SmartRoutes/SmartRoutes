@@ -36,7 +36,7 @@ SmartRoutes.ScheduleTypeFormPageController = (function(pageID) {
         },
 
         // Reports if the form page fields are valid.
-        IsPageDataValid: function() {
+        IsPageValid: function() {
             // A schedule type must be selected.
             return !scheduleTypeViewModel.noScheduleTypeSelected();
         },

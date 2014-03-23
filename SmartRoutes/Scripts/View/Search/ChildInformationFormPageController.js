@@ -87,7 +87,7 @@ SmartRoutes.ChildInformationFormPageController = (function(pageID) {
         },
 
         // Indicates if the filled in fields are valid or not.
-        IsPageDataValid: function() {
+        IsPageValid: function() {
             // This is a tautology.  The name isn't required
             // and can be arbitrary.
             return true;

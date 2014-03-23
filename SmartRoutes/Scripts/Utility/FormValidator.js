@@ -20,20 +20,21 @@ SmartRoutes.FormValidator = function() {
         return regex.test(newValue);
     };
 
-    function ValidateTextFieldCallback(eventData) {
-        var validationInfo = eventData.data;
+    function ValidateTextFieldCallback(newValue) {
+        var valid = ValidateTextField(newValue, this.regex);
 
-        if (validationInfo && validationInfo.element && validationInfo.regex) {
-            var newValue = validationInfo.element.val();
-            var valid = ValidateTextField(newValue, validationInfo.regex);
+        // Update the observable field.
+        this.valid(valid);
 
-            // Update the observable field.
-            validationInfo.valid(valid);
-
-            if (validationInfo.callback && (typeof validationInfo.callback === "function")) {
-                validationInfo.callback(validationInfo.element, valid, validationInfo.data);
-            }
+        if (this.callback && (typeof this.callback === "function")) {
+            this.callback(valid, this.element);
         }
+    };
+
+    function ForceValidateAllFields() {
+        $.each(fields(), function(index, info) {
+            info.dataBinding.valueHasMutated();
+        });
     };
 
     return {
@@ -43,25 +44,33 @@ SmartRoutes.FormValidator = function() {
         // validationCallback - function taking a boolean indicating true if the field
         //                      validated successfully, false otherwise
         // section - an integer identifying the section of the form for this field
-        AddTextField: function(element, validationCallback, regex, data) {
-            if (element && regex) {
+        AddTextField: function(dataBinding, validationCallback, regex, element) {
+            if (dataBinding && regex) {
                 var validationInfo = {
                     fieldType: fieldTypes.text,
-                    element: element,
+                    dataBinding: dataBinding,
                     callback: validationCallback,
                     regex: regex,
-                    data: data,
-                    valid: ko.observable(true),
+                    element: element,
+                    valid: ko.observable(false),
                 };
 
                 fields.push(validationInfo);
 
-                element.blur(validationInfo, ValidateTextFieldCallback);
+                dataBinding.subscribe(ValidateTextFieldCallback, validationInfo);
             }
         },
 
         IsFormValid: function() {
             return formValid();
+        },
+
+        ClearValidators: function() {
+            fields([]);
+        },
+
+        ValidateAllFields: function() {
+            ForceValidateAllFields();
         },
     };
 };

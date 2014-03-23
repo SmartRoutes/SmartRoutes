@@ -122,6 +122,9 @@ SmartRoutes.GuidedSearchPageViewController = (function(pageID) {
         var args = Array.prototype.slice.call(arguments);
         var remainingArgs = args.slice(2);
 
+        // Should ask the current page if it is valid.
+        // On first navigation, the page is assumed valid.
+
         // Pass the remaining arguments into the new active page.
         activePageController["RunPage"].apply(activePageController, remainingArgs);
 
@@ -291,15 +294,17 @@ SmartRoutes.GuidedSearchPageViewController = (function(pageID) {
 
     // Click handler for the next button.
     $("#" + buttonIDs.nextButton).click(function() {
-        var nextPage = $(activePageElement).next(".sr-form-page");
+        if (activePageController.IsPageValid()) {
+            var nextPage = $(activePageElement).next(".sr-form-page");
 
-        if (nextPage.length > 0) {
-            var nextPageID = nextPage.attr("id");
-            formPageSammyApp.setLocation(pageIDRouteMap[nextPageID]);
-        }
-        else {
-            // No pages left, we should search.
-            PerformChildCareSearch();
+            if (nextPage.length > 0) {
+                var nextPageID = nextPage.attr("id");
+                formPageSammyApp.setLocation(pageIDRouteMap[nextPageID]);
+            }
+            else {
+                // No pages left, we should search.
+                PerformChildCareSearch();
+            }
         }
     });
 
