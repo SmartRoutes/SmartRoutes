@@ -12,6 +12,7 @@ SmartRoutes.GuidedSearchPageViewController = (function(pageID) {
     var searchCompletedCallback = null;
     var lastSearchPayload = null;
     var pageVisitedKey = "SRGuidedSearchPageVisited";
+    var validator = new SmartRoutes.FormValidator();
 
     var buttonIDs = {
         nextButton: "sr-guided-search-button-next",

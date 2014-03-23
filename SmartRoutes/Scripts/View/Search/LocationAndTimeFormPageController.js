@@ -6,6 +6,9 @@ SmartRoutes.LocationAndTimeFormPageController = function(pageID) {
     var validationCallback = null;
     var scheduleType = null;
     var locationTimeFormPageID = pageID;
+    var validator = new SmartRoutes.FormValidator();
+    var notEmptyOrWhitespaceRegex = "\S+";
+    var zipCodeRegex = "^\s*[0-9]{5}([\s\-][0-9]{4})?";
 
     var elementIDs = {
         dropOffDeparture: "sr-section-drop-off-departure",
@@ -20,6 +23,11 @@ SmartRoutes.LocationAndTimeFormPageController = function(pageID) {
 
     var elementClasses = {
         geocodeFailure: "sr-geocode-fail-error",
+        addressField: "sr-address-view-address-field",
+        addressField2: "sr-address-view-address-field-2",
+        cityField: "sr-address-view-city-field",
+        zipCodeField: "sr-address-view-zip-code-field",
+        validationError: "sr-validation-error-view",
     };
 
     function UpdateAddressViewModelsFromUISelection() {
@@ -41,6 +49,17 @@ SmartRoutes.LocationAndTimeFormPageController = function(pageID) {
         }
         else {
             container.show();
+        }
+    };
+
+    function FormValidationCallback(element, valid, errorElement) {
+        var validationErrorView = element.next("." + elementClasses.validationError);
+
+        if (valid) {
+            validationErrorView.hide();
+        }
+        else {
+            validationErrorView.show();
         }
     };
 
@@ -79,8 +98,32 @@ SmartRoutes.LocationAndTimeFormPageController = function(pageID) {
         BindCallbacks();
     };
 
+    function InitFormValidator() {
+        var dropOffDepartureSection = $("#" + elementIDs.dropOffDeparture);
+        validator.AddTextField($("." + elementClasses.addressField, dropOffDepartureSection), FormValidationCallback, notEmptyOrWhitespaceRegex);
+        validator.AddTextField($("." + elementClasses.cityField, dropOffDepartureSection), FormValidationCallback, notEmptyOrWhitespaceRegex);
+        validator.AddTextField($("." + elementClasses.zipCodeField, dropOffDepartureSection), FormValidationCallback, zipCodeRegex);
+
+        var dropOffDestinationSection = $("#" + elementIDs.dropOffDestination);
+        validator.AddTextField($("." + elementClasses.addressField, dropOffDestinationSection), FormValidationCallback, notEmptyOrWhitespaceRegex, dropOffDestinationSection);
+        validator.AddTextField($("." + elementClasses.cityField, dropOffDestinationSection), FormValidationCallback, notEmptyOrWhitespaceRegex, dropOffDestinationSection);
+        validator.AddTextField($("." + elementClasses.zipCodeField, dropOffDestinationSection), FormValidationCallback, zipCodeRegex, dropOffDestinationSection);
+
+        var pickupDepartureSection = $("#" + elementIDs.pickUpDeparture);
+        validator.AddTextField($("." + elementClasses.addressField, pickupDepartureSection), FormValidationCallback, notEmptyOrWhitespaceRegex, pickupDepartureSection);
+        validator.AddTextField($("." + elementClasses.cityField, pickupDepartureSection), FormValidationCallback, notEmptyOrWhitespaceRegex, pickupDepartureSection);
+        validator.AddTextField($("." + elementClasses.zipCodeField, pickupDepartureSection), FormValidationCallback, zipCodeRegex, pickupDepartureSection);
+
+        var pickUpDestinationSection = $("#" + elementIDs.pickUpDestination);
+        validator.AddTextField($("." + elementClasses.addressField, pickUpDestinationSection), FormValidationCallback, notEmptyOrWhitespaceRegex, pickUpDestinationSection);
+        validator.AddTextField($("." + elementClasses.cityField, pickUpDestinationSection), FormValidationCallback, notEmptyOrWhitespaceRegex, pickUpDestinationSection);
+        validator.AddTextField($("." + elementClasses.zipCodeField, pickUpDestinationSection), FormValidationCallback, zipCodeRegex, pickUpDestinationSection);
+    };
+
     (function Init() {
         InitBindings();
+
+        InitFormValidator();
 
         // Kinda hackish, but forcing these elements to notify subscribers of their initial
         // value so the ui is setup correctly.

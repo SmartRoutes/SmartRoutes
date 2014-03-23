@@ -40,6 +40,9 @@ namespace SmartRoutes
                         "~/Scripts/Communication/Payloads/ServiceTypePayload.js",
                         "~/Scripts/Communication/Payloads/ChildCareSearchQueryPayload.js",
 
+                        // Validation.
+                        "~/Scripts/Utility/FormValidator.js",
+
                         // Communication controllers.
                         "~/Scripts/Communication/Controllers/GuidedSearchCommunicationController.js",
                         "~/Scripts/Communication/Controllers/ResultsCommunicationController.js",

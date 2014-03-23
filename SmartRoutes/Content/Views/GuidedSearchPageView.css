@@ -46,6 +46,10 @@
     display: none;
 }
 
+.sr-validation-error-view {
+    display: none;
+}
+
 
 /* Child info form page styling. */
 .sr-child-info-view {

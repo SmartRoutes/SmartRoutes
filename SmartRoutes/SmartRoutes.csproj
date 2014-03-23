@@ -219,6 +219,7 @@
     <Content Include="Scripts\Constants.js" />
     <Content Include="Scripts\Library\handlebars-v1.3.0.js" />
     <Content Include="Scripts\Library\handlebars.runtime-v1.3.0.js" />
+    <Content Include="Scripts\Utility\FormValidator.js" />
     <Content Include="Scripts\ViewModels\AccreditationViewModel.js" />
     <Content Include="Scripts\ViewModels\ChildCareDescriptionViewModel.js" />
     <Content Include="Scripts\ViewModels\ChildCareResultRouteSummaryViewModel.js" />
@@ -311,6 +312,7 @@
     <Content Include="Views\Templates\_Templates.cshtml" />
     <Content Include="Views\Templates\_ItineraryStepsTemplates.cshtml" />
     <Content Include="Views\Search\_GeocodeFailureErrorView.cshtml" />
+    <Content Include="Views\Search\_ValidationErrorView.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

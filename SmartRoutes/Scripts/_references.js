@@ -21,6 +21,7 @@
 /// <reference path="\Library\knockout-3.0.0.js" />
 /// <reference path="\Library\sammy-0.7.4.js" />
 /// <reference path="\Library\sammy-0.7.4.min.js" />
+/// <reference path="\Utility\FormValidator.js" />
 /// <reference path="\View\DetailedCheckboxViewController.js" />
 /// <reference path="\View\ItineraryPageViewController.js" />
 /// <reference path="\View\MainPageViewController.js" />
