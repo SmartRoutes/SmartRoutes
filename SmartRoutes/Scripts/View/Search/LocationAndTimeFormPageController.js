@@ -7,7 +7,7 @@ SmartRoutes.LocationAndTimeFormPageController = function(pageID) {
     var scheduleType = null;
     var locationTimeFormPageID = pageID;
     var validator = new SmartRoutes.FormValidator();
-    var notEmptyOrWhitespaceRegex = "\S+";
+    var notEmptyOrWhitespaceRegex = "[A-Za-z0-9]";
     // This might not be perfect, but it's close enough.
     var zipCodeRegex = "^\s*(([0-9]{5})|([0-9]{5}[\s\-][0-9]{4}))\s*$";
 
@@ -62,6 +62,10 @@ SmartRoutes.LocationAndTimeFormPageController = function(pageID) {
         else {
             validationErrorView.show();
         }
+
+        if (validationCallback) {
+            validationCallback(validator.IsFormValid());
+        }
     };
 
     function BindCallbacks() {
@@ -101,9 +105,9 @@ SmartRoutes.LocationAndTimeFormPageController = function(pageID) {
 
     function InitFormValidator() {
         var dropOffDepartureSection = $("#" + elementIDs.dropOffDeparture);
-        validator.AddTextField($("." + elementClasses.addressField, dropOffDepartureSection), FormValidationCallback, notEmptyOrWhitespaceRegex);
-        validator.AddTextField($("." + elementClasses.cityField, dropOffDepartureSection), FormValidationCallback, notEmptyOrWhitespaceRegex);
-        validator.AddTextField($("." + elementClasses.zipCodeField, dropOffDepartureSection), FormValidationCallback, zipCodeRegex);
+        validator.AddTextField($("." + elementClasses.addressField, dropOffDepartureSection), FormValidationCallback, notEmptyOrWhitespaceRegex, dropOffDepartureSection);
+        validator.AddTextField($("." + elementClasses.cityField, dropOffDepartureSection), FormValidationCallback, notEmptyOrWhitespaceRegex, dropOffDepartureSection);
+        validator.AddTextField($("." + elementClasses.zipCodeField, dropOffDepartureSection), FormValidationCallback, zipCodeRegex, dropOffDepartureSection);
 
         var dropOffDestinationSection = $("#" + elementIDs.dropOffDestination);
         validator.AddTextField($("." + elementClasses.addressField, dropOffDestinationSection), FormValidationCallback, notEmptyOrWhitespaceRegex, dropOffDestinationSection);

@@ -1,7 +1,15 @@
 ﻿
 SmartRoutes.FormValidator = function() {
 
-    var fields = new Array();
+    var fields = ko.observableArray();
+
+    var formValid = ko.computed(function() {
+        var valid = true;
+        ko.utils.arrayForEach(fields(), function(validationInfo) {
+            valid = valid && validationInfo.valid();
+        });
+        return valid;
+    });
 
     var fieldTypes = {
         text: 0,
@@ -18,6 +26,9 @@ SmartRoutes.FormValidator = function() {
         if (validationInfo && validationInfo.element && validationInfo.regex) {
             var newValue = validationInfo.element.val();
             var valid = ValidateTextField(newValue, validationInfo.regex);
+
+            // Update the observable field.
+            validationInfo.valid(valid);
 
             if (validationInfo.callback && (typeof validationInfo.callback === "function")) {
                 validationInfo.callback(validationInfo.element, valid, validationInfo.data);
@@ -40,12 +51,17 @@ SmartRoutes.FormValidator = function() {
                     callback: validationCallback,
                     regex: regex,
                     data: data,
+                    valid: ko.observable(true),
                 };
 
                 fields.push(validationInfo);
 
                 element.blur(validationInfo, ValidateTextFieldCallback);
             }
+        },
+
+        IsFormValid: function() {
+            return formValid();
         },
     };
 };
