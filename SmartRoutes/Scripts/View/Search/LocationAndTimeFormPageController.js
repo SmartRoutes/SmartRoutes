@@ -8,7 +8,8 @@ SmartRoutes.LocationAndTimeFormPageController = function(pageID) {
     var locationTimeFormPageID = pageID;
     var validator = new SmartRoutes.FormValidator();
     var notEmptyOrWhitespaceRegex = "\S+";
-    var zipCodeRegex = "^\s*[0-9]{5}([\s\-][0-9]{4})?";
+    // This might not be perfect, but it's close enough.
+    var zipCodeRegex = "^\s*(([0-9]{5})|([0-9]{5}[\s\-][0-9]{4}))\s*$";
 
     var elementIDs = {
         dropOffDeparture: "sr-section-drop-off-departure",
