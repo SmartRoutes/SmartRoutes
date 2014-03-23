@@ -170,7 +170,7 @@ SmartRoutes.ItineraryPageViewController = function(pageID) {
 
             // Insert the new nodes and bind them.
             $.each(indicesToDisplay, function(arrayIndex, childCareIndex) {
-                if ((childCareIndex >= 0) && (childCareIndex < indicesToDisplay.length)) {
+                if ((childCareIndex >= 0) && (childCareIndex < allChildCares.length)) {
                     descriptionContainer.append(descriptionHTML);
 
                     // Add a viewmodel for the child care.
