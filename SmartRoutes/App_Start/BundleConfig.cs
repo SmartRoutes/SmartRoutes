@@ -23,6 +23,9 @@ namespace SmartRoutes
             bundles.Add(new ScriptBundle("~/bundles/handlebars").Include(
                         "~/Scripts/library/handlebars-v1.3.0.js"));
 
+            bundles.Add(new ScriptBundle("~/bundles/leaflet").Include(
+                        "~/Scripts/library/leaflet-{version}.js"));
+
             // Initialization order matters here.  Dependencies must
             // be bundled before the script that needs them.
             bundles.Add(new ScriptBundle("~/bundles/smartroutes").Include(
@@ -87,6 +90,7 @@ namespace SmartRoutes
             bundles.Add(new StyleBundle("~/Content/css").Include(
                         "~/Content/bootstrap-theme.css",
                         "~/Content/bootstrap.css",
+                        "~/Content/leaflet-{version}.css",
                         "~/Content/site.css",
                         "~/Content/Views/GenericControls.css",
                         "~/Content/Views/MainPageView.css",
