@@ -132,8 +132,8 @@ namespace SmartRoutes.Support
             }
 
             return points
-                .Skip(closestToStart - 1)
-                .Take(closestToEnd - closestToStart)
+                .Skip(closestToStart)
+                .Take(closestToEnd - closestToStart + 1)
                 .ToArray();
         }
     }
