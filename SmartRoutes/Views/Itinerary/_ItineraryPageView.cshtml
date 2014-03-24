@@ -14,25 +14,15 @@
             }
         </div>
 
-        <div class="col-lg-4">
-            @* Render the route plan. *@
-            @Html.Partial("~/Views/Itinerary/_ItineraryView.cshtml")
-        </div>
-
-        <div class="col-lg-4 col-lg-offset-1">
+        <div class="col-lg-10">
             <div class="row">
-                <div class="col-lg-12">
-                    @* Render the map. *@
-                    @Html.Partial("~/Views/Shared/_GoogleMapsView.cshtml")
-                </div>
+                @* Render the route plan. *@
+                @Html.Partial("~/Views/Itinerary/_ItineraryView.cshtml")
             </div>
             <div class="row">
-                <div class="col-lg-12">
-                    @* Render the child care service summary. *@
-                    @Html.Partial("~/Views/Itinerary/_ChildCareServiceSummaryView.cshtml")
-                </div>
+                @* Render the child care service summary. *@
+                @Html.Partial("~/Views/Itinerary/_ChildCareServiceSummaryView.cshtml")
             </div>
         </div>
-
     </div>
 </div>

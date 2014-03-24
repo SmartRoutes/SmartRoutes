@@ -13,3 +13,8 @@
 .sr-loading-animation-background {
     background-color: white;
 }
+
+.sr-map-canvas {
+    margin-bottom: 10px;
+    height: 300px;
+}

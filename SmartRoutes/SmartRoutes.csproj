@@ -306,7 +306,7 @@
     <Content Include="Views\Search\_ServiceTypeView.cshtml" />
     <Content Include="Views\Shared\_LoadingView.cshtml" />
     <Content Include="Views\Results\_ResultsPageView.cshtml" />
-    <Content Include="Views\Shared\_GoogleMapsView.cshtml" />
+    <Content Include="Views\Shared\_MapView.cshtml" />
     <Content Include="Views\Results\_ResultsListView.cshtml" />
     <Content Include="Views\Results\_ResultsView.cshtml" />
     <Content Include="Views\Itinerary\_ItineraryPageView.cshtml" />
