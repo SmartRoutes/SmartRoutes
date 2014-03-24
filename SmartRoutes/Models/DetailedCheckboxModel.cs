@@ -28,7 +28,7 @@ namespace SmartRoutes.Models
         {
             this.Name = name;
             this.Description = description;
-            this.Checked = false;
+            this.Checked = true;
         }
 
         /// <summary>
