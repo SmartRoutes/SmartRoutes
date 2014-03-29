@@ -13,6 +13,7 @@ SmartRoutes.GuidedSearchPageViewController = (function(pageID) {
     var lastSearchPayload = null;
     var pageVisitedKey = "SRGuidedSearchPageVisited";
     var validator = new SmartRoutes.FormValidator();
+    var lastPageVisited = "";
 
     var buttonIDs = {
         nextButton: "sr-guided-search-button-next",
@@ -99,11 +100,22 @@ SmartRoutes.GuidedSearchPageViewController = (function(pageID) {
         return navigatedToFirstPage;
     };
 
+    function RedirectToLastPageVisited() {
+        if (lastPageVisited !== "") {
+            sammyApp.setLocation(pageIDRouteMap[lastPageVisited]);
+        }
+        else {
+            // Just go to the first page.
+            sammyApp.setLocation(pageIDRouteMap[pageIDs.childInformationPageID]);
+        }
+    };
+
     // Transitions from the current page to the page controlled by the new controller.
     // Additional arguments are passed to the new controller's RunPage function.
     function TransitionPages(currentPageController, newPageController) {
-        if (!SmartRoutes.pageController.HasActivePage()) {
-            // No active page, the browser was probably refreshed.
+        if (!SmartRoutes.pageController.HasActivePage() || !SmartRoutes.pageController.IsActivePageSearch()) {
+            // If no active page, the browser was probably refreshed.
+            // If the active page isn't search, then they probably navigated back from the results.
             // Rerun the parent route so we are actually the active page.
             sammyApp.runRoute("get", "#/search");
         }
@@ -312,13 +324,16 @@ SmartRoutes.GuidedSearchPageViewController = (function(pageID) {
         // Public:
 
         RunPage: function(resultsCallback) {
-            RedirectToFirstPageIfFirstTimeVisiting();
+            if (!RedirectToFirstPageIfFirstTimeVisiting()) {
+                RedirectToLastPageVisited();
+            }
             searchCompletedCallback = resultsCallback;
         },
 
         StopPage: function() {
             // Break this callback.
             searchCompletedCallback = null;
+            lastPageVisited = activePageController.GetFormPageID();
         },
 
         GetPageViewID: function() {

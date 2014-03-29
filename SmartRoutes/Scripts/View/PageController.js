@@ -126,5 +126,9 @@ SmartRoutes.pageController = (function () {
         HasActivePage: function() {
             return activePageController !== null;
         },
+
+        IsActivePageSearch: function() {
+            return activePageController === guidedSearchPageViewController;
+        },
     };
 })();
