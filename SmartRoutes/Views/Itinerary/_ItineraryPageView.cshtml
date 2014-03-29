@@ -8,6 +8,7 @@
             @{
                 // Render the portal view.
                 PortalViewModel resultsPortalModel = new PortalViewModel("sr-portal-route-plan-page");
+                resultsPortalModel.AddButtonModel(new PortalButtonModel(Resources.portalTextHome, Resources.PageRouteHome));
                 resultsPortalModel.AddButtonModel(new PortalButtonModel(Resources.portalTextBackToResults, Resources.PageRouteResults));
                 resultsPortalModel.AddButtonModel(new PortalButtonModel(Resources.portalTextFeedback, Resources.PageRouteFeedback));
                 Html.RenderPartial("~/Views/Shared/_PortalView.cshtml", resultsPortalModel);

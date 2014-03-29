@@ -50,6 +50,9 @@
     display: none;
 }
 
+#sr-guided-search-form-page-container {
+    padding-top: 20px;
+}
 
 /* Child info form page styling. */
 .sr-child-info-view {

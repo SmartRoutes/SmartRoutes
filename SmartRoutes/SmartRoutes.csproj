@@ -318,6 +318,7 @@
     <Content Include="Views\Templates\_ItineraryStepsTemplates.cshtml" />
     <Content Include="Views\Search\_GeocodeFailureErrorView.cshtml" />
     <Content Include="Views\Search\_ValidationErrorView.cshtml" />
+    <Content Include="Views\Shared\_SectionTitle.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

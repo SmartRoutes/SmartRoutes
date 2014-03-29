@@ -1,19 +1,10 @@
 ﻿
 <div class="sr-route-itinerary-view">
-    @* This is the title area for the list of steps. *@
-    <div class="row">
-        <div class="col-lg-12 text-center">
-            <div class="sr-section-title">
-                <span class="sr-section-title-text">Itinerary</span>
-            </div>
-        </div>
-    </div>
-
     @* This is the actual list of steps. *@
     <div class="row">
         <div class="col-lg-6">
             <div id="sr-itinerary-drop-off-container" class="sr-itinerary-steps-container">
-                <span class="sr-itinerary-section-heading">Drop Off Plan</span>
+                @Html.Partial("~/Views/Shared/_SectionTitle.cshtml", "Drop Off Plan")
                 <ol id="sr-itinerary-drop-off-list">
                     @*These are populated via javascript handlebars templates.*@
                 </ol>
@@ -27,7 +18,7 @@
     <div class="row">
         <div class="col-lg-6">
             <div id="sr-itinerary-pick-up-container" class="sr-itinerary-steps-container">
-                <span class="sr-itinerary-section-heading">Pick Up Plan</span>
+                @Html.Partial("~/Views/Shared/_SectionTitle.cshtml", "Pick Up Plan")
                 <ol id="sr-itinerary-pick-up-list">
                     @*These are populated via javascript handlebars templates.*@
                 </ol>

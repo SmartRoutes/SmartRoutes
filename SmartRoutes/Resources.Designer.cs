@@ -358,6 +358,15 @@ namespace SmartRoutes {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        public static string PageRouteHome {
+            get {
+                return ResourceManager.GetString("PageRouteHome", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to #/results.
         /// </summary>
         public static string PageRouteResults {
@@ -390,6 +399,15 @@ namespace SmartRoutes {
         public static string portalTextFeedback {
             get {
                 return ResourceManager.GetString("portalTextFeedback", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Home.
+        /// </summary>
+        public static string portalTextHome {
+            get {
+                return ResourceManager.GetString("portalTextHome", resourceCulture);
             }
         }
         
