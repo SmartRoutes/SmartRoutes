@@ -109,3 +109,13 @@
     background-color: black;
     border-color: black;
 }
+
+/* Loading animation styling. */
+
+#sr-guided-search-results-loading-view {
+    min-height: 300px;
+}
+
+.sr-loading-animation-background {
+    height: 100%;
+}

@@ -68,4 +68,5 @@ body {
 .sr-text-area-text {
     background-color: white;
     height: 250px;
+    padding: 5px;
 }
