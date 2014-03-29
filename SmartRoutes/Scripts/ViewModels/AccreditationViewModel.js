@@ -7,6 +7,6 @@ SmartRoutes.AccreditationViewModel = function(accreditationName, accreditationDe
         name: ko.observable(accreditationName),
         description: ko.observable(accreditationDescription),
         url: ko.observable(accreditationURL),
-        checked: ko.observable(accreditationChecked)
+        checked: ko.observable(false)
     };
 };
