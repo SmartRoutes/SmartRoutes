@@ -358,7 +358,7 @@ namespace SmartRoutes {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to /.
         /// </summary>
         public static string PageRouteHome {
             get {

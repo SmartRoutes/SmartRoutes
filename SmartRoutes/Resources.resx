@@ -244,7 +244,7 @@
     <value>Results</value>
   </data>
   <data name="PageRouteHome" xml:space="preserve">
-    <value />
+    <value>/</value>
   </data>
   <data name="portalTextHome" xml:space="preserve">
     <value>Home</value>
