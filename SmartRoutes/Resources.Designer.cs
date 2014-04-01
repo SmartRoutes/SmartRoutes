@@ -61,7 +61,7 @@ namespace SmartRoutes {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to ACSI Description.
+        ///   Looks up a localized string similar to The Association of Christian Schools International (ACSI) is the largest Protestant educational organization in the world. Since 1978, ACSI has advanced excellence in Christian schools by enhancing the professional and personal development of Christian educators and providing support functions for Christian schools..
         /// </summary>
         public static string ACSIDescription {
             get {
@@ -133,7 +133,7 @@ namespace SmartRoutes {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to CCFP Description.
+        ///   Looks up a localized string similar to 4Cs sponsors the federally funded Child Care Food Program (CCFP) to ensure that children receive nutritious, well-balanced meals while in day care. The CCFP reimburses licensed child care providers and license exempt TrustLined providers for serving meals and snacks that meet the USDA requirements to the children in their care..
         /// </summary>
         public static string CCFPDescription {
             get {
@@ -160,7 +160,7 @@ namespace SmartRoutes {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to COA Description.
+        ///   Looks up a localized string similar to Children of America&apos;s commitment is to provide a safe, developmentally appropriate environment for infants through elementary school. Our emphasis is to provide a stimulating and educational experience that promotes every child&apos;s social, emotional, physical and cognitive development. We deliver educational programs that foster self-esteem, encourage curiosity and inspire children&apos;s desire to be lifelong learners..
         /// </summary>
         public static string COADescription {
             get {
@@ -187,7 +187,7 @@ namespace SmartRoutes {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Day Camp Description.
+        ///   Looks up a localized string similar to A program which cares for only school age children and operates for less than seven hours each day during the time school is not in session, and the program operates at least 50% outdoors. Child day camps must register with ODJFS each year. To receive reimbursement for publicly funded child care, the child day camp must be accredited by the American Camping Association (ACA) and submit the certificate annually with the day camp registration..
         /// </summary>
         public static string DayCampDescription {
             get {
@@ -205,7 +205,7 @@ namespace SmartRoutes {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Outline features of the website here.  This will outline the search process that we will take the user through and ask that they provide feedback on his or her experience with our service..
+        ///   Looks up a localized string similar to Parents who depend on the public transportation often have difficulty finding child care services that are bus accessible. SmartRoutes is a web application that allows parents to search for child care services, ranking the results by how accessible they are via bus to their home and work. SmartRoutes takes a user’s start location, end location, and time of day to provide complete travel itineraries. To that end, the project will package the technology that drives SmartRoutes into a Software Developers Kit.  [rest of string was truncated]&quot;;.
         /// </summary>
         public static string descriptionText {
             get {
@@ -223,7 +223,7 @@ namespace SmartRoutes {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Licensed Center Description.
+        ///   Looks up a localized string similar to 13 or more children at one time, 7 to 12 children if not in a home..
         /// </summary>
         public static string LicensedCenterDescription {
             get {
@@ -241,7 +241,7 @@ namespace SmartRoutes {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to NACCP Description.
+        ///   Looks up a localized string similar to The Association for Early Learning Leaders is committed to excel­lence in the field of Early Care and Education by promoting lead­ership development and enhancing program quality..
         /// </summary>
         public static string NACCPDescription {
             get {
@@ -268,7 +268,7 @@ namespace SmartRoutes {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to NAEYC Description.
+        ///   Looks up a localized string similar to NAEYC&apos;s mission is to serve and act on behalf of the needs, rights and well-being of all young children with primary focus on the provision of educational and developmental services and resources..
         /// </summary>
         public static string NAEYCDescription {
             get {
@@ -295,7 +295,7 @@ namespace SmartRoutes {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to NAFCC Description.
+        ///   Looks up a localized string similar to Accreditation currently unavailable..
         /// </summary>
         public static string NAFCCDescription {
             get {
@@ -322,7 +322,7 @@ namespace SmartRoutes {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to NECPA Description.
+        ///   Looks up a localized string similar to The National Early Childhood Program Accreditation was established in 1991 to encourage quality and recognize excellence in early childhood programs throughout the United States and other countries.  We pledge to remain focused on the interests of children by promoting benchmarks for high quality standards throughout the early care and education profession..
         /// </summary>
         public static string NECPADescription {
             get {
@@ -421,7 +421,7 @@ namespace SmartRoutes {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Type A Home Description.
+        ///   Looks up a localized string similar to 7 to 12 children (or 4 to 12 children if 4 children are under 2 years of age) cared for in the provider’s home. The provider&apos;s own children under 6 years of age must be included in the total count..
         /// </summary>
         public static string TypeAHomeDescription {
             get {
@@ -439,7 +439,7 @@ namespace SmartRoutes {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Type B Home Description.
+        ///   Looks up a localized string similar to 1 to 6 children cared for in the provider&apos;s personal home. No more than three children may be under the age of two. The provider&apos;s own children under six years of age must be included in the total count. Type B Homes are only licensed by ODJFS if they serve, or intend to serve, children through the publicly funded child care program. Please note: anyone can operate a Type B Home without a license..
         /// </summary>
         public static string TypeBHomeDescription {
             get {
