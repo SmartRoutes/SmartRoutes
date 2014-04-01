@@ -1,0 +1,5 @@
+# ignore the huge ILNumerics assemblies -- they are loaded by NuGet
+bin32\libiomp5md.dll
+bin32\mkl_custom.dll
+bin64\libiomp5md.dll
+bin64\mkl_custom.dll
