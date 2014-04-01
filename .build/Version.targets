@@ -24,7 +24,13 @@
       <Copyright>Copyright (c) $(Year). All rights reserved.</Copyright>
       <Author>Alex Brath, Ben Smith, and Joel Verhagen</Author>
       <Version>$(Major).$(Minor).$(Patch)</Version>
+      <LicenseUrl>https://raw.github.com/SmartRoutes/SmartRoutes/master/LICENSE</LicenseUrl>
+      <ProjectUrl>https://github.com/SmartRoutes/SmartRoutes</ProjectUrl>
     </PropertyGroup>
     <AssemblyInfo CodeLanguage="CS" OutputFile="Properties\AssemblyInfo.cs" AssemblyTitle="$(RootNamespace)" AssemblyDescription="The $(RootNamespace) assembly of SmartRoutes." AssemblyCompany="$(Author)" AssemblyProduct="$(RootNamespace)" AssemblyCopyright="$(Copyright)" ComVisible="false" CLSCompliant="true" AssemblyInformationalVersion="$(Version)-$(Revision)" AssemblyVersion="$(Version)" AssemblyFileVersion="$(Version)" />
+  </Target>
+  <Target Name="NuGet">
+    <NuGetPack File="$(RootNamespace).nuspec" Symbols="false" BasePath="$(OutputPath)" OutputDirectory="$(OutputPath)" Version="$(Version)" Properties="id=$(RootNamespace);author=$(Author);copyright=$(Copyright);licenseUrl=$(LicenseUrl);projectUrl=$(ProjectUrl)">
+    </NuGetPack>
   </Target>
 </Project>

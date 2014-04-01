@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<package>
+  <metadata>
+    <id>$id$</id>
+    <version>$version$</version>
+    <title>$id$</title>
+    <authors>$author$</authors>
+    <owners>$author$</owners>
+    <licenseUrl>$licenseUrl$</licenseUrl>
+    <projectUrl>$projectUrl$</projectUrl>
+    <copyright>$copyright$</copyright>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <tags>graph search maps directions routes navigation gtfs</tags>
+    
+    <description>Contains all of the model classes used by SmartRoutes, including a GTFS model.</description>
+    <releaseNotes>Initial release.</releaseNotes>
+    <dependencies>
+      <dependency id="NLog" version="2.1.0" />
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="$id$.dll" target="lib\net45\" />
+  </files>
+</package>
