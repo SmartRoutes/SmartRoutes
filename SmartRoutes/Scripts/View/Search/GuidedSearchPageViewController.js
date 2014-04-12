@@ -57,6 +57,8 @@ SmartRoutes.GuidedSearchPageViewController = (function(pageID) {
 
         PickUpDepartureGeocodeFail: 3,
         PickUpDestinationGecodeFail: 4,
+
+        ErrorNoResults: 5,
     };
 
     var childInformationFormPageController = null;
@@ -268,6 +270,10 @@ SmartRoutes.GuidedSearchPageViewController = (function(pageID) {
                 case searchResultStatus.PickUpDestinationGecodeFail:
                     locationAndTimeFormPageController.SetErrorFromSearchStatus(status, searchResultStatus);
                     formPageSammyApp.setLocation(pageIDRouteMap[pageIDs.locationAndTimePageID]);
+                    break;
+                case searchResultStatus.ErrorNoResults:
+                    alert(status.Message);
+                    sammyApp.setLocation(pageIDRouteMap[pageIDs.childInformationPageID]);
                     break;
                 default:
                     alert("An unexpected error occured.");

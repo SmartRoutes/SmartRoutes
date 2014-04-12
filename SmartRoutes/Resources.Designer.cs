@@ -223,6 +223,15 @@ namespace SmartRoutes {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to There are no results to display..
+        /// </summary>
+        public static string ErrorNoResults {
+            get {
+                return ResourceManager.GetString("ErrorNoResults", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to 13 or more children at one time, 7 to 12 children if not in a home..
         /// </summary>
         public static string LicensedCenterDescription {

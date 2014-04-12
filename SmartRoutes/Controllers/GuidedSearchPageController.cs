@@ -59,11 +59,22 @@ namespace SmartRoutes.Controllers
         /// <returns>The results of the search.</returns>
         public JsonResult PerformChildCareSearch(ChildCareSearchQueryPayload searchQuery)
         {
-            var geocoder = new OpenStreetMapGeocoder(new Client(), OpenStreetMapGeocoder.MapQuestEndpoint);
+            ChildCareSearchResultsModel model = null;
 
-            // create the model resprentation of the search results
-            var builder = new ChildCareSearchResultsModelBuilder();
-            ChildCareSearchResultsModel model = builder.Build(geocoder, searchQuery);
+            try
+            {
+                var geocoder = new OpenStreetMapGeocoder(new Client(), OpenStreetMapGeocoder.MapQuestEndpoint);
+
+                // create the model resprentation of the search results
+                var builder = new ChildCareSearchResultsModelBuilder();
+                model = builder.Build(geocoder, searchQuery);
+            }
+            catch (System.Exception)
+            {
+                model = new ChildCareSearchResultsModel();
+                model.Status = new SearchResultsStatus(SearchResultsStatus.StatusCode.NoResults,
+                                                       Resources.ErrorNoResults);
+            }
 
             return Json(model, JsonRequestBehavior.AllowGet);
         }

@@ -249,4 +249,7 @@
   <data name="portalTextHome" xml:space="preserve">
     <value>Home</value>
   </data>
+  <data name="ErrorNoResults" xml:space="preserve">
+    <value>There are no results to display.</value>
+  </data>
 </root>
