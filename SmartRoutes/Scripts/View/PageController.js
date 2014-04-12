@@ -29,6 +29,13 @@ SmartRoutes.pageController = (function () {
         itineraryPage: "sr-itinerary-page-view"
     };
 
+    var elementIDs = {
+        topBannerView: "sr-top-banner-view",
+        bottomBannerView: "sr-bottom-banner-view",
+        topBannerSpacer: "sr-content-view-spacer-top",
+        bottomBannerSpacer: "sr-content-view-spacer-bottom",
+    };
+
     var mainPageViewController = new SmartRoutes.MainPageViewController(pageIDs.mainPage);
     var guidedSearchPageViewController = new SmartRoutes.GuidedSearchPageViewController(pageIDs.guidedSearchPage);
     var resultsPageViewController = new SmartRoutes.ResultsPageViewController(pageIDs.resultsPage);
@@ -129,6 +136,19 @@ SmartRoutes.pageController = (function () {
 
         IsActivePageSearch: function() {
             return activePageController === guidedSearchPageViewController;
+        },
+
+        GetContentAreaHeight: function() {
+            // Spacers
+            var topBannerSpacer = $("#" + elementIDs.topBannerSpacer);
+            var bottomBannerSpacer = $("#" + elementIDs.bottomBannerSpacer);
+
+            var height = window.innerHeight - topBannerSpacer.outerHeight(true) - bottomBannerSpacer.outerHeight(true);
+            return height;
+        },
+
+        ShowGuidedSearchLoadingAnimation: function() {
+            guidedSearchPageViewController.ShowLoadingAnimation();
         },
     };
 })();

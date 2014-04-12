@@ -42,7 +42,11 @@ SmartRoutes.GuidedSearchPageViewController = (function(pageID) {
         "sr-schedule-type-form-page-view": "#/search/scheduletype",
         "sr-location-time-form-page-view": "#/search/locationsandtimes",
         "sr-accreditation-form-page-view": "#/search/accreditation",
-        "sr-service-type-form-page-view": "#/search/servicetype"
+        "sr-service-type-form-page-view": "#/search/servicetype",
+    };
+
+    var elementClasses = {
+        loadingAnimationBackground: "sr-loading-animation-background",
     };
 
     var searchResultStatus = {
@@ -225,6 +229,11 @@ SmartRoutes.GuidedSearchPageViewController = (function(pageID) {
     // Displays the searching animation and hides the forms.
     function ShowSearchingAnimation() {
         $("#" + elementIDs.searchContainer).hide();
+
+        var searchContainer = $("#" + elementIDs.searchingAnimationContainer);
+        var height = SmartRoutes.pageController.GetContentAreaHeight();
+        $("." + elementClasses.loadingAnimationBackground, searchContainer).css("height", height);
+
         $("#" + elementIDs.searchingAnimationContainer).show();
     };
 
@@ -342,6 +351,10 @@ SmartRoutes.GuidedSearchPageViewController = (function(pageID) {
 
         GetChildNames: function() {
             return childInformationFormPageController.GetChildNames();
-        }
+        },
+
+        ShowLoadingAnimation: function() {
+            ShowSearchingAnimation();
+        },
     };
 });
